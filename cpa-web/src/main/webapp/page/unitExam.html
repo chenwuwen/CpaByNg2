@@ -1,0 +1,31 @@
+<div class="row" ng-controller="UnitExamCtrl">
+    <div class="col-md-5 col-md-offset-1" >
+        <div class="panel panel-default" ng-repeat='(i,exam) in exams.data'>
+            <div class="panel-heading">
+                <h3 class="panel-title">{{$index+1}}.{{exam.testStem}}</h3>
+            </div>
+            <div class="panel-body"  ng-model="exam.id">
+                <ul class="list" style="margin:0;padding:0;list-style:none">
+                    <li ng-repeat='(key,options) in exam.cpaOptionDtos'>
+                        <input class="magic-radio"   type="radio" ng-model="options.selectData" name="optionsRadio{{i}}" id="{{i}}{{key}}"/>
+                        <label for="{{i}}{{key}}">{{key|CovertKey}}.{{options.optionData}}</label>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 col-md-offset-1">
+        <div class="panel panel-default" >
+            <div class="panel-body">
+            音乐播放器
+            </div>
+        </div>
+        <div class="panel panel-default" style="position: fixed">
+            <div class="panel-body">
+                <button type="button" class="btn btn-info" ng-click="submitUnitExam()">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

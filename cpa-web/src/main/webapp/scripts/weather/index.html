@@ -1,0 +1,92 @@
+<div class='container' data-ng-controller='BaiduWeatherCtrl'>
+    <div class='row'>
+        <div class='col-12'>
+            <div class='page-header text-center'>
+                <h1 class='text-muted'>
+                    <strong>
+                        Baidu Weather Widget
+                    </strong>
+                </h1>
+            </div>
+        </div>
+    </div>
+    <div class='row justify-content-center'>
+        <div class='col-12' data-ng-cloak=''>
+            <div class='alert alert-warning mb-0' data-ng-if='errorMessage'>
+                Can't get location. Server message is:
+                <em>{{errorMessage}}</em>
+            </div>
+            <div class='weather-layout js-weather-layout weather-flip' data-ng-repeat='item in weathers'>
+                <div class='weather-widget'>
+                    <div class='row'>
+                        <div class='col-lg-12 weather-widget-main'>
+                            <i class='icn-weather' data-weather-icn='{{item.weather_data[0].weather}}'></i>
+                            <p class='title-deg'>
+                                {{item.weather_data[0].temperature}}
+                            </p>
+                            <p class='title-weather'>
+                                {{item.weather_data[0].weather}}
+                            </p>
+                            <p class='title-wind'>
+                                {{item.weather_data[0].wind}}
+                            </p>
+                            <p>
+                                {{item.weather_data[0].date}}
+                            </p>
+                            <h4>
+                                {{item.currentCity}}
+                            </h4>
+                        </div>
+                        <div class='col-lg-4 col-sm-4 col-xs-12 weather-widget-side'>
+                            <i class='icn-weather' data-weather-icn='{{item.weather_data[1].weather}}'></i>
+                            <p class='title-deg'>
+                                {{item.weather_data[1].temperature}}
+                            </p>
+                            <p class='title-weather'>
+                                {{item.weather_data[1].weather}}
+                            </p>
+                            <p class='title-wind'>
+                                {{item.weather_data[1].wind}}
+                            </p>
+                            <p>
+                                {{item.weather_data[1].date}}
+                            </p>
+                        </div>
+                        <div class='col-lg-4 col-sm-4 col-xs-12 weather-widget-side'>
+                            <i class='icn-weather' data-weather-icn='{{item.weather_data[2].weather}}'></i>
+                            <p class='title-deg'>
+                                {{item.weather_data[2].temperature}}
+                            </p>
+                            <p class='title-weather' ng-repeat='item in weathers'>
+                                {{item.weather_data[2].weather}}
+                            </p>
+                            <p class='title-wind'>
+                                {{item.weather_data[2].wind}}
+                            </p>
+                            <p>
+                                {{item.weather_data[2].date}}
+                            </p>
+                        </div>
+                        <div class='col-lg-4 col-sm-4 col-xs-12 weather-widget-side'>
+                            <i class='icn-weather' data-weather-icn='{{item.weather_data[3].weather}}'></i>
+                            <p class='title-deg'>
+                                {{item.weather_data[3].temperature}}
+                            </p>
+                            <p class='title-weather'>
+                                {{item.weather_data[3].weather}}
+                            </p>
+                            <p class='title-wind'>
+                                {{item.weather_data[3].wind}}
+                            </p>
+                            <p>
+                                {{item.weather_data[3].date}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

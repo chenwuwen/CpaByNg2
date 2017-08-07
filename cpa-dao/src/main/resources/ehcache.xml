@@ -1,0 +1,72 @@
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../config/ehcache.xsd">
+
+<!--
+          磁盘存储:将缓存中暂时不使用的对象,转移到硬盘,类似于Windows系统的虚拟内存
+          path:指定在硬盘上存储对象的路径
+      -->
+    <!--操作系统不同 这个系统属性所表示的目录也不同-->
+    <!--On Windows: java.io.tmpdir:[C:\DOCUME~1\joshua\LOCALS~1\Temp\]-->
+
+    <!--On Solaris: java.io.tmpdir:[/var/tmp/]-->
+
+    <!--On Linux: java.io.tmpdir: [/tmp]-->
+
+    <!--On Mac OS X: java.io.tmpdir: [/tmp]-->
+
+    <diskStore path="java.io.tmpdir"/>
+
+
+    <!--
+    Mandatory Default Cache configuration. These settings will be applied to caches
+    created programmtically using CacheManager.add(String cacheName)
+    -->
+    <!--
+       name:缓存名称。defaultCache:默认的缓存配置信息,如果不加特殊说明,则所有对象按照此配置项处理
+       maxElementsInMemory：缓存最大个数。
+       eternal:对象是否永久有效，一但设置了，timeout将不起作用。
+       timeToIdleSeconds：设置对象在失效前的允许闲置时间（单位：秒）。仅当eternal=false对象不是永久有效时使用，可选属性，默认值是0，也就是可闲置时间无穷大。
+       timeToLiveSeconds：设置对象在失效前允许存活时间（单位：秒）。最大时间介于创建时间和失效时间之间。仅当eternal=false对象不是永久有效时使用，默认是0.，也就是对象存活时间无穷大。
+       overflowToDisk：当内存中对象数量达到maxElementsInMemory时，Ehcache将会对象写到磁盘中。
+       diskSpoolBufferSizeMB：这个参数设置DiskStore（磁盘缓存）的缓存区大小。默认是30MB。每个Cache都应该有自己的一个缓冲区。
+       maxElementsOnDisk：硬盘最大缓存个数。
+       diskPersistent：是否缓存虚拟机重启期数据 Whether the disk store persists between restarts of the Virtual Machine. The default value is false.
+       diskExpiryThreadIntervalSeconds：磁盘失效线程运行时间间隔，默认是120秒。
+       memoryStoreEvictionPolicy：当达到maxElementsInMemory限制时，Ehcache将会根据指定的策略去清理内存。默认策略是LRU（最近最少使用）。你可以设置为FIFO（先进先出）或是LFU（较少使用）。
+       clearOnFlush：内存数量最大时是否清除。
+    -->
+    <defaultCache
+            maxElementsInMemory="10000"
+            eternal="false"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            overflowToDisk="true"
+            maxElementsOnDisk="10000000"
+            diskPersistent="false"
+            diskExpiryThreadIntervalSeconds="120"
+            memoryStoreEvictionPolicy="LRU"
+    />
+    <!--使用了Hibernate的查询缓存，需要在ehcache.xml中加入下面的配置-->
+ <!--   使用ehcache，打印sql语句是正常的，因为query cache设置为true将会创建两个缓存区域：
+    一个用于保存查询结果集 (org.hibernate.cache.StandardQueryCache)；
+    另一个则用于保存最近查询的一系列表的时间戳(org.hibernate.cache.UpdateTimestampsCache)。
+    请注意：在查询缓存中，它并不缓存结果集中所包含的实体的确切状态；
+    它只缓存这些实体的标识符属性的值、以及各值类型的结果。需要将打印sql语句与最近的cache内 容相比较，
+    将不同之处修改到cache中，所以查询缓存通常会和二级缓存一起使用。-->
+    <cache name="org.hibernate.cache.UpdateTimestampsCache"
+           maxElementsInMemory="10000"
+           eternal="true"
+           overflowToDisk="true" />
+    <cache name="org.hibernate.cache.StandardQueryCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToLiveSeconds="120"
+           overflowToDisk="true" />
+
+    <!--
+        cache:为指定名称的对象进行缓存的特殊配置
+        name:指定对象的完整名
+     -->
+ <!--   <cache name="cn.kanyun.cpa.dao.**" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>-->
+
+</ehcache>

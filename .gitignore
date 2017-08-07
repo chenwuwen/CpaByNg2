@@ -1,0 +1,13 @@
+*.iml
+*.classpath
+*.project
+*.mymetadata
+*.releaseBackup
+release.properties
+
+.idea/
+logs/
+README.md
+target/
+.setting/
+.settings/

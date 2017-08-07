@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Bootstrap 101 Template</title>
+    <!--引入jquery时需要注意，bootstrap3.3.7支持jquery3.1，如果引入了不对应版本的jquery，则会出错，bootstrap的有些效果会不显示-->
+    <link rel="stylesheet" href="framework/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="framework/bootstrap-3.3.7-dist/css/bootstrap-theme.css" type="text/css">
+    <link rel="stylesheet" href="framework/bootstrap-3.3.7-dist/css/bootstrapValidator.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/animate-custom.css">
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script src="framework/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="framework/bootstrap-3.3.7-dist/js/bootstrapValidator.js"></script>
+    <script src="framework/bootstrap-3.3.7-dist/js/zh_CN.js"></script>
+    <script src="scripts/login_register.js"></script>
+    <!--引入sweetalert2的js脚本-->
+    <script src="framework/sweetalert2/dist/sweetalert2.js"></script>
+    <link rel="stylesheet" href="framework/sweetalert2/dist/sweetalert2.css">
+    <!--为使IE浏览器(IE10以上)支持sweetalert2需引入该脚本-->
+    <script src="js/es6-promise.min.js"></script>
+    <script type="text/javascript">
+        function reloadValidateCode() {
+            $(".changecode").attr("src", "/validateCode?data=" + new Date() + Math.floor(Math.random() * 24));
+        }
+    </script>
+
+</head>
+<body>
+<div class="container">
+    <!-- Codrops top bar -->
+    <header>
+        <h1>Login and Registration Form <span>with HTML5 and CSS3</span></h1>
+        <nav class="codrops-demos">
+            <a href="http://www.jq22.com/demo/LoginRegistrationForm20160331/index.html" class="current-demo">Demo 1</a>
+            <a href="http://www.jq22.com/demo/LoginRegistrationForm20160331/index2.html">Demo 2</a>
+            <a href="http://www.jq22.com/demo/LoginRegistrationForm20160331/index3.html">Demo 3</a>
+        </nav>
+    </header>
+    <section>
+        <div id="container_demo">
+            <a class="hiddenanchor" id="toregister"></a>
+            <a class="hiddenanchor" id="tologin"></a>
+            <div id="wrapper">
+                <!--登陆-->
+                <div id="login" class="animate form">
+                    <form role="form" method="post" id="loginform"
+                          action="user/login" autocomplete="on">
+                        <h2>Log in</h2>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="userName"> 用户名 </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="userName" name="userName" required="required" class="form-control"
+                                       type="text" placeholder="用&nbsp;户&nbsp;名">
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="password">密&nbsp;&nbsp;码</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="password" name="password" required="required" type="password"
+                                       class="form-control"
+                                       placeholder="密&nbsp;&nbsp;&nbsp;&nbsp;码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="identifyingCode1">验&nbsp;证&nbsp;码</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input id="identifyingCode1" required="required"
+                                           type="text" class="form-control" name="validateCode"
+                                           placeholder="验&nbsp;证&nbsp;码">
+                                </div>
+                                <div class="col-md-4">
+                                    <img src="validateCode" class="changecode" class="img-responsive" title="点击重新获取验证码"
+                                         alt="验证码" onclick="javascript:reloadValidateCode()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input name="isRememberMe" name="isRememberMe" type="checkbox">记住我
+                            </label>
+                        </div>
+                        <div class="login button">
+                            <input type="submit" value="登陆"/>
+                        </div>
+
+                        <p class="change_link">
+                            还没有账号 ?
+                            <a href="./index.html#toregister" class="to_register">加入我们</a>
+                        </p>
+                    </form>
+                </div>
+                <!--注册-->
+                <div id="register" class="animate form">
+                    <form role="form" method="post" id="registerform"
+                          action="user/register" autocomplete="on">
+                        <h2> Sign up </h2>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable"
+                                   for="userNamesignup">用&nbsp;&nbsp;;&nbsp;户&nbsp;&nbsp;;&nbsp;名</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+                                <input id="userNamesignup" name="userName" required="required" type="text"
+                                       class="form-control"
+                                       placeholder="用&nbsp;&nbsp;户&nbsp;&nbsp;名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="emailsignup"> 邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+                                <input id="emailsignup" name="email" required="required" type="email"
+                                       class="form-control"
+                                       placeholder="邮&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;箱">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="passwordsignup">密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;;&nbsp;&nbsp;码</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="passwordsignup" name="password" required="required" type="password"
+                                       class="form-control"
+                                       placeholder="密&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="passwordsignup_confirm">确认密码 </label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
+                                <input id="passwordsignup_confirm" name="confirmPassword" required="required"
+                                       class="form-control"
+                                       type="password" placeholder="确认密码">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="sr-only sr-only-focusable" for="identifyingCode2">验&nbsp;证&nbsp;码</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input required="required" id="identifyingCode2"
+                                           type="text" class="form-control" name="validateCode"
+                                           placeholder="验&nbsp;证&nbsp;码">
+                                </div>
+                                <div class="col-md-4">
+                                    <img src="validateCode" class="changecode" class="img-responsive" title="点击重新获取验证码"
+                                         alt="验证码" onclick="javascript:reloadValidateCode()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="signin button">
+                            <input type="submit" value="注册">
+                        </div>
+                        <p class="change_link">
+                            已有账号 ?
+                            <a href="./index.html#tologin" class="to_register"> 去登陆 </a>
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</div>
+
+</body>
+</html>

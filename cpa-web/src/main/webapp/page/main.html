@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app='myapp'>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>index</title>
+    <link rel="stylesheet" href="../framework/bootstrap-3.3.7-dist/css/bootstrap.css">
+    <link rel="stylesheet" href="../framework/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" type="text/css">
+    <!--sweetalert2插件-->
+    <script src="../framework/sweetalert2/dist/sweetalert2.js"></script>
+    <link rel="stylesheet" href="../framework/sweetalert2/dist/sweetalert2.css">
+    <!--icheck插件js,新版本插件有点问题,该插件在angular中还是有些问题,打算采用纯CSS样式美化的插件-->
+    <!--<script src="../framework/iCheck/icheck-2.0.rc1.js"></script>-->
+    <!--<link rel="stylesheet" href="../framework/iCheck/skins/square/blue.css">-->
+    <!--引入一个选框美化CSS,无需JS,或用来代替icheck,使用magic-check.css-->
+    <link rel="stylesheet" href="../css/magic-check.css">
+    <!--<link rel="stylesheet" href="../css/magic-check1.css">-->
+    <!--播放器-->
+
+</head>
+<body>
+
+<div ui-view></div>
+
+<!--引入jquery时需要注意，bootstrap3.3.7支持jquery3.1，如果引入了不对应版本的jquery，则会出错，bootstrap的有些效果会不显示-->
+<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+<script src="../framework/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+
+<script src="../js/angular.min.js"></script>
+<script src="../js/angular-cookies.min.js"></script>
+<script src="../js/angular-ui-router.js"></script>
+<!--<script src="../js/angular-local-storage.js"></script>-->
+<script src="../scripts/common_directives.js"></script>
+<script src="../scripts/app.js"></script>
+<script src="../scripts/navbarCtrl.js"></script>
+<script src="../scripts/UnitExamCtrl.js"></script>
+<script src="../scripts/weather/get-location.js"></script>
+<script src="../scripts/weather/get-weather.js"></script>
+<script src="../scripts/weather/weather.js"></script>
+</body>
+</html>
