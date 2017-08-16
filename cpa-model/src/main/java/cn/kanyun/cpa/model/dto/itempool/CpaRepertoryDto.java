@@ -19,15 +19,19 @@ public class CpaRepertoryDto  implements java.io.Serializable {
      private String testStem;
      private String testType;
      private Timestamp insertDate;
+     private String presult; //用户回答的答案
+     private String bresult; //标准答案
      private List<CpaOptionDto> cpaOptionDtos;
 
      public CpaRepertoryDto(){}
 
-     public CpaRepertoryDto(Integer id, String testStem, String testType, Timestamp insertDate, List<CpaOptionDto> cpaOptionDtos) {
+     public CpaRepertoryDto(Integer id, String testStem,String presult,String bresult, String testType, Timestamp insertDate, List<CpaOptionDto> cpaOptionDtos) {
           this.id = id;
           this.testStem = testStem;
           this.testType = testType;
           this.insertDate = insertDate;
+          this.presult = presult;
+          this.bresult = bresult;
           this.cpaOptionDtos = cpaOptionDtos;
      }
 
@@ -69,5 +73,21 @@ public class CpaRepertoryDto  implements java.io.Serializable {
 
      public void setCpaOptionDtos(List<CpaOptionDto> cpaOptionDtos) {
           this.cpaOptionDtos = cpaOptionDtos;
+     }
+
+     public String getPresult() {
+          return presult;
+     }
+
+     public void setPresult(String presult) {
+          this.presult = presult;
+     }
+
+     public String getBresult() {
+          return bresult;
+     }
+
+     public void setBresult(String bresult) {
+          this.bresult = bresult;
      }
 }

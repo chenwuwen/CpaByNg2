@@ -72,7 +72,12 @@ public class UserController {
         return "index";
     }
 
-    /* 登陆检查 */
+    /**
+     *@Author: kanyun
+     *@Description:  用户登录，shiro
+     *@Date: 2017/8/16 17:01
+     *@params:
+     */
     @PostMapping("/login")
     @ResponseBody
     public CpaResult toLogin(CpaUserDto user, HttpServletRequest request) {
@@ -107,6 +112,7 @@ public class UserController {
                 }else{
                     logger.info("用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统未分配角色"+",登录IP为:"+ WebUtil.getClientAddr(request));
                 }
+                request.getSession().setAttribute("user",user);
                 CpaUser u = userService.findByUserName(user.getUserName());
                 user.setRoles(userRoleService.findRoleByUserId(u.getId()));
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
@@ -128,7 +134,12 @@ public class UserController {
         return result;
     }
 
-    /* 注册Ajax检查用户名是否可用 */
+    /**
+     *@Author: kanyun
+     *@Description: 注册Ajax检查用户名是否可用
+     *@Date: 2017/8/16 17:02
+     *@params:
+     */
     @RequestMapping("/checkname")
     @ResponseBody
     public String checkName(String username) {
@@ -151,7 +162,12 @@ public class UserController {
         return resultString;
     }
 
-    /*用户注册*/
+    /**
+     *@Author: kanyun
+     *@Description: 用户注册
+     *@Date: 2017/8/16 17:02
+     *@params:
+     */
     @RequestMapping("/register")
     @ResponseBody
     public CpaResult saveUser(CpaUserDto userDto, HttpSession session) throws NoSuchAlgorithmException {

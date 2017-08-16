@@ -2,6 +2,7 @@ package cn.kanyun.cpa.controller.system;
 
 import cn.kanyun.cpa.service.system.ICpaRoleService;
 import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/cpaRole")
 public class CpaRoleController {
-    private final Logger logger = Logger.getLogger(CpaRoleController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CpaRoleController.class);
     @Resource
     private ICpaRoleService cpaRoleService;
 }

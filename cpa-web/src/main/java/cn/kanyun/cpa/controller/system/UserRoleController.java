@@ -2,6 +2,7 @@ package cn.kanyun.cpa.controller.system;
 
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import org.apache.log4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -13,7 +14,7 @@ import javax.annotation.Resource;
 @Controller
 @RequestMapping("/userRole")
 public class UserRoleController {
-    private final Logger logger = Logger.getLogger(UserRoleController.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserRoleController.class);
     @Resource
     private IUserRoleService userRoleService;
 }

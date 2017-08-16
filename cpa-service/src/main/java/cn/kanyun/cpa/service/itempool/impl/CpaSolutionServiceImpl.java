@@ -1,9 +1,20 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
+import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
+import cn.kanyun.cpa.dao.itempool.impl.CpaSolutionDaoImpl;
+import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
+import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaSolutionService;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -11,4 +22,46 @@ import org.springframework.stereotype.Service;
 @Service(ICpaSolutionService.SERVICE_NAME)
 public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSolution> implements ICpaSolutionService {
 
+    @Resource
+    private ICpaSolutionDao cpaSolutionDao;
+
+    @Override
+    public Map<Integer, String> getSolution(List<Integer> respertoryIds) {
+        Map mapSolution = cpaSolutionDao.getAnswer(respertoryIds);
+        List list = (List) mapSolution.keySet();
+        Map<Integer, String> map = new HashMap();
+        for(int i=0;i<list.size(); i++){
+            map.put((Integer) list.get(i),((CpaSolution) mapSolution.get(list.get(i))).getResult());
+        }
+        return map;
+    }
+
+    @Override
+    public CpaResult compareAnswer(Map<Integer,String> peopleAnswer) {
+        CpaResult result = new CpaResult();
+        Map<Integer,String> basicAnswer = getSolution((List<Integer>) peopleAnswer.keySet());
+        Iterator iterator = peopleAnswer.entrySet().iterator();
+        Integer score = 0;
+        Map resultmap = new HashMap();
+        List errorList = new ArrayList();
+        while (iterator.hasNext()){
+            Map.Entry<Integer,String> entry = (Map.Entry) iterator.next();
+            String pav = entry.getValue() == null ? "" :  entry.getValue();
+            String bav = basicAnswer.get(entry.getKey())==null ? "" : basicAnswer.get(entry.getKey());
+            if (pav.equals(bav)){
+                score ++ ;
+            }else {
+                Map map = new HashMap();
+                map.put("errorItemId",entry.getKey());
+                map.put("errorItemAnswer",pav);
+                map.put("correctItemAnswer",bav);
+                errorList.add(map);
+            }
+        }
+        resultmap.put("score",score);
+        resultmap.put("errorList",errorList);
+        result.setData(resultmap);
+        result.setStatus(1);
+        return result;
+    }
 }

@@ -21,7 +21,7 @@ import java.util.*;
 public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements ICpaRepertoryService {
     @Resource(name = ICpaRepertoryDao.REPOSITORY_NAME)
     private ICpaRepertoryDao iCpaRepertoryDao;
-    //获取单元测试数据
+
     public CpaResult getUnitExam(String where, Object[] params) {
         CpaResult result = iCpaRepertoryDao.getScrollData(-1, -1, where, params);
         if (result.getTotalCount() > 0) {
@@ -66,5 +66,6 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
         }
         return result;
     }
+
 
 }
