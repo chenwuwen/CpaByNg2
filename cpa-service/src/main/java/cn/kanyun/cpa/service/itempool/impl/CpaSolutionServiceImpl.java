@@ -28,12 +28,18 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
     @Override
     public Map<Integer, String> getSolution(List<Integer> respertoryIds) {
         Map mapSolution = cpaSolutionDao.getAnswer(respertoryIds);
-        List list = (List) mapSolution.keySet();
-        Map<Integer, String> map = new HashMap();
-        for(int i=0;i<list.size(); i++){
-            map.put((Integer) list.get(i),((CpaSolution) mapSolution.get(list.get(i))).getResult());
+        Map<Integer, String> basicAnswer = new HashMap();
+//        List list = (List) mapSolution.keySet();
+//        for(int i=0;i<list.size(); i++){
+//            basicAnswer.put((Integer) list.get(i),((CpaSolution) mapSolution.get(list.get(i))).getResult());
+//        }
+        Iterator iterator = mapSolution.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<Integer,CpaSolution> entry = (Map.Entry<Integer, CpaSolution>) iterator.next();
+            basicAnswer.put(entry.getKey(),entry.getValue().getResult());
         }
-        return map;
+
+        return basicAnswer;
     }
 
     @Override

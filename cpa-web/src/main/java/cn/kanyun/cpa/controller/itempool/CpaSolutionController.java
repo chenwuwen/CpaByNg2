@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -35,9 +36,14 @@ public class CpaSolutionController {
     @ResponseBody
     public CpaResult correctItem(Map<Integer,CpaRepertoryDto> map){
         Map<Integer,String> peopleAnswer = new HashMap<>();
-        List list  = (List) peopleAnswer.keySet();
-        for (int i=0;i< list.size();i++){
-            peopleAnswer.put((Integer) list.get(i),map.get(list.get(i)).getPresult());
+//        List list  = (List) peopleAnswer.keySet();
+//        for (int i=0;i< list.size();i++){
+//            peopleAnswer.put((Integer) list.get(i),map.get(list.get(i)).getPresult());
+//        }
+        Iterator iterator = map.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<Integer,CpaRepertoryDto> entry = (Map.Entry<Integer, CpaRepertoryDto>) iterator.next();
+            peopleAnswer.put(entry.getKey(),entry.getValue().getPresult());
         }
         CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer);
         return result;
