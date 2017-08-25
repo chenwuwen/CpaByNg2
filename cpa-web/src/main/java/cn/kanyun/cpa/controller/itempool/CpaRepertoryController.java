@@ -17,7 +17,7 @@ import java.util.List;
  * Created by KANYUN on 2017/6/17.
  */
 @Controller
-@RequestMapping("/unitExam")
+@RequestMapping("/api/unitExam")
 public class CpaRepertoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(CpaRepertoryController.class);

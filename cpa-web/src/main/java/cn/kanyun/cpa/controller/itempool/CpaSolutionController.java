@@ -34,16 +34,12 @@ public class CpaSolutionController {
      */
     @RequestMapping("/correctItem")
     @ResponseBody
-    public CpaResult correctItem(Map<Integer,CpaRepertoryDto> map){
+    public CpaResult correctItem(List<Map<Integer,String>> list){
         Map<Integer,String> peopleAnswer = new HashMap<>();
-//        List list  = (List) peopleAnswer.keySet();
-//        for (int i=0;i< list.size();i++){
-//            peopleAnswer.put((Integer) list.get(i),map.get(list.get(i)).getPresult());
-//        }
-        Iterator iterator = map.entrySet().iterator();
+        Iterator iterator = list.iterator();
         while (iterator.hasNext()){
-            Map.Entry<Integer,CpaRepertoryDto> entry = (Map.Entry<Integer, CpaRepertoryDto>) iterator.next();
-            peopleAnswer.put(entry.getKey(),entry.getValue().getPresult());
+            Map.Entry<Integer,String> entry = (Map.Entry) iterator.next();
+            peopleAnswer.put(entry.getKey(),entry.getValue());
         }
         CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer);
         return result;

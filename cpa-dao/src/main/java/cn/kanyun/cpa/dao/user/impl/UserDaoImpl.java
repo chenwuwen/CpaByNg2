@@ -9,17 +9,18 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 @Repository(IUserDao.REPOSITORY_NAME)
-public class UserDaoImpl extends CommonDaoImpl<Integer,CpaUser> implements IUserDao {
-	//通过调用父类的构造函数指定clazz值，即实体类的类类型  
-    public UserDaoImpl() {  
-        super(CpaUser.class);  
+public class UserDaoImpl extends CommonDaoImpl<Integer, CpaUser> implements IUserDao {
+    //通过调用父类的构造函数指定clazz值，即实体类的类类型
+    public UserDaoImpl() {
+        super(CpaUser.class);
     }
-    Session session = HibernateSessionFactory.getSession();
+
     @Override
     public CpaUser findByUserName(String userName) {
+        Session session = getSession();
         String hql = " from CpaUser o where o.userName = :userName";
-        Query query=session.createQuery(hql);
-        query.setParameter("userName",userName);
+        Query query = session.createQuery(hql);
+        query.setParameter("userName", userName);
         return (CpaUser) query.uniqueResult();
     }
 }
