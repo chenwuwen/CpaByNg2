@@ -7,6 +7,7 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.util.CpaConstants;
 import cn.kanyun.cpa.util.EndecryptUtils;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -38,7 +39,7 @@ import java.util.Map;
 
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -112,8 +113,8 @@ public class UserController {
                 }else{
                     logger.info("用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统未分配角色"+",登录IP为:"+ WebUtil.getClientAddr(request));
                 }
-                request.getSession().setAttribute("user",user);
                 CpaUser u = userService.findByUserName(user.getUserName());
+                request.getSession().setAttribute(CpaConstants.USER,u);
                 user.setRoles(userRoleService.findRoleByUserId(u.getId()));
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
                 user.setId(u.getId());

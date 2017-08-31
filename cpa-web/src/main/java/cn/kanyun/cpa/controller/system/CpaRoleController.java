@@ -12,7 +12,7 @@ import javax.annotation.Resource;
  * Created by Administrator on 2017/6/16.
  */
 @Controller
-@RequestMapping("/cpaRole")
+@RequestMapping("/api/cpaRole")
 public class CpaRoleController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CpaRoleController.class);
     @Resource

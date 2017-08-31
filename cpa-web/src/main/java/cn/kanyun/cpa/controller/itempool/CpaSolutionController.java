@@ -19,7 +19,7 @@ import java.util.Map;
 /**
  * Created by KANYUN on 2017/6/17.
  */
-@Controller("/solution")
+@Controller("/api/solution")
 public class CpaSolutionController {
 
     private static final Logger logger = LoggerFactory.getLogger(CpaRepertoryController.class);

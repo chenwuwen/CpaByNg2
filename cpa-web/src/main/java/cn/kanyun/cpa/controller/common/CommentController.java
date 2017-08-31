@@ -25,7 +25,7 @@ public class CommentController {
 	 * @param response
 	 * @throws IOException
 	 */
-	@RequestMapping(value = "/validateCode")
+	@RequestMapping(value = "/api/validateCode")
 	public void validateCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		response.setHeader("Cache-Control", "no-cache");
 		String verifyCode = ValidateCode.generateTextCode(ValidateCode.TYPE_NUM_ONLY, 4, null);
