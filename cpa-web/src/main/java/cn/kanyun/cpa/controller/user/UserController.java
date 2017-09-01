@@ -114,7 +114,7 @@ public class UserController {
                     logger.info("用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统未分配角色"+",登录IP为:"+ WebUtil.getClientAddr(request));
                 }
                 CpaUser u = userService.findByUserName(user.getUserName());
-                request.getSession().setAttribute(CpaConstants.USER,u);
+                WebUtil.setSessionUser(request,u);
                 user.setRoles(userRoleService.findRoleByUserId(u.getId()));
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
                 user.setId(u.getId());

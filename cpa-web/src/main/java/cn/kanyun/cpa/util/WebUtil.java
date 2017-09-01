@@ -2,6 +2,7 @@ package cn.kanyun.cpa.util;
 
 
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,8 +28,8 @@ public class WebUtil {
      * @param request
      * @return
      */
-    public synchronized static CpaUserDto getSessionUser(HttpServletRequest request){
-        CpaUserDto user  = (CpaUserDto)request.getSession().getAttribute("CPAUSER");
+    public synchronized static CpaUser getSessionUser(HttpServletRequest request){
+        CpaUser user  = (CpaUser)request.getSession().getAttribute(CpaConstants.USER);
         return user;
     }
 
@@ -37,8 +38,8 @@ public class WebUtil {
      * @param request
      * @return
      */
-    public synchronized static void setSessionUser(HttpServletRequest request, CpaUserDto us){
-        request.getSession().setAttribute("CPAUSER",us);
+    public synchronized static void setSessionUser(HttpServletRequest request, CpaUser us){
+        request.getSession().setAttribute(CpaConstants.USER,us);
     }
 
     /**
@@ -186,4 +187,6 @@ public class WebUtil {
         }
         return clientAddr;
     }
+
+
 }
