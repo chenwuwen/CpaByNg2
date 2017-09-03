@@ -57,7 +57,7 @@ public class UserController {
      */
     @GetMapping("/index")
     public String index() {
-        return "index";
+        return "/dist/index";
     }
 
     /**

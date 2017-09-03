@@ -58,7 +58,7 @@ $(function () {
                     localStorage.setItem("userId",result.data.id); //将变量存储到本地sessionStorage中，并且value为userId
                     localStorage.setItem("permissions",result.data.permissions);
                     localStorage.setItem("roles",result.data.roles);
-                    window.location.href = 'page/main.html';//正确登录后页面跳转至
+                    window.location.href = 'api/user/index';//正确登录后页面跳转至
                 } else {
                     swal({
                         title: result.msg,
