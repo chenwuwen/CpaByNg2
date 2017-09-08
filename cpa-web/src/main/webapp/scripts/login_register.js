@@ -211,3 +211,8 @@ $(function () {
 
 
 })
+
+/*其实页可以通过Ajax来提交表单,把submit改成button(不改应该也可以;如果出现问题应该是表单的默认行为;可以使用event.preventDefault();来阻止默认行为)
+;然后给button绑定事件(单击或者回车);通过 $(form).bootstrapValidator('validate'); 及上面写的一大片的东西;验证表单;再通过$(form).data("bootstrapValidator").isValid();
+判断表单是否符合验证规则。如果符合验证规则，再进行ajax传输数据。*/
+
