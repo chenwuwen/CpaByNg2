@@ -135,6 +135,8 @@ public class UserController {
         return result;
     }
 
+
+
     /**
      *@Author: kanyun
      *@Description: 注册Ajax检查用户名是否可用

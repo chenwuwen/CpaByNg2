@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -29,10 +30,6 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
     public Map<Integer, String> getSolution(List<Integer> respertoryIds) {
         Map mapSolution = cpaSolutionDao.getAnswer(respertoryIds);
         Map<Integer, String> basicAnswer = new HashMap();
-//        List list = (List) mapSolution.keySet();
-//        for(int i=0;i<list.size(); i++){
-//            basicAnswer.put((Integer) list.get(i),((CpaSolution) mapSolution.get(list.get(i))).getResult());
-//        }
         Iterator iterator = mapSolution.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry<Integer,CpaSolution> entry = (Map.Entry<Integer, CpaSolution>) iterator.next();
@@ -45,7 +42,7 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
     @Override
     public CpaResult compareAnswer(Map<Integer,String> peopleAnswer) {
         CpaResult result = new CpaResult();
-        Map<Integer,String> basicAnswer = getSolution((List<Integer>) peopleAnswer.keySet());
+        Map<Integer,String> basicAnswer = getSolution((new ArrayList<Integer>(peopleAnswer.keySet())));
         Iterator iterator = peopleAnswer.entrySet().iterator();
         Integer score = 0;
         Map resultmap = new HashMap();

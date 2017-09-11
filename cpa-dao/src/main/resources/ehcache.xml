@@ -66,7 +66,11 @@
         cache:为指定名称的对象进行缓存的特殊配置
         name:指定对象的完整名
      -->
- <!--   <cache name="cn.kanyun.cpa.dao.**" maxElementsInMemory="10000" eternal="false"
-           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>-->
+    <cache name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>
+    <cache name="cn.kanyun.cpa.model.entity.itempool.CpaSolution" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>
+    <cache name="cn.kanyun.cpa.model.entity.itempool.CpaOption" maxElementsInMemory="10000" eternal="false"
+           timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"/>
 
 </ehcache>
