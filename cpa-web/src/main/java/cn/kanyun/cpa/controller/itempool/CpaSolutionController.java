@@ -45,8 +45,10 @@ public class CpaSolutionController {
         Iterator iterator = pAnswers.iterator();
         while (iterator.hasNext()) {
             String str = (String) iterator.next();
-            String[] strr = str.split("-");
-            peopleAnswer.put(Integer.valueOf(strr[0]),strr[1]);
+            if (null != str && !"".equals(str)) {
+                String[] strr = str.split("-");
+                peopleAnswer.put(Integer.valueOf(strr[0]), strr[1]);
+            }
         }
         CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer);
         return result;
