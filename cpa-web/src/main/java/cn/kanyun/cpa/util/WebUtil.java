@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.util;
 
 
-import cn.kanyun.cpa.model.dto.user.CpaUserDto;
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import com.alibaba.fastjson.JSONObject;
 

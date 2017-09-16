@@ -4,6 +4,7 @@ package cn.kanyun.cpa.service.itempool.impl;
 import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -58,10 +59,10 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
                 cpaRepertoryDto.setCpaOptionDtos(listoptions);
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             }
-            result.setStatus(1);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
             result.setData(cpaRepertoryDtos);
         } else {
-            result.setStatus(0);
+            result.setState(CpaConstants.NOT_FOUND_DATA);
             result.setMsg("未获取到记录！");
         }
         return result;

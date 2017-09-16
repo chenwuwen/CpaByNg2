@@ -7,7 +7,7 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import cn.kanyun.cpa.service.user.IUserService;
-import cn.kanyun.cpa.util.CpaConstants;
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.util.EndecryptUtils;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -23,7 +23,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,7 +85,7 @@ public class UserController {
         String s_code = (String) request.getSession().getAttribute("validateCode");
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
         if (!s_code.equalsIgnoreCase(user.getValidateCode())) {
-            result.setStatus(2);
+            result.setState(CpaConstants.OPERATION_ERROR);
             result.setMsg("验证码错误！");
         } else {
         /*就是代表当前的用户。*/
@@ -118,7 +117,7 @@ public class UserController {
                 user.setRoles(userRoleService.findRoleByUserId(u.getId()));
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
                 user.setId(u.getId());
-                result.setStatus(1);
+                result.setState(1);
                 result.setMsg("登陆成功");
                 result.setData(user);
             } catch (AuthenticationException e) {
@@ -129,7 +128,7 @@ public class UserController {
                 } else {
                     result.setMsg("登陆失败");
                 }
-                result.setStatus(2);
+                result.setState(2);
             }
         }
         return result;
@@ -179,7 +178,7 @@ public class UserController {
         String s_code = (String) session.getAttribute("validateCode");
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
         if (!s_code.equalsIgnoreCase(userDto.getValidateCode())) {
-            result.setStatus(2);
+            result.setState(2);
             result.setMsg("验证码错误！");
         } else {
             try {
@@ -198,19 +197,19 @@ public class UserController {
                     userRole.setRoleId(3);
                     Integer r = userRoleService.save(userRole);
                     if(r!=null) {
-                        result.setStatus(1);
+                        result.setState(CpaConstants.OPERATION_SUCCESS);
                         result.setMsg("注册成功,即将跳转至登陆页！");
                     }else{
-                        result.setStatus(2);
+                        result.setState(CpaConstants.OPERATION_ERROR);
                         result.setMsg("注册失败,请重试！");
                     }
                 } else {
-                    result.setStatus(2);
+                    result.setState(2);
                     result.setMsg("注册失败,请重试！");
                 }
             }catch (Exception e){
-                logger.info("用户注册异常：  "+e);
-                result.setStatus(2);
+                logger.info("/api/user/register  用户注册异常：  "+e);
+                result.setState(2);
                 result.setMsg("注册失败,请重试！");
             }
         }

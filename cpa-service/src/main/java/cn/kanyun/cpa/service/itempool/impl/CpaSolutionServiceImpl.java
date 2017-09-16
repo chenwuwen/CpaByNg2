@@ -64,7 +64,7 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
         resultmap.put("score",score);
         resultmap.put("errorList",errorList);
         result.setData(resultmap);
-        result.setStatus(1);
+        result.setState(1);
         return result;
     }
 }
