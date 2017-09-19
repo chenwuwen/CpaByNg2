@@ -5,6 +5,8 @@ import cn.kanyun.cpa.dao.itempool.ICpaOptionDao;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Created by Administrator on 2017/6/16.
  */
@@ -22,5 +24,10 @@ public class CpaOptionDaoImpl extends CommonDaoImpl<Integer, CpaOption> implemen
      */
     public CpaOptionDaoImpl(Class<CpaOption> clatt) {
         super(clatt);
+    }
+
+    @Override
+    public void saveOption(List<CpaOption> cpaOptions) {
+        saveAll(cpaOptions);
     }
 }

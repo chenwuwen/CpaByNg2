@@ -34,14 +34,20 @@ public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> impl
     @Override
     public Map<Integer, CpaSolution> getAnswer(List<Integer> respertoryIds) {
         Session session = getSession();
-        String hql ="from CpaSolution o where o.id in (:respertoryIds)";
+        String hql = "from CpaSolution o where o.id in (:respertoryIds)";
         Query query = session.createQuery(hql);
-        query.setParameterList("respertoryIds",respertoryIds);
+        query.setParameterList("respertoryIds", respertoryIds);
         Map<Integer, CpaSolution> mapSolution = new HashMap();
         List<CpaSolution> solutionList = query.list();
-        for(int i=0;i<solutionList.size();i++){
-            mapSolution.put(solutionList.get(i).getId(),solutionList.get(i));
+        for (int i = 0; i < solutionList.size(); i++) {
+            mapSolution.put(solutionList.get(i).getId(), solutionList.get(i));
         }
         return mapSolution;
+    }
+
+    @Override
+    public Integer saveSolution(CpaSolution cpaSolution) {
+        Integer k = save(cpaSolution);
+        return k;
     }
 }

@@ -2,6 +2,9 @@ package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.itempool.CpaOption;
+import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
+import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +29,10 @@ public class CpaRepertoryController {
     private ICpaRepertoryService cpaRepertoryService;
 
     /**
-     *@Author: kanyun
-     *@Description: 获取试题列表（单元测试）
-     *@Date: 2017/8/16 14:58
-     *@params:
+     * @Author: kanyun
+     * @Description: 获取试题列表（单元测试）
+     * @Date: 2017/8/16 14:58
+     * @params:
      */
     @RequestMapping("/getUnitExam/{typeCode}")
     @ResponseBody
@@ -40,5 +43,16 @@ public class CpaRepertoryController {
         return result;
     }
 
-
+    /**
+     * @Author: kanyun
+     * @Description: 保存单元测试（试题）
+     * @Date: 2017/9/18 17:21
+     * @params:
+     */
+    @RequestMapping("/addUnitExam")
+    @ResponseBody
+    public Integer addUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        Integer k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
+        return k;
+    }
 }

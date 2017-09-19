@@ -2,7 +2,9 @@ package cn.kanyun.cpa.service.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
+import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.ICommonService;
 
 import java.util.List;
@@ -21,5 +23,5 @@ public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertor
      */
     CpaResult getUnitExam(String where, Object[] params);
 
-
+    Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }

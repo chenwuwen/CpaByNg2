@@ -2,7 +2,9 @@ package cn.kanyun.cpa.dao.itempool.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
 import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
+import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
+import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,10 +19,17 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Integer, CpaRepertory> im
 
     /**
      * 保留指定clatt值的接口【通过子类显示调用父类的构造函数来指定】
-     *通过调用父类的构造函数指定clazz值，即实体类的类类型
+     * 通过调用父类的构造函数指定clazz值，即实体类的类类型
+     *
      * @param clatt
      */
     public CpaRepertoryDaoImpl(Class<CpaRepertory> clatt) {
         super(clatt);
+    }
+
+    @Override
+    public Integer saveRepertory(CpaRepertory cpaRepertory) {
+        Integer k = save(cpaRepertory);
+        return k;
     }
 }

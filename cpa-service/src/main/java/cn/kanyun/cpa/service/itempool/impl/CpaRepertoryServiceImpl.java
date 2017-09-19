@@ -1,13 +1,16 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
 
+import cn.kanyun.cpa.dao.itempool.ICpaOptionDao;
 import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
+import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
+import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,10 @@ import java.util.*;
 public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements ICpaRepertoryService {
     @Resource(name = ICpaRepertoryDao.REPOSITORY_NAME)
     private ICpaRepertoryDao iCpaRepertoryDao;
+    @Resource(name = ICpaOptionDao.REPOSITORY_NAME)
+    private ICpaOptionDao iCpaOptionDao;
+    @Resource(name = ICpaSolutionDao.REPOSITORY_NAME)
+    private ICpaSolutionDao iCpaSolutionDao;
 
     public CpaResult getUnitExam(String where, Object[] params) {
         CpaResult result = iCpaRepertoryDao.getScrollData(-1, -1, where, params);
@@ -66,6 +73,14 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
             result.setMsg("未获取到记录！");
         }
         return result;
+    }
+
+    @Override
+    public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        Integer k = iCpaRepertoryDao.saveRepertory(cpaRepertory);
+        Integer k1 = iCpaSolutionDao.saveSolution(cpaSolution);
+        iCpaOptionDao.saveOption(cpaOptions);
+        return cpaRepertory.getId();
     }
 
 
