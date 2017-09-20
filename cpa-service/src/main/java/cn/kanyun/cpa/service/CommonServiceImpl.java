@@ -103,4 +103,8 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
         return commondao.getScrollData(firstResult, maxResult, where, params,
                 orderby);
     }
+
+    public long getTotalCount(String where, Object[] params){
+        return commondao.getTotalCount(where,params);
+    }
 }

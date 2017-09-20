@@ -30,8 +30,8 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     @Resource(name = ICpaSolutionDao.REPOSITORY_NAME)
     private ICpaSolutionDao iCpaSolutionDao;
 
-    public CpaResult getUnitExam(String where, Object[] params) {
-        CpaResult result = iCpaRepertoryDao.getScrollData(-1, -1, where, params);
+    public CpaResult getUnitExam(Integer firstResult,Integer pageSize,String where, Object[] params) {
+        CpaResult result = iCpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
             List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
             List<CpaRepertory> listcr = (List<CpaRepertory>) result.getData();

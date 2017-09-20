@@ -75,6 +75,13 @@ public interface ICommonService <K extends Serializable,T extends Serializable> 
 	     * @return
 	     */
 	    public CpaResult<T> getScrollData();
+		/**
+		 * 根据条件获取总记录数
+		 * @param where 条件语句,不带where关键字,条件语句只能使用位置参数,位置参数的索引值以1开始,如:o.username=?1 and o.password=?2
+		 * @param params 条件语句出现的位置参数值
+		 * @return 总数
+		 */
+		public long getTotalCount(String where, Object[] params);
 	    /**
 	     * 分页获取记录
 	     * @param firstResult 开始索引,如果输入值为-1,即获取全部数据

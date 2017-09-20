@@ -212,6 +212,18 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return result;
     }
 
+    public long getTotalCount(String where, Object[] params){
+        String entityName = clatt.getSimpleName();
+        String whereql = where != null && !"".equals(where.trim()) ? " where "
+                + where : "";
+        Session session = getSession();
+        Query queryCount = session.createQuery("select count(o) from "
+                + entityName + " o" + whereql);
+        setQueryParameter(queryCount, params);
+        long count = (Long) queryCount.uniqueResult();
+        return count;
+    }
+
     /**
      * 设置查询参数
      *

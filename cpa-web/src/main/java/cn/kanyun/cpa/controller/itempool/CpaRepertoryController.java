@@ -2,6 +2,7 @@ package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
@@ -36,10 +37,16 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getUnitExam/{typeCode}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode) {
+    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, Integer pageNo, Integer pageSize) {
         Object[] params = {typeCode};
         String where = "o.testType=? ";
-        CpaResult result = cpaRepertoryService.getUnitExam(where, params);
+        Page page = new Page();
+        pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+        pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+        //总记录数
+        Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
+        Integer firstResult = page.countOffset(pageNo, pageSize);
+        CpaResult result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
         return result;
     }
 

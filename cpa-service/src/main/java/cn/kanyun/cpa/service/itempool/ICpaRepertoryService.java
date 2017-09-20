@@ -21,7 +21,7 @@ public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertor
      *@Date: 2017/8/16 15:05
      *@params:
      */
-    CpaResult getUnitExam(String where, Object[] params);
+    CpaResult getUnitExam(Integer firstResult,Integer pageSize, String where, Object[] params);
 
     Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }
