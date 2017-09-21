@@ -54,7 +54,7 @@ public class MyRealm extends AuthorizingRealm {
     protected AuthenticationInfo doGetAuthenticationInfo(
             AuthenticationToken token) throws AuthenticationException {
         logger.info("=================Shiro开始登录认证===================");
-        UsernamePasswordToken upToken  = (UsernamePasswordToken) token;
+        UsernamePasswordToken upToken = (UsernamePasswordToken) token;
         CpaUser user = userService.findByUserName(upToken.getUsername());
         // 账号不存在
         if (user == null || 0 == user.getStatus()) {
@@ -64,9 +64,9 @@ public class MyRealm extends AuthorizingRealm {
             throw new LockedAccountException(); //账号被锁定
         } else {
 //            盐值：取用户信息中盐值字段的值(随机值)，避免由于两个用户原始密码相同，加密后的密码也相同
-            ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUserName()+user.getSalt());
+            ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUserName() + user.getSalt());
             //若存在，将此用户存放到登录认证info中
-            return new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(),credentialsSalt, this.getName());
+            return new SimpleAuthenticationInfo(user.getUserName(), user.getPassword(), credentialsSalt, this.getName());
         }
 
     }

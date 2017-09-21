@@ -32,8 +32,10 @@ public final class EndecryptUtils {
         byte[] bytes = password.getBytes();
         return Base64.encodeToString(bytes);
     }
+
     /**
      * base64进制解密
+     *
      * @param cipherText
      * @return
      */
@@ -41,6 +43,7 @@ public final class EndecryptUtils {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(cipherText), "消息摘要不能为空");
         return Base64.decodeToString(cipherText);
     }
+
     /**
      * 16进制加密
      *
@@ -52,8 +55,10 @@ public final class EndecryptUtils {
         byte[] bytes = password.getBytes();
         return Hex.encodeToString(bytes);
     }
+
     /**
      * 16进制解密
+     *
      * @param cipherText
      * @return
      */
@@ -61,78 +66,80 @@ public final class EndecryptUtils {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(cipherText), "消息摘要不能为空");
         return new String(Hex.decode(cipherText));
     }
-    public static String generateKey()
-    {
-        AesCipherService aesCipherService=new AesCipherService();
-        Key key=aesCipherService.generateNewKey();
+
+    public static String generateKey() {
+        AesCipherService aesCipherService = new AesCipherService();
+        Key key = aesCipherService.generateNewKey();
         return Base64.encodeToString(key.getEncoded());
     }
+
     /**
      * 对密码进行md5加密,并返回密文和salt，包含在User对象中
+     *
      * @param username 用户名
      * @param password 密码
      * @return 密文和salt
      */
-    public static CpaUserDto md5Password(String username,String password){
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(username),"username不能为空");
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(password),"password不能为空");
-        SecureRandomNumberGenerator secureRandomNumberGenerator=new SecureRandomNumberGenerator();
+    public static CpaUserDto md5Password(String username, String password) {
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(username), "username不能为空");
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(password), "password不能为空");
+        SecureRandomNumberGenerator secureRandomNumberGenerator = new SecureRandomNumberGenerator();
 //        randomNumberGenerator是Math中持有的Random类单例,用于生成随机数,这里用随机数做盐值,再将盐值存储到数据库
-        String salt= secureRandomNumberGenerator.nextBytes().toHex();
+        String salt = secureRandomNumberGenerator.nextBytes().toHex();
         //组合username,四次迭代，对密码进行加密
-        String password_cipherText= new Md5Hash(password,username+salt,4).toHex();
-        CpaUserDto user=new CpaUserDto();
+        String password_cipherText = new Md5Hash(password, username + salt, 4).toHex();
+        CpaUserDto user = new CpaUserDto();
         user.setPassword(password_cipherText);
         user.setSalt(salt);
         return user;
     }
+
     /**
      * 通过username,password,salt,校验密文是否匹配 ，校验规则其实在配置文件中，这里为了清晰，写下来
-     * @param username 用户名
-     * @param password 原密码
-     * @param salt  盐
+     *
+     * @param username      用户名
+     * @param password      原密码
+     * @param salt          盐
      * @param md5cipherText 密文
      * @return
      */
-    public static  boolean checkMd5Password(String username,String password,String salt,String md5cipherText)
-    {
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(username),"username不能为空");
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(password),"password不能为空");
-        Preconditions.checkArgument(!Strings.isNullOrEmpty(md5cipherText),"md5cipherText不能为空");
+    public static boolean checkMd5Password(String username, String password, String salt, String md5cipherText) {
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(username), "username不能为空");
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(password), "password不能为空");
+        Preconditions.checkArgument(!Strings.isNullOrEmpty(md5cipherText), "md5cipherText不能为空");
         //组合username,两次迭代，对密码进行加密
-        String password_cipherText= new Md5Hash(password,username+salt,2).toHex();
+        String password_cipherText = new Md5Hash(password, username + salt, 2).toHex();
         return md5cipherText.equals(password_cipherText);
     }
 
 
-
     public static void main(String[] args) {
-        String username="chen2";
+        String username = "chen2";
         String password = "123456";
         String cipherText = encrytHex(password);
         System.out.println(password + "hex加密之后的密文是：" + cipherText);
-        String decrptPassword=decryptHex(cipherText);
+        String decrptPassword = decryptHex(cipherText);
         System.out.println(cipherText + "hex解密之后的密码是：" + decrptPassword);
         String cipherText_base64 = encrytBase64(password);
         System.out.println(password + "base64加密之后的密文是：" + cipherText_base64);
-        String decrptPassword_base64=decryptBase64(cipherText_base64);
+        String decrptPassword_base64 = decryptBase64(cipherText_base64);
         System.out.println(cipherText_base64 + "base64解密之后的密码是：" + decrptPassword_base64);
-        String h64=  H64.encodeToString(password.getBytes());
+        String h64 = H64.encodeToString(password.getBytes());
         System.out.println(h64);
-        SecureRandomNumberGenerator secureRandomNumberGenerator=new SecureRandomNumberGenerator();
+        SecureRandomNumberGenerator secureRandomNumberGenerator = new SecureRandomNumberGenerator();
 //        randomNumberGenerator是Math中持有的Random类单例,用于生成随机数,这里用随机数做盐值,再将盐值存储到数据库
-        String salt= secureRandomNumberGenerator.nextBytes().toHex();
+        String salt = secureRandomNumberGenerator.nextBytes().toHex();
         System.out.println(salt);
-        String cipherText_md5= new Md5Hash(password,username+salt,4).toHex();
-        System.out.println(password+"通过md5加密之后的密文是："+cipherText_md5);
+        String cipherText_md5 = new Md5Hash(password, username + salt, 4).toHex();
+        System.out.println(password + "通过md5加密之后的密文是：" + cipherText_md5);
         System.out.println(generateKey());
         System.out.println("==========================================================");
-        AesCipherService aesCipherService=new AesCipherService();
+        AesCipherService aesCipherService = new AesCipherService();
         aesCipherService.setKeySize(128);
-        Key key=aesCipherService.generateNewKey();
-        String aes_cipherText= aesCipherService.encrypt(password.getBytes(),key.getEncoded()).toHex();
-        System.out.println(password+" aes加密的密文是："+aes_cipherText);
-        String aes_mingwen=new String(aesCipherService.decrypt(Hex.decode(aes_cipherText),key.getEncoded()).getBytes());
-        System.out.println(aes_cipherText+" aes解密的明文是："+aes_mingwen);
+        Key key = aesCipherService.generateNewKey();
+        String aes_cipherText = aesCipherService.encrypt(password.getBytes(), key.getEncoded()).toHex();
+        System.out.println(password + " aes加密的密文是：" + aes_cipherText);
+        String aes_mingwen = new String(aesCipherService.decrypt(Hex.decode(aes_cipherText), key.getEncoded()).getBytes());
+        System.out.println(aes_cipherText + " aes解密的明文是：" + aes_mingwen);
     }
 }

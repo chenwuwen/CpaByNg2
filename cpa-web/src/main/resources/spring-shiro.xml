@@ -12,16 +12,23 @@
         <!--<constructor-arg index="0" ref=""/>-->
         <!--<constructor-arg index="1" ref=""/>-->
         <!-- 配置密码匹配器 密码凭证器-->
-    <property name="credentialsMatcher">
-        <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-            <!-- 指定散列算法为MD5,需要和生成密码时的一样 -->
-            <property name="hashAlgorithmName" value="MD5"></property>
-            <!-- 散列迭代次数，需要和生成密码时的一样 -->
-            <property name="hashIterations" value="4"></property>
-            <!--是否存储散列后的密码为16进制，需要和生成密码时的一样，默认是base64-->
-            <property name="storedCredentialsHexEncoded" value="true"></property>
-        </bean>
-    </property>
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 指定散列算法为MD5,需要和生成密码时的一样 -->
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <!-- 散列迭代次数，需要和生成密码时的一样 -->
+                <property name="hashIterations" value="4"></property>
+                <!--是否存储散列后的密码为16进制，需要和生成密码时的一样，默认是base64-->
+                <property name="storedCredentialsHexEncoded" value="true"></property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 会话验证调度器 -->
+    <bean id="sessionValidationScheduler"
+          class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
+        <property name="interval" value="${session.validate.timespan}"/>
+        <property name="sessionManager" ref="sessionManager"/>
     </bean>
 
     <!-- 7. 配置ModularRealmAuthenticator，可以实现多Realm认证 -->
@@ -64,6 +71,10 @@
         <property name="globalSessionTimeout" value="600000"/>
         <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
+        <!-- 相隔多久检查一次session的有效性   -->
+        <property name="sessionValidationInterval" value="1800000"/>
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
     </bean>
 
 
@@ -73,7 +84,7 @@
         <!-- 使用配置的缓存管理器 -->
         <property name="cacheManager" ref="cacheManager"></property>
         <!-- 会话管理 -->
-        <property name="sessionManager" ref="sessionManager" />
+        <property name="sessionManager" ref="sessionManager"/>
         <!--记住我-->
         <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
@@ -90,13 +101,13 @@
         <!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后由Js进行跳转了) -->
         <!-- <property name="successUrl" value="/system/main"/> -->
         <!-- 用户访问未对其授权的资源时,所显示的连接 没有权限跳转的地址 -->
-        <!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp -->
+        <!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp 没有权限页面-->
         <property name="unauthorizedUrl" value="/"/>
         <!-- 自定义filter配置 -->
         <property name="filters">
             <map>
                 <!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中-->
-                <entry key="authc" value-ref="formAuthenticationFilter" />
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
             </map>
         </property>
         <!--过滤定义，从上而下，蒋匿名的anon放最下面-->
@@ -108,9 +119,9 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--没有参数，表示可以匿名使用。-->
-                /admins/**=anon
+                /api/**=anon
                 <!--表示需要认证(登录)才能使用，没有参数-->
-                /admins/user/**=authc
+                /api/solution/**=authc
                 <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。-->
                 /admins/user/**=roles[admin]
                 <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。-->
@@ -118,7 +129,7 @@
                 <!--根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。-->
                 /admins/user/**=rest[user]
                 <!--当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。-->
-               /admins/user/**=port[8081]
+                /admins/user/**=port[8081]
                 <!--没有参数表示httpBasic认证-->
                 /admins/user/**=authcBasic
                 <!--没有参数，表示安全的url请求，协议为https-->
@@ -127,19 +138,29 @@
                 /admins/user/**=user
             </value>
         </property>
+
+        <!-- 读取初始自定义权限内容-->
+        <!--   <property name="filterChainDefinitions" value="#{shiroManager.loadFilterChainDefinitions()}"/>
+           <property name="filters">
+               <util:map>
+                   <entry key="login" value-ref="login"></entry>
+                   <entry key="role" value-ref="role"></entry>
+               </util:map>
+           </property>-->
+
     </bean>
 
-    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 -->
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 Shiro生命周期处理器-->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
     <!-- 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证 -->
     <!-- 配置以下两个bean即可实现此功能 -->
     <!-- Enable Shiro Annotations for Spring-configured beans. Only run after the lifecycleBeanProcessor has run -->
     <!-- 由于本例中并未使用Shiro注解,故注释掉这两个bean(个人觉得将权限通过注解的方式硬编码在程序中,查看起来不是很方便,没必要使用) -->
-   <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>-->
+    <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+         <property name="securityManager" ref="securityManager"/>
+     </bean>-->
 
     <!-- 基于Form表单的身份验证过滤器，不配置将也会注册此过虑器，表单中的用户账号、密码及loginurl将采用默认值，建议配置 -->
 
@@ -149,18 +170,27 @@
 
         <!-- 表单中账号的input名称 -->
 
-        <property name="usernameParam" value="username" />
+        <property name="usernameParam" value="username"/>
 
         <!-- 表单中密码的input名称 -->
 
-        <property name="passwordParam" value="password" />
+        <property name="passwordParam" value="password"/>
 
         <!--记住我input框名称-->
         <property name="rememberMeParam" value="rememberMe"/>
 
         <!-- loginurl：用户登陆地址，此地址是可以http访问的url地址 -->
 
-        <property name="loginUrl" value="/login" />
+        <property name="loginUrl" value="/login"/>
 
     </bean>
 </beans>
+        <!-- ============================================================================ -->
+        <!--整个认证流程：-->
+        <!--(1). 在Controller中通过Security.getSubject()获取当前的Subject；-->
+        <!--(2). 通过Subject的isAuthenticated()验证当前用户是否已经被认证；-->
+        <!--(3). 如果没有被认证，开始认证。-->
+        <!--(4). 将从前台传来的用户名（邮箱）和密码封装到一个UsernamePasswordToken对象upToken中；-->
+        <!--(5). 调用当前Subject的login(upToken)方法，这会把upToken作为参数传递到自定义的Realm的doGetAuthenticationInfo(AuthenticationToken)方法中；-->
+        <!--(6). 在doGetAuthenticationInfo(AuthenticationToken)方法中，首先将AuthenticationToken转换为UsernamePasswordToken对象upToken，然后调用Service层，根据upToken中的用户名到数据库中查询密码；-->
+        <!--(7). 由shiro完成密码的比对。密码的比对是通过AuthenticatingRealm的credentialsMatcher属性来进行比对的-->
