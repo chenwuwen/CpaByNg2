@@ -10,12 +10,7 @@ import cn.kanyun.cpa.service.itempool.ICpaSolutionService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -27,43 +22,45 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
     private ICpaSolutionDao cpaSolutionDao;
 
     @Override
-    public Map<Integer, String> getSolution(List<Integer> respertoryIds) {
+    public Map<Integer, String[]> getSolution(List<Integer> respertoryIds) {
         Map mapSolution = cpaSolutionDao.getAnswer(respertoryIds);
-        Map<Integer, String> basicAnswer = new HashMap();
+        Map<Integer, String[]> basicAnswer = new HashMap();
         Iterator iterator = mapSolution.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry<Integer,CpaSolution> entry = (Map.Entry<Integer, CpaSolution>) iterator.next();
-            basicAnswer.put(entry.getKey(),entry.getValue().getResult());
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, CpaSolution> entry = (Map.Entry<Integer, CpaSolution>) iterator.next();
+            basicAnswer.put(entry.getKey(), entry.getValue().getResult().split(","));
         }
 
         return basicAnswer;
     }
 
     @Override
-    public CpaResult compareAnswer(Map<Integer,String> peopleAnswer,String typeCode) {
+    public CpaResult compareAnswer(Map<Integer, String[]> peopleAnswer, String typeCode) {
         CpaResult result = new CpaResult();
-        Map<Integer,String> basicAnswer = getSolution((new ArrayList<Integer>(peopleAnswer.keySet())));
+        Map<Integer, String[]> basicAnswer = getSolution((new ArrayList<Integer>(peopleAnswer.keySet())));
         Iterator iterator = peopleAnswer.entrySet().iterator();
         Integer score = 0;
         Map resultmap = new HashMap();
         List errorList = new ArrayList();
-        while (iterator.hasNext()){
-            Map.Entry<Integer,String> entry = (Map.Entry) iterator.next();
-            String pav = entry.getValue() == null ? "" :  entry.getValue();
-            String bav = basicAnswer.get(entry.getKey())==null ? "" : basicAnswer.get(entry.getKey());
-            if (pav.equals(bav)){
-                score ++ ;
-            }else {
+        while (iterator.hasNext()) {
+            Map.Entry<Integer, String[]> entry = (Map.Entry) iterator.next();
+            String pav[] = entry.getValue() == null || entry.getValue().length < 1 ? new String[0] : entry.getValue();
+            String bav[] = basicAnswer.get(entry.getKey()) == null || basicAnswer.get(entry.getKey()).length < 1 ? new String[0] : basicAnswer.get(entry.getKey());
+            Arrays.sort(pav);
+            Arrays.sort(bav);
+            if (Arrays.equals(pav, bav)) {
+                score++;
+            } else {
                 Map map = new HashMap();
-                map.put("errorItemId",entry.getKey());
-                map.put("errorItemAnswer",pav);
-                map.put("correctItemAnswer",bav);
+                map.put("errorItemId", entry.getKey());
+                map.put("errorItemAnswer", pav);
+                map.put("correctItemAnswer", bav);
                 errorList.add(map);
             }
         }
-        resultmap.put("typeCode",typeCode);
-        resultmap.put("score",score);
-        resultmap.put("errorList",errorList);
+        resultmap.put("typeCode", typeCode);
+        resultmap.put("score", score);
+        resultmap.put("errorList", errorList);
         result.setData(resultmap);
         result.setState(1);
         return result;

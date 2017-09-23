@@ -20,7 +20,7 @@ public interface ICpaSolutionService extends ICommonService<Integer,CpaSolution>
      *@Date: 2017/8/16 15:27
      *@params:
      */
-    public Map<Integer,String> getSolution(List<Integer> respertoryIds);
+    public Map<Integer,String[]> getSolution(List<Integer> respertoryIds);
 
     /**
      *@Author: kanyun
@@ -28,5 +28,5 @@ public interface ICpaSolutionService extends ICommonService<Integer,CpaSolution>
      *@Date: 2017/8/16 15:06
      *@params:
      */
-    CpaResult compareAnswer(Map<Integer,String> peopleAnswer,String typeCode);
+    CpaResult compareAnswer(Map<Integer,String[]> peopleAnswer,String typeCode);
 }

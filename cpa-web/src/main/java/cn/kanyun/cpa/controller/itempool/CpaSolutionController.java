@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -40,17 +37,25 @@ public class CpaSolutionController {
     @ResponseBody
 /*    @RequestBody接收的是一个Json对象的字符串，而不是一个Json对象。然而在ajax请求往往传的都是Json对象，后来发现用 JSON.stringify(data)的方式就能将对象变成字符串。
     同时ajax请求的时候也要指定dataType: "json",contentType:"application/json" 这样就可以轻易的将一个对象或者List传到Java端，使用@RequestBody即可绑定对象或者List*/
-    public CpaResult correctItem(String pAnswers,String typeCode) {
-        Map<Integer, String> peopleAnswer = new HashMap<>();
-//        Iterator iterator = pAnswers.iterator();
-//        while (iterator.hasNext()) {
-//            String str = (String) iterator.next();
-//            if (null != str && !"".equals(str)) {
-//                String[] strr = str.split("-");
-//                peopleAnswer.put(Integer.valueOf(strr[0]), strr[1]);
-//            }
-//        }
-        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer,typeCode);
+    public CpaResult correctItem(@RequestBody CpaRepertoryDto cpaRepertoryDto) {
+        Map<Integer, String[]> peopleAnswer = new HashMap<>();
+        Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
+        while (iterator.hasNext()) {
+            String str = (String) iterator.next();
+            if (null != str && !"".equals(str)) {
+                String[] strr = str.split("-");
+                Integer k = Integer.valueOf(strr[0]); //获取试题ID（数组中第一项）
+                strr[0] = strr[strr.length-1]; //（数组中其他项为value做数组，将数组最后一个值赋给数组第一个值）
+                strr = Arrays.copyOf(strr,strr.length-1); //数组缩容
+              /*  处理数组第二种方法,需要再建立一个数组 使用System.arraycopy方法：如果是数组比较大，那么使用System.arraycopy会比较有优势，因为其使用的是内存复制，省去了大量的数组寻址访问等时间*/
+//                String[] str = new String[strr.length-1];
+//                System.arraycopy(strr,1,str,0,strr.length-1);
+//                System.out.println(Arrays.toString(str));
+
+                peopleAnswer.put(k, strr);
+            }
+        }
+        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer,cpaRepertoryDto.getTypeCode());
         return result;
     }
 

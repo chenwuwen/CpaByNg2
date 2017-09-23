@@ -22,10 +22,13 @@ public class CpaRepertoryDto  implements java.io.Serializable {
      private String presult; //用户回答的答案
      private String bresult; //标准答案
      private List<CpaOptionDto> cpaOptionDtos;
+     private List<String> pAnswer;
+     private String typeCode;
 
-     public CpaRepertoryDto(){}
+     public CpaRepertoryDto() {
+     }
 
-     public CpaRepertoryDto(Integer id, String testStem,String presult,String bresult, String testType, Timestamp insertDate, List<CpaOptionDto> cpaOptionDtos) {
+     public CpaRepertoryDto(Integer id, String testStem, String testType, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode) {
           this.id = id;
           this.testStem = testStem;
           this.testType = testType;
@@ -33,6 +36,8 @@ public class CpaRepertoryDto  implements java.io.Serializable {
           this.presult = presult;
           this.bresult = bresult;
           this.cpaOptionDtos = cpaOptionDtos;
+          this.pAnswer = pAnswer;
+          this.typeCode = typeCode;
      }
 
      public Integer getId() {
@@ -67,14 +72,6 @@ public class CpaRepertoryDto  implements java.io.Serializable {
           this.insertDate = insertDate;
      }
 
-     public List<CpaOptionDto> getCpaOptionDtos() {
-          return cpaOptionDtos;
-     }
-
-     public void setCpaOptionDtos(List<CpaOptionDto> cpaOptionDtos) {
-          this.cpaOptionDtos = cpaOptionDtos;
-     }
-
      public String getPresult() {
           return presult;
      }
@@ -89,5 +86,29 @@ public class CpaRepertoryDto  implements java.io.Serializable {
 
      public void setBresult(String bresult) {
           this.bresult = bresult;
+     }
+
+     public List<CpaOptionDto> getCpaOptionDtos() {
+          return cpaOptionDtos;
+     }
+
+     public void setCpaOptionDtos(List<CpaOptionDto> cpaOptionDtos) {
+          this.cpaOptionDtos = cpaOptionDtos;
+     }
+
+     public List<String> getpAnswer() {
+          return pAnswer;
+     }
+
+     public void setpAnswer(List<String> pAnswer) {
+          this.pAnswer = pAnswer;
+     }
+
+     public String getTypeCode() {
+          return typeCode;
+     }
+
+     public void setTypeCode(String typeCode) {
+          this.typeCode = typeCode;
      }
 }
