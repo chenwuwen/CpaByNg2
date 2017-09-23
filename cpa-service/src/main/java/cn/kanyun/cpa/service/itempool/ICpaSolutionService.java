@@ -28,5 +28,5 @@ public interface ICpaSolutionService extends ICommonService<Integer,CpaSolution>
      *@Date: 2017/8/16 15:06
      *@params:
      */
-    CpaResult compareAnswer(Map<Integer,String> peopleAnswer);
+    CpaResult compareAnswer(Map<Integer,String> peopleAnswer,String typeCode);
 }

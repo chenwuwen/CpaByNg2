@@ -40,7 +40,7 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
     }
 
     @Override
-    public CpaResult compareAnswer(Map<Integer,String> peopleAnswer) {
+    public CpaResult compareAnswer(Map<Integer,String> peopleAnswer,String typeCode) {
         CpaResult result = new CpaResult();
         Map<Integer,String> basicAnswer = getSolution((new ArrayList<Integer>(peopleAnswer.keySet())));
         Iterator iterator = peopleAnswer.entrySet().iterator();
@@ -61,6 +61,7 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
                 errorList.add(map);
             }
         }
+        resultmap.put("typeCode",typeCode);
         resultmap.put("score",score);
         resultmap.put("errorList",errorList);
         result.setData(resultmap);

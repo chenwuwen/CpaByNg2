@@ -40,17 +40,17 @@ public class CpaSolutionController {
     @ResponseBody
 /*    @RequestBody接收的是一个Json对象的字符串，而不是一个Json对象。然而在ajax请求往往传的都是Json对象，后来发现用 JSON.stringify(data)的方式就能将对象变成字符串。
     同时ajax请求的时候也要指定dataType: "json",contentType:"application/json" 这样就可以轻易的将一个对象或者List传到Java端，使用@RequestBody即可绑定对象或者List*/
-    public CpaResult correctItem(@RequestBody List<String> pAnswers) {
+    public CpaResult correctItem(String pAnswers,String typeCode) {
         Map<Integer, String> peopleAnswer = new HashMap<>();
-        Iterator iterator = pAnswers.iterator();
-        while (iterator.hasNext()) {
-            String str = (String) iterator.next();
-            if (null != str && !"".equals(str)) {
-                String[] strr = str.split("-");
-                peopleAnswer.put(Integer.valueOf(strr[0]), strr[1]);
-            }
-        }
-        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer);
+//        Iterator iterator = pAnswers.iterator();
+//        while (iterator.hasNext()) {
+//            String str = (String) iterator.next();
+//            if (null != str && !"".equals(str)) {
+//                String[] strr = str.split("-");
+//                peopleAnswer.put(Integer.valueOf(strr[0]), strr[1]);
+//            }
+//        }
+        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer,typeCode);
         return result;
     }
 

@@ -24,12 +24,6 @@
         </property>
     </bean>
 
-    <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler"
-          class="org.apache.shiro.session.mgt.ExecutorServiceSessionValidationScheduler">
-        <property name="interval" value="${session.validate.timespan}"/>
-        <property name="sessionManager" ref="sessionManager"/>
-    </bean>
 
     <!-- 7. 配置ModularRealmAuthenticator，可以实现多Realm认证 -->
     <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
@@ -74,7 +68,6 @@
         <!-- 相隔多久检查一次session的有效性   -->
         <property name="sessionValidationInterval" value="1800000"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>
     </bean>
 
 
