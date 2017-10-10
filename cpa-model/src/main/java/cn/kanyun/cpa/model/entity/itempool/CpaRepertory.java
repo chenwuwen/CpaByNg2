@@ -9,42 +9,48 @@ import java.util.Set;
  * CpaRepertory entity. @author MyEclipse Persistence Tools
  */
 
-public class CpaRepertory  implements java.io.Serializable {
+public class CpaRepertory implements java.io.Serializable {
 
 
     // Fields    
 
-     private Integer id;
-     private String testStem;
-     private String testType;
-     private Timestamp insertDate;
-     private Set cpaOptions = new HashSet(0);
-     private Set cpaSolutions = new HashSet(0);
+    private Integer id;
+    private String testStem;
+    private String testType;
+    private String choice ; //是否是多选题(默认为单选)
+    private Timestamp insertDate;
+    private Set cpaOptions = new HashSet(0);
+    private Set cpaSolutions = new HashSet(0);
 
 
     // Constructors
 
-    /** default constructor */
+    /**
+     * default constructor
+     */
     public CpaRepertory() {
     }
 
-    
-    /** full constructor */
-    public CpaRepertory(String testStem, String testType, Timestamp insertDate, Set cpaOptions, Set cpaSolutions) {
+
+    /**
+     * full constructor
+     */
+    public CpaRepertory(String testStem, String testType, String choice, Timestamp insertDate, Set cpaOptions, Set cpaSolutions) {
         this.testStem = testStem;
         this.testType = testType;
+        this.choice = choice;
         this.insertDate = insertDate;
         this.cpaOptions = cpaOptions;
         this.cpaSolutions = cpaSolutions;
     }
 
-   
+
     // Property accessors
 
     public Integer getId() {
         return this.id;
     }
-    
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -52,7 +58,7 @@ public class CpaRepertory  implements java.io.Serializable {
     public String getTestStem() {
         return this.testStem;
     }
-    
+
     public void setTestStem(String testStem) {
         this.testStem = testStem;
     }
@@ -60,15 +66,23 @@ public class CpaRepertory  implements java.io.Serializable {
     public String getTestType() {
         return this.testType;
     }
-    
+
     public void setTestType(String testType) {
         this.testType = testType;
+    }
+
+    public String getChoice() {
+        return choice;
+    }
+
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 
     public Timestamp getInsertDate() {
         return this.insertDate;
     }
-    
+
     public void setInsertDate(Timestamp insertDate) {
         this.insertDate = insertDate;
     }
@@ -76,7 +90,7 @@ public class CpaRepertory  implements java.io.Serializable {
     public Set getCpaOptions() {
         return this.cpaOptions;
     }
-    
+
     public void setCpaOptions(Set cpaOptions) {
         this.cpaOptions = cpaOptions;
     }
@@ -84,17 +98,10 @@ public class CpaRepertory  implements java.io.Serializable {
     public Set getCpaSolutions() {
         return this.cpaSolutions;
     }
-    
+
     public void setCpaSolutions(Set cpaSolutions) {
         this.cpaSolutions = cpaSolutions;
     }
-   
-
-
-
-
-
-
 
 
 }

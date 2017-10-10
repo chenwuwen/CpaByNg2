@@ -10,105 +10,115 @@ import java.util.Set;
  * CpaRepertory entity. @author MyEclipse Persistence Tools
  */
 
-public class CpaRepertoryDto  implements java.io.Serializable {
+public class CpaRepertoryDto implements java.io.Serializable {
 
 
     // Fields    
 
-     private Integer id;
-     private String testStem;
-     private String testType;
-     private Timestamp insertDate;
-     private String presult; //用户回答的答案
-     private String bresult; //标准答案
-     private List<CpaOptionDto> cpaOptionDtos;
-     private List<String> pAnswer;
-     private String typeCode;
+    private Integer id;
+    private String testStem;
+    private String testType;
+    private String choice; //是否是多选题
+    private Timestamp insertDate;
+    private String presult; //用户回答的答案
+    private String bresult; //标准答案
+    private List<CpaOptionDto> cpaOptionDtos;
+    private List<String> pAnswer;
+    private String typeCode;
 
-     public CpaRepertoryDto() {
-     }
+    public CpaRepertoryDto() {
+    }
 
-     public CpaRepertoryDto(Integer id, String testStem, String testType, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode) {
-          this.id = id;
-          this.testStem = testStem;
-          this.testType = testType;
-          this.insertDate = insertDate;
-          this.presult = presult;
-          this.bresult = bresult;
-          this.cpaOptionDtos = cpaOptionDtos;
-          this.pAnswer = pAnswer;
-          this.typeCode = typeCode;
-     }
+    public CpaRepertoryDto(Integer id, String testStem, String testType, String choice, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode) {
+        this.id = id;
+        this.testStem = testStem;
+        this.testType = testType;
+        this.choice = choice;
+        this.insertDate = insertDate;
+        this.presult = presult;
+        this.bresult = bresult;
+        this.cpaOptionDtos = cpaOptionDtos;
+        this.pAnswer = pAnswer;
+        this.typeCode = typeCode;
+    }
 
-     public Integer getId() {
-          return id;
-     }
+    public Integer getId() {
+        return id;
+    }
 
-     public void setId(Integer id) {
-          this.id = id;
-     }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-     public String getTestStem() {
-          return testStem;
-     }
+    public String getTestStem() {
+        return testStem;
+    }
 
-     public void setTestStem(String testStem) {
-          this.testStem = testStem;
-     }
+    public void setTestStem(String testStem) {
+        this.testStem = testStem;
+    }
 
-     public String getTestType() {
-          return testType;
-     }
+    public String getTestType() {
+        return testType;
+    }
 
-     public void setTestType(String testType) {
-          this.testType = testType;
-     }
+    public String getChoice() {
+        return choice;
+    }
 
-     public Timestamp getInsertDate() {
-          return insertDate;
-     }
+    public void setChoice(String choice) {
+        this.choice = choice;
+    }
 
-     public void setInsertDate(Timestamp insertDate) {
-          this.insertDate = insertDate;
-     }
+    public void setTestType(String testType) {
+        this.testType = testType;
+    }
 
-     public String getPresult() {
-          return presult;
-     }
+    public Timestamp getInsertDate() {
+        return insertDate;
+    }
 
-     public void setPresult(String presult) {
-          this.presult = presult;
-     }
+    public void setInsertDate(Timestamp insertDate) {
+        this.insertDate = insertDate;
+    }
 
-     public String getBresult() {
-          return bresult;
-     }
+    public String getPresult() {
+        return presult;
+    }
 
-     public void setBresult(String bresult) {
-          this.bresult = bresult;
-     }
+    public void setPresult(String presult) {
+        this.presult = presult;
+    }
 
-     public List<CpaOptionDto> getCpaOptionDtos() {
-          return cpaOptionDtos;
-     }
+    public String getBresult() {
+        return bresult;
+    }
 
-     public void setCpaOptionDtos(List<CpaOptionDto> cpaOptionDtos) {
-          this.cpaOptionDtos = cpaOptionDtos;
-     }
+    public void setBresult(String bresult) {
+        this.bresult = bresult;
+    }
 
-     public List<String> getpAnswer() {
-          return pAnswer;
-     }
+    public List<CpaOptionDto> getCpaOptionDtos() {
+        return cpaOptionDtos;
+    }
 
-     public void setpAnswer(List<String> pAnswer) {
-          this.pAnswer = pAnswer;
-     }
+    public void setCpaOptionDtos(List<CpaOptionDto> cpaOptionDtos) {
+        this.cpaOptionDtos = cpaOptionDtos;
+    }
 
-     public String getTypeCode() {
-          return typeCode;
-     }
+    public List<String> getpAnswer() {
+        return pAnswer;
+    }
 
-     public void setTypeCode(String typeCode) {
-          this.typeCode = typeCode;
-     }
+    public void setpAnswer(List<String> pAnswer) {
+        this.pAnswer = pAnswer;
+    }
+
+    public String getTypeCode() {
+        return typeCode;
+    }
+
+    public void setTypeCode(String typeCode) {
+        this.typeCode = typeCode;
+    }
 }
