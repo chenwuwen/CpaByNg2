@@ -216,3 +216,10 @@ $(function () {
 ;然后给button绑定事件(单击或者回车);通过 $(form).bootstrapValidator('validate'); 及上面写的一大片的东西;验证表单;再通过$(form).data("bootstrapValidator").isValid();
 判断表单是否符合验证规则。如果符合验证规则，再进行ajax传输数据。*/
 
+/*后台返回时间正确,到了前台变成了毫秒数,除了后台解决，还有一种前台解决方法,通过重写Date的toLocaleString函数,即可得到自定义的日期格式;使用方法
+Date.prototype.toLocaleString = function () {
+    return this.getFullYear() + "/" + (this.getMonth() + 1) + "/" + this.getDate() + " " + this.getHours() + ":" + this.getMinutes() + ":" + this.getSeconds();
+};
+如得到的毫秒数为 A 使用方法为(有时需要将A*1000,即var B = new Date(A*1000))
+var B = new Date(A)
+return B.toLocaleDateString()*/
