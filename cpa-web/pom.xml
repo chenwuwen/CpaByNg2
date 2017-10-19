@@ -12,6 +12,10 @@
     <packaging>war</packaging>
     <name>cpa-web</name>
     <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
         <!--项目模块依赖-->
         <dependency>
             <groupId>cn.kanyun</groupId>

@@ -2,8 +2,12 @@ package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.user.AnswerRecord;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.itempool.ICpaSolutionService;
 import cn.kanyun.cpa.service.itempool.impl.CpaSolutionServiceImpl;
+import cn.kanyun.cpa.service.user.IAnswerRecordService;
+import cn.kanyun.cpa.util.WebUtil;
 import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -26,6 +32,8 @@ public class CpaSolutionController {
 
     @Resource
     private ICpaSolutionService cpaSolutionService;
+    @Resource
+    private IAnswerRecordService answerRecordService;
 
     /**
      * @Author: kanyun
@@ -37,7 +45,8 @@ public class CpaSolutionController {
     @ResponseBody
 /*    @RequestBody接收的是一个Json对象的字符串，而不是一个Json对象。然而在ajax请求往往传的都是Json对象，后来发现用 JSON.stringify(data)的方式就能将对象变成字符串。
     同时ajax请求的时候也要指定dataType: "json",contentType:"application/json" 这样就可以轻易的将一个对象或者List传到Java端，使用@RequestBody即可绑定对象或者List*/
-    public CpaResult correctItem(@RequestBody CpaRepertoryDto cpaRepertoryDto) {
+    public CpaResult correctItem(@RequestBody CpaRepertoryDto cpaRepertoryDto, HttpServletRequest request) {
+        CpaUser user = WebUtil.getSessionUser(request);
         Map<Integer, String[]> peopleAnswer = new HashMap<>();
         Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
         while (iterator.hasNext()) {
@@ -56,6 +65,7 @@ public class CpaSolutionController {
             }
         }
         CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer,cpaRepertoryDto.getTypeCode());
+        answerRecordService.saveUserAnswerRecord(result,user);
         return result;
     }
 

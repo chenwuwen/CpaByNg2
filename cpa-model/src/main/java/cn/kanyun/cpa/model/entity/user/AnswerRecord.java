@@ -5,11 +5,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "answer_record", schema = "cpa", catalog = "")
-public class AnswerRecord {
+public class AnswerRecord implements Serializable {
     private int id;
     private Integer userId;
     private String username;
