@@ -13,11 +13,4 @@ import java.util.List;
 public interface ICpaOptionDao extends ICommonDao<Integer, CpaOption> {
     public static final String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaOptionDaoImpl";
 
-    /**
-     * @Author: zhaoyingxu
-     * @Description: 新增单元测试 （新增试题选项）
-     * @Date: 2017/9/18 17:07
-     * @params:
-     */
-    public void saveOption(List<CpaOption> cpaOptions);
 }

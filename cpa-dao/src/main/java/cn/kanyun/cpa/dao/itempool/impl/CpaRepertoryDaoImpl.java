@@ -27,9 +27,5 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Integer, CpaRepertory> im
         super(clatt);
     }
 
-    @Override
-    public Integer saveRepertory(CpaRepertory cpaRepertory) {
-        Integer k = save(cpaRepertory);
-        return k;
-    }
+
 }

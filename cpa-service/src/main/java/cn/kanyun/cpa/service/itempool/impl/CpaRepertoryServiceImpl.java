@@ -13,10 +13,15 @@ import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
 import java.util.*;
+
+
 
 /**
  * Created by Administrator on 2017/6/16.
@@ -78,9 +83,18 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
 
     @Override
     public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
-        Integer k = iCpaRepertoryDao.saveRepertory(cpaRepertory);
-        Integer k1 = iCpaSolutionDao.saveSolution(cpaSolution);
-        iCpaOptionDao.saveOption(cpaOptions);
+        cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
+        for (CpaOption cpaOption:cpaOptions){
+            cpaOption.setCpaRepertory(cpaRepertory);
+        }
+        cpaSolution.setCpaRepertory(cpaRepertory);
+        Session session = getSession();
+        Transaction tx = session.beginTransaction();
+        iCpaRepertoryDao.save(cpaRepertory);
+        iCpaSolutionDao.save(cpaSolution);
+        iCpaOptionDao.saveAll(cpaOptions);
+        tx.commit();
+        session.close();
         return cpaRepertory.getId();
     }
 

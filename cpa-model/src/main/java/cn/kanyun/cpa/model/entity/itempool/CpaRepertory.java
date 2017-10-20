@@ -18,9 +18,9 @@ public class CpaRepertory implements java.io.Serializable {
     private String testStem;
     private String testType;
     private String choice ; //是否是多选题(默认为单选)
-    private Timestamp insertDate;
+    private Timestamp insertDate = new Timestamp(System.currentTimeMillis());
     private Set cpaOptions = new HashSet(0);
-    private Set cpaSolutions = new HashSet(0);
+    private CpaSolution cpaSolution;
 
 
     // Constructors
@@ -35,13 +35,13 @@ public class CpaRepertory implements java.io.Serializable {
     /**
      * full constructor
      */
-    public CpaRepertory(String testStem, String testType, String choice, Timestamp insertDate, Set cpaOptions, Set cpaSolutions) {
+    public CpaRepertory(String testStem, String testType, String choice, Timestamp insertDate, Set cpaOptions, CpaSolution cpaSolution) {
         this.testStem = testStem;
         this.testType = testType;
         this.choice = choice;
         this.insertDate = insertDate;
         this.cpaOptions = cpaOptions;
-        this.cpaSolutions = cpaSolutions;
+        this.cpaSolution = cpaSolution;
     }
 
 
@@ -95,13 +95,11 @@ public class CpaRepertory implements java.io.Serializable {
         this.cpaOptions = cpaOptions;
     }
 
-    public Set getCpaSolutions() {
-        return this.cpaSolutions;
+    public CpaSolution getCpaSolution() {
+        return cpaSolution;
     }
 
-    public void setCpaSolutions(Set cpaSolutions) {
-        this.cpaSolutions = cpaSolutions;
+    public void setCpaSolution(CpaSolution cpaSolution) {
+        this.cpaSolution = cpaSolution;
     }
-
-
 }

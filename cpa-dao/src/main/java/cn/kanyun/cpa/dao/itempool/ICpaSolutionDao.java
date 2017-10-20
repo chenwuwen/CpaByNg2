@@ -22,12 +22,5 @@ public interface ICpaSolutionDao extends ICommonDao<Integer, CpaSolution> {
      */
     public Map<Integer, CpaSolution> getAnswer(List<Integer> respertoryIds);
 
-    /**
-     * @Author: kanyun
-     * @Description: 新增单元测试 （新增试题答案）
-     * @Date: 2017/9/18 17:05
-     * @params:
-     */
-    public Integer saveSolution(CpaSolution cpaSolution);
 
 }

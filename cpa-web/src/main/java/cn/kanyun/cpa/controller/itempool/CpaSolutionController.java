@@ -30,9 +30,9 @@ public class CpaSolutionController {
 
     private static final Logger logger = LoggerFactory.getLogger(CpaRepertoryController.class);
 
-    @Resource
+    @Resource(name = ICpaSolutionService.SERVICE_NAME)
     private ICpaSolutionService cpaSolutionService;
-    @Resource
+    @Resource(name = IAnswerRecordService.SERVICE_NAME)
     private IAnswerRecordService answerRecordService;
 
     /**
@@ -54,8 +54,8 @@ public class CpaSolutionController {
             if (null != str && !"".equals(str)) {
                 String[] strr = str.split("-");
                 Integer k = Integer.valueOf(strr[0]); //获取试题ID（数组中第一项）
-                strr[0] = strr[strr.length-1]; //（数组中其他项为value做数组，将数组最后一个值赋给数组第一个值）
-                strr = Arrays.copyOf(strr,strr.length-1); //数组缩容
+                strr[0] = strr[strr.length - 1]; //（数组中其他项为value做数组，将数组最后一个值赋给数组第一个值）
+                strr = Arrays.copyOf(strr, strr.length - 1); //数组缩容
               /*  处理数组第二种方法,需要再建立一个数组 使用System.arraycopy方法：如果是数组比较大，那么使用System.arraycopy会比较有优势，因为其使用的是内存复制，省去了大量的数组寻址访问等时间*/
 //                String[] str = new String[strr.length-1];
 //                System.arraycopy(strr,1,str,0,strr.length-1);
@@ -64,8 +64,8 @@ public class CpaSolutionController {
                 peopleAnswer.put(k, strr);
             }
         }
-        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer,cpaRepertoryDto.getTypeCode());
-        answerRecordService.saveUserAnswerRecord(result,user);
+        CpaResult result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTypeCode());
+        answerRecordService.saveUserAnswerRecord(result, user);
         return result;
     }
 

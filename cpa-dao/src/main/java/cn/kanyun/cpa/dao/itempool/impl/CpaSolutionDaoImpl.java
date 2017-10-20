@@ -45,9 +45,4 @@ public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> impl
         return mapSolution;
     }
 
-    @Override
-    public Integer saveSolution(CpaSolution cpaSolution) {
-        Integer k = save(cpaSolution);
-        return k;
-    }
 }

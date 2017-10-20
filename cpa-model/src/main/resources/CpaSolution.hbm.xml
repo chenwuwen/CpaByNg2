@@ -11,7 +11,10 @@
             <column name="id" />
             <generator class="native"></generator>
         </id>
-        <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select">
+        <!--因为CpaSolution为外键表 植入<many-to-one>元素 并设置属性unique=“true” 确保该列只能是唯一的， 一个答案对应一个题-->
+        <!--一对一外键关联，其实可以看做是一对多的一种特殊形式，多方退化成一。多方退化成一只需要在<many-to-one>标签中设置"unique"="true"。-->
+        <!--一对一主键关联，是让两张的主键值一样。要使两表的主键相同，只能一张表生成主键，另一张表参考主键。-->
+        <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select" unique="true">
             <column name="re_id">
                 <comment>题库ID</comment>
             </column>

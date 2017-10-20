@@ -26,8 +26,4 @@ public class CpaOptionDaoImpl extends CommonDaoImpl<Integer, CpaOption> implemen
         super(clatt);
     }
 
-    @Override
-    public void saveOption(List<CpaOption> cpaOptions) {
-        saveAll(cpaOptions);
-    }
 }

@@ -1,6 +1,7 @@
 package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
+import cn.kanyun.cpa.model.dto.itempool.ItemForm;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
@@ -11,10 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,11 +57,14 @@ public class CpaRepertoryController {
      * @Author: kanyun
      * @Description: 保存单元测试（试题）
      * @Date: 2017/9/18 17:21
-     * @params:
+     * @params: ,List<CpaOption> cpaOptions,CpaSolution cpaSolution
      */
     @RequestMapping("/addUnitExam")
     @ResponseBody
-    public Integer addUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+    public Integer addUnitExam( @RequestBody ItemForm itemForm) {
+        CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
+        List<CpaOption> cpaOptions = itemForm.getCpaOptions();
+        CpaSolution cpaSolution = itemForm.getCpaSolution();
         Integer k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
         return k;
     }
