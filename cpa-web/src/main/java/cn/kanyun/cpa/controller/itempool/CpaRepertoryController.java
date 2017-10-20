@@ -62,10 +62,11 @@ public class CpaRepertoryController {
     @RequestMapping("/addUnitExam")
     @ResponseBody
     public Integer addUnitExam( @RequestBody ItemForm itemForm) {
+        Integer k = 0;
         CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
         List<CpaOption> cpaOptions = itemForm.getCpaOptions();
         CpaSolution cpaSolution = itemForm.getCpaSolution();
-        Integer k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
+        k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
         return k;
     }
 }

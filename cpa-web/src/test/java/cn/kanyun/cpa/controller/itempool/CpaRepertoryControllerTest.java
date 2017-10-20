@@ -8,8 +8,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -18,11 +22,21 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations="classpath*:applicationContext.xml")
+
+@RunWith(SpringJUnit4ClassRunner.class)  //必须要写，相当于提供了spring的环境
+@WebAppConfiguration("src/main/resources")
+@ContextConfiguration(locations = "classpath*:*.xml")
 public class CpaRepertoryControllerTest {
-    @Resource
+    @Autowired
+    private org.springframework.web.context.WebApplicationContext context;
+    @Autowired
     private ICpaRepertoryService cpaRepertoryService;
+    //    spring3.2之后出现了org.springframework.test.web.servlet.MockMvc 类,对springMVC单元测试进行支持
+    //    可以对所有的controller来进行测试
+    MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+
+    //仅仅对单个Controller来进行测试
+    // mockMvc = MockMvcBuilders.standaloneSetup(new MeunController()).build();
     @Before
     public void setUp() throws Exception {
     }
@@ -39,18 +53,18 @@ public class CpaRepertoryControllerTest {
         cpaRepertory.setChoice("exclusive");
         cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
         List<CpaOption> cpaOptions = new ArrayList<>();
-            CpaOption cpaOption1 = new CpaOption();
-            cpaOption1.setSelectData("A");
-            cpaOption1.setOptionData("操作系统");
-            CpaOption cpaOption2 = new CpaOption();
-            cpaOption1.setSelectData("B");
-            cpaOption1.setOptionData("支持服务程序");
-            CpaOption cpaOption3 = new CpaOption();
-            cpaOption1.setSelectData("C");
-            cpaOption1.setOptionData("应用程序");
-            CpaOption cpaOption4 = new CpaOption();
-            cpaOption1.setSelectData("D");
-            cpaOption1.setOptionData("数据库管理系统");
+        CpaOption cpaOption1 = new CpaOption();
+        cpaOption1.setSelectData("A");
+        cpaOption1.setOptionData("操作系统");
+        CpaOption cpaOption2 = new CpaOption();
+        cpaOption1.setSelectData("B");
+        cpaOption1.setOptionData("支持服务程序");
+        CpaOption cpaOption3 = new CpaOption();
+        cpaOption1.setSelectData("C");
+        cpaOption1.setOptionData("应用程序");
+        CpaOption cpaOption4 = new CpaOption();
+        cpaOption1.setSelectData("D");
+        cpaOption1.setOptionData("数据库管理系统");
         cpaOptions.add(cpaOption1);
         cpaOptions.add(cpaOption2);
         cpaOptions.add(cpaOption3);
@@ -58,7 +72,7 @@ public class CpaRepertoryControllerTest {
         CpaSolution cpaSolution = new CpaSolution();
         cpaSolution.setResult("A");
         Integer k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
-        System.out.println("主键K的值为："+k);
+        System.out.println("主键K的值为：" + k);
     }
 
 }

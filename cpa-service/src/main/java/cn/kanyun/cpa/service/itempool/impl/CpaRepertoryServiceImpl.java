@@ -1,6 +1,7 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
 
+import cn.kanyun.cpa.dao.HibernateSessionFactory;
 import cn.kanyun.cpa.dao.itempool.ICpaOptionDao;
 import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
 import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
@@ -88,7 +89,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
             cpaOption.setCpaRepertory(cpaRepertory);
         }
         cpaSolution.setCpaRepertory(cpaRepertory);
-        Session session = getSession();
+        Session session = HibernateSessionFactory.getSession();
         Transaction tx = session.beginTransaction();
         iCpaRepertoryDao.save(cpaRepertory);
         iCpaSolutionDao.save(cpaSolution);
