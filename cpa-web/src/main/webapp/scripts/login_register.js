@@ -53,7 +53,7 @@ $(function () {
             var bv = $form.data('bootstrapValidator');
             // 使用Ajax提交表单数据
             $.post($form.attr('action'), $form.serialize(), function (result) {
-                if (result.status==1) {
+                if (result.state==1) {
                     localStorage.setItem("userName",result.data.userName); //将变量存储到本地sessionStorage中，并且value为userName
                     localStorage.setItem("userId",result.data.id); //将变量存储到本地sessionStorage中，并且value为userId
                     localStorage.setItem("permissions",result.data.permissions);
@@ -185,7 +185,7 @@ $(function () {
             var bv = $form.data('bootstrapValidator');
             // 使用Ajax提交表单数据
             $.post($form.attr('action'), $form.serialize(), function (result) {
-                if (result.status==1) {
+                if (result.state==1) {
                     swal({
                         title:'注册成功!',
                         text:'2秒后自动跳转到登陆页面!',

@@ -22,11 +22,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-@Controller("/api")
+@Controller
+@RequestMapping("/api")
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -105,7 +107,7 @@ public class LoginController {
                 user.setRoles(userRoleService.findRoleByUserId(u.getId()));
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
                 user.setId(u.getId());
-                result.setState(1);
+                result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setMsg("登陆成功");
                 result.setData(user);
             } catch (AuthenticationException e) {
@@ -116,7 +118,7 @@ public class LoginController {
                 } else {
                     result.setMsg("登陆失败");
                 }
-                result.setState(2);
+                result.setState(CpaConstants.OPERATION_ERROR);
             }
         }
         return result;

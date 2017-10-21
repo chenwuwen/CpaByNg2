@@ -111,12 +111,16 @@
         <!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
         <property name="filterChainDefinitions">
             <value>
+                <!--anon 表示不需要认证和授权-->
+                <!--authc 表示需要认证,没有登是不能访问的-->
+                <!--perms 表示需要该权限才能访问的页面-->
+                <!--roles 表示需要角色才能访问的页面-->
                 <!--没有参数，表示可以匿名使用。-->
                 /api/**=anon
                 <!--表示需要认证(登录)才能使用，没有参数-->
                 /api/solution/**=authc
                 <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。-->
-                /admins/user/**=roles[admin]
+                /api/unitExam/addUnitExam=roles[admin]
                 <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。-->
                 /admins/user/**=perms[user:add:*]
                 <!--根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。-->
@@ -129,6 +133,7 @@
                 /admins/user/**=ssl
                 <!--没有参数表示必须存在用户，当登入操作时不做检查-->
                 /admins/user/**=user
+
             </value>
         </property>
 
