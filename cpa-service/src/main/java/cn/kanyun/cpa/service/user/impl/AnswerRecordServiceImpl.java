@@ -1,11 +1,14 @@
 package cn.kanyun.cpa.service.user.impl;
 
+import cn.kanyun.cpa.dao.HibernateSessionFactory;
 import cn.kanyun.cpa.dao.user.IAnswerRecordDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.IAnswerRecordService;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,6 +21,8 @@ public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRe
     private IAnswerRecordDao answerRecordDao;
     @Override
     public void saveUserAnswerRecord(CpaResult result, CpaUser user) {
+        Session session = HibernateSessionFactory.getSession();
+        Transaction tx = session.beginTransaction();
         AnswerRecord answerRecord = new AnswerRecord();
         answerRecord.setAnswerDate(new Timestamp(System.currentTimeMillis()));
         answerRecord.setCorrectcount((Integer) ((Map)result.getData()).get("correctCount"));
@@ -29,5 +34,6 @@ public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRe
         answerRecord.setPetname(user.getPetName());
         answerRecord.setTotalcount((Integer) ((Map)result.getData()).get("totalCount"));
         answerRecordDao.save(answerRecord);
+        tx.commit();
     }
 }

@@ -45,7 +45,7 @@ public class UserController {
 
     @Resource(name = IUserService.SERVICE_NAME)
     private IUserService userService;
-    @Resource
+    @Resource(name = IUserRoleService.SERVICE_NAME)
     private IUserRoleService userRoleService;
 
 
