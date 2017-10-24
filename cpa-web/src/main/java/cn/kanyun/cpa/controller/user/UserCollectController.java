@@ -6,6 +6,7 @@ import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,9 +32,9 @@ public class UserCollectController {
      * @Date: 2017/8/16 17:02
      * @params:
      */
-    @RequestMapping("/toggleCollect")
+    @RequestMapping("/toggleCollect/{reId}")
     @ResponseBody
-    public Integer toggleCollect(Integer reId, HttpServletRequest request) {
+    public Integer toggleCollect(@PathVariable("reId")Integer reId, HttpServletRequest request) {
         Integer k = 1;
         try {
             CpaUser user = WebUtil.getSessionUser(request);

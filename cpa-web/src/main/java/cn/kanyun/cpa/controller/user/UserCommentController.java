@@ -8,6 +8,7 @@ import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -35,14 +36,12 @@ public class UserCommentController {
      */
     @RequestMapping("/saveComment")
     @ResponseBody
-    public Integer saveComment(Integer reId, String comment, HttpServletRequest request) {
+    public Integer saveComment(@RequestBody UserComment userComment, HttpServletRequest request) {
         Integer k = 1;
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            UserComment userComment = new UserComment();
-            userComment.setComment(comment);
-            userComment.setReId(reId);
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
+            userComment.setUserId(user.getId());
             userCommentService.save(userComment);
         } catch (Exception e) {
             logger.error("Error : /api/usercomment/saveComment " + e);
