@@ -1,9 +1,7 @@
 package cn.kanyun.cpa.dao.user.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.user.IAnswerRecordDao;
 import cn.kanyun.cpa.dao.user.IUserCollectDao;
-import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.UserCollect;
 import org.springframework.stereotype.Repository;
 

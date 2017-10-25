@@ -1,7 +1,6 @@
 package cn.kanyun.cpa.dao.user.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.HibernateSessionFactory;
 import cn.kanyun.cpa.dao.user.IUserDao;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import org.hibernate.Query;

@@ -9,7 +9,7 @@ import java.sql.Timestamp;
  */
 @Entity
 @Table(name = "user_collect", schema = "cpa", catalog = "")
-public class UserCollect implements Serializable {
+public class UserCollect implements java.io.Serializable {
     private int id;
     private Integer userId;
     private Integer reId;

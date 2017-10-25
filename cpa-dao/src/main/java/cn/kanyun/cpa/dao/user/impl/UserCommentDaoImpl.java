@@ -1,19 +1,24 @@
 package cn.kanyun.cpa.dao.user.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.user.IUserCollectDao;
 import cn.kanyun.cpa.dao.user.IUserCommentDao;
-import cn.kanyun.cpa.model.entity.user.UserCollect;
 import cn.kanyun.cpa.model.entity.user.UserComment;
 import org.springframework.stereotype.Repository;
 
 @Repository(IUserCommentDao.REPOSITORY_NAME)
 public class UserCommentDaoImpl extends CommonDaoImpl<Integer, UserComment> implements IUserCommentDao {
+
     //通过调用父类的构造函数指定clazz值，即实体类的类类型
     public UserCommentDaoImpl() {
         super(UserComment.class);
     }
-
-
+    /**
+     * 保留指定clatt值的接口【通过子类显示调用父类的构造函数来指定】
+     *
+     * @param clatt
+     */
+    public UserCommentDaoImpl(Class<UserComment> clatt) {
+        super(clatt);
+    }
 }
 

@@ -10,7 +10,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "answer_record", schema = "cpa", catalog = "")
-public class AnswerRecord implements Serializable {
+public class AnswerRecord implements java.io.Serializable {
     private int id;
     private Integer userId;
     private String username;

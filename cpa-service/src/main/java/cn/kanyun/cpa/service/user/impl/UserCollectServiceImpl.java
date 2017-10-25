@@ -1,13 +1,11 @@
 package cn.kanyun.cpa.service.user.impl;
 
 import cn.kanyun.cpa.dao.user.IUserCollectDao;
-import cn.kanyun.cpa.dao.user.IUserDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserCollect;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.IUserCollectService;
-import cn.kanyun.cpa.service.user.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
