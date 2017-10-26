@@ -101,6 +101,8 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     public T saveOrUpdate(T t) {
         Session session = getSession();
         session.saveOrUpdate(t);
+        session.flush();
+        session.clear();
         return t;
     }
 

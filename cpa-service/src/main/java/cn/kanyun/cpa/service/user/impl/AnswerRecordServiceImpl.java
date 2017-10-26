@@ -21,8 +21,6 @@ public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRe
     private IAnswerRecordDao answerRecordDao;
     @Override
     public void saveUserAnswerRecord(CpaResult result, CpaUser user) {
-        Session session = HibernateSessionFactory.getSession();
-        Transaction tx = session.beginTransaction();
         AnswerRecord answerRecord = new AnswerRecord();
         answerRecord.setAnswerDate(new Timestamp(System.currentTimeMillis()));
         answerRecord.setCorrectcount((Integer) ((Map)result.getData()).get("correctCount"));
@@ -34,6 +32,5 @@ public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRe
         answerRecord.setPetname(user.getPetName());
         answerRecord.setTotalcount((Integer) ((Map)result.getData()).get("totalCount"));
         answerRecordDao.save(answerRecord);
-        tx.commit();
     }
 }

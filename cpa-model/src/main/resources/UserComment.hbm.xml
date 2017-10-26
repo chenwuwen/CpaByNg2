@@ -1,24 +1,35 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
     <class name="cn.kanyun.cpa.model.entity.user.UserComment" table="user_comment" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="int(11)"/>
+            <column name="id" sql-type="int(11)">
+                <comment>ID</comment>
+            </column>
+            <generator class="native"></generator>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)" />
+            <column name="user_id" sql-type="int(11)">
+                <comment>用户ID</comment>
+            </column>
         </property>
         <property name="reId">
-            <column name="re_id" sql-type="int(11)" />
+            <column name="re_id" sql-type="int(11)">
+                <comment>试题ID</comment>
+            </column>
         </property>
         <property name="commentDate">
-            <column name="comment_date" sql-type="timestamp" />
+            <column name="comment_date" sql-type="timestamp">
+                <comment>评论时间</comment>
+            </column>
         </property>
         <property name="comment">
-            <column name="comment" sql-type="varchar(255)" />
+            <column name="comment" sql-type="varchar(255)">
+                <comment>收藏内容</comment>
+            </column>
         </property>
     </class>
 </hibernate-mapping>

@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.List;
+
+import static com.alibaba.druid.sql.ast.SQLPartitionValue.Operator.List;
 
 @Service(IUserCollectService.SERVICE_NAME)
 @Transactional
@@ -23,18 +27,21 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
         UserCollect userCollect = new UserCollect();
         userCollect.setReId(reId);
         userCollect.setUserId(user.getId());
+        userCollect.setCollectDate(new Timestamp(System.currentTimeMillis()));
+        userCollect.setStatus(1);
         Object[] params = {reId, user.getId()};
         String where = "o.reId = ? and o.userId =?";
-        CpaResult cpaResult = userCollectDao.getScrollData(-1, -1, where, params);
+        CpaResult<UserCollect> cpaResult = userCollectDao.getScrollData(-1, -1, where, params);
         if (cpaResult.getTotalCount() > 0) {
-            UserCollect userCollect1 = (UserCollect) cpaResult.getData();
-            if (userCollect1.getStatus() == 1) {
+            java.util.List<UserCollect> userCollects = (java.util.List<UserCollect>) cpaResult.getData();
+            if (userCollects.get(0).getStatus() == 1) {
                 userCollect.setStatus(0);
+                userCollect.setId(userCollects.get(0).getId());
             } else {
-                userCollect.setStatus(1);
+                userCollect.setId(userCollects.get(0).getId());
             }
-        }
 
+        }
         userCollectDao.saveOrUpdate(userCollect);
     }
 }

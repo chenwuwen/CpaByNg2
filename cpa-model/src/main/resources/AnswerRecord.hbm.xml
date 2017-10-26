@@ -9,9 +9,10 @@
             <column name="id" sql-type="int(11)">
                 <comment>ID</comment>
             </column>
+            <generator class="native"></generator>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)" >
+            <column name="user_id" sql-type="int(11)">
                 <comment>用户ID</comment>
             </column>
         </property>
@@ -21,38 +22,38 @@
             </column>
         </property>
         <property name="petname">
-            <column name="petname" sql-type="varchar(255)" >
+            <column name="petname" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
         <property name="itemType">
-            <column name="item_type" sql-type="varchar(255)" >
+            <column name="item_type" sql-type="varchar(255)">
                 <comment>试题类型</comment>
             </column>
         </property>
         <property name="score">
-            <column name="score" sql-type="int(11)" >
+            <column name="score" sql-type="int(11)">
                 <comment>得分</comment>
             </column>
         </property>
         <property name="totalcount">
-            <column name="totalcount" sql-type="int(11)" >
+            <column name="totalcount" sql-type="int(11)">
                 <comment>总题数</comment>
             </column>
         </property>
         <property name="correctcount">
-            <column name="correctcount" sql-type="int(11)" >
+            <column name="correctcount" sql-type="int(11)">
                 <comment>答对数</comment>
             </column>
         </property>
         <property name="errorcount">
-            <column name="errorcount" sql-type="int(11)" >
+            <column name="errorcount" sql-type="int(11)">
 
                 <comment>答错数</comment>
             </column>
         </property>
         <property name="answerDate">
-            <column name="answer_date" sql-type="timestamp" >
+            <column name="answer_date" sql-type="timestamp">
                 <comment>答题日期</comment>
             </column>
         </property>
