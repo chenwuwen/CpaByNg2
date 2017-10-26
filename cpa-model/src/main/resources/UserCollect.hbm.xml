@@ -9,16 +9,16 @@
             <column name="id" sql-type="int(11)"/>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)" not-null="true"/>
+            <column name="user_id" sql-type="int(11)" />
         </property>
         <property name="reId">
-            <column name="re_id" sql-type="int(11)" not-null="true"/>
+            <column name="re_id" sql-type="int(11)"/>
         </property>
         <property name="collectDate">
-            <column name="collect_date" sql-type="timestamp" not-null="true"/>
+            <column name="collect_date" sql-type="timestamp" />
         </property>
         <property name="status">
-            <column name="status" sql-type="int(11)" not-null="true"/>
+            <column name="status" sql-type="int(11)" />
         </property>
     </class>
 </hibernate-mapping>

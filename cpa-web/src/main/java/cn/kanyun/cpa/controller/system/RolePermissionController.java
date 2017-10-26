@@ -15,6 +15,6 @@ import javax.annotation.Resource;
 @RequestMapping("/rolePermission")
 public class RolePermissionController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RolePermissionController.class);
-    @Resource
+    @Resource(name = IRolePermissionService.SERVICE_NAME)
     private IRolePermissionService rolePermissionService;
 }

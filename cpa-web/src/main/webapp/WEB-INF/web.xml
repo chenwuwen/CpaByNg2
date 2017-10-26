@@ -48,7 +48,7 @@
     </listener>
     <!-- session超时定义,单位为分钟 -->
     <session-config>
-        <session-timeout>20</session-timeout>
+        <session-timeout>600</session-timeout>
     </session-config>
     <!-- 当web容器启动的时候，自动加载spring容器 -->
     <context-param>

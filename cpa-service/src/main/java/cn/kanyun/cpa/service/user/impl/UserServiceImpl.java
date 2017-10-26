@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> implements IUserService {
     @Resource(name = IUserDao.REPOSITORY_NAME )
-    private IUserDao userdao;
+    private IUserDao userDao;
 
     /*检测用户登陆*/
     /*2017.7用户登录由shiro接管*/
@@ -32,7 +32,7 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
 //        }
 //        String where = "o.username = ?";
 //        CpaUser user = null;
-//        CpaResult result = userdao.getScrollData(-1, -1, where, params);
+//        CpaResult result = userDao.getScrollData(-1, -1, where, params);
 //        if (result.getTotalCount() == 1) {
 //            List list = (List) result.getData();
 //            user = (CpaUser) list.get(0);
@@ -53,7 +53,7 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
 
     @Override
     public CpaUser findByUserName(String userName) {
-        CpaUser user = userdao.findByUserName(userName);
+        CpaUser user = userDao.findByUserName(userName);
         return user;
     }
 

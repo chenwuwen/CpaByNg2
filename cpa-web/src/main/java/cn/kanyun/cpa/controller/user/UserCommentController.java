@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserComment;
 import cn.kanyun.cpa.service.user.IUserCollectService;
@@ -37,16 +39,39 @@ public class UserCommentController {
     @RequestMapping("/saveComment")
     @ResponseBody
     public Integer saveComment(@RequestBody UserComment userComment, HttpServletRequest request) {
-        Integer k = 1;
+        Integer k = 0;
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
             userComment.setUserId(user.getId());
-            userCommentService.save(userComment);
+            k = userCommentService.save(userComment);
         } catch (Exception e) {
             logger.error("Error : /api/usercomment/saveComment " + e);
-            k = 0;
         }
         return k;
+    }
+
+    /**
+     * @Author: kanyun
+     * @Description: 获取用户评论
+     * @Date: 2017/8/16 17:02
+     * @params:
+     */
+    public CpaResult getUserComment(Integer pageNo, Integer pageSize, HttpServletRequest request) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaUser user = WebUtil.getSessionUser(request);
+            Page page = new Page();
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+            pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+            Object[] params = {user.getId()};
+            String where = "o.userId =?";
+            Long totalRecords = userCommentService.getTotalCount(where, params);
+            Integer firstResult = page.countOffset(pageNo, pageSize);
+            result = userCommentService.getUserComment(firstResult, pageSize, where, params);
+        } catch (Exception e) {
+            logger.error("Error : /api/usercomment/getUserComment " + e);
+        }
+        return result;
     }
 }

@@ -11,48 +11,48 @@
             </column>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)" not-null="true">
+            <column name="user_id" sql-type="int(11)" >
                 <comment>用户ID</comment>
             </column>
         </property>
         <property name="username">
-            <column name="username" sql-type="varchar(255)" not-null="true">
+            <column name="username" sql-type="varchar(255)">
                 <comment>用户名</comment>
             </column>
         </property>
         <property name="petname">
-            <column name="petname" sql-type="varchar(255)" not-null="true">
+            <column name="petname" sql-type="varchar(255)" >
                 <comment>用户昵称</comment>
             </column>
         </property>
         <property name="itemType">
-            <column name="item_type" sql-type="varchar(255)" not-null="true">
+            <column name="item_type" sql-type="varchar(255)" >
                 <comment>试题类型</comment>
             </column>
         </property>
         <property name="score">
-            <column name="score" sql-type="int(11)" not-null="true">
+            <column name="score" sql-type="int(11)" >
                 <comment>得分</comment>
             </column>
         </property>
         <property name="totalcount">
-            <column name="totalcount" sql-type="int(11)" not-null="true">
+            <column name="totalcount" sql-type="int(11)" >
                 <comment>总题数</comment>
             </column>
         </property>
         <property name="correctcount">
-            <column name="correctcount" sql-type="int(11)" not-null="true">
+            <column name="correctcount" sql-type="int(11)" >
                 <comment>答对数</comment>
             </column>
         </property>
         <property name="errorcount">
-            <column name="errorcount" sql-type="int(11)" not-null="true">
+            <column name="errorcount" sql-type="int(11)" >
 
                 <comment>答错数</comment>
             </column>
         </property>
         <property name="answerDate">
-            <column name="answer_date" sql-type="timestamp" not-null="true">
+            <column name="answer_date" sql-type="timestamp" >
                 <comment>答题日期</comment>
             </column>
         </property>

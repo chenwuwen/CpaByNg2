@@ -15,6 +15,6 @@ import javax.annotation.Resource;
 @RequestMapping("/userRole")
 public class UserRoleController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UserRoleController.class);
-    @Resource
+    @Resource(name = IUserRoleService.SERVICE_NAME)
     private IUserRoleService userRoleService;
 }

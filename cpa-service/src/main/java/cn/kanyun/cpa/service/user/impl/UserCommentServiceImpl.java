@@ -1,6 +1,8 @@
 package cn.kanyun.cpa.service.user.impl;
 
 import cn.kanyun.cpa.dao.user.IUserCommentDao;
+import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserComment;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.IUserCommentService;
@@ -17,4 +19,9 @@ public class UserCommentServiceImpl extends CommonServiceImpl<Integer, UserComme
     private IUserCommentDao userCommentDao;
 
 
+    @Override
+    public CpaResult getUserComment(Integer firstResult,Integer pageSize,String where ,Object[] params) {
+        CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params);
+        return cpaResult;
+    }
 }

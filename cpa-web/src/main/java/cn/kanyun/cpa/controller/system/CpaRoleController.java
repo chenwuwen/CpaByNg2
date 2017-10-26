@@ -15,6 +15,6 @@ import javax.annotation.Resource;
 @RequestMapping("/api/cpaRole")
 public class CpaRoleController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CpaRoleController.class);
-    @Resource
+    @Resource(name = ICpaRoleService.SERVICE_NAME)
     private ICpaRoleService cpaRoleService;
 }
