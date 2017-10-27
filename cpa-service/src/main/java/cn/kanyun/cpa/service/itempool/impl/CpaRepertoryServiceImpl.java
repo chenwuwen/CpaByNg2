@@ -14,6 +14,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
@@ -23,21 +24,20 @@ import java.sql.Timestamp;
 import java.util.*;
 
 
-
 /**
  * Created by Administrator on 2017/6/16.
  */
 @Service(ICpaRepertoryService.SERVICE_NAME)
 public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements ICpaRepertoryService {
     @Resource(name = ICpaRepertoryDao.REPOSITORY_NAME)
-    private ICpaRepertoryDao iCpaRepertoryDao;
+    private ICpaRepertoryDao cpaRepertoryDao;
     @Resource(name = ICpaOptionDao.REPOSITORY_NAME)
-    private ICpaOptionDao iCpaOptionDao;
+    private ICpaOptionDao cpaOptionDao;
     @Resource(name = ICpaSolutionDao.REPOSITORY_NAME)
-    private ICpaSolutionDao iCpaSolutionDao;
+    private ICpaSolutionDao cpaSolutionDao;
 
-    public CpaResult getUnitExam(Integer firstResult,Integer pageSize,String where, Object[] params) {
-        CpaResult result = iCpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
+    public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
+        CpaResult result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
             List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
             List<CpaRepertory> listcr = (List<CpaRepertory>) result.getData();
@@ -84,18 +84,24 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
 
     @Override
     public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+//        for (CpaOption cpaOption:cpaOptions){
+//            cpaOption.setCpaRepertory(cpaRepertory);
+//        }
+//        cpaSolution.setCpaRepertory(cpaRepertory);
+//        Session session = HibernateSessionFactory.getSession();
+//        Transaction tx = session.beginTransaction();
+//        iCpaRepertoryDao.save(cpaRepertory);
+//        iCpaSolutionDao.save(cpaSolution);
+//        iCpaOptionDao.saveAll(cpaOptions);
+//        tx.commit();
+//        session.close();
+
+/*        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表
+        ,就可以把相关联的表也保存了，就不用一个个保存了*/
         cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
-        for (CpaOption cpaOption:cpaOptions){
-            cpaOption.setCpaRepertory(cpaRepertory);
-        }
-        cpaSolution.setCpaRepertory(cpaRepertory);
-        Session session = HibernateSessionFactory.getSession();
-        Transaction tx = session.beginTransaction();
-        iCpaRepertoryDao.save(cpaRepertory);
-        iCpaSolutionDao.save(cpaSolution);
-        iCpaOptionDao.saveAll(cpaOptions);
-        tx.commit();
-        session.close();
+        cpaRepertory.setCpaOptions(new HashSet(cpaOptions));
+        cpaRepertory.setCpaSolution(cpaSolution);
+        cpaRepertoryDao.save(cpaRepertory);
         return cpaRepertory.getId();
     }
 

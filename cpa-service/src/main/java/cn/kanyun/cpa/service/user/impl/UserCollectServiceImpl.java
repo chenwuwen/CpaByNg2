@@ -11,9 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
-import java.util.List;
-
-import static com.alibaba.druid.sql.ast.SQLPartitionValue.Operator.List;
 
 @Service(IUserCollectService.SERVICE_NAME)
 @Transactional
@@ -23,7 +20,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
 
 
     @Override
-    public void toggleUserCollect(Integer reId, CpaUser user) {
+    public Integer toggleUserCollect(Integer reId, CpaUser user) {
         UserCollect userCollect = new UserCollect();
         userCollect.setReId(reId);
         userCollect.setUserId(user.getId());
@@ -42,6 +39,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
             }
 
         }
-        userCollectDao.saveOrUpdate(userCollect);
+        UserCollect userCollect1  = userCollectDao.saveOrUpdate(userCollect);
+        return userCollect1.getId();
     }
 }

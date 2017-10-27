@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.user.IUserCollectService;
 import cn.kanyun.cpa.util.WebUtil;
@@ -34,15 +36,18 @@ public class UserCollectController {
      */
     @RequestMapping("/toggleCollect/{reId}")
     @ResponseBody
-    public Integer toggleCollect(@PathVariable("reId")Integer reId, HttpServletRequest request) {
-        Integer k = 1;
+    public CpaResult toggleCollect(@PathVariable("reId")Integer reId, HttpServletRequest request) {
+        CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            userCollectService.toggleUserCollect(reId, user);
+            if (null == user){
+                result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            }
+            result.setData(userCollectService.toggleUserCollect(reId, user));
         } catch (Exception e) {
             logger.error("Error : /api/usercollect/toggleCollect " + e);
-            k = 0;
+            result.setState(CpaConstants.OPERATION_ERROR);
         }
-        return k;
+        return result;
     }
 }

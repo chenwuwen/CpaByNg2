@@ -62,7 +62,7 @@
     <!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
         <!-- session的失效时长，单位毫秒 -->
-        <property name="globalSessionTimeout" value="600000"/>
+        <property name="globalSessionTimeout" value="6000000"/>
         <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
         <!-- 相隔多久检查一次session的有效性   -->

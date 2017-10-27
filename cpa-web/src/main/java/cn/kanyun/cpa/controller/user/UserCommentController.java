@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
@@ -38,17 +39,21 @@ public class UserCommentController {
      */
     @RequestMapping("/saveComment")
     @ResponseBody
-    public Integer saveComment(@RequestBody UserComment userComment, HttpServletRequest request) {
-        Integer k = 0;
+    public CpaResult saveComment(@RequestBody UserComment userComment, HttpServletRequest request) {
+        CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
+            if (null == user) {
+                result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            }
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
             userComment.setUserId(user.getId());
-            k = userCommentService.save(userComment);
+            result.setData(userCommentService.save(userComment));
         } catch (Exception e) {
             logger.error("Error : /api/usercomment/saveComment " + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
         }
-        return k;
+        return result;
     }
 
     /**
