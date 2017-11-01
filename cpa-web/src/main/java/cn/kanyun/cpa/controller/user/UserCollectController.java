@@ -40,8 +40,8 @@ public class UserCollectController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            if (null == user){
-                result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            if (null != user){
+                result.setStatus(CpaConstants.USER_HAS_LOGIN);
             }
             result.setData(userCollectService.toggleUserCollect(reId, user));
         } catch (Exception e) {

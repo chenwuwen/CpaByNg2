@@ -43,8 +43,8 @@ public class UserCommentController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            if (null == user) {
-                result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            if (null != user) {
+                result.setStatus(CpaConstants.USER_HAS_LOGIN);
             }
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
             userComment.setUserId(user.getId());
