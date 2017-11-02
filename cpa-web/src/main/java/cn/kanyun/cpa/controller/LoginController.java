@@ -108,6 +108,7 @@ public class LoginController {
                 user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
                 user.setId(u.getId());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
+                result.setStatus(CpaConstants.USER_HAS_LOGIN);
                 result.setMsg("登陆成功");
                 result.setData(user);
             } catch (AuthenticationException e) {
