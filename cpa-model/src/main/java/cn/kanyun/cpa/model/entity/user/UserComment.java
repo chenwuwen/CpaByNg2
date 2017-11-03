@@ -12,6 +12,8 @@ import java.sql.Timestamp;
 public class UserComment implements java.io.Serializable {
     private int id;
     private Integer userId;
+    private String username;
+    private String petname;
     private Integer reId;
     private Timestamp commentDate;
     private String comment;
@@ -32,8 +34,24 @@ public class UserComment implements java.io.Serializable {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
-        this.userId = userId;
+    @Basic
+    @Column(name = "username", nullable = true, length = 255)
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Basic
+    @Column(name = "petname", nullable = true, length = 255)
+    public String getPetname() {
+        return petname;
+    }
+
+    public void setPetname(String petname) {
+        this.petname = petname;
     }
 
     @Basic

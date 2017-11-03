@@ -26,6 +26,8 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
         userCollect.setUserId(user.getId());
         userCollect.setCollectDate(new Timestamp(System.currentTimeMillis()));
         userCollect.setStatus(1);
+        userCollect.setUsername(user.getUserName());
+        userCollect.setPetname(user.getPetName());
         Object[] params = {reId, user.getId()};
         String where = "o.reId = ? and o.userId =?";
         CpaResult<UserCollect> cpaResult = userCollectDao.getScrollData(-1, -1, where, params);

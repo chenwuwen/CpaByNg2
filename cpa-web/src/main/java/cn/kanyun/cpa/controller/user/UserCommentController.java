@@ -48,6 +48,8 @@ public class UserCommentController {
             }
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
             userComment.setUserId(user.getId());
+            userComment.setUsername(user.getUserName());
+            userComment.setPetname(user.getPetName());
             result.setData(userCommentService.save(userComment));
         } catch (Exception e) {
             logger.error("Error : /api/usercomment/saveComment " + e);
