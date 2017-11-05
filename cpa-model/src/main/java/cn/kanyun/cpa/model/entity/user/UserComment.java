@@ -34,6 +34,10 @@ public class UserComment implements java.io.Serializable {
         return userId;
     }
 
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
     @Basic
     @Column(name = "username", nullable = true, length = 255)
     public String getUsername() {

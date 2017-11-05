@@ -3,6 +3,8 @@ package cn.kanyun.cpa.dao;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
 import org.hibernate.Session;
@@ -89,6 +91,14 @@ public interface ICommonDao<K extends Serializable ,T extends Serializable> {
      * @return 总数
      */
     public long getTotalCount(String where, Object[] params);
+    /**
+     * 根据条件获取总记录数(列表)
+     * @param where 条件语句,不带where关键字,条件语句只能使用位置参数,位置参数的索引值以1开始,如:o.username=?1 and o.password=?2
+     * @param params 条件语句出现的位置参数值
+     * @param fields group by 语句中需要的字段
+     * @return 列表
+     */
+    public List<Map<Object,Object>> getGroupByList(Object[] fields, String where, Map<String,Collection> params);
     /** 
      * 分页获取记录 
      * @param firstResult 开始索引,如果输入值为-1,即获取全部数据 

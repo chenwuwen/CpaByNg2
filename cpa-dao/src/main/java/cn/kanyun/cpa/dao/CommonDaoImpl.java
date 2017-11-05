@@ -1,17 +1,17 @@
 package cn.kanyun.cpa.dao;
 
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 import javax.annotation.Resource;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 
 
@@ -213,7 +213,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return result;
     }
 
-    public long getTotalCount(String where, Object[] params){
+    public long getTotalCount(String where, Object[] params) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "
                 + where : "";
@@ -223,6 +223,26 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         setQueryParameter(queryCount, params);
         long count = (Long) queryCount.uniqueResult();
         return count;
+    }
+
+    public List<Map<Object,Object>> getGroupByList(Object[] fields, String where, Map<String,Collection> params) {
+        String entityName = clatt.getSimpleName();
+        String whereql = where != null && !"".equals(where.trim()) ? " where "
+                + where : "";
+        Session session = getSession();
+        Query queryList = session.createQuery("select count(o), " + buildGroupBy(fields) + " from "
+                + entityName + " o" + whereql +" group by "+ buildGroupBy(fields));
+        Iterator iterator = params.entrySet().iterator();
+        while (iterator.hasNext()){
+            Map.Entry<String, Collection> entry = (Map.Entry<String, Collection>) iterator.next();
+            queryList.setParameterList(entry.getKey(),entry.getValue());
+        }
+/*        设置Hibernate返回值类型为Map(但是其是返回了一个封装所有Map的List,ALIAS_TO_ENTITY_MAP是指以数据库的字段为Key,
+          以字段内容为value的Map,有几个字段就会生成几个Map,然后将所有Map封装到List中),不过随着Hibernate的发展,
+          可以直接在Hql中直接使用集合查询语句(如list，map)*/
+        queryList.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
+        List<Map<Object,Object>> list = queryList.list();
+        return list;
     }
 
     /**
@@ -252,6 +272,23 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
             for (Map.Entry<String, String> entry : orderby.entrySet()) {
                 sb.append("o.").append(entry.getKey()).append(" ")
                         .append(entry.getValue()).append(',');
+            }
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 构建group by语句
+     *
+     * @param groupby 传入需要进行分组查询的参数
+     * @return
+     */
+    public static String buildGroupBy(Object[] fields) {
+        StringBuilder sb = new StringBuilder();
+        if (fields != null) {
+            for (int i = 0; i < fields.length; i++) {
+                sb.append("o." + fields[i] + ",");
             }
             sb.deleteCharAt(sb.length() - 1);
         }

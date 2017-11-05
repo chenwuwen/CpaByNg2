@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 @Service(IUserCommentService.SERVICE_NAME)
 @Transactional
@@ -23,5 +26,11 @@ public class UserCommentServiceImpl extends CommonServiceImpl<Integer, UserComme
     public CpaResult getUserComment(Integer firstResult,Integer pageSize,String where ,Object[] params) {
         CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params);
         return cpaResult;
+    }
+
+    @Override
+    public List<Map<Object,Object>> getCommentCountByCondition(Object[] fields, String where, Map<String,Collection> params) {
+        List<Map<Object,Object>> list=userCommentDao.getGroupByList(fields,where,params);
+        return list;
     }
 }

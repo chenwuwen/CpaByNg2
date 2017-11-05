@@ -1,7 +1,6 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
 
-import cn.kanyun.cpa.dao.HibernateSessionFactory;
 import cn.kanyun.cpa.dao.itempool.ICpaOptionDao;
 import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
 import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
@@ -14,9 +13,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
-import org.hibernate.Hibernate;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import cn.kanyun.cpa.service.user.IUserCommentService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -35,17 +32,21 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     private ICpaOptionDao cpaOptionDao;
     @Resource(name = ICpaSolutionDao.REPOSITORY_NAME)
     private ICpaSolutionDao cpaSolutionDao;
+    @Resource
+    private IUserCommentService iUserCommentService;
 
     public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
         CpaResult result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
             List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
             List<CpaRepertory> listcr = (List<CpaRepertory>) result.getData();
+            List reids = new ArrayList();
             for (CpaRepertory cr : listcr) {
                 CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
                 cpaRepertoryDto.setTestStem(cr.getTestStem());
                 cpaRepertoryDto.setChoice(cr.getChoice());
                 cpaRepertoryDto.setId(cr.getId());
+                reids.add(cr.getId());
                 Set<CpaOption> setco = cr.getCpaOptions();
 //                将Set集合转换为List集合
                 List<CpaOption> listco = new ArrayList<CpaOption>();
@@ -73,6 +74,27 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
                 cpaRepertoryDto.setCpaOptionDtos(listoptions);
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             }
+            Object[] fields = {"reId"};
+            String commentWhere = "o.reId in (:reids)";
+            Map paramsMap = new HashMap();
+            paramsMap.put("reids",reids);
+            List<Map<Object, Object>> list = iUserCommentService.getCommentCountByCondition(fields,commentWhere,paramsMap);
+            if(!list.isEmpty()){
+                Map<Object, Object> commentMap = new HashMap();
+                for(Map<Object, Object> commentCount:list){
+                    commentMap.putAll(commentCount);
+                }
+                Iterator iterator = commentMap.entrySet().iterator();
+                if (iterator.hasNext()){
+                    Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) iterator.next();
+                    for (CpaRepertoryDto cpaRepertoryDto:cpaRepertoryDtos){
+                        if(cpaRepertoryDto.getId()==entry.getKey()){
+                            cpaRepertoryDto.setCommentCount((Integer)entry.getValue());
+                        }
+                    }
+                }
+            }
+
             result.setState(CpaConstants.OPERATION_SUCCESS);
             result.setData(cpaRepertoryDtos);
         } else {
