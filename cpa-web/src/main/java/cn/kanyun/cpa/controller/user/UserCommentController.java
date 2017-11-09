@@ -11,6 +11,7 @@ import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -64,6 +65,8 @@ public class UserCommentController {
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @RequestMapping("/getUserComment")
+    @ResponseBody
     public CpaResult getUserComment(Integer pageNo, Integer pageSize, HttpServletRequest request) {
         CpaResult result = new CpaResult();
         try {
@@ -73,6 +76,31 @@ public class UserCommentController {
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
             Object[] params = {user.getId()};
             String where = "o.userId =?";
+            Long totalRecords = userCommentService.getTotalCount(where, params);
+            Integer firstResult = page.countOffset(pageNo, pageSize);
+            result = userCommentService.getUserComment(firstResult, pageSize, where, params);
+        } catch (Exception e) {
+            logger.error("Error : /api/usercomment/getUserComment " + e);
+        }
+        return result;
+    }
+
+    /**
+     * @Author: kanyun
+     * @Description: 获取评论
+     * @Date: 2017/8/16 17:02
+     * @params:
+     */
+    @RequestMapping("/getItemComment/{reId}")
+    @ResponseBody
+    public CpaResult getItemComment(@PathVariable("reId") Integer reId, Integer pageNo, Integer pageSize) {
+        CpaResult result = new CpaResult();
+        try {
+            Page page = new Page();
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+            pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+            Object[] params = {reId};
+            String where = "o.reId =?";
             Long totalRecords = userCommentService.getTotalCount(where, params);
             Integer firstResult = page.countOffset(pageNo, pageSize);
             result = userCommentService.getUserComment(firstResult, pageSize, where, params);

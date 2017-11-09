@@ -14,6 +14,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import cn.kanyun.cpa.service.user.IUserCommentService;
+import cn.kanyun.cpa.util.TypeConver;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -77,19 +78,17 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
             Object[] fields = {"reId"};
             String commentWhere = "o.reId in (:reids)";
             Map paramsMap = new HashMap();
-            paramsMap.put("reids",reids);
-            List<Map<Object, Object>> list = iUserCommentService.getCommentCountByCondition(fields,commentWhere,paramsMap);
-            if(!list.isEmpty()){
-                Map<Object, Object> commentMap = new HashMap();
-                for(Map<Object, Object> commentCount:list){
-                    commentMap.putAll(commentCount);
-                }
+            paramsMap.put("reids", reids);
+            List<Map<Object, Object>> list = iUserCommentService.getCommentCountByCondition(fields, commentWhere, paramsMap);
+            if (!list.isEmpty()) {
+                Map<Object, Object> commentMap = TypeConver.List2Map(list, "reId", "count");
                 Iterator iterator = commentMap.entrySet().iterator();
-                if (iterator.hasNext()){
+                while (iterator.hasNext()) {
                     Map.Entry<Object, Object> entry = (Map.Entry<Object, Object>) iterator.next();
-                    for (CpaRepertoryDto cpaRepertoryDto:cpaRepertoryDtos){
-                        if(cpaRepertoryDto.getId()==entry.getKey()){
-                            cpaRepertoryDto.setCommentCount((Integer)entry.getValue());
+                    for (CpaRepertoryDto cpaRepertoryDto : cpaRepertoryDtos) {
+                        if (cpaRepertoryDto.getId() == entry.getKey()) {
+                            cpaRepertoryDto.setCommentCount((Long) entry.getValue());
+                            break;
                         }
                     }
                 }

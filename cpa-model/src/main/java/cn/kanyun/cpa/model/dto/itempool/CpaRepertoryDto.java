@@ -25,12 +25,12 @@ public class CpaRepertoryDto implements java.io.Serializable {
     private List<CpaOptionDto> cpaOptionDtos;
     private List<String> pAnswer;
     private String typeCode;
-    private Integer commentCount;
+    private Long commentCount;
 
     public CpaRepertoryDto() {
     }
 
-    public CpaRepertoryDto(Integer id, String testStem, String testType, String choice, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode,Integer commentCount) {
+    public CpaRepertoryDto(Integer id, String testStem, String testType, String choice, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode,Long commentCount) {
         this.id = id;
         this.testStem = testStem;
         this.testType = testType;
@@ -124,11 +124,11 @@ public class CpaRepertoryDto implements java.io.Serializable {
         this.typeCode = typeCode;
     }
 
-    public Integer getCommentCount() {
+    public Long getCommentCount() {
         return commentCount;
     }
 
-    public void setCommentCount(Integer commentCount) {
+    public void setCommentCount(Long commentCount) {
         this.commentCount = commentCount;
     }
 }

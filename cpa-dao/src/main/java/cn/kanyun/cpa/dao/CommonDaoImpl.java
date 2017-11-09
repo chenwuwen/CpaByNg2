@@ -230,8 +230,8 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         String whereql = where != null && !"".equals(where.trim()) ? " where "
                 + where : "";
         Session session = getSession();
-        Query queryList = session.createQuery("select count(o), " + buildGroupBy(fields) + " from "
-                + entityName + " o" + whereql +" group by "+ buildGroupBy(fields));
+        Query queryList = session.createQuery("select count(o) as count, " + buildGroupBy(0,fields) + " from "
+                + entityName + " o" + whereql +" group by "+ buildGroupBy(1,fields));
         Iterator iterator = params.entrySet().iterator();
         while (iterator.hasNext()){
             Map.Entry<String, Collection> entry = (Map.Entry<String, Collection>) iterator.next();
@@ -284,15 +284,26 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
      * @param groupby 传入需要进行分组查询的参数
      * @return
      */
-    public static String buildGroupBy(Object[] fields) {
+    public static String buildGroupBy(Integer num,Object[] fields) {
         StringBuilder sb = new StringBuilder();
-        if (fields != null) {
-            for (int i = 0; i < fields.length; i++) {
-                sb.append("o." + fields[i] + ",");
+        if (num==0){
+            if (fields != null) {
+                for (int i = 0; i < fields.length; i++) {
+                    sb.append("o." + fields[i] + " as "+fields[i]+",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
             }
-            sb.deleteCharAt(sb.length() - 1);
+        }else{
+            if (fields != null) {
+                for (int i = 0; i < fields.length; i++) {
+                    sb.append("o." + fields[i] +",");
+                }
+                sb.deleteCharAt(sb.length() - 1);
+            }
         }
+
         return sb.toString();
     }
+
 
 }  
