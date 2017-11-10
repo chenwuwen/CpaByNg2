@@ -47,6 +47,10 @@ public class UserCommentController {
             if (null != user) {
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);
             }
+            if (userComment.getComment().isEmpty()){
+                result.setState(CpaConstants.OPERATION_ERROR);
+                result.setMsg("评论内容不能为空");
+            }
             userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
             userComment.setUserId(user.getId());
             userComment.setUsername(user.getUserName());

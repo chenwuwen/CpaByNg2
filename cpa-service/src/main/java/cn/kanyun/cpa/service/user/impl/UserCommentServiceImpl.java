@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,9 @@ public class UserCommentServiceImpl extends CommonServiceImpl<Integer, UserComme
 
     @Override
     public CpaResult getUserComment(Integer firstResult,Integer pageSize,String where ,Object[] params) {
-        CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params);
+        LinkedHashMap orderby = new LinkedHashMap();
+        orderby.put("comment_date","asc");
+        CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params,orderby);
         return cpaResult;
     }
 

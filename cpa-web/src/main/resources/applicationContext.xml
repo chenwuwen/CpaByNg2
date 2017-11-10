@@ -84,8 +84,8 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <!-- 启动对@AspectJ注解的支持 -->
-    <aop:aspectj-autoproxy/>
+    <!-- 启动对@AspectJ注解的支持,激活自动代理功能 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
     <!-- 事务配置 ，此不是必须的，只有需要支持事务控制的工程在才需要，不过一般都需要，所以一般都需要配置这个 -->
     <!-- 配置事务管理器bean,使用HibernateTransactionManager事务管理器 -->
     <bean id="transactionManager"
