@@ -50,9 +50,6 @@ public class CpaSolutionController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            if (null == user) {
-                result.setStatus(CpaConstants.USER_NOT_LOGIN);
-            }
             Map<Integer, String[]> peopleAnswer = new HashMap<>();
             Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
             while (iterator.hasNext()) {

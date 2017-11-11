@@ -164,6 +164,11 @@
             <artifactId>spring-orm</artifactId>
             <version>4.3.3.release</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>4.3.6.RELEASE</version>
+        </dependency>
         <!--spring bom 解决spring依赖多版本问题,引入该POM文件后,再引入其他spring的jar包可不标明版本-->
         <dependency>
             <groupId>org.springframework</groupId>

@@ -44,18 +44,16 @@ public class UserCommentController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            if (null != user) {
-                result.setStatus(CpaConstants.USER_HAS_LOGIN);
-            }
-            if (userComment.getComment().isEmpty()){
+            if (userComment.getComment().isEmpty()) {
                 result.setState(CpaConstants.OPERATION_ERROR);
                 result.setMsg("评论内容不能为空");
+            } else {
+                userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
+                userComment.setUserId(user.getId());
+                userComment.setUsername(user.getUserName());
+                userComment.setPetname(user.getPetName());
+                result.setData(userCommentService.save(userComment));
             }
-            userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
-            userComment.setUserId(user.getId());
-            userComment.setUsername(user.getUserName());
-            userComment.setPetname(user.getPetName());
-            result.setData(userCommentService.save(userComment));
         } catch (Exception e) {
             logger.error("Error : /api/usercomment/saveComment " + e);
             result.setState(CpaConstants.OPERATION_ERROR);

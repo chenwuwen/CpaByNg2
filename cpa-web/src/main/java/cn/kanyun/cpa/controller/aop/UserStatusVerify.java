@@ -1,13 +1,23 @@
 package cn.kanyun.cpa.controller.aop;
 
+import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.util.WebUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.swing.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
+@Component
 @Aspect
 public class UserStatusVerify {
     private static final Logger logger = LoggerFactory.getLogger(UserStatusVerify.class);
@@ -42,14 +52,20 @@ public class UserStatusVerify {
      * 定义Pointcut，Pointcut的名称为aspectjMethod()，此方法没有返回值和参数
      * 该方法就是一个标识，不进行调用
      * 配置切入点,该方法无方法体,主要为方便同类中其他方法使用此处配置的切入点
+     * <p>
+     * execution(<修饰符模式>?<返回类型模式><方法名模式>(<参数模式>)<异常模式>?)
+     * 除了返回类型模式、方法名模式和参数模式外，其它项都是可选的
+     * 在多个表达式之间使用 ||,or表示 或，使用 &&,and表示 与，！表示 非
      */
-    @Pointcut("execution(* cn.kanyun.cpa.controller.itempool.*(..))")
-    private void aspectjMethod(){}
+    @Pointcut("execution(* cn.kanyun.cpa.controller..*.*(..)) && !execution(* cn.kanyun.cpa.controller.itempool.CpaRepertoryController.getUnitExam(..))")
+    private void aspectjMethod() {
+    }
 
     /**
      * Before
      * 在核心业务执行前执行，不能阻止核心业务的调用。
      * 配置前置通知,使用在方法aspectjMethod()上注册的切入点,同时接受JoinPoint切入点对象,可以没有该参数
+     *
      * @param joinPoint
      */
     @Before("aspectjMethod()")
@@ -64,6 +80,7 @@ public class UserStatusVerify {
      * After
      * 核心业务逻辑退出后（包括正常执行结束和异常退出），执行此Advice
      * 配置后置通知,使用在方法aspect()上注册的切入点
+     *
      * @param joinPoint
      */
     @After(value = "aspectjMethod()")
@@ -77,10 +94,11 @@ public class UserStatusVerify {
     /**
      * 手动控制调用核心业务逻辑，以及调用前和调用后的处理,
      * Around
-     *
+     * <p>
      * 注意：当核心业务抛异常后，立即退出，转向AfterAdvice
      * 执行完AfterAdvice，再转到ThrowingAdvice
      * 配置环绕通知,使用在方法aspect()上注册的切入点
+     *
      * @param pjp
      * @return
      * @throws Throwable
@@ -89,6 +107,17 @@ public class UserStatusVerify {
     public Object aroundAdvice(ProceedingJoinPoint pjp) throws Throwable {
         logger.info("-----aroundAdvice().invoke-----");
         logger.info(" 此处可以做类似于Before Advice的事情");
+        RequestAttributes ra = RequestContextHolder.getRequestAttributes();
+        ServletRequestAttributes sra = (ServletRequestAttributes) ra;
+        HttpServletRequest request = sra.getRequest();
+        HttpSession session = request.getSession();
+        // 从session中获取用户信息
+        CpaUser user = WebUtil.getSessionUser(request);
+        if (null == user) {
+            CpaResult result = new CpaResult();
+            result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            return result;
+        }
 
         //调用核心逻辑
         Object retVal = pjp.proceed();
@@ -100,6 +129,7 @@ public class UserStatusVerify {
     /**
      * AfterReturning
      * 核心业务逻辑调用正常退出后，不管是否有返回值，正常退出后，均执行此Advice
+     *
      * @param joinPoint
      */
     @AfterReturning(value = "aspectjMethod()", returning = "retVal")
@@ -113,15 +143,16 @@ public class UserStatusVerify {
 
     /**
      * 核心业务逻辑调用异常退出后，执行此Advice，处理错误信息
-     *
+     * <p>
      * 注意：执行顺序在Around Advice之后
+     *
      * @param joinPoint
      * @param ex
      */
     @AfterThrowing(value = "aspectjMethod()", throwing = "ex")
     public void afterThrowingAdvice(JoinPoint joinPoint, Exception ex) {
         logger.info("-----afterThrowingAdvice().invoke-----");
-        logger.info(" 错误信息："+ex.getMessage());
+        logger.info(" 错误信息：" + ex.getMessage());
         logger.info(" 此处意在执行核心业务逻辑出错时，捕获异常，并可做一些日志记录操作等等");
         logger.info(" 可通过joinPoint来获取所需要的内容");
         logger.info("-----End of afterThrowingAdvice()------");
