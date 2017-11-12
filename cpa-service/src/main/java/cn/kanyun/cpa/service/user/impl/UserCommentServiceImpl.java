@@ -26,7 +26,7 @@ public class UserCommentServiceImpl extends CommonServiceImpl<Integer, UserComme
     @Override
     public CpaResult getUserComment(Integer firstResult,Integer pageSize,String where ,Object[] params) {
         LinkedHashMap orderby = new LinkedHashMap();
-        orderby.put("comment_date","asc");
+        orderby.put("commentDate","desc");
         CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params,orderby);
         return cpaResult;
     }
