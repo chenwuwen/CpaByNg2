@@ -24,10 +24,8 @@ import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -50,20 +48,20 @@ public class UserController {
 
 
     /**
-     *@Author: kanyun
-     *@Description: 注册Ajax检查用户名是否可用
-     *@Date: 2017/8/16 17:02
-     *@params:
+     * @Author: kanyun
+     * @Description: 注册Ajax检查用户名是否可用
+     * @Date: 2017/8/16 17:02
+     * @params:
      */
-    @RequestMapping("/checkname")
+    @RequestMapping("/checkname1")
     @ResponseBody
-    public String checkName(String username) {
+    public String checkName1(String username) {
         boolean b = true;
         Object[] params = {username};
-        String where = "o.username=? ";
+        String where = "o.userName=? ";
         CpaResult result = userService.getScrollData(-1, -1, where, params);
         if (result.getTotalCount() > 0) {
-           b = false;
+            b = false;
         }
         Map<String, Boolean> map = new HashMap<>();
         map.put("valid", b);
@@ -78,54 +76,58 @@ public class UserController {
     }
 
     /**
-     *@Author: kanyun
-     *@Description: 用户注册
-     *@Date: 2017/8/16 17:02
-     *@params:
+     * @param
+     * @return
+     * @author Kanyun
+     * @Description: (新方法，统一返回值，保留旧方法)注册Ajax检查用户名是否可用
+     * @date 2017/11/13 10:21
+     */
+    @RequestMapping("/checkname")
+    @ResponseBody
+    public CpaResult checkName(@RequestParam("username") String username) {
+        Object[] params = {username};
+        String where = "o.userName=? ";
+        CpaResult result = userService.getScrollData(-1, -1, where, params);
+        if (result.getTotalCount() > 0) {
+            result.setState(CpaConstants.OPERATION_ERROR);
+            result.setMsg("用户名已存在");
+            result.setData(null);
+        } else {
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+            result.setData(null);
+        }
+        return result;
+    }
+
+    /**
+     * @Author: kanyun
+     * @Description: 用户注册
+     * @Date: 2017/8/16 17:02
+     * @params:
      */
     @RequestMapping("/register")
     @ResponseBody
-    public CpaResult saveUser(CpaUserDto userDto, HttpSession session) throws NoSuchAlgorithmException {
+    public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, HttpSession session) throws NoSuchAlgorithmException {
         CpaResult result = new CpaResult();
         // 获取session中保存的验证码
         String s_code = (String) session.getAttribute("validateCode");
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
         if (!s_code.equalsIgnoreCase(userDto.getValidateCode())) {
-            result.setState(2);
+            result.setState(CpaConstants.OPERATION_ERROR);
             result.setMsg("验证码错误！");
         } else {
             try {
-                CpaUser user = new CpaUser();
-                user.setEmail(userDto.getEmail());
-                user.setUserName(userDto.getUserName());
-                userDto = EndecryptUtils.md5Password(userDto.getUserName(), userDto.getPassword());
-                user.setRegDate(new Timestamp(System.currentTimeMillis()));
-                user.setSalt(userDto.getSalt());
-                user.setPassword(userDto.getPassword());
-                user.setStatus(1);
-                Integer k = userService.save(user);
-                if (k != null) {
-                    UserRole userRole = new UserRole();
-                    userRole.setUserId(k);
-                    userRole.setRoleId(3);
-                    Integer r = userRoleService.save(userRole);
-                    if(r!=null) {
-                        result.setState(CpaConstants.OPERATION_SUCCESS);
-                        result.setMsg("注册成功,即将跳转至登陆页！");
-                    }else{
-                        result.setState(CpaConstants.OPERATION_ERROR);
-                        result.setMsg("注册失败,请重试！");
-                    }
-                } else {
-                    result.setState(2);
-                    result.setMsg("注册失败,请重试！");
-                }
-            }catch (Exception e){
-                logger.info("/api/user/register  用户注册异常：  "+e);
-                result.setState(2);
+                CpaUser user = userService.saveUser(userDto);
+                result.setState(CpaConstants.OPERATION_SUCCESS);
+                result.setMsg("注册成功,即将跳转至登陆页！");
+                session.setAttribute(CpaConstants.USER, user);
+            } catch (Exception e) {
+                logger.info("/api/user/register  用户注册异常：  " + e);
+                result.setState(CpaConstants.OPERATION_ERROR);
                 result.setMsg("注册失败,请重试！");
             }
         }
+
         return result;
     }
 }

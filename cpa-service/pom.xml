@@ -64,6 +64,13 @@
             <type>pom</type>
         </dependency>
 
+        <!--shiro权限控制-->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-all</artifactId>
+        </dependency>
+
+
         <!--日志记录-->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -81,6 +88,11 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
+        </dependency>
+        <!--其他-->
+        <dependency>
+            <groupId>org.bitbucket.cowwoc</groupId>
+            <artifactId>preconditions</artifactId>
         </dependency>
 
     </dependencies>

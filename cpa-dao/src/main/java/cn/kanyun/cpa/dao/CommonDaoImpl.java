@@ -54,9 +54,21 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     // clatt= (Class<T>)(parameterizedType.getActualTypeArguments()[0]);
     // }
 
+
+  /*  采用getCurrentSession()创建的session会绑定到当前线程中，
+    而采用openSession()创建的session则不会。
+    采用getCurrentSession()创建的session在commit或rollback时会自动关闭，
+    而采用openSession()创建的session必须手动关闭。
+    使用getCurrentSession()需要在hibernate.cfg.xml文件中加入如下配置：
+    *如果使用的是本地事务（jdbc事务）
+    <property name="hibernate.current_session_context_class">thread</property>
+    *如果使用的是全局事务（jta事务）
+    <property name="hibernate.current_session_context_class">jta</property>
+    如果采用的时Hibernate4，使用getCurrentSession()必须配置事务，否则无法取到session*/
+
     @Override
     public Session getSession() {
-        return getSessionFactory().openSession();
+        return getSessionFactory().getCurrentSession();
     }
 
     @SuppressWarnings("unchecked")
@@ -225,23 +237,23 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return count;
     }
 
-    public List<Map<Object,Object>> getGroupByList(Object[] fields, String where, Map<String,Collection> params) {
+    public List<Map<Object, Object>> getGroupByList(Object[] fields, String where, Map<String, Collection> params) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "
                 + where : "";
         Session session = getSession();
-        Query queryList = session.createQuery("select count(o) as count, " + buildGroupBy(0,fields) + " from "
-                + entityName + " o" + whereql +" group by "+ buildGroupBy(1,fields));
+        Query queryList = session.createQuery("select count(o) as count, " + buildGroupBy(0, fields) + " from "
+                + entityName + " o" + whereql + " group by " + buildGroupBy(1, fields));
         Iterator iterator = params.entrySet().iterator();
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             Map.Entry<String, Collection> entry = (Map.Entry<String, Collection>) iterator.next();
-            queryList.setParameterList(entry.getKey(),entry.getValue());
+            queryList.setParameterList(entry.getKey(), entry.getValue());
         }
 /*        设置Hibernate返回值类型为Map(但是其是返回了一个封装所有Map的List,ALIAS_TO_ENTITY_MAP是指以数据库的字段为Key,
           以字段内容为value的Map,有几个字段就会生成几个Map,然后将所有Map封装到List中),不过随着Hibernate的发展,
           可以直接在Hql中直接使用集合查询语句(如list，map)*/
         queryList.setResultTransformer(CriteriaSpecification.ALIAS_TO_ENTITY_MAP);
-        List<Map<Object,Object>> list = queryList.list();
+        List<Map<Object, Object>> list = queryList.list();
         return list;
     }
 
@@ -284,19 +296,19 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
      * @param groupby 传入需要进行分组查询的参数
      * @return
      */
-    public static String buildGroupBy(Integer num,Object[] fields) {
+    public static String buildGroupBy(Integer num, Object[] fields) {
         StringBuilder sb = new StringBuilder();
-        if (num==0){
+        if (num == 0) {
             if (fields != null) {
                 for (int i = 0; i < fields.length; i++) {
-                    sb.append("o." + fields[i] + " as "+fields[i]+",");
+                    sb.append("o." + fields[i] + " as " + fields[i] + ",");
                 }
                 sb.deleteCharAt(sb.length() - 1);
             }
-        }else{
+        } else {
             if (fields != null) {
                 for (int i = 0; i < fields.length; i++) {
-                    sb.append("o." + fields[i] +",");
+                    sb.append("o." + fields[i] + ",");
                 }
                 sb.deleteCharAt(sb.length() - 1);
             }

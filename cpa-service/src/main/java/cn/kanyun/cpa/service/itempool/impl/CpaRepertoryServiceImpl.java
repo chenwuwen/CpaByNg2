@@ -16,6 +16,7 @@ import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import cn.kanyun.cpa.service.user.IUserCommentService;
 import cn.kanyun.cpa.util.TypeConver;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
@@ -26,6 +27,7 @@ import java.util.*;
  * Created by Administrator on 2017/6/16.
  */
 @Service(ICpaRepertoryService.SERVICE_NAME)
+@Transactional
 public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements ICpaRepertoryService {
     @Resource(name = ICpaRepertoryDao.REPOSITORY_NAME)
     private ICpaRepertoryDao cpaRepertoryDao;

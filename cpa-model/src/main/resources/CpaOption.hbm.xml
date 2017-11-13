@@ -11,7 +11,7 @@
             <column name="id" />
             <generator class="native"></generator>
         </id>
-        <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select">
+        <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select" cascade="all">
             <column name="re_id">
                 <comment>试题ID</comment>
             </column>

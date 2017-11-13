@@ -132,7 +132,14 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
-
+    <!--此过滤器是为了解决hibernate报错：Could not obtain transaction-synchronized Session for current thread-->
+    <filter>
+        <filter-name>SpringOpenSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SpringOpenSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
 </web-app>  

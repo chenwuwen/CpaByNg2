@@ -92,6 +92,13 @@
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
     </bean>
-    <!-- 注解实现事务 -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!--这里是声明式事务配置-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="*" propagation="REQUIRED" />-->
+            <!--<tx:method name="*" read-only="true"/>-->
+        <!--</tx:attributes>-->
+    </tx:advice>
+    <!-- 注解实现事务 @Transactional 当注解标于类前时，标示类中所有方法都进行事物处理,（给Service层配置事务是比较好的方式，因为一个Service层方法操作可以关联到多个DAO的操作。在Service层执行这些Dao操作，多DAO操作有失败全部回滚，成功则全部提交。）-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 </beans>  
