@@ -56,7 +56,7 @@
                 <comment>盐</comment>
             </column>
         </property>
-        <set name="userRoles" inverse="true">
+        <set name="userRoles" inverse="true" cascade="all">
             <key>
                 <column name="user_id">
                     <comment>用户ID</comment>

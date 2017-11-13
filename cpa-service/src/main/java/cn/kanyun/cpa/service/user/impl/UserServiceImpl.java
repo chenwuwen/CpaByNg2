@@ -81,6 +81,7 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
         Set userRoles = new HashSet<>();
         UserRole userRole = new UserRole();
         userRole.setRoleId(3);
+        userRole.setCpaUser(user);
         userRoles.add(userRole);
 
         user.setUserRoles(userRoles);

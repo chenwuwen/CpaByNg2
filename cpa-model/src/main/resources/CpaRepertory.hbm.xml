@@ -31,7 +31,7 @@
                 <comment>插入时间</comment>
             </column>
         </property>
-        <set name="cpaOptions" inverse="true">
+        <set name="cpaOptions" inverse="true" cascade="all">
             <key>
                 <column name="re_id">
                     <comment>试题ID</comment>

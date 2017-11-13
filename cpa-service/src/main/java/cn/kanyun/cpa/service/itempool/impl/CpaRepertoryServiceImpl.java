@@ -122,7 +122,13 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
 /*        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表
         ,就可以把相关联的表也保存了，就不用一个个保存了*/
         cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
-        cpaRepertory.setCpaOptions(new HashSet(cpaOptions));
+        Set cpaOptions1 = new HashSet();
+        for(CpaOption cpaOption:cpaOptions){
+            cpaOption.setCpaRepertory(cpaRepertory);
+            cpaOptions1.add(cpaOption);
+        }
+        cpaSolution.setCpaRepertory(cpaRepertory);
+        cpaRepertory.setCpaOptions(cpaOptions1);
         cpaRepertory.setCpaSolution(cpaSolution);
         cpaRepertoryDao.save(cpaRepertory);
         return cpaRepertory.getId();

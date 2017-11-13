@@ -9,12 +9,6 @@
             <column name="id" sql-type="int(11)"/>
             <generator class="native"></generator>
         </id>
-        <property name="userId">
-            <column name="user_id" sql-type="int(11)" not-null="true"/>
-        </property>
-        <property name="roleId">
-            <column name="role_id" sql-type="int(11)" not-null="true"/>
-        </property>
         <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select" insert="false" update="false">
             <column name="user_id">
                 <comment>用户ID</comment>
