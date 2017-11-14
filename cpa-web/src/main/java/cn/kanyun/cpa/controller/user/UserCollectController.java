@@ -41,6 +41,7 @@ public class UserCollectController {
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             result.setData(userCollectService.toggleUserCollect(reId, user));
+            result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("Error : /api/usercollect/toggleCollect " + e);
             result.setState(CpaConstants.OPERATION_ERROR);

@@ -14,8 +14,13 @@ public interface ICommonDao<K extends Serializable ,T extends Serializable> {
      * 由session工厂获取当前session对象 
      * @return 
      */  
-    public Session getSession();  
-    /** 
+    public Session getSession();
+    /**
+     * 清除缓冲区内指定的缓冲对象
+     * @return
+     */
+    public void evict(T t);
+    /**
      * 将实体对象保存到数据库中 
      * @param t 待保存的实体对象 
      * @return 实体对象的ID 

@@ -71,6 +71,12 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return getSessionFactory().getCurrentSession();
     }
 
+    @Override
+    public void evict(T t){
+        Session session = getSession();
+        session.evict(t);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public K save(T t) {

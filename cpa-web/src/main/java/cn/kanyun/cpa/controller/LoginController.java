@@ -104,8 +104,8 @@ public class LoginController {
                 }
                 CpaUser u = userService.findByUserName(user.getUserName());
                 WebUtil.setSessionUser(request,u);
-                user.setRoles(userRoleService.findRoleByUserId(u.getId()));
-                user.setPermissions(userRoleService.findPermissionByUerId(u.getId()));
+                user.setRoles(userRoleService.findRoleByUser(u));
+                user.setPermissions(userRoleService.findPermissionByUer(u));
                 user.setId(u.getId());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);

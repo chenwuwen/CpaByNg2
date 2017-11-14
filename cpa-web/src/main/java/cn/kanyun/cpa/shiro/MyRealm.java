@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.shiro;
 
+import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.system.IRolePermissionService;
 import cn.kanyun.cpa.service.system.IUserRoleService;
@@ -21,6 +22,7 @@ import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 
 import javax.annotation.Resource;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -82,13 +84,14 @@ public class MyRealm extends AuthorizingRealm {
 
         String userName = (String) principals.getPrimaryPrincipal();
         CpaUser user = userService.findByUserName(userName);
-
         if (user != null) {
             SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
             //角色名集合
-            Set<String> roles = userRoleService.findRoleByUserId(user.getId());
+//            Set<String> roles = userRoleService.findRoleByUserId(user.getId());
+            Set<String> roles = userRoleService.findRoleByUser(user);
             //权限名的集合
-            Set<String> permissions = userRoleService.findPermissionByUerId(user.getId());
+//            Set<String> permissions = userRoleService.findPermissionByUerId(user.getId());
+            Set<String> permissions = userRoleService.findPermissionByUer(user);
             info.setRoles(roles);
             info.addStringPermissions(permissions);
             return info;

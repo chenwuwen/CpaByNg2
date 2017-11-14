@@ -6,6 +6,7 @@ import cn.kanyun.cpa.model.entity.system.CpaPermission;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.model.entity.system.RolePermission;
 import cn.kanyun.cpa.model.entity.system.UserRole;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,30 @@ public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> im
     }
 
     @Override
-    public  Set<String> findPermissionByUerId(Integer userId) {
+    public Set<String> findRoleByUser(CpaUser cpaUser) {
+        Set<UserRole> userRoles = cpaUser.getUserRoles();
+        Set<String> roles = new HashSet<>();
+        for (UserRole userRole : userRoles) {
+            roles.add(userRole.getCpaRole().getRoleName());
+        }
+        return roles;
+    }
+
+    @Override
+    public Set<String> findPermissionByUer(CpaUser cpaUser) {
+        Set<UserRole> userRoles = cpaUser.getUserRoles();
+        Set<String> permissions = new HashSet<>();
+        for (UserRole userRole : userRoles) {
+            Set<RolePermission> rolePermissions = userRole.getCpaRole().getRolePermissions();
+            for (RolePermission rolePermission : rolePermissions) {
+                permissions.add(rolePermission.getCpaPermission().getPermissionCode());
+            }
+        }
+        return permissions;
+    }
+
+    @Override
+    public Set<String> findPermissionByUerId(Integer userId) {
         Set<UserRole> setUserRoles = userRoleDao.findRoleByUserId(userId);
         Set<Integer> roleIds = new HashSet<>();
         for (UserRole userRole : setUserRoles) {
@@ -44,7 +68,7 @@ public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> im
         }
         Set<RolePermission> setRolePermissions = rolePermissionDao.findPermissionByRoleId(roleIds);
         Set<String> set = new HashSet<>();
-        for (RolePermission rolePermission:setRolePermissions){
+        for (RolePermission rolePermission : setRolePermissions) {
 
             set.add(rolePermission.getCpaPermission().getPermissionCode());
         }
