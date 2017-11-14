@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
     <class name="cn.kanyun.cpa.model.entity.system.CpaRole" table="cpa_role" schema="cpa">
@@ -9,11 +9,15 @@
             <column name="id" sql-type="int(11)"/>
             <generator class="native"></generator>
         </id>
-        <property name="roleName">
-            <column name="role_name" sql-type="varchar(10)" length="10" not-null="true"/>
+        <property name="roleName" type="java.lang.String">
+                <column name="role_name">
+                    <comment>角色名称</comment>
+                </column>
         </property>
-        <property name="description">
-            <column name="description" sql-type="varchar(255)" length="255" not-null="true"/>
+        <property name="description" type="java.lang.String">
+                <column name="description">
+                    <comment>角色描述</comment>
+                </column>
         </property>
         <set name="rolePermissions" inverse="true">
             <key>
@@ -21,7 +25,7 @@
                     <comment>角色ID</comment>
                 </column>
             </key>
-            <one-to-many class="cn.kanyun.cpa.model.entity.system.RolePermission" />
+            <one-to-many class="cn.kanyun.cpa.model.entity.system.RolePermission"/>
         </set>
         <set name="userRoles" inverse="true">
             <key>
@@ -29,7 +33,7 @@
                     <comment>角色ID</comment>
                 </column>
             </key>
-            <one-to-many class="cn.kanyun.cpa.model.entity.system.UserRole" />
+            <one-to-many class="cn.kanyun.cpa.model.entity.system.UserRole"/>
         </set>
     </class>
 </hibernate-mapping>

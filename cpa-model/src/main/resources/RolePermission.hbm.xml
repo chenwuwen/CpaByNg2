@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-mapping PUBLIC
-    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
     <class name="cn.kanyun.cpa.model.entity.system.RolePermission" table="role_permission" schema="cpa">
@@ -9,18 +9,14 @@
             <column name="id" sql-type="int(11)"/>
             <generator class="native"></generator>
         </id>
-        <property name="roleId">
-            <column name="role_id" sql-type="int(11)" not-null="true"/>
-        </property>
-        <property name="permissionId">
-            <column name="permission_id" sql-type="int(11)" not-null="true"/>
-        </property>
-        <many-to-one name="cpaRole" class="cn.kanyun.cpa.model.entity.system.CpaRole" fetch="select" insert="false" update="false">
+        <many-to-one name="cpaRole" class="cn.kanyun.cpa.model.entity.system.CpaRole" fetch="select" insert="false"
+                     update="false">
             <column name="role_id">
                 <comment>角色ID</comment>
             </column>
         </many-to-one>
-        <many-to-one name="cpaPermission" class="cn.kanyun.cpa.model.entity.system.CpaPermission" fetch="select" insert="false" update="false">
+        <many-to-one name="cpaPermission" class="cn.kanyun.cpa.model.entity.system.CpaPermission" fetch="select"
+                     insert="false" update="false">
             <column name="permission_id">
                 <comment>权限ID</comment>
             </column>

@@ -2,6 +2,7 @@ package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
@@ -61,12 +62,19 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/addUnitExam")
     @ResponseBody
-    public Integer addUnitExam( @RequestBody ItemForm itemForm) {
-        int k ;
-        CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-        List<CpaOption> cpaOptions = itemForm.getCpaOptions();
-        CpaSolution cpaSolution = itemForm.getCpaSolution();
-        k = cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution);
-        return k;
+    public CpaResult addUnitExam( @RequestBody ItemForm itemForm) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
+            List<CpaOption> cpaOptions = itemForm.getCpaOptions();
+            CpaSolution cpaSolution = itemForm.getCpaSolution();
+            result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        }catch (Exception e){
+            logger.info("/api/unitExam/addUnitExam  新增试题异常：  " + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+
+        return result;
     }
 }

@@ -12,6 +12,7 @@ import cn.kanyun.cpa.dao.system.IUserRoleDao;
 import cn.kanyun.cpa.dao.user.IUserDao;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
@@ -77,11 +78,16 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
         user.setSalt(userDto.getSalt());
         user.setPassword(userDto.getPassword());
         user.setStatus(1);
+
+        /*构建CpaRole,但并不会保存CpaRole,因为没有配置级联关系,级联关系为默认*/
+        CpaRole role= new CpaRole();
+        role.setId(3);
+
         /*构建UserRole*/
         Set userRoles = new HashSet<>();
         UserRole userRole = new UserRole();
-        userRole.setRoleId(3);
         userRole.setCpaUser(user);
+        userRole.setCpaRole(role);
         userRoles.add(userRole);
 
         user.setUserRoles(userRoles);
