@@ -16,6 +16,8 @@ import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import cn.kanyun.cpa.service.user.IUserCommentService;
 import cn.kanyun.cpa.util.TypeConver;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -38,6 +40,8 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     @Resource
     private IUserCommentService iUserCommentService;
 
+//    不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
+    @Transactional(propagation= Propagation.NOT_SUPPORTED,readOnly = true,isolation = Isolation.REPEATABLE_READ)
     public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
         CpaResult result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
@@ -106,6 +110,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     }
 
     @Override
+    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
     public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
 //        for (CpaOption cpaOption:cpaOptions){
 //            cpaOption.setCpaRepertory(cpaRepertory);

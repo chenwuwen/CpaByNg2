@@ -68,6 +68,7 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
     }
 
     @Override
+    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
     public CpaUser saveUser(CpaUserDto userDto) {
         /*构建CpaUser*/
         CpaUser user = new CpaUser();

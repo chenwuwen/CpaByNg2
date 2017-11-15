@@ -92,13 +92,23 @@
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
     </bean>
+
+    <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <!--这里是声明式事务配置-->
+        <!--配置事务的传播特性-->
         <!--<tx:attributes>-->
             <!--<tx:method name="*" propagation="REQUIRED" />-->
             <!--<tx:method name="*" read-only="true"/>-->
         <!--</tx:attributes>-->
     </tx:advice>
+    <!-- 那些类的哪些方法参与事务 -->
+    <aop:config>
+        <aop:pointcut id="allServiceMethod" expression="execution(* cn.kanyun.cpa.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice"/>
+    </aop:config>
+
     <!-- 注解实现事务 @Transactional 当注解标于类前时，标示类中所有方法都进行事物处理,（给Service层配置事务是比较好的方式，因为一个Service层方法操作可以关联到多个DAO的操作。在Service层执行这些Dao操作，多DAO操作有失败全部回滚，成功则全部提交。）-->
+    <!--@Transactional 只能被应用到public方法上, 对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能.-->
+    <!--@Transactional 注解可以被应用于接口定义和接口方法、类定义和类的 public 方法上,Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。-->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
 </beans>  
