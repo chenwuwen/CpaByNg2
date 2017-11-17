@@ -57,7 +57,7 @@ public class UserStatusVerify {
      * 除了返回类型模式、方法名模式和参数模式外，其它项都是可选的
      * 在多个表达式之间使用 ||,or表示 或，使用 &&,and表示 与，！表示 非
      */
-    @Pointcut("execution(* cn.kanyun.cpa.controller..*.*(..)) && !execution(* cn.kanyun.cpa.controller.itempool.CpaRepertoryController.getUnitExam(..)) && !execution(* cn.kanyun.cpa.controller.common..*.*(..)) && !execution(* cn.kanyun.cpa.controller.user.UserController.*(..)) && !execution(* cn.kanyun.cpa.controller.LoginController.*(..))")
+    @Pointcut("execution(* cn.kanyun.cpa.controller..*.*(..)) && !execution(* cn.kanyun.cpa.controller.itempool.CpaRepertoryController.getUnitExam(..)) && !execution(* cn.kanyun.cpa.controller.itempool.CpaRepertoryController.exportWord(..)) && !execution(* cn.kanyun.cpa.controller.common..*.*(..)) && !execution(* cn.kanyun.cpa.controller.user.UserController.*(..)) && !execution(* cn.kanyun.cpa.controller.LoginController.*(..))")
     private void aspectjMethod() {
     }
 

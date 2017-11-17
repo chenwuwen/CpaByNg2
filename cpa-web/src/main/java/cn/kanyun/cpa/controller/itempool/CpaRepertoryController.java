@@ -9,20 +9,25 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
+import cn.kanyun.cpa.util.WordUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by KANYUN on 2017/6/17.
+ */
+
+/**
+ * 在方法级@RequestMapping的注解增加了一个RequestMothod.GET，意思是只有以GET方式提交的"/fileupload"URL请求才会进入fileUploadForm()
+ * 方法，其实根据HTTP协议，HTTP支持一系列提交方法（GET，POST，PUT，DELETE），同一个URL都可以使用这几种提交方式
+ * 事实上SpringMVC正是通过将同一个URL的不同提交方法对应到不同的方法上达到RESTful
  */
 @Controller
 @RequestMapping("/api/unitExam")
@@ -71,10 +76,40 @@ public class CpaRepertoryController {
             result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
         }catch (Exception e){
-            logger.info("/api/unitExam/addUnitExam  新增试题异常：  " + e);
+            logger.error("/api/unitExam/addUnitExam  新增试题异常：  " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
 
         return result;
     }
+    
+    /**    
+     *   
+     * @author Kanyun 
+     * @Description: 导出word
+     * @date 2017/11/16 11:39  
+     * @param   
+     * @return
+     * Controller中定义void方法，这种场景一般是通过HttpServletResponse对象来输出页面内容。注意：Controller的void方法中一定要声明HttpServletResponse类型的方法入参！
+     *注意：在Controller中，@RequestMapping注解的方法，在调用这个方法时候，
+     *  如果有定义HttpServletResponse类型的入参，Spring MVC框架会自动传入一个HttpServletResponse对象作为方法参数；
+     *  如果有定义HttpServletRequest类型的入参，Spring MVC框架会自动传入一个HttpServletRequest对象作为方法参数。
+     * void方法不定义HttpServletResponse类型的入参，HttpServletResponse对象通过RequestContextHolder上下文获取
+     *  注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
+     */
+    @RequestMapping(value="/exportWord/{typeCode}",method= RequestMethod.POST,produces = {"application/vnd.ms-excel;charset=UTF-8"})
+    public void exportWord(@PathVariable("typeCode") String typeCode, HttpServletResponse reponse){
+        try {
+            Object[] params = {typeCode};
+            String where = "o.testType=? ";
+            Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
+            CpaResult result = cpaRepertoryService.getUnitExam(-1, -1, where, params);
+            List<CpaRepertoryDto> list = (List) result.getData();
+            WordUtil.exportWord(list,reponse);
+        }catch (Exception e){
+            logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
+        }
+
+    }
+    
 }

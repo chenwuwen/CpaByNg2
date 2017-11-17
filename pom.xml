@@ -306,6 +306,12 @@
             <artifactId>poi-ooxml</artifactId>
             <version>3.9</version>
         </dependency>
+        <!--word模板渲染组件-->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.2.0</version>
+        </dependency>
 
         <!--JSON解析和序列化-->
         <dependency>
