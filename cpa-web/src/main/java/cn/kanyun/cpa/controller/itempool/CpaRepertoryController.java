@@ -17,8 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -105,7 +106,9 @@ public class CpaRepertoryController {
             Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
             CpaResult result = cpaRepertoryService.getUnitExam(-1, -1, where, params);
             List<CpaRepertoryDto> list = (List) result.getData();
-            WordUtil.exportWord(list,reponse);
+            Map map = new HashMap<>();
+            map.put("cpaRepertoryDtos",list);
+            WordUtil.exportWord(map,  reponse);
         }catch (Exception e){
             logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
         }
