@@ -64,11 +64,11 @@ public class CpaRepertoryController {
      * @Author: kanyun
      * @Description: 保存单元测试（试题）
      * @Date: 2017/9/18 17:21
-     * @params: ,List<CpaOption> cpaOptions,CpaSolution cpaSolution
+     * @params: , List<CpaOption> cpaOptions,CpaSolution cpaSolution
      */
     @RequestMapping("/addUnitExam")
     @ResponseBody
-    public CpaResult addUnitExam( @RequestBody ItemForm itemForm) {
+    public CpaResult addUnitExam(@RequestBody ItemForm itemForm) {
         CpaResult result = new CpaResult();
         try {
             CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
@@ -76,30 +76,28 @@ public class CpaRepertoryController {
             CpaSolution cpaSolution = itemForm.getCpaSolution();
             result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error("/api/unitExam/addUnitExam  新增试题异常：  " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
 
         return result;
     }
-    
-    /**    
-     *   
-     * @author Kanyun 
-     * @Description: 导出word
-     * @date 2017/11/16 11:39  
-     * @param   
-     * @return
-     * Controller中定义void方法，这种场景一般是通过HttpServletResponse对象来输出页面内容。注意：Controller的void方法中一定要声明HttpServletResponse类型的方法入参！
-     *注意：在Controller中，@RequestMapping注解的方法，在调用这个方法时候，
-     *  如果有定义HttpServletResponse类型的入参，Spring MVC框架会自动传入一个HttpServletResponse对象作为方法参数；
-     *  如果有定义HttpServletRequest类型的入参，Spring MVC框架会自动传入一个HttpServletRequest对象作为方法参数。
+
+    /**
+     * @param
+     * @return Controller中定义void方法，这种场景一般是通过HttpServletResponse对象来输出页面内容。注意：Controller的void方法中一定要声明HttpServletResponse类型的方法入参！
+     * 注意：在Controller中，@RequestMapping注解的方法，在调用这个方法时候，
+     * 如果有定义HttpServletResponse类型的入参，Spring MVC框架会自动传入一个HttpServletResponse对象作为方法参数；
+     * 如果有定义HttpServletRequest类型的入参，Spring MVC框架会自动传入一个HttpServletRequest对象作为方法参数。
      * void方法不定义HttpServletResponse类型的入参，HttpServletResponse对象通过RequestContextHolder上下文获取
-     *  注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
+     * 注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
+     * @author Kanyun
+     * @Description: 导出word
+     * @date 2017/11/16 11:39
      */
-    @RequestMapping(value="/exportWord/{typeCode}",method= RequestMethod.POST,produces = {"application/vnd.ms-excel;charset=UTF-8"})
-    public void exportWord(@PathVariable("typeCode") String typeCode, HttpServletResponse reponse){
+    @RequestMapping(value = "/exportWord/{typeCode}", method = RequestMethod.GET, produces = {"application/msword;charset=UTF-8"})
+    public void exportWord(@PathVariable("typeCode") String typeCode, HttpServletResponse response) {
         try {
             Object[] params = {typeCode};
             String where = "o.testType=? ";
@@ -107,12 +105,13 @@ public class CpaRepertoryController {
             CpaResult result = cpaRepertoryService.getUnitExam(-1, -1, where, params);
             List<CpaRepertoryDto> list = (List) result.getData();
             Map map = new HashMap<>();
-            map.put("cpaRepertoryDtos",list);
-            WordUtil.exportWord(map,  reponse);
-        }catch (Exception e){
+            map.put("cpaRepertoryDtos", list);
+            map.put("total", totalRecords);
+            WordUtil.exportWord(map, response);
+        } catch (Exception e) {
             logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
         }
 
     }
-    
+
 }
