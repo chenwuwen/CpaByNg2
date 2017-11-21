@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URLEncoder;
+import java.nio.channels.FileChannel;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -27,6 +28,98 @@ import java.util.Map;
  * @param haderMap 页眉数据
  * @param bodyMap  内容数据
  * @param footMap  页脚数据
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ * <p>
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ * <p>
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ * <p>
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ * <p>
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
  * <p>
  * response.setContentType()的String参数及对应类型
  * <p>
@@ -122,21 +215,35 @@ public class WordUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(WordUtil.class);
 
-    private static String fileName = DateUtils.toYmd(new Date())+"_"+System.currentTimeMillis()+ "_cpa.doc";
+    private static String fileName = DateUtils.toYmd(new Date()) + "_" + System.currentTimeMillis() + "_cpa.doc";
 
     private static Configuration configuration = null;
 
-    public WordUtil() {
 
-        configuration = new Configuration();
-        configuration.setDefaultEncoding("utf-8");
-
+    private WordUtil() {
     }
 
-//    static {
+
+    //    匿名类获取类实例（单例模式）
+    private static class SingletonHolder {
+        private final static WordUtil instance = new WordUtil();
+    }
+
+    public static WordUtil getInstance() {
+        return SingletonHolder.instance;
+    }
+
+//    public WordUtil() {
+//
 //        configuration = new Configuration();
 //        configuration.setDefaultEncoding("utf-8");
+//
 //    }
+
+    static {
+        configuration = new Configuration();
+        configuration.setDefaultEncoding("utf-8");
+    }
 
     /**
      * 利用匿名类在静态方法中获取当前类，弥补静态方法中不能用this.getClass()的不足
@@ -284,9 +391,12 @@ public class WordUtil {
         //dataMap 要填入模本的数据文件
         //设置模本装置方法和路径,FreeMarker支持多种模板装载方法。可以重servlet，classpath，数据库装载，
         //这里我们的模板是放在classpath下面
-        WordUtil wordUtil = new WordUtil();
-//        configuration.setClassForTemplateLoading(this.getClass(), "/");
-        configuration.setClassForTemplateLoading(wordUtil.getClass(), "/");
+        /*几种配置路径的方法*/
+//        WordUtil.class
+//        WordUtil wordUtil = new WordUtil(); wordUtil.getClass();
+//        Class.forName(WordUtil.getClassNameForStatic())
+//        configuration.setClassForTemplateLoading(this.getClass(), "/"); this不能在static方法里使用
+        configuration.setClassForTemplateLoading(WordUtil.getInstance().getClass(), "/");
         Template t = null;
         try {
             //test.ftl为要装载的模板
@@ -327,25 +437,30 @@ public class WordUtil {
     public static void exportWord(Map<String, Object> data, HttpServletResponse response) {
         File file = null;
         file = createDoc(data);
-        InputStream is = null;
+        logger.info("生成word文件大小为（Long型）：" + file.length());
+        FileInputStream fis = null;
         ServletOutputStream out = null;
         try {
-            is = new FileInputStream(file);
+            fis = new FileInputStream(file);
+            logger.info("读取word输入流大小（int型,如果文件太大,不准确，使用NIO下的FileChannel）: " + fis.available());
+//            FileChannel fc= null;
+//            fc=fis.getChannel();
+//            logger.info("转换为NIO流的大小"+fc.size());
             response.setContentType("application/msword,charset=utf-8");
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
             out = response.getOutputStream();
             byte[] buffer = new byte[512];  // 缓冲区
             int bytesToRead = -1;
-            while ((bytesToRead = is.read(buffer)) != -1) {
+            while ((bytesToRead = fis.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesToRead);
             }
             out.flush();
             out.close();
-            is.close();
+            fis.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-//            if(file != null) file.delete(); // 删除临时文件
+            if(file != null) file.delete(); // 删除临时文件
         }
 
     }

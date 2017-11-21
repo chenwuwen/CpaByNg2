@@ -4,6 +4,7 @@ import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.ExamType;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -107,6 +108,7 @@ public class CpaRepertoryController {
             Map map = new HashMap<>();
             map.put("cpaRepertoryDtos", list);
             map.put("total", totalRecords);
+            map.put("type", ExamType.valueOf(typeCode.toUpperCase()));
             WordUtil.exportWord(map, response);
         } catch (Exception e) {
             logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
