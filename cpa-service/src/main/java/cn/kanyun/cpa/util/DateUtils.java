@@ -12,6 +12,7 @@ public class DateUtils {
     public static final String YYYY_MM_DD_HH_MM_SS = "yyyy-MM-dd HH:mm:ss";
     public static final String YYYY_MM_DD_HH_MM = "yyyy-MM-dd HH:mm";
     public static final String YYYY_MM_DD = "yyyy-MM-dd";
+    public static final String YYYY_MM_DD_ = "yyyy/MM/dd";
     public static final String MM_DD = "MM-dd";
     public static final String HH_MM_SS = "HH:mm:ss";
     public static final String HH_MM = "HH:mm";
@@ -19,6 +20,7 @@ public class DateUtils {
     public final static DateTimeFormatter FORMATTER_YYYY_MM_DD_HH_MM_SS = DateTimeFormat.forPattern(YYYY_MM_DD_HH_MM_SS);
     public final static DateTimeFormatter FORMATTER_YYYY_MM_DD_HH_MM = DateTimeFormat.forPattern(YYYY_MM_DD_HH_MM);
     public final static DateTimeFormatter FORMATTER_YYYY_MM_DD = DateTimeFormat.forPattern(YYYY_MM_DD);
+    public final static DateTimeFormatter FORMATTER_YYYY_MM_DD_ = DateTimeFormat.forPattern(YYYY_MM_DD_);
     public final static DateTimeFormatter FORMATTER_MM_DD = DateTimeFormat.forPattern(MM_DD);
     public final static DateTimeFormatter FORMATTER_HH_MM_SS = DateTimeFormat.forPattern(HH_MM_SS);
     public final static DateTimeFormatter FORMATTER_HH_MM = DateTimeFormat.forPattern(HH_MM);
@@ -48,6 +50,10 @@ public class DateUtils {
 
     public static String toYmd(Date dateTime) {
         return format(dateTime, YYYY_MM_DD);
+    }
+
+    public static String toYmdX(Date dateTime) {
+        return format(dateTime, YYYY_MM_DD_);
     }
 
     public static String toMd(Date dateTime) {
@@ -86,5 +92,7 @@ public class DateUtils {
 
         String date = toHm(new Date());
         System.out.println(date);
+
+        System.out.println(DateUtils.toYmdX(new Date()));
     }
 }

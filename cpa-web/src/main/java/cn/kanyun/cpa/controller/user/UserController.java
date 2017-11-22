@@ -5,6 +5,7 @@ import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.service.file.IUploadFileService;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import cn.kanyun.cpa.service.user.IUserService;
 import cn.kanyun.cpa.model.entity.CpaConstants;
@@ -25,10 +26,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -45,6 +49,8 @@ public class UserController {
     private IUserService userService;
     @Resource(name = IUserRoleService.SERVICE_NAME)
     private IUserRoleService userRoleService;
+    @Resource(name = IUploadFileService.SERVICE_NAME)
+    private IUploadFileService uploadFileService;
 
 
     /**
@@ -126,6 +132,35 @@ public class UserController {
                 result.setState(CpaConstants.OPERATION_ERROR);
                 result.setMsg("注册失败,请重试！");
             }
+        }
+
+        return result;
+    }
+
+    /**
+     * @param
+     * @return
+     * @author Kanyun
+     * @Description: 上传用户头像
+     * @date 2017/11/21 20:31
+     */
+    @RequestMapping("/upLoadUserHeaderImg")
+    @ResponseBody
+    public CpaResult upLoadUserHeaderImg(@RequestParam("uploadedfile") MultipartFile uploadedfile, HttpServletRequest request) {
+        CpaResult result = new CpaResult();
+        try {
+            MultipartFile[] files = {uploadedfile};
+            CpaResult imgResult = uploadFileService.upLoadFile(files);
+            if (1 == imgResult.getState()) {
+                result.setData(imgResult.getData());
+                CpaUser user = WebUtil.getSessionUser(request);
+                user.setImgPath(String.valueOf(imgResult.getData()));
+                userService.update(user);
+                result.setState(CpaConstants.OPERATION_SUCCESS);
+            }
+        } catch (Exception e) {
+            logger.error("api/user/upLoadUserHeaderImg error: " + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
         }
 
         return result;

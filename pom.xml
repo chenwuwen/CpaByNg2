@@ -388,6 +388,14 @@
             <version>1.2.1</version>
         </dependency>
 
+        <!--FTP-->
+        <dependency>
+            <groupId>commons-net</groupId>
+            <artifactId>commons-net</artifactId>
+            <version>3.5</version>
+            <classifier>ftp</classifier>
+        </dependency>
+
         <!-- aspectjweaver.jar这是Spring AOP所要用到的包 -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -400,6 +408,19 @@
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
             <version>2.9.9</version>
+        </dependency>
+
+        <!--图片处理,但需要操作系统安装ImageMagick或者GraphicsMagick再配好环境变量。-->
+        <dependency>
+            <groupId>org.im4java</groupId>
+            <artifactId>im4java</artifactId>
+            <version>1.4.0</version>
+        </dependency>
+        <!--Thumbnailator 是一个优秀的图片处理的Google开源Java类库-->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
         </dependency>
 
 
@@ -498,6 +519,12 @@
             <groupId>commons-pool</groupId>
             <artifactId>commons-pool</artifactId>
             <version>1.6</version>
+        </dependency>
+        <!--二维码?-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>javase</artifactId>
+            <version>3.3.0</version>
         </dependency>
 
     </dependencies>

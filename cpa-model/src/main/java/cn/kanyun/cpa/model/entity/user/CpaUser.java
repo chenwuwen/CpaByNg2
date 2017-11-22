@@ -25,10 +25,12 @@ public class CpaUser implements java.io.Serializable {
     private Integer status;
     private String salt;
     private Set userRoles = new HashSet<>();
+    private String imgPath;
 
-    public CpaUser(){}
+    public CpaUser() {
+    }
 
-    public CpaUser(Integer id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles) {
+    public CpaUser(Integer id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -39,6 +41,7 @@ public class CpaUser implements java.io.Serializable {
         this.lastLoginDate = lastLoginDate;
         this.status = status;
         this.userRoles = userRoles;
+        this.imgPath = imgPath;
     }
 
     public Integer getId() {
@@ -131,6 +134,13 @@ public class CpaUser implements java.io.Serializable {
         this.salt = salt;
     }
 
+    public String getImgPath() {
+        return imgPath;
+    }
+
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 
     @Override
     public String toString() {
@@ -144,8 +154,9 @@ public class CpaUser implements java.io.Serializable {
                 ", regDate=" + regDate +
                 ", lastLoginDate=" + lastLoginDate +
                 ", status=" + status +
+                ", salt='" + salt + '\'' +
                 ", userRoles=" + userRoles +
-                ", salt=" + salt +
+                ", imgPath='" + imgPath + '\'' +
                 '}';
     }
 }

@@ -13,7 +13,12 @@
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
     <!-- 加载配置文件 -->
     <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
-    <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+   <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
+    如 @Value("${FTP_ADDRESS}")
+    private String FTP_ADDRESS;
+    前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
+    <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
+
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
     <!-- Spring的扫描仅仅是扫描@Service @Repository，@Components标记!!!@Controller是有SpingMVC来扫描的 -->
     <context:component-scan base-package="cn.kanyun"/>

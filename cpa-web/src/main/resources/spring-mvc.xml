@@ -18,8 +18,11 @@
         文件中的扫描是针对@Service @Repository，@Components来说的，Spring是桥梁, 而SpringMVC更专注了控制和转发，所以虽然两者都要进行注解扫描，但是所扫描的
         内容是不一样的 -->
     <!--当配置为base-package="cn.kanyun"不仅仅扫描到带有@Controller注解的Bean，还会默认扫描到带有@Service/@Repository注解的Bean，可能造成事务不起作用等问题-->
-    <!--此时需要加上use-default-filters=“false”禁用掉默认的行为,配置为base-package="cn.kanyun.cpa.controller"则不会-->
-    <context:component-scan base-package="cn.kanyun.cpa.controller" />
+    <!--此时需要加上use-default-filters=“false”禁用掉默认的行为,配置为base-package="cn.kanyun.cpa.controller"则不会 springmvc容器中只扫描Controller注解-->
+    <!--如果spring配置了context:property-placeholder加载配置文件,则一定不能缺少下面的use-default-filters="false"-->
+    <context:component-scan base-package="cn.kanyun.cpa.controller" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
     <!-- 通知spring使用cglib而不是jdk的来生成代理方法，这样 AOP可以拦截到Controller -->
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 

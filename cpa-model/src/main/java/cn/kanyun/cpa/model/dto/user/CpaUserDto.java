@@ -18,14 +18,17 @@ public class CpaUserDto extends BaseEntity {
     private String salt; //盐
     private Set<String> roles; //角色集合
     private Set<String> permissions; //权限集合
+    private String imgPath;
 
 
     public String getIsRememberMe() {
         return isRememberMe;
     }
+
     public void setIsRememberMe(String isRememberMe) {
         this.isRememberMe = isRememberMe;
     }
+
     public String getUserName() {
         return userName;
     }
@@ -83,5 +86,11 @@ public class CpaUserDto extends BaseEntity {
         this.permissions = permissions;
     }
 
+    public String getImgPath() {
+        return imgPath;
+    }
 
+    public void setImgPath(String imgPath) {
+        this.imgPath = imgPath;
+    }
 }
