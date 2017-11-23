@@ -450,7 +450,7 @@ public class WordUtil {
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
             out = response.getOutputStream();
             byte[] buffer = new byte[512];  // 缓冲区
-            int bytesToRead = -1;
+            int bytesToRead ;
             while ((bytesToRead = fis.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesToRead);
             }

@@ -150,7 +150,7 @@ public class UserController {
         CpaResult result = new CpaResult();
         try {
             MultipartFile[] files = {uploadedfile};
-            CpaResult imgResult = uploadFileService.upLoadFile(files);
+            CpaResult imgResult = uploadFileService.upLoadImg(files);
             if (1 == imgResult.getState()) {
                 result.setData(imgResult.getData());
                 CpaUser user = WebUtil.getSessionUser(request);

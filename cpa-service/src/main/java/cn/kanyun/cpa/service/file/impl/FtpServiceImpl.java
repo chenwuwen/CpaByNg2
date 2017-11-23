@@ -17,6 +17,7 @@ public class FtpServiceImpl implements IFtpService {
 
         ftpUtil.connect();
         Enum e = ftpUtil.upload(localDirectory, remoteDirectory);
+        ftpUtil.disconnect();
         return e;
     }
 

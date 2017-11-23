@@ -3,12 +3,13 @@ package cn.kanyun.cpa.service;
 import cn.kanyun.cpa.dao.ICommonDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
-
+@Transactional
 public abstract class CommonServiceImpl<K extends Serializable, T extends Serializable>
         implements ICommonService<K, T> {
     //	此处不可添加@Resource注解,添加之后，当有多个类实现一个接口会报NoUniqueBeanDefinitionException异常，
