@@ -58,7 +58,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
 //                文件转换为BufferedImage使用gm处理图片需要
 //                BufferedImage image = ImageIO.read(new FileInputStream(filePath));
                 for (String size : imgSizes) {
-//                                    压缩图片保存路径
+//                   压缩图片保存路径
                     String descPath = rootPath + DateUtils.toYmdX(new Date()) + "/" + FileUtil.generateFileName(newFileName, size, false);
 //                创建文件
                     File handlerFile = new File(descPath);
@@ -68,7 +68,8 @@ public class UploadFileServiceImpl implements IUploadFileService {
                     //压缩图片并导出图片
                     Thumbnails.of(filePath).size(Integer.parseInt(size.split("-")[0]), Integer.parseInt(size.split("-")[1])).toFile(descPath);
                 }
-//                ftpService.uploadFTP(filePath,"image/"+DateUtils.toYmdX(new Date()) + "/");
+                //上传文件到FTP
+                ftpService.uploadFTP(filePath, "image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setData(DateUtils.toYmdX(new Date()) + "/" + newFileName);
             } catch (IOException e) {

@@ -2,6 +2,7 @@ package cn.kanyun.cpa.util;
 
 import java.io.*;
 
+import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -12,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 /**
  * 支持断点续传的FTP实用类
+ * TP服务器的模式有主动模式、被动模式两种 PORT方式和PASV方式
+ * FTPClient连接FTP服务的时候，Java中org.apache.commons.net.ftp.FTPClient默认使用的是主动模式
  *
  * @author xiongl
  * @version 0.3 实现中文目录创建及中文文件创建，添加对于中文的支持
@@ -41,8 +44,8 @@ public class FTPUtil {
     public FTPUtil() {
 
         // 设置将过程中使用到的命令输出到控制台
-        // this.ftpClient.addProtocolCommandListener(new
-        // PrintCommandListener(new PrintWriter(System.out)));
+//         this.ftpClient.addProtocolCommandListener(new
+//                 PrintCommandListener(new PrintWriter(System.out)));
     }
 
     /**
@@ -63,7 +66,7 @@ public class FTPUtil {
         } catch (Exception e) {
             throw new Exception("登陆异常，请检查主机端口");
         }
-        ftpClient.setControlEncoding("GBK");
+        ftpClient.setControlEncoding("UTF-8");
         if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
             if (ftpClient.login(username, password)) {
                 logger.info("FTP登陆成功!");
@@ -110,7 +113,7 @@ public class FTPUtil {
         DownloadStatus result;
 
         // 检查远程文件是否存在
-        FTPFile[] files = ftpClient.listFiles(new String(remote.getBytes("GBK"), "iso-8859-1"));
+        FTPFile[] files = ftpClient.listFiles(new String(remote.getBytes("UTF-8"), "iso-8859-1"));
         if (files.length != 1) {
             // System.out.println("远程文件不存在");
             logger.info("远程文件不存在");
@@ -132,7 +135,7 @@ public class FTPUtil {
             FileOutputStream out = new FileOutputStream(f, true);
             // 找出本地已经接收了多少
             ftpClient.setRestartOffset(localSize);
-            InputStream in = ftpClient.retrieveFileStream(new String(remote.getBytes("GBK"), "iso-8859-1"));
+            InputStream in = ftpClient.retrieveFileStream(new String(remote.getBytes("UTF-8"), "iso-8859-1"));
             try {
                 byte[] bytes = new byte[1024];
                 // 总的进度
@@ -167,7 +170,7 @@ public class FTPUtil {
             }
         } else {
             OutputStream out = new FileOutputStream(f);
-            InputStream in = ftpClient.retrieveFileStream(new String(remote.getBytes("GBK"), "iso-8859-1"));
+            InputStream in = ftpClient.retrieveFileStream(new String(remote.getBytes("UTF-8"), "iso-8859-1"));
             try {
                 byte[] bytes = new byte[1024];
                 long step = lRemoteSize / 100;
@@ -212,11 +215,11 @@ public class FTPUtil {
      */
     public UploadStatus upload(String local, String remote)
             throws IOException {
-        // 设置PassiveMode传输
+        // 设置PassiveMode传输 设置被动模式
         ftpClient.enterLocalPassiveMode();
         // 设置以二进制流的方式传输
         ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
-        ftpClient.setControlEncoding("GBK");
+        ftpClient.setControlEncoding("UTF-8");
         UploadStatus result;
         // 对远程目录的处理
         String remoteFileName = remote;
@@ -229,7 +232,7 @@ public class FTPUtil {
         }
 
         // 检查远程是否存在文件
-        FTPFile[] files = ftpClient.listFiles(new String(remoteFileName.getBytes("GBK"), "iso-8859-1"));
+        FTPFile[] files = ftpClient.listFiles(new String(remoteFileName.getBytes("UTF-8"), "iso-8859-1"));
         if (files.length == 1) {
             long remoteSize = files[0].getSize();
             File f = new File(local);
@@ -281,7 +284,7 @@ public class FTPUtil {
         UploadStatus status = UploadStatus.Create_Directory_Success;
         String directory = remote.substring(0, remote.lastIndexOf("/") + 1);
         if (!directory.equalsIgnoreCase("/")
-                && !ftpClient.changeWorkingDirectory(new String(directory.getBytes("GBK"), "iso-8859-1"))) {
+                && !ftpClient.changeWorkingDirectory(new String(directory.getBytes("UTF-8"), "iso-8859-1"))) {
             // 如果远程目录不存在，则递归创建远程服务器目录
             int start = 0;
             int end = 0;
@@ -292,9 +295,9 @@ public class FTPUtil {
             }
             end = directory.indexOf("/", start);
             while (true) {
-                String subDirectory = new String(remote.substring(start, end).getBytes("GBK"), "iso-8859-1");
+                String subDirectory = new String(remote.substring(start, end).getBytes("UTF-8"), "iso-8859-1");
                 if (!ftpClient.changeWorkingDirectory(subDirectory)) {
-                    if (ftpClient.makeDirectory(subDirectory)) {
+                    if (ftpClient.makeDirectory(new String(subDirectory.getBytes("UTF-8"), "iso-8859-1"))) {
                         ftpClient.changeWorkingDirectory(subDirectory);
                     } else {
                         System.out.println("创建目录失败");
@@ -332,33 +335,35 @@ public class FTPUtil {
         long process = 0;
         long localreadbytes = 0L;
         RandomAccessFile raf = new RandomAccessFile(localFile, "r");
-        //appendFileStream方法，用于大文件的断点续传功能。它只是向已经存在的文件追加数据。新文件上传，要使用storeFile方法,服务端换用Serv-U，可以用appendFileStream上传新文件
-//        OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
-//        OutputStream out1 = ftpClient.storeFileStream(new String(remoteFile.getBytes("GBK"), "iso-8859-1"));
-//        // 断点续传
-//        if (remoteSize > 0) {
-//            ftpClient.setRestartOffset(remoteSize);
-//            process = remoteSize / step;
-//            raf.seek(remoteSize);
-//            localreadbytes = remoteSize;
-//        }
-//        byte[] bytes = new byte[1024];
-//        int c;
-//        while ((c = raf.read(bytes)) != -1) {
-//            out.write(bytes, 0, c);
-//            localreadbytes += c;
-//            if (localreadbytes / step != process) {
-//                process = localreadbytes / step;
-//                System.out.println("上传进度:" + process);
-//                // TODO 汇报上传状态
-//            }
-//        }
-//        out.flush();
-//        raf.close();
-//        out.close();
-        FileInputStream fis = new FileInputStream(localFile);
-        boolean result1 = ftpClient.storeFile(remoteFile,fis);
-        System.out.println(result1);
+        /**
+         * appendFileStream方法，用于大文件的断点续传功能。它只是向已经存在的文件追加数据。新文件上传，要使用storeFile方法
+         * FileInputStream fis = new FileInputStream(localFile);
+         * boolean result = ftpClient.storeFile(new String(remoteFile.getBytes("UTF-8"),"iso-8859-1"),fis);
+         * 服务端换用Serv-U，可以用appendFileStream上传新文件
+         */
+        OutputStream out = ftpClient.appendFileStream(new String(remoteFile.getBytes("UTF-8"), "iso-8859-1"));
+        // 断点续传
+        if (remoteSize > 0) {
+            ftpClient.setRestartOffset(remoteSize);
+            process = remoteSize / step;
+            raf.seek(remoteSize);
+            localreadbytes = remoteSize;
+        }
+        byte[] bytes = new byte[1024];
+        int c;
+        while ((c = raf.read(bytes)) != -1) {
+            out.write(bytes, 0, c);
+            localreadbytes += c;
+            if (localreadbytes / step != process) {
+                process = localreadbytes / step;
+                System.out.println("上传进度:" + process);
+                // TODO 汇报上传状态
+            }
+        }
+        out.flush();
+        raf.close();
+        out.close();
+
         //FTPClient 处理多个文件时注意添加completePendingCommand,如果没有使用completePendingCommand()这方/法，则只能处理一个文件，在处理第二个文件的时候（即第二次调用retrieveFileStream()方法的时候）返回null
         boolean result = ftpClient.completePendingCommand();
         System.out.println(result);
@@ -377,11 +382,11 @@ public class FTPUtil {
 //            myFtp.connect("67.198.141.254", 21, "kanyun123", "123456");
             myFtp.connect();
             // myFtp.ftpClient.makeDirectory(new
-            // String("电视剧".getBytes("GBK"),"iso-8859-1"));
+            // String("电视剧".getBytes("UTF-8"),"iso-8859-1"));
             // myFtp.ftpClient.changeWorkingDirectory(new
-            // String("电视剧".getBytes("GBK"),"iso-8859-1"));
+            // String("电视剧".getBytes("UTF-8"),"iso-8859-1"));
             // myFtp.ftpClient.makeDirectory(new
-            // String("走西口".getBytes("GBK"),"iso-8859-1"));
+            // String("走西口".getBytes("UTF-8"),"iso-8859-1"));
             // System.out.println(myFtp.upload("E:\\yw.flv", "/yw.flv",5));
             // System.out.println(myFtp.upload("E:\\走西口24.mp4","/央视走西口/新浪网/走西口24.mp4"));
             System.out.println(myFtp.download("index.html", "C:\\Users\\KANYUN\\Desktop\\index.html0"));
@@ -398,7 +403,7 @@ public class FTPUtil {
         Download_From_Break_Success, // 断点下载文件成功
         Download_From_Break_Failed, // 断点下载文件失败
         Download_New_Success, // 全新下载文件成功
-        Download_New_Failed; // 全新下载文件失败
+        Download_New_Failed, // 全新下载文件失败
     }
 
     public enum UploadStatus {
