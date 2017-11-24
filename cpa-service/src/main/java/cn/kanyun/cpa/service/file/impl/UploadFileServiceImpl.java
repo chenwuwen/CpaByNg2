@@ -69,7 +69,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
                     Thumbnails.of(filePath).size(Integer.parseInt(size.split("-")[0]), Integer.parseInt(size.split("-")[1])).toFile(descPath);
                 }
                 //上传文件到FTP
-                ftpService.uploadFTP(filePath, "image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
+                ftpService.uploadFTP(filePath, "/image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setData(DateUtils.toYmdX(new Date()) + "/" + newFileName);
             } catch (IOException e) {
