@@ -99,32 +99,32 @@ public class MyRealm extends AuthorizingRealm {
         return null;
     }
 
-    @Override
-    public void onLogout(PrincipalCollection principals) {
-        super.clearCachedAuthorizationInfo(principals);
-        CpaUser user = (CpaUser) principals.getPrimaryPrincipal();
-        removeUserCache(user);
-    }
-
-    /**
-     * 清除用户缓存
-     *
-     * @param CpaUser
-     */
-    public void removeUserCache(CpaUser user) {
-        removeUserCache(user.getUserName());
-    }
-
-    /**
-     * 清除用户缓存
-     *
-     * @param userName
-     */
-    public void removeUserCache(String userName) {
-        SimplePrincipalCollection principals = new SimplePrincipalCollection();
-        principals.add(userName, super.getName());
-        super.clearCachedAuthenticationInfo(principals);
-    }
+//    @Override
+//    public void onLogout(PrincipalCollection principals) {
+//        super.clearCachedAuthorizationInfo(principals);
+//        CpaUser user = (CpaUser) principals.getPrimaryPrincipal();
+//        removeUserCache(user);
+//    }
+//
+//    /**
+//     * 清除用户缓存
+//     *
+//     * @param CpaUser
+//     */
+//    public void removeUserCache(CpaUser user) {
+//        removeUserCache(user.getUserName());
+//    }
+//
+//    /**
+//     * 清除用户缓存
+//     *
+//     * @param userName
+//     */
+//    public void removeUserCache(String userName) {
+//        SimplePrincipalCollection principals = new SimplePrincipalCollection();
+//        principals.add(userName, super.getName());
+//        super.clearCachedAuthenticationInfo(principals);
+//    }
 }
 
 

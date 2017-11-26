@@ -19,14 +19,5 @@ public interface IUploadFileService {
      */  
     CpaResult upLoadImg(MultipartFile[] files) throws Exception;
 
-    /**    
-     *   
-     * @author Kanyun 
-     * @Description: 数据验证
-     * @date 2017/11/21 22:19
-     * @param   file 上传的数据
-     * @param   type 数据类型（文件：file,图片：image）
-     * @return   
-     */  
-    CpaResult validateFile(MultipartFile[] files, String[] type);
+
 }

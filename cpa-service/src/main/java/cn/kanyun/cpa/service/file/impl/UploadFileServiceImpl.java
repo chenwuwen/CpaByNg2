@@ -37,6 +37,8 @@ public class UploadFileServiceImpl implements IUploadFileService {
     //初始化List（双括号初始化法）
     public List<String> imgSizes = new ArrayList<String>() {{
         add("200-220");
+        /*圆形头像*/
+        add("50-50");
     }};
 
     @Resource(name = IFtpService.SERVICE_NAME)
@@ -81,8 +83,5 @@ public class UploadFileServiceImpl implements IUploadFileService {
         return result;
     }
 
-    @Override
-    public CpaResult validateFile(MultipartFile[] files, String[] type) {
-        return null;
-    }
+
 }

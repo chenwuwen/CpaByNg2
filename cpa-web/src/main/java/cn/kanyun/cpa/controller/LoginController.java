@@ -107,6 +107,7 @@ public class LoginController {
                 user.setRoles(userRoleService.findRoleByUser(u));
                 user.setPermissions(userRoleService.findPermissionByUer(u));
                 user.setId(u.getId());
+                user.setImgPath(u.getImgPath());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);
                 result.setMsg("登陆成功");

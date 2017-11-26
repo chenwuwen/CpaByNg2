@@ -58,10 +58,12 @@
         <property name="cookie" ref="rememberMeCookie"/>
     </bean>
 
-    <!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session -->
+    <!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session,即如下配置 -->
+    <!--<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager">-->
     <!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
     <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <!-- session的失效时长，单位毫秒 -->
+        <!-- session的失效时长，单位毫秒, -->
+        <!--如果上面配置的Class是DefaultWebSecurityManager，则session的失效时间取决于下面的配置，如果上面配置的Class是ServletContainerSessionManager，则session的失效时间取决与web.xml设置的时间-->
         <property name="globalSessionTimeout" value="6000000"/>
         <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
@@ -80,6 +82,16 @@
         <property name="sessionManager" ref="sessionManager"/>
         <!--记住我-->
         <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator" />
+
+    <!--定义退出过滤器,此处先执行LogoutFilter的退出清空缓存操作，然后重定向，value为重定向的地址-->
+    <!--下面的配置是shiro默认的logout过滤器的配置,也可以通过继承shiro的过滤器，自定义logout过滤器-->
+    <!--<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">-->
+    <bean id="logoutFilter" class="cn.kanyun.cpa.filter.SystemLogoutFilter">
+        <property name="redirectUrl" value="/" />
     </bean>
 
     <!-- Shiro 的Web过滤器 -->
@@ -101,6 +113,8 @@
             <map>
                 <!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中-->
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <!--退出过滤器-->
+                <entry key="logout" value-ref="logoutFilter" />
             </map>
         </property>
         <!--过滤定义，从上而下，蒋匿名的anon放最下面-->
@@ -115,8 +129,13 @@
                 <!--authc 表示需要认证,没有登是不能访问的-->
                 <!--perms 表示需要该权限才能访问的页面-->
                 <!--roles 表示需要角色才能访问的页面-->
+
+                <!--页面点击退出时：拦截/api/user/logout找到对应logout-->
+                /api/user/logout = logout
+
                 <!--没有参数，表示可以匿名使用。-->
                 /api/**=anon
+
                 <!--表示需要认证(登录)才能使用，没有参数-->
                 /api/solution/**=authc
                 <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。-->

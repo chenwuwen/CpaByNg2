@@ -68,7 +68,7 @@ public class LogAspect {
      * @Title：doAround
      * @Description: 环绕触发
      */
-    @Around("execution(* cn.kanyun.cpa.*.*.*(..))")
+    @Around("execution(* cn.kanyun.cpa.controller.*.*(..))")
     public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
         /**
          * 1.获取request信息

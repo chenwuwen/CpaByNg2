@@ -35,13 +35,23 @@ public class WebUtil {
     }
 
     /**
-     * 在session中获得user
+     * 将user保存到session中
      *
      * @param request
      * @return
      */
     public synchronized static void setSessionUser(HttpServletRequest request, CpaUser us) {
         request.getSession().setAttribute(CpaConstants.USER, us);
+    }
+
+    /**
+     * 将user从session中移除
+     *
+     * @param request
+     * @return
+     */
+    public synchronized static void removeSessionUser(HttpServletRequest request){
+        request.getSession().removeAttribute(CpaConstants.USER);
     }
 
     /**

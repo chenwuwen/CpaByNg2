@@ -30,15 +30,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * 通过redirect返回String类型跳转，注意这种方法不允许Spring控制器用@RestController注解，
+ * 因为@RestController相当于类中的所有方法都标注了@ResponseBody，这些方法不会返回一个视图，而是返回一个json对象，
+ * 这样的话只是在页面上打印出字符串，而不跳转。控制器用@Controller注解即可
+ */
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
@@ -164,5 +170,26 @@ public class UserController {
         }
 
         return result;
+    }
+
+    /**
+     * @param
+     * @return
+     * @author Kanyun
+     * @Description:
+     * @date 2017/11/25 15:57
+     */
+    @RequestMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        CpaUser user = WebUtil.getSessionUser(request);
+        logger.info(user.getUserName() + "于时间" + new DateTime(System.currentTimeMillis()) + "退出系统");
+        try {
+            /*清除session*/
+            WebUtil.removeSessionUser(request);
+            /*重定向到默认页*/
+            response.sendRedirect("/");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
