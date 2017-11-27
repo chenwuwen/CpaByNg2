@@ -52,6 +52,19 @@ import java.util.Date;
  * web：cookie／localStorage／sessionStorage／；
  * app：内存
  */
+
+/**
+ * token的发送与获取
+ * ajax为例子：beforeSend:function(request) {
+ * // token，为登陆时获取到
+ *  request.setRequestHeader("token",token);
+  *   },
+ *   后台获取：request.getHeader("token");
+ *
+ *   token验证机制
+ *   1：通过token解密是否成功可以判断token是否正确或者是否过期
+ *   2：解密完成，可以对比用户属性或者用户的固定token（缓存中或者放入数据库）
+ */
 public class JwtUtil {
 
 //    Key key = MacProvider.generateKey();//这里是加密解密的key。github Demo上Key的获取方式
