@@ -423,8 +423,12 @@
             <artifactId>thumbnailator</artifactId>
             <version>0.4.8</version>
         </dependency>
-
-
+        <!--Json Web Token验证，主要用于生成Token-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>0.9.0</version>
+        </dependency>
         <!-- project lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>

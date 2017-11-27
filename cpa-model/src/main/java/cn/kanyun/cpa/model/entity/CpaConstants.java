@@ -39,4 +39,13 @@ public class CpaConstants {
 
     /** 用户名或密码错误 */
     public static final String USERNAME_OR_PASSWORD_ERROE = "用户名或密码错误";
+
+    /** JWT生成Token的key自定义字符串 */
+    public static final String JWT_SECRET="kanyun1993chenwuwen02cpa10com";
+
+    /** JWT生成Token设置过期时间 */
+    public static final long JWT_REFRESH_INTERVAL = 60*60*1000;
+
+    /** JWT生成Token设置ISSUSER */
+    public static final String JWT_ISSUSER = "kanyun.cpa.com";
 }

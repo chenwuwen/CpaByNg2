@@ -152,6 +152,13 @@
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
         </dependency>
+
+        <!--Json Web Token验证，主要用于生成Token-->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+        </dependency>
+
         <!--为防止与tomcat中的servlet发生冲突,导致服务无法启动,所以加上scope定义该jar包的使用范围-->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>

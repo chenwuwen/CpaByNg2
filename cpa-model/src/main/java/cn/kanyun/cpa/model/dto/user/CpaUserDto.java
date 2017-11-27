@@ -19,7 +19,15 @@ public class CpaUserDto extends BaseEntity {
     private Set<String> roles; //角色集合
     private Set<String> permissions; //权限集合
     private String imgPath;
+    private String token;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getIsRememberMe() {
         return isRememberMe;

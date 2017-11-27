@@ -7,6 +7,7 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.util.JwtUtil;
 import cn.kanyun.cpa.util.WebUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -107,6 +108,7 @@ public class LoginController {
                 user.setRoles(userRoleService.findRoleByUser(u));
                 user.setPermissions(userRoleService.findPermissionByUer(u));
                 user.setId(u.getId());
+                JwtUtil.createJWT(JwtUtil.generalSubject(u),u.getUserName(),CpaConstants.JWT_ISSUSER,CpaConstants.JWT_REFRESH_INTERVAL,CpaConstants.JWT_SECRET);
                 user.setImgPath(u.getImgPath());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);
