@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.util;
 
+import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;
@@ -149,5 +150,9 @@ public class JwtUtil {
         return jo.toString();
     }
 
-
+    public static void main(String[] args) {
+        String subject = "{userId : 1,userMame: kanyun}";
+        String token = createJWT(subject,"kanyun", CpaConstants.JWT_ISSUSER,CpaConstants.JWT_REFRESH_INTERVAL,CpaConstants.JWT_SECRET);
+        System.out.println(token);
+    }
 }

@@ -89,6 +89,7 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+
         <!--该依赖为谷歌Gson包，使用最多的是Gson类的toJson()和fromJson()方法-->
         <dependency>
             <groupId>com.google.code.gson</groupId>
