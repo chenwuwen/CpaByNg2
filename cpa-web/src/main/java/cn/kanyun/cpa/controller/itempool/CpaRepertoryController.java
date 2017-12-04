@@ -12,6 +12,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.redis.service.IRedisService;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -54,17 +55,19 @@ public class CpaRepertoryController {
     public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, Integer pageNo, Integer pageSize) {
         CpaResult result = null;
         Object[] params = {typeCode};
-        String where = "o.testType=? ";
+        String where = "o.testType=?";
         Page page = new Page();
         pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
         pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
-        result = (CpaResult) redisService.getCacheObject(where + params + page.toString());
+        String key = where + StringUtils.join(params) + pageNo + pageSize;
+        logger.info("Redis缓存的Key：" + key);
+        result = (CpaResult) redisService.getCacheObject(key);
         if (null == result) {
             //总记录数
             Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
             Integer firstResult = page.countOffset(pageNo, pageSize);
             result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
-            redisService.setCacheObject(where + params + page.toString(),result);
+            redisService.setCacheObject(key,result);
         }
         return result;
     }
