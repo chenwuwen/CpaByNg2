@@ -38,6 +38,11 @@
             <artifactId>cpa-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cn.kanyun</groupId>
+            <artifactId>cpa-redis</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!--Spring相关-->
         <dependency>
@@ -185,6 +190,7 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
         </dependency>
+      
 
     </dependencies>
 

@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.redis;
+package cn.kanyun.cpa.redis.service;
 
 import org.springframework.data.redis.core.BoundSetOperations;
 
@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2017/6/5.
  */
-public interface RedisService<T> {
+public interface IRedisService<T> {
     public void setCacheObject(String key, Object value);
 
     /**

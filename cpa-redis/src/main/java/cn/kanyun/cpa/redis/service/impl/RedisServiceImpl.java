@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.redis;
+package cn.kanyun.cpa.redis.service.impl;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import cn.kanyun.cpa.redis.service.IRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -25,7 +26,7 @@ import org.springframework.stereotype.Service;
  */
 @SuppressWarnings("ALL")
 @Service
-public class RedisAbstractService<T> {
+public class RedisServiceImpl<T> implements IRedisService<T> {
     @Autowired
     @Qualifier("redisTemplate")
     public RedisTemplate<String, Object> redisTemplate;
@@ -377,3 +378,4 @@ public class RedisAbstractService<T> {
     }
 
 }
+

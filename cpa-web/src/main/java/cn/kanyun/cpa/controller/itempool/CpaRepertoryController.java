@@ -9,6 +9,7 @@ import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.redis.service.IRedisService;
 import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
 import org.slf4j.Logger;
@@ -39,6 +40,8 @@ public class CpaRepertoryController {
 
     @Resource(name = ICpaRepertoryService.SERVICE_NAME)
     private ICpaRepertoryService cpaRepertoryService;
+    @Resource
+    private IRedisService redisService;
 
     /**
      * @Author: kanyun
@@ -49,15 +52,20 @@ public class CpaRepertoryController {
     @RequestMapping("/getUnitExam/{typeCode}")
     @ResponseBody
     public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, Integer pageNo, Integer pageSize) {
+        CpaResult result = null;
         Object[] params = {typeCode};
         String where = "o.testType=? ";
         Page page = new Page();
         pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
         pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
-        //总记录数
-        Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
-        Integer firstResult = page.countOffset(pageNo, pageSize);
-        CpaResult result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+        result = (CpaResult) redisService.getCacheObject(where + params + page.toString());
+        if (null == result) {
+            //总记录数
+            Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
+            Integer firstResult = page.countOffset(pageNo, pageSize);
+            result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+            redisService.setCacheObject(where + params + page.toString(),result);
+        }
         return result;
     }
 
