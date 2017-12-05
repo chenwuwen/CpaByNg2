@@ -54,20 +54,25 @@ public class CpaRepertoryController {
     @ResponseBody
     public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, Integer pageNo, Integer pageSize) {
         CpaResult result = null;
-        Object[] params = {typeCode};
-        String where = "o.testType=?";
-        Page page = new Page();
-        pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
-        pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
-        String key = where + StringUtils.join(params) + pageNo + pageSize;
-        logger.info("Redis缓存的Key：" + key);
-        result = (CpaResult) redisService.getCacheObject(key);
-        if (null == result) {
-            //总记录数
-            Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
-            Integer firstResult = page.countOffset(pageNo, pageSize);
-            result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
-            redisService.setCacheObject(key,result);
+        try {
+            Object[] params = {typeCode};
+            String where = "o.testType=?";
+            Page page = new Page();
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+            pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+            String key = where + StringUtils.join(params) + pageNo + pageSize;
+            logger.info("Redis缓存的Key：" + key);
+            result = (CpaResult) redisService.getCacheObject(key);
+            if (null == result) {
+                //总记录数
+                Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
+                Integer firstResult = page.countOffset(pageNo, pageSize);
+                result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+                redisService.setCacheObject(key, result);
+            }
+        } catch (Exception e) {
+            logger.error("/api/unitExam/getUnitExam Error: " + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
     }
@@ -92,7 +97,6 @@ public class CpaRepertoryController {
             logger.error("/api/unitExam/addUnitExam  新增试题异常：  " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
-
         return result;
     }
 
