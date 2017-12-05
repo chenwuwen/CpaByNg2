@@ -78,4 +78,6 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSoluti
         result.setState(1);
         return result;
     }
+
+
 }

@@ -68,12 +68,33 @@ public class CpaSolutionController {
                 }
             }
             result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTypeCode());
-            answerRecordService.saveUserAnswerRecord(result, user);
+            AnswerRecord answerRecord = this.patchAnswerRecord(result, user);
+            answerRecordService.addAnswerRecord(answerRecord);
         } catch (Exception e) {
             logger.error("Error : /api/solution/correctItem " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
+    }
+
+    /**
+     * @Description: 拼凑AnswerRecord
+     * @param result 回答记录的结果
+     * @param user  回答试题用户
+     * @return
+     */
+    private AnswerRecord patchAnswerRecord(CpaResult result,CpaUser user){
+        AnswerRecord answerRecord = new AnswerRecord();
+        answerRecord.setAnswerDate(new Timestamp(System.currentTimeMillis()));
+        answerRecord.setCorrectcount((Integer) ((Map)result.getData()).get("correctCount"));
+        answerRecord.setItemType(((Map)result.getData()).get("typeCode").toString());
+        answerRecord.setErrorcount((Integer) ((Map)result.getData()).get("errorCount"));
+        answerRecord.setScore((Integer) ((Map)result.getData()).get("score"));
+        answerRecord.setUsername(user.getUserName());
+        answerRecord.setUserId(user.getId());
+        answerRecord.setPetname(user.getPetName());
+        answerRecord.setTotalcount((Integer) ((Map)result.getData()).get("totalCount"));
+        return answerRecord;
     }
 
 }

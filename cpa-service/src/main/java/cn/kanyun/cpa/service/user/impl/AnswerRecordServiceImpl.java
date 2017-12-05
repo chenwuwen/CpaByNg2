@@ -14,23 +14,24 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 @Service(IAnswerRecordService.SERVICE_NAME)
 public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRecord> implements IAnswerRecordService {
+
+    private static final LinkedBlockingQueue<AnswerRecord> answerRecords = new LinkedBlockingQueue<AnswerRecord>();
+
     @Resource
     private IAnswerRecordDao answerRecordDao;
     @Override
-    public void saveUserAnswerRecord(CpaResult result, CpaUser user) {
-        AnswerRecord answerRecord = new AnswerRecord();
-        answerRecord.setAnswerDate(new Timestamp(System.currentTimeMillis()));
-        answerRecord.setCorrectcount((Integer) ((Map)result.getData()).get("correctCount"));
-        answerRecord.setItemType(((Map)result.getData()).get("typeCode").toString());
-        answerRecord.setErrorcount((Integer) ((Map)result.getData()).get("errorCount"));
-        answerRecord.setScore((Integer) ((Map)result.getData()).get("score"));
-        answerRecord.setUsername(user.getUserName());
-        answerRecord.setUserId(user.getId());
-        answerRecord.setPetname(user.getPetName());
-        answerRecord.setTotalcount((Integer) ((Map)result.getData()).get("totalCount"));
-        answerRecordDao.save(answerRecord);
+    public void saveUserAnswerRecord() {
+
+        answerRecordDao.saveAll(this.answerRecords);
+    }
+
+    @Override
+    public void addAnswerRecord(AnswerRecord answerRecord) {
+        answerRecords.offer(answerRecord);
     }
 }
