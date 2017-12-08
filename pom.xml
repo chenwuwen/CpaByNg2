@@ -57,6 +57,11 @@
         </repository>
     </repositories>
 
+    <!--构建该项目或使用该插件所需要的Maven的最低版本-->
+    <prerequisites>
+        <maven>3.5.2</maven>
+    </prerequisites>
+
     <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -284,7 +289,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid</artifactId>
-                <version>1.1.2</version>
+                <version>1.1.6</version>
             </dependency>
             <!--Quartz定时任务-->
             <dependency>

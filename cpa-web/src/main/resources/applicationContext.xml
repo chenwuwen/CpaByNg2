@@ -29,7 +29,7 @@
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
-        <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall -->
+        <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall，去掉后监控界面sql无法统计 -->
         <property name="filters" value="stat,log4j"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
