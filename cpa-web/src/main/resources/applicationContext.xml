@@ -114,8 +114,8 @@
     </bean>
 
 
-    <!-- 编写spring 配置文件的配置多数源映射关系 -->
-    <bean class="cn.kanyun.cpa.dao.common.DynamicDataSource" id="dataSource">
+    <!-- 编写spring 配置文件的配置多数源映射关系(多数据源的作用主要是为了读写分离) ,动态控制数据源的类-->
+    <bean class="cn.kanyun.cpa.common.DynamicDataSource" id="dataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry value-ref="CpaDataSource" key="CpaDataSource"></entry>

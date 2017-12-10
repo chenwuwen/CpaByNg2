@@ -1,7 +1,8 @@
-package cn.kanyun.cpa.dao.common;
+package cn.kanyun.cpa.common;
 
 /**
  * 定义一个可以设置当前线程的变量的工具类，用于设置对应的数据源名称
+ * 用于存放数据源，然后给其他类得到，保证同一线程下数据不会出错
  * Created by Administrator on 2017/12/7 0007.
  */
 public class DataSourceContextHolder {

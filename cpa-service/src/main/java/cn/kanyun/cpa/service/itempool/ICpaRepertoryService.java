@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.service.itempool;
 
+import cn.kanyun.cpa.common.annotation.DataSource;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
@@ -17,11 +18,21 @@ public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertor
 
     /**
      *@Author: kanyun
-     *@Description: 获取试题列表（单元测试）
+     *@Description: 获取试题列表（单元测试）,选择从数据库库进行查询
      *@Date: 2017/8/16 15:05
      *@params:
      */
+    @DataSource(targetDataSource = "CpaDataSource2")
     CpaResult getUnitExam(Integer firstResult,Integer pageSize, String where, Object[] params);
 
+    /**
+     * @Description: 保存试题，单独保存，(单元测试)，选择主数据库库进行插入
+     * @Date: 2017/9/16 15:05
+     * @param cpaRepertory
+     * @param cpaOptions
+     * @param cpaSolution
+     * @return
+     */
+    @DataSource(targetDataSource = "CpaDataSource1")
     Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }
