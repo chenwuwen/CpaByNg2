@@ -10,7 +10,8 @@
        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
-    <!-- 默认访问跳转到登录页面(即定义无需Controller的url<->view直接映射) -->
+    <!--(如果当前路径是/ ) 默认访问跳转(亦或是重定向redirect)到登录页面(即定义无需Controller的url<->view直接映射),还有一种用法是
+     <mvc:view-controller path="/" view-name=admin/index"/> 如果当前路径是/ 则交给相应的视图解析器直接解析为视图 -->
     <mvc:view-controller path="/" view-name="forward:/index.html"/>
 
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
