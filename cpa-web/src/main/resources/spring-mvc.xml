@@ -78,6 +78,9 @@
         <!-- 这里的配置是自动给后面servlet的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
         <property name="prefix" value="/"/>
         <property name="suffix" value=".html"/>
+        <property name="contentType" value="text/html;charset=UTF-8"/>
+        <!--order表示优先级,O表示优先级最高,可以配置多个视图解析器-->
+        <property name="order" value="0"/>
     </bean>
 
 
@@ -90,7 +93,6 @@
     <!--<bean class="com.host.app.web.interceptor.LoginInterceptor" />-->
     <!--</mvc:interceptor>-->
     <!--</mvc:interceptors>-->
-
 
 
     <!-- 文件上传配置 -->
