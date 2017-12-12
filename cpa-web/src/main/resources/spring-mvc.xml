@@ -59,7 +59,7 @@
     </mvc:annotation-driven>
 
     <!-- 对静态资源文件的访问  方案一 （二选一） -->
-    <!--SpringMVC3.0之后推荐使用-->
+    <!--SpringMVC3.0之后推荐使用,需要在web.xml配置default(当前容器名)的servlet-mapping -->
     <!-- 据说是如果静态资源放在WEB-INF下，使用该命令可以加载，但是为了安全静态资源应该加载webroot下 -->
     <!--使用该配置的前提是web.xml里的DispatcherServlet设置的是拦截所有请求（<url-pattern>/</url-pattern>）-->
     <!--如果只是拦截.do请求(<url-pattern>*.do</url-pattern>)，则不必设置该配置-->

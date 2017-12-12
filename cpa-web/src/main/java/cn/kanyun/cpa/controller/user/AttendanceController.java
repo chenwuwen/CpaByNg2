@@ -1,9 +1,11 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.model.dto.user.AttendanceDto;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.user.IAttendanceService;
+import cn.kanyun.cpa.service.user.IUserService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +24,13 @@ public class AttendanceController {
     @Resource(name = IAttendanceService.SERVICE_NAME)
     private IAttendanceService attendanceService;
 
+
+    /**
+     * @describe:
+     * @params:[request]
+     * @Author: Kanyun
+     * @Date: 2017/12/12 0012 13:33
+     */
     @RequestMapping("/attendance")
     @ResponseBody
     public CpaResult signIn(HttpServletRequest request) {
@@ -33,6 +42,21 @@ public class AttendanceController {
             logger.error("用户签到异常：" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
+        return result;
+    }
+
+    @RequestMapping("/getSignIn")
+    @ResponseBody
+    public CpaResult getReapSigInDay(HttpServletRequest request){
+        CpaResult result = new CpaResult();
+        CpaUser user = WebUtil.getSessionUser(request);
+        AttendanceDto attendanceDto = new AttendanceDto();
+        if (attendanceService.getReapSigInDay(user)){
+                attendanceDto.setReapSigInDay(user.getReapSigInDay());
+        }else {
+            attendanceDto.setReapSigInDay(0);
+        }
+        result.setData(attendanceDto);
         return result;
     }
 }

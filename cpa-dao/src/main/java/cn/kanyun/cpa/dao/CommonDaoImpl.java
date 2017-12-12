@@ -280,7 +280,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     /**
      * 构建排序语句
      *
-     * @param orderby 排序属性与asc/desc, Key为属性,Value为asc/desc
+     * @param orderby 排序属性与asc/desc, Key为属性(即要排序的字段),Value为asc/desc
      * @return
      */
     public static String buildOrderby(LinkedHashMap<String, String> orderby) {

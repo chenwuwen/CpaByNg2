@@ -26,11 +26,12 @@ public class CpaUser implements java.io.Serializable {
     private String salt;
     private Set userRoles = new HashSet<>();
     private String imgPath;
+    private Integer reapSigInDay;
 
     public CpaUser() {
     }
 
-    public CpaUser(Integer id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath) {
+    public CpaUser(Integer id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -42,6 +43,7 @@ public class CpaUser implements java.io.Serializable {
         this.status = status;
         this.userRoles = userRoles;
         this.imgPath = imgPath;
+        this.reapSigInDay=reapSigInDay;
     }
 
     public Integer getId() {
@@ -140,6 +142,14 @@ public class CpaUser implements java.io.Serializable {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public Integer getReapSigInDay() {
+        return reapSigInDay;
+    }
+
+    public void setReapSigInDay(Integer reapSigInDay) {
+        this.reapSigInDay = reapSigInDay;
     }
 
     @Override
