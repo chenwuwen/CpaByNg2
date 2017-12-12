@@ -4,6 +4,7 @@ import cn.kanyun.cpa.dao.CommonDaoImpl;
 import cn.kanyun.cpa.dao.user.IAttendanceDao;
 import cn.kanyun.cpa.dao.user.IUserCollectDao;
 import cn.kanyun.cpa.model.entity.user.Attendance;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import org.springframework.stereotype.Repository;
 
 @Repository(IAttendanceDao.REPOSITORY_NAME)
@@ -13,8 +14,9 @@ public class AttendanceDaoImpl extends CommonDaoImpl<Integer,Attendance> impleme
      *
      * @param clatt
      */
-    public AttendanceDaoImpl(Class clatt) {
-        super(clatt);
+    //通过调用父类的构造函数指定clazz值，即实体类的类类型
+    public AttendanceDaoImpl() {
+        super(Attendance.class);
     }
 
 
