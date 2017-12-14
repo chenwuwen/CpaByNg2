@@ -1,9 +1,11 @@
 package cn.kanyun.cpa.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *   
@@ -332,4 +334,182 @@ public class DateHelper {
 		String dateTime = formatDate(date);
 		return formatDateTime(dateTime);
 	}
+
+	/**
+	 * 获取两个日期中的最小日期
+	 *
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	public static Date min(Date beginDate, Date endDate) {
+		if (beginDate == null) {
+			return endDate;
+		}
+		if (endDate == null) {
+			return beginDate;
+		}
+		if (beginDate.after(endDate)) {
+			return endDate;
+		}
+		return beginDate;
+	}
+
+	/**
+	 * 获取两个日期中的最大日期
+	 *
+	 * @param beginDate
+	 * @param endDate
+	 * @return
+	 */
+	public static Date max(Date beginDate, Date endDate) {
+		if (beginDate == null) {
+			return endDate;
+		}
+		if (endDate == null) {
+			return beginDate;
+		}
+		if (beginDate.after(endDate)) {
+			return beginDate;
+		}
+		return endDate;
+	}
+
+	/**
+	 * 获取某年某月的第一天
+	 *
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public static Date getStartMonthDate(int year, int month) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, 1);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获取某年某月的最后一天
+	 *
+	 * @param year
+	 * @param month
+	 * @return
+	 */
+	public static Date getEndMonthDate(int year, int month) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(year, month - 1, 1);
+		int day = calendar.getActualMaximum(5);
+		calendar.set(year, month - 1, day);
+		return calendar.getTime();
+	}
+
+	/**
+	 * 获取昨天的开始时间
+	 *
+	 * @return 默认格式 Wed May 31 14:47:18 CST 2017
+	 */
+	public static Date getBeginDayOfYesterday() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayBegin());
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
+
+	/**
+	 * 获取昨天的结束时间
+	 *
+	 * @return 默认格式 Wed May 31 14:47:18 CST 2017
+	 */
+	public static Date getEndDayOfYesterDay() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayEnd());
+		cal.add(Calendar.DAY_OF_MONTH, -1);
+		return cal.getTime();
+	}
+
+	/**
+	 * 获取明天的开始时间
+	 *
+	 * @return 默认格式 Wed May 31 14:47:18 CST 2017
+	 */
+	public static Date getBeginDayOfTomorrow() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayBegin());
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+
+		return cal.getTime();
+	}
+
+	/**
+	 * 获取明天的结束时间
+	 *
+	 * @return 默认格式 Wed May 31 14:47:18 CST 2017
+	 */
+	public static Date getEndDayOfTomorrow() {
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(getDayEnd());
+		cal.add(Calendar.DAY_OF_MONTH, 1);
+		return cal.getTime();
+	}
+
+	/**
+	 * 获取当天的开始时间
+	 *
+	 * @return yyyy-MM-dd HH:mm:ss  格式
+	 */
+	public static Date getDayBegin() {
+    	/*
+        Calendar cal = new GregorianCalendar();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();*/
+		Date date = new Date();
+		return getDayStartTime(date);
+	}
+
+	/**
+	 * 获取当天的结束时间
+	 *
+	 * @return yyyy-MM-dd HH:mm:ss  格式
+	 */
+	public static Date getDayEnd() {
+        /*Calendar cal = new GregorianCalendar();
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        return cal.getTime();*/
+		Date date = new Date();
+		return getDayEndTime(date);
+	}
+
+	/**
+	 * 获取某个日期的开始时间
+	 *
+	 * @param d
+	 * @return yyyy-MM-dd HH:mm:ss  格式
+	 */
+	public static Timestamp getDayStartTime(Date d) {
+		Calendar calendar = Calendar.getInstance();
+		if (null != d) calendar.setTime(d);
+		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+		return new Timestamp(calendar.getTimeInMillis());
+	}
+
+	/**
+	 * 获取某个日期的结束时间
+	 *
+	 * @param d
+	 * @return yyyy-MM-dd HH:mm:ss  格式
+	 */
+	public static Timestamp getDayEndTime(Date d) {
+		Calendar calendar = Calendar.getInstance();
+		if (null != d) calendar.setTime(d);
+		calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
+		calendar.set(Calendar.MILLISECOND, 999);
+		return new Timestamp(calendar.getTimeInMillis());
+	}
+
 }

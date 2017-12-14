@@ -13,10 +13,10 @@
      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
     <!-- 加载配置文件 -->
     <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
-   <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
-    如 @Value("${FTP_ADDRESS}")
-    private String FTP_ADDRESS;
-    前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
+    <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
+     如 @Value("${FTP_ADDRESS}")
+     private String FTP_ADDRESS;
+     前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
     <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
 
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
@@ -60,7 +60,7 @@
         <!-- 监控数据库 -->
         <property name="proxyFilters">
             <list>
-                <ref bean="logFilter" />
+                <ref bean="logFilter"/>
             </list>
         </property>
     </bean>
@@ -103,14 +103,14 @@
         <!-- 监控数据库 -->
         <property name="proxyFilters">
             <list>
-                <ref bean="logFilter" />
+                <ref bean="logFilter"/>
             </list>
         </property>
     </bean>
 
     <!-- 输出的SQL-->
     <bean id="logFilter" class="com.alibaba.druid.filter.logging.Log4jFilter">
-        <property name="statementExecutableSqlLogEnable" value="true" />
+        <property name="statementExecutableSqlLogEnable" value="true"/>
     </bean>
 
 
@@ -137,10 +137,10 @@
         </property>
         <!--Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置-->
         <!--<property name="hibernateProperties">-->
-            <!--<props>-->
-                <!--<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>-->
-                <!--<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>-->
-            <!--</props>-->
+        <!--<props>-->
+        <!--<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>-->
+        <!--<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>-->
+        <!--</props>-->
         <!--</property>-->
     </bean>
     <!-- 报错找不到“找不到类型返回值的转换器”解决方案，同时应该加入这两个jar包 -->
@@ -166,12 +166,40 @@
         <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
     </bean>
 
+    <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
+    <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->
+    <!--拦截器使用责任链模式,拦截器是基于java的反射机制的，而过滤器是基于函数回调。两者都是Aop的实现，拦截器不依赖与servlet容器，过滤器依赖与servlet容器。拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。-->
+    <!--在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。-->
+    <!--在mvc:interceptors标签下声明interceptor主要有两种方式：-->
+    <!--（1）直接定义一个Interceptor实现类的bean对象。使用这种方式声明的Interceptor拦截器将会对所有的请求进行拦截。-->
+    <!--（2）使用mvc:interceptor标签进行声明。使用这种方式进行声明的Interceptor可以通过mvc:mapping子标签来定义需要进行拦截的请求路径。-->
+    <mvc:interceptors>
+        <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+        <!--也就是说在此处定义的拦截器,是拦截所有action-->
+        <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        <mvc:interceptor>
+            <!--path="/**/*"表示拦截所有请求跟直接定义在mvc:interceptors根下效果一致,当然也可以自己定义拦截哪些请求-->
+            <mvc:mapping path="/**/*"/>
+            <!--mvc:exclude-mapping表示在mvc:interceptor的mvc:mapping拦截方法下,不拦截哪些请求-->
+            <!--path="/static/**"表示不拦截根目录下static目录下的所有文件-->
+            <mvc:exclude-mapping path="/static/**"/>
+            <!--path="/**/*.html"表示不拦截所有的以html结尾的文件-->
+            <mvc:exclude-mapping path="/**/*.html"/>
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <!--也就是说在此处定义的拦截器,是拦截所有上面定义的action-->
+            <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
     <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!--配置事务的传播特性-->
         <!--<tx:attributes>-->
-            <!--<tx:method name="*" propagation="REQUIRED" />-->
-            <!--<tx:method name="*" read-only="true"/>-->
+        <!--<tx:method name="*" propagation="REQUIRED" />-->
+        <!--<tx:method name="*" read-only="true"/>-->
         <!--</tx:attributes>-->
     </tx:advice>
     <!-- 那些类的哪些方法参与事务 -->
@@ -183,5 +211,5 @@
     <!-- 注解实现事务 @Transactional 当注解标于类前时，标示类中所有方法都进行事物处理,（给Service层配置事务是比较好的方式，因为一个Service层方法操作可以关联到多个DAO的操作。在Service层执行这些Dao操作，多DAO操作有失败全部回滚，成功则全部提交。）-->
     <!--@Transactional 只能被应用到public方法上, 对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能.-->
     <!--@Transactional 注解可以被应用于接口定义和接口方法、类定义和类的 public 方法上,Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。-->
-    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true" />
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 </beans>  
