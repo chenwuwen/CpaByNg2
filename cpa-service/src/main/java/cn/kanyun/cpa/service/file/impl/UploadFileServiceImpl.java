@@ -73,7 +73,7 @@ public class UploadFileServiceImpl implements IUploadFileService {
                 //上传文件到FTP
                 ftpService.uploadFTP(filePath, "/image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
-                result.setData(DateUtils.toYmdX(new Date()) + "/" + newFileName);
+                result.setData(filePath.replace(rootPath,""));
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error("UploadFileServiceImpl 上传图片或压缩图片出错: " + e);

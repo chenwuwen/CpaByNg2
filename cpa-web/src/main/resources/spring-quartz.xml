@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="
 		http://www.springframework.org/schema/beans
@@ -28,7 +29,12 @@
     </bean>
 
     <!--定义需要被定时任务处理的类-->
-    <bean id="answerRecordService" class="cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl"></bean>
+    <!--<bean id="answerRecordService" class="cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl"></bean>-->
+    <bean id="answerRecordService" class="cn.kanyun.cpa.job.UserThingJob"></bean>
+
+    <!--配置调度程序quartz ，其中配置JobDetail有两种方式-->
+    <!--方式一：使用JobDetailBean，任务类必须实现Job接口-->
+    <!--方式二：使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法-->
 
     <bean id="saveUserAnswerRecordJobDetail"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
@@ -46,7 +52,10 @@
         <property name="jobDetail" ref="saveUserAnswerRecordJobDetail"/>
         <!--cron表达式,设定任务什么时间执行-->
         <!--如果需要动态的设置任务的执行时间，就不能直接使用org.springframework.scheduling.quartz.CronTriggerFactoryBean，需要自己实现一个动态调度服务类，在其中构建CronTrigger或SimpleTrigger，动态配置时间。-->
+        <!--每天凌晨两点执行-->
         <property name="cronExpression" value="0 0 2 * * ?"/>
+        <!--每5秒执行一次-->
+        <!--<property name="cronExpression" value="*/5 * * * * ?"/>-->
         <!--设置时区-->
         <property name="timeZone" value="GMT+8:00"/>
     </bean>
