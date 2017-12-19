@@ -165,6 +165,48 @@
             <artifactId>jjwt</artifactId>
         </dependency>
 
+        <!--dubbo远程过程调用(RPC)所需依赖-->
+        <!--在做dubbo的时候出现java.lang.NoSuchMethodError: org.springframework.beans.MutablePropertyValues.add是因为用maven的时候其他包被引入进来了;把一些重复的包exclusion就可以了！-->
+        <!--在做dubbo的时候出现dubbo nested exception is java.lang.ExceptionInInitializerError异常，解决方法换个javassist包,如3.3版本-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>dubbo</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring</artifactId>
+                    <groupId>org.springframework</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>javassist</artifactId>
+                    <groupId>org.javassist</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.github.sgroschupf</groupId>
+            <artifactId>zkclient</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>netty</artifactId>
+                    <groupId>io.netty</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
         <!--为防止与tomcat中的servlet发生冲突,导致服务无法启动,所以加上scope定义该jar包的使用范围-->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>

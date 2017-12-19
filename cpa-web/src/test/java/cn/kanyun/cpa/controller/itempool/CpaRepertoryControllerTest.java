@@ -15,13 +15,9 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)  //必须要写，相当于提供了spring的环境
 @WebAppConfiguration("src/main/resources")
@@ -39,6 +35,7 @@ public class CpaRepertoryControllerTest {
     // mockMvc = MockMvcBuilders.standaloneSetup(new MeunController()).build();
     @Before
     public void setUp() throws Exception {
+        System.out.println("---------");
     }
 
     @After
