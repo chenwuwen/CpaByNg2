@@ -18,14 +18,34 @@
         <module>cpa-redis</module>
         <module>cpa-util</module>
     </modules>
+    <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
+    <!--<distributionManagement>-->
+    <!--<repository>-->
+    <!--&lt;!&ndash;这个ID需要与你的release仓库的Repository ID一致&ndash;&gt;-->
+    <!--<id>releases</id>-->
+    <!--<url>http://192.168.1.11:8081/nexus/content/repositories/releases</url>-->
+    <!--</repository>-->
+    <!--<snapshotRepository>-->
+    <!--&lt;!&ndash;这个ID需要与你的snapshots仓库的Repository ID一致&ndash;&gt;-->
+    <!--<id>snapshots</id>-->
+    <!--<url>http://192.168.1.11:8081/nexus/content/repositories/snapshots</url>-->
+    <!--</snapshotRepository>-->
+    <!--</distributionManagement>-->
     <!--增加仓库配置,不然可能插件找不到,导致报错-->
     <repositories>
         <!--如有Nexus私服, 取消注释并指向正确的服务器地址-->
-        <!--<repository>
+        <repository>
             <id>nexus-repos</id>
             <name>Team Nexus Repository</name>
-            <url>>http://192.168.0.91:8081/nexus</url>
-        </repository>-->
+            <url>http://115.47.154.107:8081/nexus/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <!--一些公共meven库-->
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
@@ -152,6 +172,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.ruifight</groupId>
+                <artifactId>oa-remote</artifactId>
+                <version>1.1.0</version>
+            </dependency>
             <!--Junit单元测试-->
             <dependency>
                 <groupId>junit</groupId>
@@ -544,7 +569,7 @@
             <!--三、服务器模式：此模式下 HSQLDB 跟其它数据库服务器一样，需要通过服务器的形式来进行启动-->
             <!--四、Web服务器模式：此模式以WEB服务器的形式启动，并通过HTTP协议接受客户端命令。从1.7.2版本开始，Web服务器模式的 HSQLDB 开始支持事务处理。-->
             <!--可作为测试使用-->
-          <dependency>
+            <dependency>
                 <groupId>org.hsqldb</groupId>
                 <artifactId>hsqldb</artifactId>
                 <version>2.3.5</version>
@@ -581,7 +606,7 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.3</version>
+                <version>3.15.0-GA</version>
             </dependency>
             <dependency>
                 <groupId>proxool</groupId>

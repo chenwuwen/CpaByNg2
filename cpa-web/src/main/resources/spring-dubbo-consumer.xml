@@ -6,11 +6,12 @@
        http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
     <description>dubbo服务消费者配置</description>
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
-    <dubbo:application name="demotest-consumer" owner="programmer" organization="dubbox"/>
+    <dubbo:application name="XXX" owner="XXX" organization="dubbox1"/>
     <!--向 zookeeper 订阅 provider 的地址，由 zookeeper 定时推送-->
     <dubbo:registry address="zookeeper://115.47.154.107:2181"/>
     <!--使用 dubbo 协议调用定义好的 api.PermissionService 接口-->
-    <dubbo:reference id="permissionService" interface="com.ruifight.oa.service.TestService"/>
+    <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
+    <dubbo:reference id="testService" interface="com.ruifight.oa.service.TestService" check="false"/>
 
     <!-- 服务者与消费者的默认配置 -->
     <!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试   -->
