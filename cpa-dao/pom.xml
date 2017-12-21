@@ -6,7 +6,7 @@
     坐标包括group ID，artifact ID和 version。 -->
     <parent>
         <!-- 被继承的父项目的构件标识符 -->
-        <artifactId>cpa</artifactId>
+        <artifactId>cpa</artifactId>o
         <!-- 被继承的父项目的全球唯一标识符 -->
         <groupId>cn.kanyun</groupId>
         <!-- 被继承的父项目的版本 -->

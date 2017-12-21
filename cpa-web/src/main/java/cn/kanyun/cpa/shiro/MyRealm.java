@@ -6,6 +6,7 @@ import cn.kanyun.cpa.service.system.IRolePermissionService;
 import cn.kanyun.cpa.service.system.IUserRoleService;
 import cn.kanyun.cpa.service.user.IUserService;
 import net.sf.ehcache.CacheManager;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -17,11 +18,16 @@ import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.subject.SimplePrincipalCollection;
+import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 
 import javax.annotation.Resource;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -65,6 +71,16 @@ public class MyRealm extends AuthorizingRealm {
             // 账号状态异常
             throw new LockedAccountException(); //账号被锁定
         } else {
+            //处理session
+            DefaultWebSecurityManager securityManager = (DefaultWebSecurityManager) SecurityUtils.getSecurityManager();
+            DefaultWebSessionManager sessionManager = (DefaultWebSessionManager)securityManager.getSessionManager();
+            Collection<Session> sessions = sessionManager.getSessionDAO().getActiveSessions();//获取当前已登录的用户session列表
+            for(Session session:sessions){
+                //清除该用户以前登录时保存的session(同一时刻只能有一人登录)
+                if(user.getUserName().equals(String.valueOf(session.getAttribute(DefaultSubjectContext.PRINCIPALS_SESSION_KEY)))) {
+                    sessionManager.getSessionDAO().delete(session);
+                }
+            }
 //            盐值：取用户信息中盐值字段的值(随机值)，避免由于两个用户原始密码相同，加密后的密码也相同
             ByteSource credentialsSalt = ByteSource.Util.bytes(user.getUserName() + user.getSalt());
             //若存在，将此用户存放到登录认证info中

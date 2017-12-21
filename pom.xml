@@ -18,6 +18,7 @@
         <module>cpa-redis</module>
         <module>cpa-util</module>
     </modules>
+    <!--上传私服 pom.xml 配置-->
     <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
     <!--<distributionManagement>-->
     <!--<repository>-->
@@ -422,7 +423,7 @@
 
             <!--dubbo远程过程调用(RPC)所需依赖-->
             <!--在做dubbo的时候出现java.lang.NoSuchMethodError: org.springframework.beans.MutablePropertyValues.add是因为用maven的时候其他包被引入进来了;把一些重复的包exclusion就可以了！-->
-            <!--在做dubbo的时候出现dubbo nested exception is java.lang.ExceptionInInitializerError异常，解决方法换个javassist包,如3.3版本-->
+            <!--在做dubbo的时候出现dubbo nested exception is java.lang.ExceptionInInitializerError异常，解决方法换个javassist包,如3.18.2-GA版本-->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>dubbo</artifactId>
@@ -606,7 +607,7 @@
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.15.0-GA</version>
+                <version>3.18.2-GA</version>
             </dependency>
             <dependency>
                 <groupId>proxool</groupId>
