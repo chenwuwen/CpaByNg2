@@ -1,7 +1,6 @@
 package cn.kanyun.cpa.service.itempool;
 
 import cn.kanyun.cpa.common.annotation.DataSource;
-import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -22,7 +21,7 @@ public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertor
      *@Date: 2017/8/16 15:05
      *@params:
      */
-    @DataSource(targetDataSource = "CpaDataSource2")
+    @DataSource(targetDataSource = "slave")
     CpaResult getUnitExam(Integer firstResult,Integer pageSize, String where, Object[] params);
 
     /**
@@ -33,6 +32,6 @@ public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertor
      * @param cpaSolution
      * @return
      */
-    @DataSource(targetDataSource = "CpaDataSource1")
+    @DataSource(targetDataSource = "master")
     Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }

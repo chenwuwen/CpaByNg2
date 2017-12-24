@@ -53,8 +53,9 @@
     <!-- 当web容器启动的时候，自动加载spring容器 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:applicationContext.xml,classpath:spring-shiro.xml,classpath:spring-redis.xml,classpath:spring-quartz.xml,
-            classpath:spring-dubbo-consumer.xml
+        <param-value>
+            classpath:applicationContext.xml,classpath:spring-shiro.xml,classpath:spring-redis.xml,classpath:spring-quartz.xml,
+            classpath:spring-dubbo-consumer.xml, classpath:spring-dubbo-provider.xml
         </param-value>
     </context-param>
     <!-- 防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面 -->

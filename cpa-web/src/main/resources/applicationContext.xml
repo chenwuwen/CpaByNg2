@@ -118,8 +118,8 @@
     <bean class="cn.kanyun.cpa.common.DynamicDataSource" id="dataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
-                <entry value-ref="CpaDataSource" key="CpaDataSource"></entry>
-                <entry value-ref="CpaDataSource2" key="CpaDataSource2"></entry>
+                <entry value-ref="CpaDataSource" key="master"></entry>
+                <entry value-ref="CpaDataSource2" key="slave"></entry>
             </map>
         </property>
         <!--默认数据源-->
@@ -212,4 +212,7 @@
     <!--@Transactional 只能被应用到public方法上, 对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能.-->
     <!--@Transactional 注解可以被应用于接口定义和接口方法、类定义和类的 public 方法上,Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。-->
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!--引入其他模块配置文件，这样被引入的配置文件就不用写在web.xml中了，但需要注意的是resource中引入的文件的地址要用相对路径，不然会出错。-->
+    <!--<import resource="classpath:hibernate.cfg.xml"/>-->
 </beans>  
