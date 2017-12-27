@@ -1,11 +1,16 @@
 package cn.kanyun.cpa.util;
 
+import cn.kanyun.cpa.model.entity.CpaConstants;
+import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FilenameUtils;
 import org.joda.time.DateTime;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -198,6 +203,28 @@ public class FileUtil {
 
         return name.toString();
 
+    }
+
+    /**
+     * MultipartFile 转换成File
+     *
+     * @param multfile 原文件类型
+     * @return File
+     * @throws IOException
+     */
+    private File multipartToFile(MultipartFile multfile) throws IOException {
+        CommonsMultipartFile cf = (CommonsMultipartFile)multfile;
+        //这个myfile是MultipartFile的
+        DiskFileItem fi = (DiskFileItem) cf.getFileItem();
+        File file = fi.getStoreLocation();
+        //手动创建临时文件
+        if(file.length() < CpaConstants.MIN_FILE_SIZE){
+            File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") +
+                    file.getName());
+            multfile.transferTo(tmpFile);
+            return tmpFile;
+        }
+        return file;
     }
 
     /**

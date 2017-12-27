@@ -48,4 +48,7 @@ public class CpaConstants {
 
     /** JWT生成Token设置ISSUSER */
     public static final String JWT_ISSUSER = "kanyun.cpa.com";
+
+    /**最大上传文件，超过此值上传文件将产生临时文件*/
+    public static final Integer MIN_FILE_SIZE =2048;
 }
