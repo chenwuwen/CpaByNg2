@@ -36,12 +36,12 @@
                 <comment>用户昵称</comment>
             </column>
         </property>
-        <property name="regDate" type="java.sql.Timestamp">
+        <property name="regDate" type="java.time.LocalDateTime">
             <column name="reg_date" length="19">
                 <comment>注册时间</comment>
             </column>
         </property>
-        <property name="lastLoginDate" type="java.sql.Timestamp">
+        <property name="lastLoginDate" type="java.time.LocalDateTime">
             <column name="last_login_date" length="19">
                 <comment>上次登陆时间</comment>
             </column>

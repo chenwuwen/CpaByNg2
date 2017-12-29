@@ -250,8 +250,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <!--未指明编译源代码时使用的字符编码， maven编译的时候默认使用的GBK编码， 通过encoding属性设置字符编码， 告诉maven这个项目使用UTF-8来编译 -->
                     <encoding>utf8</encoding>
                 </configuration>

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by KANYUN on 2017/10/24.
@@ -47,7 +47,7 @@ public class UserCommentController {
                 result.setState(CpaConstants.OPERATION_ERROR);
                 result.setMsg("评论内容不能为空");
             } else {
-                userComment.setCommentDate(new Timestamp(System.currentTimeMillis()));
+                userComment.setCommentDate(LocalDateTime.now());
                 userComment.setUserId(user.getId());
                 userComment.setUsername(user.getUserName());
                 userComment.setPetname(user.getPetName());

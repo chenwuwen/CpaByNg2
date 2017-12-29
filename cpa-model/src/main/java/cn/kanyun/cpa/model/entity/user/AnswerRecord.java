@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.model.entity.user;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "answer_record", schema = "cpa", catalog = "")
@@ -15,7 +15,7 @@ public class AnswerRecord implements java.io.Serializable {
     private Integer totalcount;
     private Integer correctcount;
     private Integer errorcount;
-    private Timestamp answerDate;
+    private LocalDateTime answerDate;
 
     @Id
     @Column(name = "id", nullable = false)
@@ -109,11 +109,11 @@ public class AnswerRecord implements java.io.Serializable {
 
     @Basic
     @Column(name = "answer_date", nullable = true)
-    public Timestamp getAnswerDate() {
+    public LocalDateTime getAnswerDate() {
         return answerDate;
     }
 
-    public void setAnswerDate(Timestamp answerDate) {
+    public void setAnswerDate(LocalDateTime answerDate) {
         this.answerDate = answerDate;
     }
 

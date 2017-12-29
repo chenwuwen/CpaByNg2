@@ -15,7 +15,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +48,7 @@ public class CpaRepertoryControllerTest {
         cpaRepertory.setTestStem("下列软件中，计算机系统所必备的是( )");
         cpaRepertory.setTestType("cpuAccount");
         cpaRepertory.setChoice("exclusive");
-        cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
+        cpaRepertory.setInsertDate(LocalDateTime.now());
         List<CpaOption> cpaOptions = new ArrayList<>();
         CpaOption cpaOption1 = new CpaOption();
         cpaOption1.setSelectData("A");

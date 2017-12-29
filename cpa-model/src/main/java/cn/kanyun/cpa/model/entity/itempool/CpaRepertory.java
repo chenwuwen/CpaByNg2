@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.model.entity.itempool;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public class CpaRepertory implements java.io.Serializable {
     private String testStem;
     private String testType;
     private String choice ; //是否是多选题(默认为单选)
-    private Timestamp insertDate = new Timestamp(System.currentTimeMillis());
+    private LocalDateTime insertDate;
     private Set cpaOptions = new HashSet(0);
     private CpaSolution cpaSolution;
 
@@ -35,7 +35,7 @@ public class CpaRepertory implements java.io.Serializable {
     /**
      * full constructor
      */
-    public CpaRepertory(String testStem, String testType, String choice, Timestamp insertDate, Set cpaOptions, CpaSolution cpaSolution) {
+    public CpaRepertory(String testStem, String testType, String choice, LocalDateTime insertDate, Set cpaOptions, CpaSolution cpaSolution) {
         this.testStem = testStem;
         this.testType = testType;
         this.choice = choice;
@@ -79,11 +79,11 @@ public class CpaRepertory implements java.io.Serializable {
         this.choice = choice;
     }
 
-    public Timestamp getInsertDate() {
+    public LocalDateTime getInsertDate() {
         return this.insertDate;
     }
 
-    public void setInsertDate(Timestamp insertDate) {
+    public void setInsertDate(LocalDateTime insertDate) {
         this.insertDate = insertDate;
     }
 

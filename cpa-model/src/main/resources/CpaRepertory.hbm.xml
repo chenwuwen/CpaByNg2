@@ -26,7 +26,7 @@
                 <comment>题的类型(单选多选)</comment>
             </column>
         </property>
-        <property name="insertDate" type="java.sql.Timestamp">
+        <property name="insertDate" type="java.time.LocalDateTime">
             <column name="insert_date" length="19">
                 <comment>插入时间</comment>
             </column>

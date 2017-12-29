@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.kanyun.cpa.model.entity.user.Attendance" table="answer_record" schema="cpa">
+        <id name="id">
+            <column name="id" sql-type="bigint(20)">
+                <comment>ID</comment>
+            </column>
+            <generator class="native"></generator>
+        </id>
+        <property name="userName">
+            <column name="username" sql-type="varchar(255)">
+                <comment>用户名</comment>
+            </column>
+        </property>
+        <property name="userId">
+            <column name="user_id" sql-type="bigint(20)">
+                <comment>用户ID</comment>
+            </column>
+        </property>
+        <property name="attendanceDate" >
+            <column name="attendance_date" sql-type="timestamp">
+                <comment>用户ID</comment>
+            </column>
+        </property>
+
+    </class>
+</hibernate-mapping>

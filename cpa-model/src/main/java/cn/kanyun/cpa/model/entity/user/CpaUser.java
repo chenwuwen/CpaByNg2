@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.model.entity.user;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,8 +20,8 @@ public class CpaUser implements java.io.Serializable {
     private String gender;
     private String email;
     private String petName;
-    private Timestamp regDate;
-    private Timestamp lastLoginDate;
+    private LocalDateTime regDate;
+    private LocalDateTime lastLoginDate;
     private Integer status;
     private String salt;
     private Set userRoles = new HashSet<>();
@@ -31,7 +31,7 @@ public class CpaUser implements java.io.Serializable {
     public CpaUser() {
     }
 
-    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
+    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, LocalDateTime regDate, LocalDateTime lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -95,19 +95,19 @@ public class CpaUser implements java.io.Serializable {
         this.petName = petName;
     }
 
-    public Timestamp getRegDate() {
+    public LocalDateTime getRegDate() {
         return regDate;
     }
 
-    public void setRegDate(Timestamp regDate) {
+    public void setRegDate(LocalDateTime regDate) {
         this.regDate = regDate;
     }
 
-    public Timestamp getLastLoginDate() {
+    public LocalDateTime getLastLoginDate() {
         return lastLoginDate;
     }
 
-    public void setLastLoginDate(Timestamp lastLoginDate) {
+    public void setLastLoginDate(LocalDateTime lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
     }
 

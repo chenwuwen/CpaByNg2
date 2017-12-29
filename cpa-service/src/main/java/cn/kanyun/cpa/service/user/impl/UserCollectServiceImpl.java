@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Service(UserCollectService.SERVICE_NAME)
 @Transactional
@@ -24,7 +24,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
         UserCollect userCollect = new UserCollect();
         userCollect.setReId(reId.longValue());
         userCollect.setUserId(user.getId());
-        userCollect.setCollectDate(new Timestamp(System.currentTimeMillis()));
+        userCollect.setCollectDate( LocalDateTime.now() );
         userCollect.setStatus(1);
         userCollect.setUsername(user.getUserName());
         userCollect.setPetname(user.getPetName());

@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
 @Service(AttendanceService.SERVICE_NAME)
@@ -32,7 +33,7 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Integer, Attendance
     public CpaResult signIn(CpaUser user) {
         CpaResult result = new CpaResult();
         Attendance attendance = new Attendance();
-        attendance.setAttendanceDate(new Timestamp(System.currentTimeMillis()));
+        attendance.setAttendanceDate(LocalDateTime.now());
         attendance.setUserId(user.getId());
         attendance.setUserName(user.getUserName());
         //判断当前未打卡前上一次打卡,与当前时间差值
@@ -58,8 +59,10 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Integer, Attendance
         }};
         CpaResult result = getScrollData(1, 1, where, params, orderBy);
         Attendance attendance = (Attendance) result.getData();
-        if (System.currentTimeMillis() - attendance.getAttendanceDate().getTime() > 24 * 60 * 60 * 1000) {
-            //上次打卡时间与当前相差一天
+        //获取上次签到时间
+        Timestamp lastSiginTime = Timestamp.valueOf(attendance.getAttendanceDate());
+        if (System.currentTimeMillis() - lastSiginTime.getTime() > 24 * 60 * 60 * 1000) {
+            //上次签到时间与当前相差一天
             return false;
         }
         return true;

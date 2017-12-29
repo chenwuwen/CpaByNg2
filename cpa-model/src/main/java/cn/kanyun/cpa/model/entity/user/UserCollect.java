@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.model.entity.user;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * Created by KANYUN on 2017/10/24.
@@ -14,7 +14,7 @@ public class UserCollect implements java.io.Serializable {
     private String username;
     private String petname;
     private Long reId;
-    private Timestamp collectDate;
+    private LocalDateTime collectDate;
     private Integer status;
 
     @Id
@@ -69,11 +69,11 @@ public class UserCollect implements java.io.Serializable {
 
     @Basic
     @Column(name = "collect_date", nullable = true)
-    public Timestamp getCollectDate() {
+    public LocalDateTime getCollectDate() {
         return collectDate;
     }
 
-    public void setCollectDate(Timestamp collectDate) {
+    public void setCollectDate(LocalDateTime collectDate) {
         this.collectDate = collectDate;
     }
 

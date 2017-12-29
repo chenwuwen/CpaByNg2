@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.model.entity.user;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 /**
  * 签到记录
@@ -9,12 +9,12 @@ public class Attendance implements java.io.Serializable{
     private Long id;
     private String userName;
     private Long userId;
-    private Timestamp attendanceDate;
+    private LocalDateTime attendanceDate;
 
     public Attendance() {
     }
 
-    public Attendance(Long id, String userName, Long userId, Timestamp attendanceDate) {
+    public Attendance(Long id, String userName, Long userId, LocalDateTime attendanceDate) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
@@ -45,11 +45,11 @@ public class Attendance implements java.io.Serializable{
         this.userId = userId;
     }
 
-    public Timestamp getAttendanceDate() {
+    public LocalDateTime getAttendanceDate() {
         return attendanceDate;
     }
 
-    public void setAttendanceDate(Timestamp attendanceDate) {
+    public void setAttendanceDate(LocalDateTime attendanceDate) {
         this.attendanceDate = attendanceDate;
     }
 }

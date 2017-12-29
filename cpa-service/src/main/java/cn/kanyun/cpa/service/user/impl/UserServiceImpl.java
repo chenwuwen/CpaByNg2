@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +71,7 @@ public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> impleme
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
         userDto = EndecryptUtils.md5Password(userDto.getUserName(), userDto.getPassword());
-        user.setRegDate(new Timestamp(System.currentTimeMillis()));
+        user.setRegDate(LocalDateTime.now());
         user.setSalt(userDto.getSalt());
         user.setPassword(userDto.getPassword());
         user.setStatus(1);

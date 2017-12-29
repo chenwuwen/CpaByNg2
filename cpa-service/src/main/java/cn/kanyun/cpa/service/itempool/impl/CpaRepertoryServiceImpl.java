@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -127,7 +127,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
 
 /*        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表
         ,就可以把相关联的表也保存了，就不用一个个保存了*/
-        cpaRepertory.setInsertDate(new Timestamp(System.currentTimeMillis()));
+        cpaRepertory.setInsertDate(LocalDateTime.now());
         Set cpaOptions1 = new HashSet();
         for(CpaOption cpaOption:cpaOptions){
             cpaOption.setCpaRepertory(cpaRepertory);

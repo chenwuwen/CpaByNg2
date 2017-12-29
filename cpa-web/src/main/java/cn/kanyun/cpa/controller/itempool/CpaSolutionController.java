@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -86,7 +86,7 @@ public class CpaSolutionController {
      */
     private AnswerRecord patchAnswerRecord(CpaResult result,CpaUser user){
         AnswerRecord answerRecord = new AnswerRecord();
-        answerRecord.setAnswerDate(new Timestamp(System.currentTimeMillis()));
+        answerRecord.setAnswerDate(LocalDateTime.now());
         answerRecord.setCorrectcount((Integer) ((Map)result.getData()).get("correctCount"));
         answerRecord.setItemType(((Map)result.getData()).get("typeCode").toString());
         answerRecord.setErrorcount((Integer) ((Map)result.getData()).get("errorCount"));

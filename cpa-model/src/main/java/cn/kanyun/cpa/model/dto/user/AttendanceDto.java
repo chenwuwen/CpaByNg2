@@ -1,18 +1,18 @@
 package cn.kanyun.cpa.model.dto.user;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class AttendanceDto implements java.io.Serializable{
     private Long id;
     private String userName;
     private Integer userId;
-    private Timestamp attendanceDate;
+    private LocalDateTime attendanceDate;
     private Integer reapSigInDay;
 
     public AttendanceDto() {
     }
 
-    public AttendanceDto(Long id, String userName, Integer userId, Timestamp attendanceDate, Integer reapSigInDay) {
+    public AttendanceDto(Long id, String userName, Integer userId, LocalDateTime attendanceDate, Integer reapSigInDay) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
@@ -44,11 +44,11 @@ public class AttendanceDto implements java.io.Serializable{
         this.userId = userId;
     }
 
-    public Timestamp getAttendanceDate() {
+    public LocalDateTime getAttendanceDate() {
         return attendanceDate;
     }
 
-    public void setAttendanceDate(Timestamp attendanceDate) {
+    public void setAttendanceDate(LocalDateTime attendanceDate) {
         this.attendanceDate = attendanceDate;
     }
 
