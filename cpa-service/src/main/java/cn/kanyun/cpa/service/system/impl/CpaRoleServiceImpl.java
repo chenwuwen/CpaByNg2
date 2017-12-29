@@ -1,10 +1,9 @@
 package cn.kanyun.cpa.service.system.impl;
 
-import cn.kanyun.cpa.dao.system.ICpaRoleDao;
-import cn.kanyun.cpa.dao.system.impl.CpaRoleDaoImpl;
+import cn.kanyun.cpa.dao.system.CpaRoleDao;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.system.ICpaRoleService;
+import cn.kanyun.cpa.service.system.CpaRoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -12,8 +11,8 @@ import javax.annotation.Resource;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Service(ICpaRoleService.SERVICE_NAME)
-public class CpaRoleServiceImpl extends CommonServiceImpl<Integer, CpaRole> implements ICpaRoleService {
-    @Resource(name = ICpaRoleDao.REPOSITORY_NAME)
-    private ICpaRoleDao cpaRoleDao;
+@Service(CpaRoleService.SERVICE_NAME)
+public class CpaRoleServiceImpl extends CommonServiceImpl<Integer, CpaRole> implements CpaRoleService {
+    @Resource(name = CpaRoleDao.REPOSITORY_NAME)
+    private CpaRoleDao cpaRoleDao;
 }

@@ -1,26 +1,18 @@
 package cn.kanyun.cpa.shiro;
 
-import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.system.IRolePermissionService;
-import cn.kanyun.cpa.service.system.IUserRoleService;
-import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.service.system.RolePermissionService;
+import cn.kanyun.cpa.service.system.UserRoleService;
+import cn.kanyun.cpa.service.user.UserService;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.apache.shiro.subject.SimplePrincipalCollection;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
 import org.apache.shiro.util.ByteSource;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
@@ -28,7 +20,6 @@ import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 
 import javax.annotation.Resource;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -39,11 +30,11 @@ import java.util.Set;
 public class MyRealm extends AuthorizingRealm {
     //由于shiro是在其他service之前加载，所以必须在运行时加载
     @Resource
-    private IUserService userService;
+    private UserService userService;
     @Resource
-    private IUserRoleService userRoleService;
+    private UserRoleService userRoleService;
     @Resource
-    private IRolePermissionService rolePermissionService;
+    private RolePermissionService rolePermissionService;
 
     private org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(MyRealm.class);
 

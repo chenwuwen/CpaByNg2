@@ -1,13 +1,11 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
-import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
-import cn.kanyun.cpa.dao.itempool.impl.CpaSolutionDaoImpl;
-import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
+import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.redis.service.IRedisService;
+import cn.kanyun.cpa.redis.service.RedisService;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.itempool.ICpaSolutionService;
+import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +15,13 @@ import java.util.*;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Service(ICpaSolutionService.SERVICE_NAME)
-public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSolution> implements ICpaSolutionService {
+@Service(CpaSolutionService.SERVICE_NAME)
+public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSolution> implements CpaSolutionService {
 
     @Resource
-    private ICpaSolutionDao cpaSolutionDao;
+    private CpaSolutionDao cpaSolutionDao;
     @Resource
-    private IRedisService redisService;
+    private RedisService redisService;
 
     @Override
     public Map<Integer, String[]> getSolution(List<Integer> respertoryIds, String typeCode) {

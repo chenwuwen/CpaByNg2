@@ -5,11 +5,9 @@ import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.itempool.ICpaSolutionService;
-import cn.kanyun.cpa.service.itempool.impl.CpaSolutionServiceImpl;
-import cn.kanyun.cpa.service.user.IAnswerRecordService;
+import cn.kanyun.cpa.service.itempool.CpaSolutionService;
+import cn.kanyun.cpa.service.user.AnswerRecordService;
 import cn.kanyun.cpa.util.WebUtil;
-import com.alibaba.fastjson.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -31,10 +32,10 @@ public class CpaSolutionController {
 
     private static final Logger logger = LoggerFactory.getLogger(CpaRepertoryController.class);
 
-    @Resource(name = ICpaSolutionService.SERVICE_NAME)
-    private ICpaSolutionService cpaSolutionService;
-    @Resource(name = IAnswerRecordService.SERVICE_NAME)
-    private IAnswerRecordService answerRecordService;
+    @Resource(name = CpaSolutionService.SERVICE_NAME)
+    private CpaSolutionService cpaSolutionService;
+    @Resource(name = AnswerRecordService.SERVICE_NAME)
+    private AnswerRecordService answerRecordService;
 
     /**
      * @Author: kanyun

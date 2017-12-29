@@ -3,13 +3,12 @@ package cn.kanyun.cpa.controller.user;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.user.IUserCollectService;
+import cn.kanyun.cpa.service.user.UserCollectService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,8 +24,8 @@ public class UserCollectController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserCollectController.class);
 
-    @Resource(name = IUserCollectService.SERVICE_NAME)
-    private IUserCollectService userCollectService;
+    @Resource(name = UserCollectService.SERVICE_NAME)
+    private UserCollectService userCollectService;
 
     /**
      * @Author: kanyun

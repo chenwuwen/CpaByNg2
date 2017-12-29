@@ -5,8 +5,7 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserComment;
-import cn.kanyun.cpa.service.user.IUserCollectService;
-import cn.kanyun.cpa.service.user.IUserCommentService;
+import cn.kanyun.cpa.service.user.UserCommentService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +28,8 @@ public class UserCommentController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserCommentController.class);
 
-    @Resource(name = IUserCommentService.SERVICE_NAME)
-    private IUserCommentService userCommentService;
+    @Resource(name = UserCommentService.SERVICE_NAME)
+    private UserCommentService userCommentService;
 
     /**
      * @Author: kanyun

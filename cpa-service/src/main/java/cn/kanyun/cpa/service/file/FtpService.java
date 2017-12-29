@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.service.file;
 
-public interface IFtpService {
+public interface FtpService {
     public static final String SERVICE_NAME = "cn.kanyun.cpa.Service.file.impl.FtpServiceImpl";
     
     /**    

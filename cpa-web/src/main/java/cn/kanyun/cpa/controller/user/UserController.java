@@ -2,41 +2,30 @@ package cn.kanyun.cpa.controller.user;
 
 
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
-import cn.kanyun.cpa.model.entity.system.UserRole;
-import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.service.file.IUploadFileService;
-import cn.kanyun.cpa.service.system.IUserRoleService;
-import cn.kanyun.cpa.service.user.IUserService;
 import cn.kanyun.cpa.model.entity.CpaConstants;
-import cn.kanyun.cpa.util.EndecryptUtils;
+import cn.kanyun.cpa.model.entity.CpaResult;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.service.file.UploadFileService;
+import cn.kanyun.cpa.service.system.UserRoleService;
+import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,12 +40,12 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Resource(name = IUserService.SERVICE_NAME)
-    private IUserService userService;
-    @Resource(name = IUserRoleService.SERVICE_NAME)
-    private IUserRoleService userRoleService;
-    @Resource(name = IUploadFileService.SERVICE_NAME)
-    private IUploadFileService uploadFileService;
+    @Resource(name = UserService.SERVICE_NAME)
+    private UserService userService;
+    @Resource(name = UserRoleService.SERVICE_NAME)
+    private UserRoleService userRoleService;
+    @Resource(name = UploadFileService.SERVICE_NAME)
+    private UploadFileService uploadFileService;
 
 
     /**

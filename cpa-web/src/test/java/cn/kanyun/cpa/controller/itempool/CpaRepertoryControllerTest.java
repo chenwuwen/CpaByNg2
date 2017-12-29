@@ -3,7 +3,7 @@ package cn.kanyun.cpa.controller.itempool;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
+import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class CpaRepertoryControllerTest {
     @Autowired
     private org.springframework.web.context.WebApplicationContext context;
     @Autowired
-    private ICpaRepertoryService cpaRepertoryService;
+    private CpaRepertoryService cpaRepertoryService;
     //    spring3.2之后出现了org.springframework.test.web.servlet.MockMvc 类,对springMVC单元测试进行支持
     //    可以对所有的controller来进行测试
     MockMvc mockMvc = MockMvcBuilders.webAppContextSetup(context).build();

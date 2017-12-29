@@ -1,17 +1,15 @@
 package cn.kanyun.cpa.dao.itempool.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
-import cn.kanyun.cpa.model.entity.itempool.CpaOption;
+import cn.kanyun.cpa.dao.itempool.CpaRepertoryDao;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
-import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Repository(ICpaRepertoryDao.REPOSITORY_NAME)
-public class CpaRepertoryDaoImpl extends CommonDaoImpl<Integer, CpaRepertory> implements ICpaRepertoryDao {
+@Repository(CpaRepertoryDao.REPOSITORY_NAME)
+public class CpaRepertoryDaoImpl extends CommonDaoImpl<Integer, CpaRepertory> implements CpaRepertoryDao {
 
     public CpaRepertoryDaoImpl() {
         super(CpaRepertory.class);

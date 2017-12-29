@@ -9,8 +9,8 @@ import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.redis.service.IRedisService;
-import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
+import cn.kanyun.cpa.redis.service.RedisService;
+import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -39,10 +39,10 @@ public class CpaRepertoryController {
 
     private static final Logger logger = LoggerFactory.getLogger(CpaRepertoryController.class);
 
-    @Resource(name = ICpaRepertoryService.SERVICE_NAME)
-    private ICpaRepertoryService cpaRepertoryService;
+    @Resource(name = CpaRepertoryService.SERVICE_NAME)
+    private CpaRepertoryService cpaRepertoryService;
     @Resource
-    private IRedisService redisService;
+    private RedisService redisService;
 
     /**
      * @Author: kanyun

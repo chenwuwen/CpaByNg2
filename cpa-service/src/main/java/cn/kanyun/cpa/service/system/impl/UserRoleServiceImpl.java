@@ -1,14 +1,12 @@
 package cn.kanyun.cpa.service.system.impl;
 
-import cn.kanyun.cpa.dao.system.IRolePermissionDao;
-import cn.kanyun.cpa.dao.system.IUserRoleDao;
-import cn.kanyun.cpa.model.entity.system.CpaPermission;
-import cn.kanyun.cpa.model.entity.system.CpaRole;
+import cn.kanyun.cpa.dao.system.RolePermissionDao;
+import cn.kanyun.cpa.dao.system.UserRoleDao;
 import cn.kanyun.cpa.model.entity.system.RolePermission;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.system.IUserRoleService;
+import cn.kanyun.cpa.service.system.UserRoleService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,12 +16,12 @@ import java.util.Set;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Service(IUserRoleService.SERVICE_NAME)
-public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> implements IUserRoleService {
-    @Resource(name = IUserRoleDao.REPOSITORY_NAME)
-    private IUserRoleDao userRoleDao;
-    @Resource(name = IRolePermissionDao.REPOSITORY_NAME)
-    private IRolePermissionDao rolePermissionDao;
+@Service(UserRoleService.SERVICE_NAME)
+public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> implements UserRoleService {
+    @Resource(name = UserRoleDao.REPOSITORY_NAME)
+    private UserRoleDao userRoleDao;
+    @Resource(name = RolePermissionDao.REPOSITORY_NAME)
+    private RolePermissionDao rolePermissionDao;
 
     @Override
     public Set<String> findRoleByUserId(Integer userId) {

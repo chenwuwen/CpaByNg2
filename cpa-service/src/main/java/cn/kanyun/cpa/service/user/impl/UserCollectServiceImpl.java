@@ -1,22 +1,22 @@
 package cn.kanyun.cpa.service.user.impl;
 
-import cn.kanyun.cpa.dao.user.IUserCollectDao;
+import cn.kanyun.cpa.dao.user.UserCollectDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserCollect;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.user.IUserCollectService;
+import cn.kanyun.cpa.service.user.UserCollectService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.sql.Timestamp;
 
-@Service(IUserCollectService.SERVICE_NAME)
+@Service(UserCollectService.SERVICE_NAME)
 @Transactional
-public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserCollect> implements IUserCollectService {
-    @Resource(name = IUserCollectDao.REPOSITORY_NAME)
-    private IUserCollectDao userCollectDao;
+public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserCollect> implements UserCollectService {
+    @Resource(name = UserCollectDao.REPOSITORY_NAME)
+    private UserCollectDao userCollectDao;
 
 
     @Override

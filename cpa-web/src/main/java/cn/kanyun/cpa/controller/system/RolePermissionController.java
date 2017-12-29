@@ -1,7 +1,6 @@
 package cn.kanyun.cpa.controller.system;
 
-import cn.kanyun.cpa.service.system.IRolePermissionService;
-import org.apache.log4j.Logger;
+import cn.kanyun.cpa.service.system.RolePermissionService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,6 @@ import javax.annotation.Resource;
 @RequestMapping("/rolePermission")
 public class RolePermissionController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(RolePermissionController.class);
-    @Resource(name = IRolePermissionService.SERVICE_NAME)
-    private IRolePermissionService rolePermissionService;
+    @Resource(name = RolePermissionService.SERVICE_NAME)
+    private RolePermissionService rolePermissionService;
 }

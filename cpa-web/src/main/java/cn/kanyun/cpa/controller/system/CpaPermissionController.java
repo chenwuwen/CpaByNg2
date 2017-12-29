@@ -1,8 +1,6 @@
 package cn.kanyun.cpa.controller.system;
 
-import cn.kanyun.cpa.controller.itempool.CpaRepertoryController;
-import cn.kanyun.cpa.service.system.ICpaPermissionService;
-import org.apache.log4j.Logger;
+import cn.kanyun.cpa.service.system.CpaPermissionService;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +14,6 @@ import javax.annotation.Resource;
 @RequestMapping("/cpaPermission")
 public class CpaPermissionController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CpaPermissionController.class);
-    @Resource(name = ICpaPermissionService.SERVICE_NAME)
-    private ICpaPermissionService cpaPermissionService;
+    @Resource(name = CpaPermissionService.SERVICE_NAME)
+    private CpaPermissionService cpaPermissionService;
 }

@@ -1,15 +1,15 @@
 package cn.kanyun.cpa.dao.system.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.system.ICpaRoleDao;
+import cn.kanyun.cpa.dao.system.CpaRoleDao;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import org.springframework.stereotype.Repository;
 
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Repository(ICpaRoleDao.REPOSITORY_NAME)
-public class CpaRoleDaoImpl extends CommonDaoImpl<Integer,CpaRole> implements ICpaRoleDao {
+@Repository(CpaRoleDao.REPOSITORY_NAME)
+public class CpaRoleDaoImpl extends CommonDaoImpl<Integer,CpaRole> implements CpaRoleDao {
 
     public CpaRoleDaoImpl() {
         super(CpaRole.class);

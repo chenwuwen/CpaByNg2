@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Arrays;
 
-public interface IUploadFileService {
+public interface UploadFileService {
     public static final String SERVICE_NAME="cn.kanyun.cpa.Service.file.impl.UploadFileServiceImpl";
 
     /**    

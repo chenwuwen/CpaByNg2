@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2017/6/5.
  */
-public interface IRedisService<T> {
+public interface RedisService<T> {
     public void setCacheObject(String key, Object value);
 
     /**

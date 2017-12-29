@@ -5,16 +5,12 @@ import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.system.IUserRoleService;
-import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.service.system.UserRoleService;
+import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.JwtUtil;
 import cn.kanyun.cpa.util.WebUtil;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -34,10 +30,10 @@ public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Resource(name = IUserService.SERVICE_NAME)
-    private IUserService userService;
+    @Resource(name = UserService.SERVICE_NAME)
+    private UserService userService;
     @Resource
-    private IUserRoleService userRoleService;
+    private UserRoleService userRoleService;
 
     /**
      * 首页

@@ -44,7 +44,7 @@
     <!--使用 dubbo 协议实现定义好的 api.PermissionService 接口-->
     <!-- 声明需要暴露的服务接口 -->
     <!--这里我讲试题库的接口提供出去-->
-    <dubbo:service interface="cn.kanyun.cpa.service.itempool.ICpaRepertoryService" ref="cpaRepertoryService"
+    <dubbo:service interface="cn.kanyun.cpa.service.itempool.CpaRepertoryService" ref="cpaRepertoryService"
                    protocol="dubbo"/>
     <!--具体实现该接口的 bean-->
     <!--试题库的接口的实现类-->

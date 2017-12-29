@@ -1,9 +1,9 @@
 package cn.kanyun.cpa.service.user;
 
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
-import cn.kanyun.cpa.service.ICommonService;
+import cn.kanyun.cpa.service.CommonService;
 
-public interface IAnswerRecordService extends ICommonService<Integer, AnswerRecord> {
+public interface AnswerRecordService extends CommonService<Integer, AnswerRecord> {
     public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl";
 
     /**

@@ -1,25 +1,16 @@
 package cn.kanyun.cpa.redis.service.impl;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
-
-import cn.kanyun.cpa.redis.service.IRedisService;
+import cn.kanyun.cpa.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.BoundSetOperations;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2017/6/1.
@@ -37,7 +28,7 @@ import org.springframework.stereotype.Service;
  */
 @SuppressWarnings("ALL")
 @Service
-public class RedisServiceImpl<T> implements IRedisService<T> {
+public class RedisServiceImpl<T> implements RedisService<T> {
     @Autowired
     @Qualifier("redisTemplate")
     public RedisTemplate<String, Object> redisTemplate;

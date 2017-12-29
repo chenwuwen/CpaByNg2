@@ -1,15 +1,15 @@
 package cn.kanyun.cpa.dao;
 
+import cn.kanyun.cpa.model.entity.CpaResult;
+import org.hibernate.Session;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import cn.kanyun.cpa.model.entity.CpaResult;
-import org.hibernate.Session;
-
-public interface ICommonDao<K extends Serializable ,T extends Serializable> {
+public interface CommonDao<K extends Serializable ,T extends Serializable> {
     /**
      * 由session工厂获取当前session对象 
      * @return 

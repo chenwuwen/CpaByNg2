@@ -2,35 +2,25 @@ package cn.kanyun.cpa.service.file.impl;
 
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.file.IFtpService;
-import cn.kanyun.cpa.service.file.IUploadFileService;
+import cn.kanyun.cpa.service.file.FtpService;
+import cn.kanyun.cpa.service.file.UploadFileService;
 import cn.kanyun.cpa.util.DateUtils;
 import cn.kanyun.cpa.util.FileUtil;
 import cn.kanyun.cpa.util.FolderUtils;
-import cn.kanyun.cpa.util.ImageUtil;
 import net.coobird.thumbnailator.Thumbnails;
-import org.apache.commons.io.FileUtils;
-import org.im4java.core.IM4JavaException;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.HttpServletBean;
-import sun.misc.IOUtils;
 
 import javax.annotation.Resource;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Logger;
 
-@Service(IUploadFileService.SERVICE_NAME)
-public class UploadFileServiceImpl implements IUploadFileService {
+@Service(UploadFileService.SERVICE_NAME)
+public class UploadFileServiceImpl implements UploadFileService {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 
@@ -41,8 +31,8 @@ public class UploadFileServiceImpl implements IUploadFileService {
         add("50-50");
     }};
 
-    @Resource(name = IFtpService.SERVICE_NAME)
-    private IFtpService ftpService;
+    @Resource(name = FtpService.SERVICE_NAME)
+    private FtpService ftpService;
 
     @Override
     public CpaResult upLoadImg(MultipartFile[] files) throws Exception {

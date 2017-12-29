@@ -1,8 +1,7 @@
 package cn.kanyun.cpa.dao.system.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.system.IUserRoleDao;
-import cn.kanyun.cpa.model.entity.system.CpaRole;
+import cn.kanyun.cpa.dao.system.UserRoleDao;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,8 +15,8 @@ import java.util.Set;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Repository(IUserRoleDao.REPOSITORY_NAME)
-public class UserRoleDaoImpl extends CommonDaoImpl<Integer,UserRole> implements IUserRoleDao {
+@Repository(UserRoleDao.REPOSITORY_NAME)
+public class UserRoleDaoImpl extends CommonDaoImpl<Integer,UserRole> implements UserRoleDao {
 
     public UserRoleDaoImpl(){
         super(UserRole.class);

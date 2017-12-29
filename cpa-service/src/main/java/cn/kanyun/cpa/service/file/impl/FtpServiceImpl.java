@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.service.file.impl;
 
 
-import cn.kanyun.cpa.service.file.IFtpService;
+import cn.kanyun.cpa.service.file.FtpService;
 import cn.kanyun.cpa.util.FTPUtil;
 import cn.kanyun.cpa.util.FileUtil;
 import org.springframework.stereotype.Service;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
-@Service(IFtpService.SERVICE_NAME)
-public class FtpServiceImpl implements IFtpService {
+@Service(FtpService.SERVICE_NAME)
+public class FtpServiceImpl implements FtpService {
     @Resource
     private FTPUtil ftpUtil;
 

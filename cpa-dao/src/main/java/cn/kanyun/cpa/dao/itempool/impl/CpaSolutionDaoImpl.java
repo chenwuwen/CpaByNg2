@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.dao.itempool.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
+import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -14,8 +14,8 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Repository(ICpaSolutionDao.REPOSITORY_NAME)
-public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> implements ICpaSolutionDao {
+@Repository(CpaSolutionDao.REPOSITORY_NAME)
+public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> implements CpaSolutionDao {
 
     public CpaSolutionDaoImpl() {
         super(CpaSolution.class);

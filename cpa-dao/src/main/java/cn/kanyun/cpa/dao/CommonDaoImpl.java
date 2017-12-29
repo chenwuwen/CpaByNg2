@@ -1,18 +1,16 @@
 package cn.kanyun.cpa.dao;
 
-import java.io.Serializable;
-import java.util.*;
-
-import javax.annotation.Resource;
-
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
+
+import javax.annotation.Resource;
+import java.io.Serializable;
+import java.util.*;
 
 
 /**
@@ -23,7 +21,7 @@ import org.hibernate.criterion.Projections;
  * @author BearSmall
  */
 public abstract class CommonDaoImpl<K extends Serializable, T extends Serializable>
-        implements ICommonDao<K, T> {
+        implements CommonDao<K, T> {
     @Resource
     private SessionFactory sessionFactory; // 从容器中注入session工厂【无需get,set方法】
 

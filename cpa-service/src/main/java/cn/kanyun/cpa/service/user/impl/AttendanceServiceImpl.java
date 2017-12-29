@@ -1,17 +1,15 @@
 package cn.kanyun.cpa.service.user.impl;
 
-import cn.kanyun.cpa.dao.user.IAttendanceDao;
-import cn.kanyun.cpa.dao.user.IUserDao;
+import cn.kanyun.cpa.dao.user.AttendanceDao;
+import cn.kanyun.cpa.dao.user.UserDao;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.Attendance;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.user.IAttendanceService;
-import org.joda.time.DateTimeUtils;
+import cn.kanyun.cpa.service.user.AttendanceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.annotation.Transient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,15 +17,15 @@ import javax.annotation.Resource;
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 
-@Service(IAttendanceService.SERVICE_NAME)
+@Service(AttendanceService.SERVICE_NAME)
 @Transactional
-public class AttendanceServiceImpl extends CommonServiceImpl<Integer, Attendance> implements IAttendanceService {
+public class AttendanceServiceImpl extends CommonServiceImpl<Integer, Attendance> implements AttendanceService {
     private static final Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
 
-    @Resource(name = IAttendanceDao.REPOSITORY_NAME)
-    private IAttendanceDao attendanceDao;
-    @Resource(name = IUserDao.REPOSITORY_NAME)
-    private IUserDao userDao;
+    @Resource(name = AttendanceDao.REPOSITORY_NAME)
+    private AttendanceDao attendanceDao;
+    @Resource(name = UserDao.REPOSITORY_NAME)
+    private UserDao userDao;
 
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})

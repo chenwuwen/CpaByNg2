@@ -1,8 +1,7 @@
 package cn.kanyun.cpa.dao.system.impl;
 
 import cn.kanyun.cpa.dao.CommonDaoImpl;
-import cn.kanyun.cpa.dao.system.IRolePermissionDao;
-import cn.kanyun.cpa.model.entity.system.CpaPermission;
+import cn.kanyun.cpa.dao.system.RolePermissionDao;
 import cn.kanyun.cpa.model.entity.system.RolePermission;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -16,8 +15,8 @@ import java.util.Set;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Repository(IRolePermissionDao.REPOSITORY_NAME)
-public class RolePermissionDaoImpl extends CommonDaoImpl<Integer,RolePermission> implements IRolePermissionDao {
+@Repository(RolePermissionDao.REPOSITORY_NAME)
+public class RolePermissionDaoImpl extends CommonDaoImpl<Integer,RolePermission> implements RolePermissionDao {
 
     public RolePermissionDaoImpl() {
         super(RolePermission.class);

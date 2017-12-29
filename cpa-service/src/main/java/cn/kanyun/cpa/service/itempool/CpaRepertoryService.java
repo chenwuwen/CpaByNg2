@@ -5,14 +5,14 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.service.ICommonService;
+import cn.kanyun.cpa.service.CommonService;
 
 import java.util.List;
 
 /**
  * Created by Administrator on 2017/6/16.
  */
-public interface ICpaRepertoryService extends ICommonService<Integer,CpaRepertory> {
+public interface CpaRepertoryService extends CommonService<Integer,CpaRepertory> {
     public static final String SERVICE_NAME="cn.kanyun.cpa.Service.itempool.impl.CpaRepertoryServiceImpl";
 
     /**

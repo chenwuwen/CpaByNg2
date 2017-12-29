@@ -1,33 +1,29 @@
 package cn.kanyun.cpa.service.user.impl;
 
-import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Resource;
-
-import cn.kanyun.cpa.dao.system.IUserRoleDao;
-import cn.kanyun.cpa.dao.user.IUserDao;
+import cn.kanyun.cpa.dao.system.UserRoleDao;
+import cn.kanyun.cpa.dao.user.UserDao;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
-import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.EndecryptUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service(IUserService.SERVICE_NAME)
+import javax.annotation.Resource;
+import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
+
+@Service(UserService.SERVICE_NAME)
 @Transactional
-public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> implements IUserService {
-    @Resource(name = IUserDao.REPOSITORY_NAME)
-    private IUserDao userDao;
-    @Resource(name = IUserRoleDao.REPOSITORY_NAME)
-    private IUserRoleDao userRoleDao;
+public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> implements UserService {
+    @Resource(name = UserDao.REPOSITORY_NAME)
+    private UserDao userDao;
+    @Resource(name = UserRoleDao.REPOSITORY_NAME)
+    private UserRoleDao userRoleDao;
 
     /*检测用户登陆*/
     /*2017.7用户登录由shiro接管*/

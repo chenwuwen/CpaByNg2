@@ -4,8 +4,7 @@ import cn.kanyun.cpa.model.dto.user.AttendanceDto;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.service.user.IAttendanceService;
-import cn.kanyun.cpa.service.user.IUserService;
+import cn.kanyun.cpa.service.user.AttendanceService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,8 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 public class AttendanceController {
     private static final Logger logger = LoggerFactory.getLogger(AttendanceController.class);
 
-    @Resource(name = IAttendanceService.SERVICE_NAME)
-    private IAttendanceService attendanceService;
+    @Resource(name = AttendanceService.SERVICE_NAME)
+    private AttendanceService attendanceService;
 
 
     /**

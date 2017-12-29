@@ -6,7 +6,7 @@ import java.util.LinkedHashMap;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
 
-public interface ICommonService <K extends Serializable,T extends Serializable>  {
+public interface CommonService <K extends Serializable,T extends Serializable>  {
 	    /**
 	     * 将实体对象保存到数据库中
 	     * @param t 待保存的实体对象

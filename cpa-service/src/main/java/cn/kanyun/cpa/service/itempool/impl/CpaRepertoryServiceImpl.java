@@ -1,9 +1,9 @@
 package cn.kanyun.cpa.service.itempool.impl;
 
 
-import cn.kanyun.cpa.dao.itempool.ICpaOptionDao;
-import cn.kanyun.cpa.dao.itempool.ICpaRepertoryDao;
-import cn.kanyun.cpa.dao.itempool.ICpaSolutionDao;
+import cn.kanyun.cpa.dao.itempool.CpaOptionDao;
+import cn.kanyun.cpa.dao.itempool.CpaRepertoryDao;
+import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaConstants;
@@ -12,8 +12,8 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.service.CommonServiceImpl;
-import cn.kanyun.cpa.service.itempool.ICpaRepertoryService;
-import cn.kanyun.cpa.service.user.IUserCommentService;
+import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
+import cn.kanyun.cpa.service.user.UserCommentService;
 import cn.kanyun.cpa.util.TypeConver;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -28,17 +28,17 @@ import java.util.*;
 /**
  * Created by Administrator on 2017/6/16.
  */
-@Service(ICpaRepertoryService.SERVICE_NAME)
+@Service(CpaRepertoryService.SERVICE_NAME)
 @Transactional
-public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements ICpaRepertoryService {
-    @Resource(name = ICpaRepertoryDao.REPOSITORY_NAME)
-    private ICpaRepertoryDao cpaRepertoryDao;
-    @Resource(name = ICpaOptionDao.REPOSITORY_NAME)
-    private ICpaOptionDao cpaOptionDao;
-    @Resource(name = ICpaSolutionDao.REPOSITORY_NAME)
-    private ICpaSolutionDao cpaSolutionDao;
+public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements CpaRepertoryService {
+    @Resource(name = CpaRepertoryDao.REPOSITORY_NAME)
+    private CpaRepertoryDao cpaRepertoryDao;
+    @Resource(name = CpaOptionDao.REPOSITORY_NAME)
+    private CpaOptionDao cpaOptionDao;
+    @Resource(name = CpaSolutionDao.REPOSITORY_NAME)
+    private CpaSolutionDao cpaSolutionDao;
     @Resource
-    private IUserCommentService iUserCommentService;
+    private UserCommentService userCommentService;
 
 //    不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
     @Transactional(propagation= Propagation.NOT_SUPPORTED,readOnly = true,isolation = Isolation.REPEATABLE_READ)
@@ -86,7 +86,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
             String commentWhere = "o.reId in (:reids)";
             Map paramsMap = new HashMap();
             paramsMap.put("reids", reids);
-            List<Map<Object, Object>> list = iUserCommentService.getCommentCountByCondition(fields, commentWhere, paramsMap);
+            List<Map<Object, Object>> list = userCommentService.getCommentCountByCondition(fields, commentWhere, paramsMap);
             if (!list.isEmpty()) {
                 Map<Object, Object> commentMap = TypeConver.List2Map(list, "reId", "count");
                 Iterator iterator = commentMap.entrySet().iterator();
