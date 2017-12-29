@@ -40,7 +40,7 @@ public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> impl
         Map<Integer, CpaSolution> mapSolution = new HashMap();
         List<CpaSolution> solutionList = query.list();
         for (int i = 0; i < solutionList.size(); i++) {
-            mapSolution.put(solutionList.get(i).getId(), solutionList.get(i));
+            mapSolution.put(solutionList.get(i).getId().intValue(), solutionList.get(i));
         }
         return mapSolution;
     }

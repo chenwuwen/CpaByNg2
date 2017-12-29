@@ -137,7 +137,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
         cpaRepertory.setCpaOptions(cpaOptions1);
         cpaRepertory.setCpaSolution(cpaSolution);
         cpaRepertoryDao.save(cpaRepertory);
-        return cpaRepertory.getId();
+        return cpaRepertory.getId().intValue();
     }
 
 

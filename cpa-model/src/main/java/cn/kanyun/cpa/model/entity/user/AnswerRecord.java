@@ -1,18 +1,13 @@
 package cn.kanyun.cpa.model.entity.user;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.io.Serializable;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "answer_record", schema = "cpa", catalog = "")
 public class AnswerRecord implements java.io.Serializable {
-    private int id;
-    private Integer userId;
+    private Long id;
+    private Long userId;
     private String username;
     private String petname;
     private String itemType;
@@ -24,21 +19,21 @@ public class AnswerRecord implements java.io.Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     @Basic
     @Column(name = "user_id", nullable = true)
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
@@ -122,39 +117,5 @@ public class AnswerRecord implements java.io.Serializable {
         this.answerDate = answerDate;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
 
-        AnswerRecord that = (AnswerRecord) o;
-
-        if (id != that.id) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (username != null ? !username.equals(that.username) : that.username != null) return false;
-        if (petname != null ? !petname.equals(that.petname) : that.petname != null) return false;
-        if (itemType != null ? !itemType.equals(that.itemType) : that.itemType != null) return false;
-        if (score != null ? !score.equals(that.score) : that.score != null) return false;
-        if (totalcount != null ? !totalcount.equals(that.totalcount) : that.totalcount != null) return false;
-        if (correctcount != null ? !correctcount.equals(that.correctcount) : that.correctcount != null) return false;
-        if (errorcount != null ? !errorcount.equals(that.errorcount) : that.errorcount != null) return false;
-        if (answerDate != null ? !answerDate.equals(that.answerDate) : that.answerDate != null) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (username != null ? username.hashCode() : 0);
-        result = 31 * result + (petname != null ? petname.hashCode() : 0);
-        result = 31 * result + (itemType != null ? itemType.hashCode() : 0);
-        result = 31 * result + (score != null ? score.hashCode() : 0);
-        result = 31 * result + (totalcount != null ? totalcount.hashCode() : 0);
-        result = 31 * result + (correctcount != null ? correctcount.hashCode() : 0);
-        result = 31 * result + (errorcount != null ? errorcount.hashCode() : 0);
-        result = 31 * result + (answerDate != null ? answerDate.hashCode() : 0);
-        return result;
-    }
 }

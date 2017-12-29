@@ -7,7 +7,7 @@
 <!--suppress ALL -->
 <hibernate-mapping>
     <class name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" table="cpa_repertory" catalog="cpa">
-        <id name="id" type="java.lang.Integer">
+        <id name="id" type="java.lang.Long">
             <column name="id"/>
             <generator class="native"></generator>
         </id>

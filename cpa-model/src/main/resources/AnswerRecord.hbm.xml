@@ -6,7 +6,7 @@
 
     <class name="cn.kanyun.cpa.model.entity.user.AnswerRecord" table="answer_record" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="int(11)">
+            <column name="id" sql-type="bigint(20)">
                 <comment>ID</comment>
             </column>
             <generator class="native"></generator>

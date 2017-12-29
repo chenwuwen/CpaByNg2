@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.model.entity;
 
-public enum ExamType {
+public enum ExamEnum {
 
     /**
      * 利用构造函数传参利用构造函数传参
@@ -16,7 +16,7 @@ public enum ExamType {
 
 
     // 构造函数，枚举类型只能为私有
-    private ExamType(String value) {
+    private ExamEnum(String value) {
 
         this.value = value;
     }

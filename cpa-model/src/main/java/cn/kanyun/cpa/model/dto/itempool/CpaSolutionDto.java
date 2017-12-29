@@ -10,23 +10,23 @@ public class CpaSolutionDto  implements java.io.Serializable {
 
     // Fields    
 
-     private Integer id;
+     private Long id;
      private Integer stemId; //题干ID
      private String result; //答案
 
     public CpaSolutionDto(){}
 
-    public CpaSolutionDto(Integer id, Integer stemId, String result) {
+    public CpaSolutionDto(Long id, Integer stemId, String result) {
         this.id = id;
         this.stemId = stemId;
         this.result = result;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -22,7 +22,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
     @Override
     public Integer toggleUserCollect(Integer reId, CpaUser user) {
         UserCollect userCollect = new UserCollect();
-        userCollect.setReId(reId);
+        userCollect.setReId(reId.longValue());
         userCollect.setUserId(user.getId());
         userCollect.setCollectDate(new Timestamp(System.currentTimeMillis()));
         userCollect.setStatus(1);
@@ -47,6 +47,6 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserColle
             userCollectDao.evict(userCollects.get(0));
         }
         UserCollect userCollect1 = userCollectDao.saveOrUpdate(userCollect);
-        return userCollect1.getId();
+        return userCollect1.getId().intValue();
     }
 }

@@ -1,9 +1,7 @@
 package cn.kanyun.cpa.model.dto.itempool;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -15,7 +13,7 @@ public class CpaRepertoryDto implements java.io.Serializable {
 
     // Fields    
 
-    private Integer id;
+    private Long id;
     private String testStem;
     private String testType;
     private String choice; //是否是多选题
@@ -30,7 +28,7 @@ public class CpaRepertoryDto implements java.io.Serializable {
     public CpaRepertoryDto() {
     }
 
-    public CpaRepertoryDto(Integer id, String testStem, String testType, String choice, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode,Long commentCount) {
+    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, Timestamp insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode,Long commentCount) {
         this.id = id;
         this.testStem = testStem;
         this.testType = testType;
@@ -44,11 +42,11 @@ public class CpaRepertoryDto implements java.io.Serializable {
         this.commentCount = commentCount;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

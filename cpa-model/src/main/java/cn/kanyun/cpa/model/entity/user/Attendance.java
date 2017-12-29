@@ -6,26 +6,26 @@ import java.sql.Timestamp;
  * 签到记录
  */
 public class Attendance implements java.io.Serializable{
-    private Integer id;
+    private Long id;
     private String userName;
-    private Integer userId;
+    private Long userId;
     private Timestamp attendanceDate;
 
     public Attendance() {
     }
 
-    public Attendance(Integer id, String userName, Integer userId, Timestamp attendanceDate) {
+    public Attendance(Long id, String userName, Long userId, Timestamp attendanceDate) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
         this.attendanceDate = attendanceDate;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -37,11 +37,11 @@ public class Attendance implements java.io.Serializable{
         this.userName = userName;
     }
 
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 

@@ -3,7 +3,7 @@ package cn.kanyun.cpa.model.dto.user;
 import java.sql.Timestamp;
 
 public class AttendanceDto implements java.io.Serializable{
-    private Integer id;
+    private Long id;
     private String userName;
     private Integer userId;
     private Timestamp attendanceDate;
@@ -12,7 +12,7 @@ public class AttendanceDto implements java.io.Serializable{
     public AttendanceDto() {
     }
 
-    public AttendanceDto(Integer id, String userName, Integer userId, Timestamp attendanceDate, Integer reapSigInDay) {
+    public AttendanceDto(Long id, String userName, Integer userId, Timestamp attendanceDate, Integer reapSigInDay) {
         this.id = id;
         this.userName = userName;
         this.userId = userId;
@@ -20,11 +20,11 @@ public class AttendanceDto implements java.io.Serializable{
         this.reapSigInDay = reapSigInDay;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

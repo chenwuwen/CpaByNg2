@@ -14,7 +14,7 @@ public class CpaUser implements java.io.Serializable {
 
     // Fields    
 
-    private Integer id;
+    private Long id;
     private String userName;
     private String password;
     private String gender;
@@ -31,7 +31,7 @@ public class CpaUser implements java.io.Serializable {
     public CpaUser() {
     }
 
-    public CpaUser(Integer id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
+    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, Timestamp regDate, Timestamp lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -46,11 +46,11 @@ public class CpaUser implements java.io.Serializable {
         this.reapSigInDay=reapSigInDay;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

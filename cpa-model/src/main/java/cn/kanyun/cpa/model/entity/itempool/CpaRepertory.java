@@ -14,7 +14,7 @@ public class CpaRepertory implements java.io.Serializable {
 
     // Fields    
 
-    private Integer id;
+    private Long id;
     private String testStem;
     private String testType;
     private String choice ; //是否是多选题(默认为单选)
@@ -47,11 +47,11 @@ public class CpaRepertory implements java.io.Serializable {
 
     // Property accessors
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

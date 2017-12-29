@@ -11,7 +11,7 @@ public class CpaOption  implements java.io.Serializable {
 
     // Fields    
 
-     private Integer id;
+     private Long id;
      private CpaRepertory cpaRepertory;
      private String selectData;
      private String optionData;
@@ -34,11 +34,11 @@ public class CpaOption  implements java.io.Serializable {
    
     // Property accessors
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
     
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
