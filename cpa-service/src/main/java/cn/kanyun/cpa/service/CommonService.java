@@ -1,10 +1,11 @@
 package cn.kanyun.cpa.service;
 
+import cn.kanyun.cpa.common.annotation.DataSource;
+import cn.kanyun.cpa.model.entity.CpaResult;
+
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-
-import cn.kanyun.cpa.model.entity.CpaResult;
 
 public interface CommonService <K extends Serializable,T extends Serializable>  {
 	    /**
@@ -68,12 +69,14 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	     * 获取总记录数
 	     * @return 总数
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public long getTotalCount();
 	    /******************************HQL******************************/
 	    /**
 	     * 分页获取所有记录
 	     * @return
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public CpaResult<T> getScrollData();
 		/**
 		 * 根据条件获取总记录数
@@ -81,6 +84,7 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 		 * @param params 条件语句出现的位置参数值
 		 * @return 总数
 		 */
+		@DataSource(targetDataSource = "slave")
 		public long getTotalCount(String where, Object[] params);
 	    /**
 	     * 分页获取记录
@@ -88,6 +92,7 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	     * @param maxResult 每页获取的记录数,如果输入值为-1,即获取全部数据
 	     * @return
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public CpaResult<T> getScrollData(int firstResult, int maxResult);
 	    /**
 	     * 分页获取记录
@@ -99,6 +104,7 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	        orderby.put("password", "desc");
 	     * @return
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public CpaResult<T> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
 	    /**
 	     * 分页获取记录
@@ -108,6 +114,7 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	     * @param params 条件语句出现的位置参数值
 	     * @return
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public CpaResult getScrollData(int firstResult, int maxResult, String where, Object[] params);
 	    /**
 	     * 分页获取记录
@@ -121,6 +128,7 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	        orderby.put("password", "desc");
 	     * @return
 	     */
+		@DataSource(targetDataSource = "slave")
 	    public CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
 	  
 	}

@@ -21,7 +21,7 @@ public interface CpaRepertoryService extends CommonService<Integer,CpaRepertory>
      *@Date: 2017/8/16 15:05
      *@params:
      */
-    @DataSource(targetDataSource = "slave")
+//    @DataSource(targetDataSource = "slave")
     CpaResult getUnitExam(Integer firstResult,Integer pageSize, String where, Object[] params);
 
     /**

@@ -43,7 +43,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
 //    不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
     @Transactional(propagation= Propagation.NOT_SUPPORTED,readOnly = true,isolation = Isolation.REPEATABLE_READ)
     public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
-        CpaResult result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where, params);
+        CpaResult result = getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
             List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
             List<CpaRepertory> listcr = (List<CpaRepertory>) result.getData();

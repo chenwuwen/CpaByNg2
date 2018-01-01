@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.controller.aop;
+package cn.kanyun.cpa.aop;
 
 import cn.kanyun.cpa.common.DataSourceContextHolder;
 import cn.kanyun.cpa.common.annotation.DataSource;
@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 @Aspect
 public class DataSourceAspect {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserStatusVerify.class);
+    private static final Logger logger = LoggerFactory.getLogger(DataSourceAspect.class);
 
     @Pointcut("execution(* cn.kanyun.cpa.service..*.*(..))")
     private void aspectjMethod() {

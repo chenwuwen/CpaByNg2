@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.controller.aop;
+package cn.kanyun.cpa.aop;
 
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.util.WebUtil;
