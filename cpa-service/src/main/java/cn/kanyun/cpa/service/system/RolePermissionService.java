@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.service.system;
 
-import cn.kanyun.cpa.common.annotation.DataSource;
+import cn.kanyun.cpa.dao.common.annotation.DataSource;
 import cn.kanyun.cpa.model.entity.system.CpaPermission;
 import cn.kanyun.cpa.model.entity.system.RolePermission;
 import cn.kanyun.cpa.service.CommonService;

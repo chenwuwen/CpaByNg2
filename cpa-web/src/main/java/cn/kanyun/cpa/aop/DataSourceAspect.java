@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.aop;
 
-import cn.kanyun.cpa.common.DataSourceContextHolder;
-import cn.kanyun.cpa.common.annotation.DataSource;
+import cn.kanyun.cpa.dao.common.DataSourceContextHolder;
+import cn.kanyun.cpa.dao.common.annotation.DataSource;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;

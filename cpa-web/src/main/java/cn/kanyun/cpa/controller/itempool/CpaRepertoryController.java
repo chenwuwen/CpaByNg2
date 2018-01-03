@@ -62,20 +62,23 @@ public class CpaRepertoryController {
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
             String key = where + StringUtils.join(params) + pageNo + pageSize;
             logger.info("Redis缓存的Key：" + key);
-            try{
+            try {
                 result = (CpaResult) redisService.getCacheObject(key);
-            }catch (Exception e){
-                logger.info("/api/unitExam/getUnitExam Redis Error: "+e);
+            } catch (Exception e) {
+                logger.info("/api/unitExam/getUnitExam Redis Error: " + e);
             }
             if (null == result) {
                 //总记录数
                 Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
+                page.setTotalRecords(totalRecords.intValue());
                 Integer firstResult = page.countOffset(pageNo, pageSize);
                 result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
-                try{
+                //总页数
+                Integer totalPage = page.getTotalPages();
+                try {
                     redisService.setCacheObject(key, result);
-                }catch (Exception e){
-                    logger.info("/api/unitExam/getUnitExam Redis Error: "+e);
+                } catch (Exception e) {
+                    logger.info("/api/unitExam/getUnitExam Redis Error: " + e);
                 }
             }
         } catch (Exception e) {

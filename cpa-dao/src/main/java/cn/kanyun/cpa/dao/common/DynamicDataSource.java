@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.common;
+package cn.kanyun.cpa.dao.common;
 
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
@@ -15,6 +15,13 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 /**
  * 该类会根据DataSourceContextHolder的TheadLocal得到存放在其中的数据源，内部加载的时候会根据存放的数据源得到数据源实例
  * 事务管理配置一定要配置在往DynamicDataSourceHolder 中注入数据源key之前，否则会报 Could not open JDBC Connection for transaction; nested exception is java.lang.IllegalStateException: Cannot determine target DataSource for lookup key [null] 找不到数据源错误
+ */
+
+/**
+ * 这个抽象类是Spring为动态切换数据源准备的。要使用这个抽象类，
+ * 一个是要重写determineCurrentLookupKey方法，告诉它当前要用哪个数据源；
+ * 一是在Spring的配置文件中将几个数据源注入到targetDataSources属性中。
+ * 本文中，该属性的形式为:HashMap<String,DataSource>
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
     @Override

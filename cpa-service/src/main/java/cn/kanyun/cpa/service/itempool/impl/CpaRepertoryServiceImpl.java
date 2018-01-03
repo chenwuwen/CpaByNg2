@@ -40,8 +40,9 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     @Resource
     private UserCommentService userCommentService;
 
-//    不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
-    @Transactional(propagation= Propagation.NOT_SUPPORTED,readOnly = true,isolation = Isolation.REPEATABLE_READ)
+    @Override
+//不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
+    @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
         CpaResult result = getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
@@ -111,7 +112,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     }
 
     @Override
-    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
 //        for (CpaOption cpaOption:cpaOptions){
 //            cpaOption.setCpaRepertory(cpaRepertory);
@@ -129,7 +130,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
         ,就可以把相关联的表也保存了，就不用一个个保存了*/
         cpaRepertory.setInsertDate(LocalDateTime.now());
         Set cpaOptions1 = new HashSet();
-        for(CpaOption cpaOption:cpaOptions){
+        for (CpaOption cpaOption : cpaOptions) {
             cpaOption.setCpaRepertory(cpaRepertory);
             cpaOptions1.add(cpaOption);
         }

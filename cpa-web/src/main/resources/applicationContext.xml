@@ -115,7 +115,7 @@
 
 
     <!-- 编写spring 配置文件的配置多数源映射关系(多数据源的作用主要是为了读写分离) ,动态控制数据源的类-->
-    <bean class="cn.kanyun.cpa.common.DynamicDataSource" id="dataSource">
+    <bean id="dynamicDataSource" class="cn.kanyun.cpa.dao.common.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
                 <entry value-ref="CpaDataSource" key="master"></entry>
@@ -128,21 +128,31 @@
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
-    <bean id="sessionFactory"
+<!--    <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="CpaDataSource"/>
+        &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
+        <property name="configLocation">
+            <value>classpath:hibernate.cfg.xml</value>
+        </property>
+        &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
+        &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
+        &lt;!&ndash;<props>&ndash;&gt;
+        &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
+        &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
+        &lt;!&ndash;</props>&ndash;&gt;
+        &lt;!&ndash;</property>&ndash;&gt;
+    </bean>-->
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"/>
         <!--将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误-->
         <property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
         </property>
-        <!--Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置-->
-        <!--<property name="hibernateProperties">-->
-        <!--<props>-->
-        <!--<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>-->
-        <!--<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>-->
-        <!--</props>-->
-        <!--</property>-->
     </bean>
+
     <!-- 报错找不到“找不到类型返回值的转换器”解决方案，同时应该加入这两个jar包 -->
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
@@ -165,6 +175,11 @@
           class="org.springframework.orm.hibernate4.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
     </bean>
+
+    <!--可选，使用动态数据源读写分离时必选 -->
+    <!--<bean id="transactionManager" class="cn.kanyun.cpa.dao.common.DynamicTransactionManager">-->
+        <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--</bean>-->
 
     <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
     <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->

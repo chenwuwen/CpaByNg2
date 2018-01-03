@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.common.annotation;
+package cn.kanyun.cpa.dao.common.annotation;
 
 import java.lang.annotation.*;
 

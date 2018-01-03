@@ -24,6 +24,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         implements CommonDao<K, T> {
     @Resource
     private SessionFactory sessionFactory; // 从容器中注入session工厂【无需get,set方法】
+//    private DynamicSessionFactory dynamicSessionFactory; // 从容器中注入session工厂【无需get,set方法】(动态SessionFactory)
 
     private Class<T> clatt; // 【实体类对应的Class对象】
 
@@ -35,6 +36,9 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     public SessionFactory getSessionFactory() {
         return sessionFactory;
     }
+//    public DynamicSessionFactory getSessionFactory() {
+//        return dynamicSessionFactory;
+//    }
 
     /**
      * 保留指定clatt值的接口【通过子类显示调用父类的构造函数来指定】
@@ -70,7 +74,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     }
 
     @Override
-    public void evict(T t){
+    public void evict(T t) {
         Session session = getSession();
         session.evict(t);
     }
@@ -133,8 +137,9 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         Session session = getSession();
         @SuppressWarnings("unchecked")
         T t = (T) session.get(clatt, id);
-        if (t == null)
+        if (t == null) {
             return false;
+        }
         session.delete(t);
         return true;
     }
@@ -214,8 +219,9 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         Query query = session.createQuery("select o from " + entityName + " o"
                 + whereql + buildOrderby(orderby));
         query.setCacheable(true);   //激活查询缓存,查询缓存,缓存的是对象的ID
-        if (firstResult != -1 && maxResult != -1)
+        if (firstResult != -1 && maxResult != -1) {
             query.setFirstResult(firstResult).setMaxResults(maxResult);
+        }
         setQueryParameter(query, params);
 
         CpaResult<T> result = new CpaResult<T>();
@@ -229,6 +235,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return result;
     }
 
+    @Override
     public long getTotalCount(String where, Object[] params) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "
@@ -241,6 +248,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return count;
     }
 
+    @Override
     public List<Map<Object, Object>> getGroupByList(Object[] fields, String where, Map<String, Collection> params) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "

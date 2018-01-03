@@ -20,6 +20,7 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
     @Autowired
     private CommonDao<K, T> commondao; // 从容器中注入session工厂【无需get,set方法】
 
+    @Override
     public K save(T t) {
         return commondao.save(t);
     }
@@ -105,6 +106,7 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
                 orderby);
     }
 
+    @Override
     public long getTotalCount(String where, Object[] params){
         return commondao.getTotalCount(where,params);
     }
