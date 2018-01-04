@@ -3,21 +3,24 @@ package cn.kanyun.cpa.model.entity;
 /*模型驱动，用于返回字符串数据*/
 public class CpaResult<T> implements java.io.Serializable {
 
-    public Integer status;//用户登陆状态 0：代表未登录，1：代表已登录(添加该值，用以返回状态让js进行一些处理如重定向到登陆页面或者注册页面等等，类似的也可以写两个controller，一个负责跳转页面（判断权限，可跳转到登陆页，也可以跳转到目的页）另外一个controller负责处理业务逻辑，但是对于单页面（SPA）来说这种模式并不适用）
-    public Integer state;//状态  0:代表未找到，1:代表成功，2:代表失败
-    public String msg;//消息
-    public Object data;//数据
-    public Long totalCount;//总记录数
+    private Integer status;//用户登陆状态 0：代表未登录，1：代表已登录(添加该值，用以返回状态让js进行一些处理如重定向到登陆页面或者注册页面等等，类似的也可以写两个controller，一个负责跳转页面（判断权限，可跳转到登陆页，也可以跳转到目的页）另外一个controller负责处理业务逻辑，但是对于单页面（SPA）来说这种模式并不适用）
+    private Integer state;//状态  0:代表未找到，1:代表成功，2:代表失败
+    private String msg;//消息
+    private Object data;//数据
+    private Long totalCount;//总记录数
+    private Integer totalPage; //总页数
+
 
     public CpaResult() {
     }
 
-    public CpaResult(Integer status, Integer state, String msg, Object data, Long totalCount) {
+    public CpaResult(Integer status, Integer state, String msg, Object data, Long totalCount,Integer totalPage) {
         this.status = status;
         this.state = state;
         this.msg = msg;
         this.data = data;
         this.totalCount = totalCount;
+        this.totalPage = totalPage;
     }
 
     public Integer getStatus() {
@@ -58,6 +61,14 @@ public class CpaResult<T> implements java.io.Serializable {
 
     public void setTotalCount(Long totalCount) {
         this.totalCount = totalCount;
+    }
+
+    public Integer getTotalPage() {
+        return totalPage;
+    }
+
+    public void setTotalPage(Integer totalPage) {
+        this.totalPage = totalPage;
     }
 }
 

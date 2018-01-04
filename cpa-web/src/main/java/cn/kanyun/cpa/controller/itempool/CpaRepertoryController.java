@@ -74,7 +74,7 @@ public class CpaRepertoryController {
                 Integer firstResult = page.countOffset(pageNo, pageSize);
                 result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
                 //总页数
-                Integer totalPage = page.getTotalPages();
+                result.setTotalPage(page.getTotalPages());
                 try {
                     redisService.setCacheObject(key, result);
                 } catch (Exception e) {
