@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.service.itempool;
 
+import cn.kanyun.cpa.dao.common.DataSourceContextHolder;
+import cn.kanyun.cpa.dao.common.annotation.DataSource;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -20,6 +22,7 @@ public interface CpaRepertoryService extends CommonService<Integer,CpaRepertory>
      *@Date: 2017/8/16 15:05
      *@params:
      */
+    @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
     CpaResult getUnitExam(Integer firstResult,Integer pageSize, String where, Object[] params);
 
     /**

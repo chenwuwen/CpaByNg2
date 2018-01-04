@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.dao.common;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 /**
@@ -10,6 +12,9 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * AbstractRoutingDataSource就是这个控制器，只要我们实现它，然后重写他的抽象方法
  * 那么知道什么时候是插入、什么时候是查询；:在service方法中，自定义注解>>反射读取注解>>判断数据源>>分配数据源到 AbstractRoutingDataSource >>Spring给你装配到DAO
  * Created by Administrator on 2017/12/7 0007.
+ * <p>
+ * 该类会根据DataSourceContextHolder的TheadLocal得到存放在其中的数据源，内部加载的时候会根据存放的数据源得到数据源实例
+ * 事务管理配置一定要配置在往DynamicDataSourceHolder 中注入数据源key之前，否则会报 Could not open JDBC Connection for transaction; nested exception is java.lang.IllegalStateException: Cannot determine target DataSource for lookup key [null] 找不到数据源错误
  */
 
 /**
@@ -24,8 +29,12 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * 本文中，该属性的形式为:HashMap<String,DataSource>
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
+    private static final Logger logger = LoggerFactory.getLogger(DynamicDataSource.class);
+
+
     @Override
     protected Object determineCurrentLookupKey() {
+        logger.info("动态数据源===========" + DataSourceContextHolder.getDataSourceType());
         return DataSourceContextHolder.getDataSourceType();
     }
 }

@@ -27,7 +27,7 @@
             </column>
         </property>
         <property name="reId">
-            <column name="re_id" sql-type="int(11)">
+            <column name="re_id" sql-type="bigint(20)">
                 <comment>试题ID</comment>
             </column>
         </property>

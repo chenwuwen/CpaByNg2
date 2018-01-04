@@ -3,17 +3,24 @@ package cn.kanyun.cpa.aop;
 import cn.kanyun.cpa.dao.common.DataSourceContextHolder;
 import cn.kanyun.cpa.dao.common.annotation.DataSource;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+/**
+ * 动态切换数据源AOP类
+ * 通过Service接口上的DataSource注解中的值，来确定要切换的数据源
+ */
+@Order(-1) // 保证该AOP在@Transactional之前执行,此配置很重要尤其在进行事务配置之后，如果进行了事务配置，不在AOP中加这个配置,那么动态切换数据源将生效
 @Component
 @Aspect
 public class DataSourceAspect {
@@ -66,5 +73,17 @@ public class DataSourceAspect {
         } catch (Exception e) {
             logger.error("动态选择数据源报错：" + clazz + ":" + e.getMessage());
         }
+    }
+
+    /**
+     * @describe:　方法结束后清除数据源
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/4 0004 15:22
+     */
+    @After("aspectjMethod()")
+    public void afterAdvice(JoinPoint point) {
+        logger.info("==========AOP after方法后，动态切换数据源，清除数据源==========");
+        DataSourceContextHolder.clearDataSourceType();
     }
 }

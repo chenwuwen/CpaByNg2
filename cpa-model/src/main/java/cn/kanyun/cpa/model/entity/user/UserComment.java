@@ -13,7 +13,7 @@ public class UserComment implements java.io.Serializable {
     private Long userId;
     private String username;
     private String petname;
-    private Integer reId;
+    private Long reId;
     private LocalDateTime commentDate;
     private String comment;
 
@@ -59,11 +59,11 @@ public class UserComment implements java.io.Serializable {
 
     @Basic
     @Column(name = "re_id", nullable = true)
-    public Integer getReId() {
+    public Long getReId() {
         return reId;
     }
 
-    public void setReId(Integer reId) {
+    public void setReId(Long reId) {
         this.reId = reId;
     }
 

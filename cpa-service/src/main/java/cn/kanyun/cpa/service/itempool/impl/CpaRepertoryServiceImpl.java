@@ -37,7 +37,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
     private CpaOptionDao cpaOptionDao;
     @Resource(name = CpaSolutionDao.REPOSITORY_NAME)
     private CpaSolutionDao cpaSolutionDao;
-    @Resource
+    @Resource(name = UserCommentService.SERVICE_NAME)
     private UserCommentService userCommentService;
 
     @Override
