@@ -2,7 +2,6 @@ package cn.kanyun.cpa.model.entity.system;
 
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -14,14 +13,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_role", schema = "cpa", catalog = "")
 public class UserRole implements java.io.Serializable {
-    private int id;
+    private Long id;
     private CpaUser cpaUser; //user_id
     private CpaRole cpaRole; //role_id
 
     public UserRole() {
     }
 
-    public UserRole(int id, CpaUser cpaUser, CpaRole cpaRole) {
+    public UserRole(Long id, CpaUser cpaUser, CpaRole cpaRole) {
         this.id = id;
         this.cpaUser = cpaUser;
         this.cpaRole = cpaRole;
@@ -29,11 +28,11 @@ public class UserRole implements java.io.Serializable {
 
     @Id
     @Column(name = "id", nullable = false)
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

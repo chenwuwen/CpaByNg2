@@ -128,21 +128,21 @@
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
-<!--    <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="CpaDataSource"/>
-        &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-        &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
-        &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
-        &lt;!&ndash;<props>&ndash;&gt;
-        &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
-        &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
-        &lt;!&ndash;</props>&ndash;&gt;
-        &lt;!&ndash;</property>&ndash;&gt;
-    </bean>-->
+    <!--    <bean id="sessionFactory"
+              class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+            <property name="dataSource" ref="CpaDataSource"/>
+            &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
+            <property name="configLocation">
+                <value>classpath:hibernate.cfg.xml</value>
+            </property>
+            &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
+            &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
+            &lt;!&ndash;<props>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
+            &lt;!&ndash;</props>&ndash;&gt;
+            &lt;!&ndash;</property>&ndash;&gt;
+        </bean>-->
 
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
@@ -161,8 +161,7 @@
                 <constructor-arg value="UTF-8"/>
             </bean>
             <!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
-            <bean
-                    class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
                 <property name="prettyPrint" value="true"/>
             </bean>
         </mvc:message-converters>
@@ -172,13 +171,13 @@
     <!-- 事务配置 ，此不是必须的，只有需要支持事务控制的工程在才需要，不过一般都需要，所以一般都需要配置这个 -->
     <!-- 配置事务管理器bean,使用HibernateTransactionManager事务管理器 -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
     </bean>
 
     <!--可选，使用动态数据源读写分离时必选 -->
     <!--<bean id="transactionManager" class="cn.kanyun.cpa.dao.common.DynamicTransactionManager">-->
-        <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--<property name="sessionFactory" ref="sessionFactory" />-->
     <!--</bean>-->
 
     <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->

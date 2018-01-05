@@ -35,7 +35,10 @@
 
     <!-- 定义缓存管理器,可使用多种缓存组件-->
     <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>
+        <!--<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>-->
+        <!--以上配置可能会报错：net.sf.ehcache.CacheException: Another unnamed CacheManager already exists in the same VM. Please provide unique names for each CacheManager in the config or do one of following-->
+        <!--配置shiro的缓存时用到了EhCacheCacheManager，因为系统只能创建一个EhCacheCacheManager,所以要让自己的和系统的创建方式来自同一个地方,即在applicationContext.xml中配置缓存工厂,这边进行引用-->
+        <property name="cacheManager" ref="ehCacheManagerFactory"/>
     </bean>
 
     <!-- 记住我cookie -->
@@ -90,13 +93,13 @@
     </bean>
 
     <!-- 会话ID生成器 -->
-    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator" />
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
 
     <!--定义退出过滤器,此处先执行LogoutFilter的退出清空缓存操作，然后重定向，value为重定向的地址-->
     <!--下面的配置是shiro默认的logout过滤器的配置,也可以通过继承shiro的过滤器，自定义logout过滤器-->
     <!--<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">-->
     <bean id="logoutFilter" class="cn.kanyun.cpa.filter.SystemLogoutFilter">
-        <property name="redirectUrl" value="/" />
+        <property name="redirectUrl" value="/"/>
     </bean>
 
     <!-- Shiro 的Web过滤器 -->
@@ -119,7 +122,7 @@
                 <!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中-->
                 <entry key="authc" value-ref="formAuthenticationFilter"/>
                 <!--退出过滤器-->
-                <entry key="logout" value-ref="logoutFilter" />
+                <entry key="logout" value-ref="logoutFilter"/>
             </map>
         </property>
         <!--过滤定义，从上而下，蒋匿名的anon放最下面-->

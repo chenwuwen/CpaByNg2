@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<project
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <modelVersion>4.0.0</modelVersion>
     <groupId>cn.kanyun</groupId>
     <artifactId>cpa</artifactId>
@@ -242,12 +241,12 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
-                <version>4.1.6.Final</version>
+                <version>5.1.2.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.common</groupId>
                 <artifactId>hibernate-commons-annotations</artifactId>
-                <version>4.0.4.Final</version>
+                <version>5.0.1.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.javax.persistence</groupId>
@@ -257,7 +256,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>4.1.6.Final</version>
+                <version>5.1.2.Final</version>
                 <optional>true</optional>
                 <exclusions>
                     <exclusion>
@@ -273,7 +272,13 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-ehcache</artifactId>
-                <version>4.1.6.Final</version>
+                <version>5.1.2.Final</version>
+            </dependency>
+            <!--Hibernate5之后开始支持JDK,比如Date和Time API,之前使用Hibernate4保存日期字段时使用JDk8 LocalDateTime保存会报错,故ORM换成Hibernate5并加上此依赖-->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-java8</artifactId>
+                <version>5.2.12.Final</version>
             </dependency>
 
             <!--使用javax.persistence注解配置PO对象,如@Entity-->

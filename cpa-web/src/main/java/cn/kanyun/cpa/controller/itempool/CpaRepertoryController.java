@@ -65,7 +65,7 @@ public class CpaRepertoryController {
             try {
                 result = (CpaResult) redisService.getCacheObject(key);
             } catch (Exception e) {
-                logger.info("/api/unitExam/getUnitExam Redis Error: " + e);
+                logger.error("/api/unitExam/getUnitExam Redis Error: " + e);
             }
             if (null == result) {
                 //总记录数
@@ -78,7 +78,7 @@ public class CpaRepertoryController {
                 try {
                     redisService.setCacheObject(key, result);
                 } catch (Exception e) {
-                    logger.info("/api/unitExam/getUnitExam Redis Error: " + e);
+                    logger.error("/api/unitExam/getUnitExam Redis Error: " + e);
                 }
             }
         } catch (Exception e) {

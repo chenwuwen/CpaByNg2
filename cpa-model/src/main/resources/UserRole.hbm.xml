@@ -6,7 +6,7 @@
 
     <class name="cn.kanyun.cpa.model.entity.system.UserRole" table="user_role" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="int(11)"/>
+            <column name="id" sql-type="bigint(20)"/>
             <generator class="native"></generator>
         </id>
         <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select">

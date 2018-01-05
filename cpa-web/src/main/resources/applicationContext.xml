@@ -2,7 +2,7 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
      http://www.springframework.org/schema/context
@@ -10,7 +10,7 @@
      http://www.springframework.org/schema/tx
      http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     <!-- 加载配置文件 -->
     <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
     <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
@@ -54,7 +54,8 @@
         <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
         <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
         <property name="poolPreparedStatements" value="${poolPreparedStatements}"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${maxPoolPreparedStatementPerConnectionSize}"/>
         <!-- 关闭abanded连接时输出错误日志 -->
         <property name="logAbandoned" value="true"/>
         <!-- 监控数据库 -->
@@ -97,7 +98,8 @@
         <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
         <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
         <property name="poolPreparedStatements" value="${poolPreparedStatements}"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="${maxPoolPreparedStatementPerConnectionSize}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${maxPoolPreparedStatementPerConnectionSize}"/>
         <!-- 关闭abanded连接时输出错误日志 -->
         <property name="logAbandoned" value="true"/>
         <!-- 监控数据库 -->
@@ -128,24 +130,24 @@
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
-<!--    <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="CpaDataSource"/>
-        &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
-        <property name="configLocation">
-            <value>classpath:hibernate.cfg.xml</value>
-        </property>
-        &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
-        &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
-        &lt;!&ndash;<props>&ndash;&gt;
-        &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
-        &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
-        &lt;!&ndash;</props>&ndash;&gt;
-        &lt;!&ndash;</property>&ndash;&gt;
-    </bean>-->
+    <!--    <bean id="sessionFactory"
+              class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+            <property name="dataSource" ref="CpaDataSource"/>
+            &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
+            <property name="configLocation">
+                <value>classpath:hibernate.cfg.xml</value>
+            </property>
+            &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
+            &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
+            &lt;!&ndash;<props>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
+            &lt;!&ndash;</props>&ndash;&gt;
+            &lt;!&ndash;</property>&ndash;&gt;
+        </bean>-->
 
     <bean id="sessionFactory"
-          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
         <property name="dataSource" ref="dynamicDataSource"/>
         <!--将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误-->
         <property name="configLocation">
@@ -172,13 +174,41 @@
     <!-- 事务配置 ，此不是必须的，只有需要支持事务控制的工程在才需要，不过一般都需要，所以一般都需要配置这个 -->
     <!-- 配置事务管理器bean,使用HibernateTransactionManager事务管理器 -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <!--不自动检测数据源-->
+        <!--<property name="autodetectDataSource" value="false" />-->
+        <!-- 事务中获取session时，是从这里获取的 -->
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
 
     <!--可选，使用动态数据源读写分离时必选 -->
     <!--<bean id="transactionManager" class="cn.kanyun.cpa.dao.common.DynamicTransactionManager">-->
-        <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--</bean>-->
+
+    <!-- 缓存配置 -->
+    <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->
+    <!--<cache:annotation-driven cache-manager="cacheManager"/>-->
+    <!-- Spring自己的基于java.util.concurrent.ConcurrentHashMap实现的缓存管理器(该功能是从Spring3.1开始提供的) -->
+    <!--
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean name="myCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+            </set>
+        </property>
+    </bean>
+     -->
+    <!-- 若只想使用Spring自身提供的缓存器,则注释掉下面的两个关于Ehcache配置的bean,并启用上面的SimpleCacheManager即可 -->
+    <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
+    <!-- Spring提供的基于的Ehcache实现的缓存管理器 -->
+    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处天上新设置的bead id-->
+    <!--<bean id="cacheManager"-->
+          <!--class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
+        <!--<property name="cacheManager" ref="ehCacheManagerFactory"/>-->
     <!--</bean>-->
 
     <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->

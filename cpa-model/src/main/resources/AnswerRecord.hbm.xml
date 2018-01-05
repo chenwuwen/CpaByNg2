@@ -53,7 +53,7 @@
             </column>
         </property>
         <property name="answerDate">
-            <column name="answer_date" sql-type="timestamp">
+            <column name="answer_date" sql-type="datetime">
                 <comment>答题日期</comment>
             </column>
         </property>

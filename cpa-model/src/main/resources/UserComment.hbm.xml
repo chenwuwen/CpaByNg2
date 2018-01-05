@@ -32,7 +32,7 @@
             </column>
         </property>
         <property name="commentDate">
-            <column name="comment_date" sql-type="timestamp">
+            <column name="comment_date" sql-type="datetime">
                 <comment>评论时间</comment>
             </column>
         </property>

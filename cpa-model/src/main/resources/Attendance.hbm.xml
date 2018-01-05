@@ -22,8 +22,8 @@
             </column>
         </property>
         <property name="attendanceDate" >
-            <column name="attendance_date" sql-type="timestamp">
-                <comment>用户ID</comment>
+            <column name="attendance_date" sql-type="datetime">
+                <comment>签到时间</comment>
             </column>
         </property>
 

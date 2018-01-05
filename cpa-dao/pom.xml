@@ -88,6 +88,11 @@
             <artifactId>hibernate-ehcache</artifactId>
             <version>4.1.6.Final</version>
         </dependency>
+        <!--Hibernate5之后开始支持JDK,比如Date和Time API,之前使用Hibernate4保存日期字段时使用JDk8 LocalDateTime保存会报错,故ORM换成Hibernate5并加上此依赖-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-java8</artifactId>
+        </dependency>
 
         <!--日志记录-->
         <dependency>

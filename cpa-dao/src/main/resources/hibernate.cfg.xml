@@ -53,7 +53,7 @@
 
         <!--但是加入该配置会报错：Could not obtain transaction-synchronized Session for current thread;解决方法，在web.xml中加入hibernate过滤器-->
         <property name="hibernate.current_session_context_class">
-            org.springframework.orm.hibernate4.SpringSessionContext
+            org.springframework.orm.hibernate5.SpringSessionContext
         </property>
 
         <!-- 开启二级缓存-->
@@ -84,8 +84,8 @@
             <!--当spring也配置了ehcache作为缓存时，为了使spring缓存和hibernate缓存使用同一缓存管理器，从而保证缓存的一致性，
             需要使用org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory。如果仅是hibernate使用ehcache的话，
             org.hibernate.cache.ehcache.EhCacheRegionFactory即可-->
-            org.hibernate.cache.ehcache.EhCacheRegionFactory
-            <!--org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory-->
+            <!--org.hibernate.cache.ehcache.EhCacheRegionFactory-->
+            org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
         </property>
         <!-- Hibernate4以后都封装到org.hibernate.cache.ehcache.EhCacheRegionFactory -->
         <!-- 指定缓存配置文件位置 -->

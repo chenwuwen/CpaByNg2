@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : MySql
-Source Server Version : 50712
-Source Host           : localhost:3306
+Source Server         : 远程
+Source Server Version : 50720
+Source Host           : 115.47.154.107:3306
 Source Database       : cpa
 
 Target Server Type    : MYSQL
-Target Server Version : 50712
+Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2017-10-27 00:00:03
+Date: 2018-01-05 10:53:58
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -20,8 +20,8 @@ SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 DROP TABLE IF EXISTS `answer_record`;
 CREATE TABLE `answer_record` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` int(11) DEFAULT NULL COMMENT '??ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '??ID',
   `username` varchar(255) DEFAULT NULL COMMENT '???',
   `petname` varchar(255) DEFAULT NULL COMMENT '????',
   `item_type` varchar(255) DEFAULT NULL COMMENT '????',
@@ -29,7 +29,7 @@ CREATE TABLE `answer_record` (
   `totalcount` int(11) DEFAULT NULL COMMENT '???',
   `correctcount` int(11) DEFAULT NULL COMMENT '???',
   `errorcount` int(11) DEFAULT NULL COMMENT '???',
-  `answer_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `answer_date` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
@@ -43,8 +43,8 @@ INSERT INTO `answer_record` VALUES ('1', '8', 'kanyun', null, 'basicAccount', '3
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_option`;
 CREATE TABLE `cpa_option` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `re_id` int(11) DEFAULT NULL COMMENT '试题ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
   `select_data` varchar(2) DEFAULT NULL COMMENT '选择内容即ABCD',
   `option_data` varchar(100) DEFAULT NULL COMMENT '选项内容',
   PRIMARY KEY (`id`),
@@ -200,10 +200,10 @@ INSERT INTO `cpa_permission` VALUES ('4', 'insert', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_repertory`;
 CREATE TABLE `cpa_repertory` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `test_stem` varchar(200) DEFAULT NULL COMMENT '题干',
   `test_type` varchar(20) DEFAULT NULL COMMENT '试题类型',
-  `insert_date` timestamp NULL DEFAULT NULL COMMENT '插入时间',
+  `insert_date` datetime DEFAULT NULL COMMENT '插入时间',
   `choice` varchar(255) DEFAULT NULL COMMENT '????(????)',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8 COMMENT='题库表';
@@ -265,8 +265,8 @@ INSERT INTO `cpa_role` VALUES ('3', 'normal', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_solution`;
 CREATE TABLE `cpa_solution` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `re_id` int(11) DEFAULT NULL COMMENT '题库ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `re_id` bigint(20) DEFAULT NULL COMMENT '题库ID',
   `result` varchar(20) DEFAULT NULL COMMENT '正确答案选项',
   PRIMARY KEY (`id`),
   KEY `re_id` (`re_id`),
@@ -312,17 +312,17 @@ INSERT INTO `cpa_solution` VALUES ('30', '30', 'A');
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_user`;
 CREATE TABLE `cpa_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户表主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户表主键ID',
   `username` varchar(255) NOT NULL COMMENT '登录名',
   `password` varchar(255) NOT NULL COMMENT '登陆密码',
   `petname` varchar(255) DEFAULT '' COMMENT '昵称',
   `gender` char(2) DEFAULT '' COMMENT '性别',
   `email` varchar(255) DEFAULT '' COMMENT 'Email',
-  `regdate` timestamp NULL DEFAULT NULL COMMENT '注册时间',
-  `lastlogindate` timestamp NULL DEFAULT NULL COMMENT '上次登陆时间',
+  `regdate` datetime DEFAULT NULL COMMENT '注册时间',
+  `lastlogindate` datetime DEFAULT NULL COMMENT '上次登陆时间',
   `pet_name` varchar(20) DEFAULT '',
-  `reg_date` timestamp NULL DEFAULT NULL,
-  `last_login_date` timestamp NULL DEFAULT NULL,
+  `reg_date` datetime DEFAULT NULL,
+  `last_login_date` datetime DEFAULT NULL,
   `status` tinyint(2) DEFAULT NULL,
   `salt` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -368,10 +368,10 @@ INSERT INTO `role_permission` VALUES ('7', '2', '3');
 -- ----------------------------
 DROP TABLE IF EXISTS `user_collect`;
 CREATE TABLE `user_collect` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT ' 用户ID',
-  `re_id` int(11) DEFAULT NULL COMMENT '试题ID',
-  `collect_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '收藏日期',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL COMMENT ' 用户ID',
+  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
+  `collect_date` datetime DEFAULT NULL COMMENT '收藏日期',
   `status` int(11) DEFAULT NULL COMMENT '收藏状态： 0 取消收藏 1 已收藏',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -386,10 +386,10 @@ INSERT INTO `user_collect` VALUES ('1', '8', '1', '2017-10-26 23:52:06', '1');
 -- ----------------------------
 DROP TABLE IF EXISTS `user_comment`;
 CREATE TABLE `user_comment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
-  `re_id` int(11) DEFAULT NULL COMMENT '试题ID',
-  `comment_date` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '评论时间',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
+  `comment_date` datetime DEFAULT NULL COMMENT '评论时间',
   `comment` varchar(255) DEFAULT NULL COMMENT '评论内容',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
@@ -404,8 +404,8 @@ INSERT INTO `user_comment` VALUES ('1', '8', '1', '2017-10-26 23:50:47', '附近
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `role_id` int(11) DEFAULT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`),
   KEY `FK143BF46A9752B83F` (`role_id`),

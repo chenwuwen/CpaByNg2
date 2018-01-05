@@ -83,6 +83,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
                 cpaRepertoryDto.setCpaOptionDtos(listoptions);
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             }
+//            获取每个试题的评论数,主要用作页面是否显示查看评论按钮
             Object[] fields = {"reId"};
             String commentWhere = "o.reId in (:reids)";
             Map paramsMap = new HashMap();
