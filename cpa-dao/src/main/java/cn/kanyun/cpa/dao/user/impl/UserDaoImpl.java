@@ -20,8 +20,6 @@ public class UserDaoImpl extends CommonDaoImpl<Integer, CpaUser> implements User
         String hql = " from CpaUser o where o.userName = :userName";
         Query query = session.createQuery(hql);
         query.setParameter("userName", userName);
-        Object o = query.uniqueResult();
-        System.out.println(o);
         return (CpaUser) query.uniqueResult();
     }
 }
