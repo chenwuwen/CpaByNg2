@@ -2,7 +2,7 @@
        xmlns="http://www.springframework.org/schema/beans"
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
-       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:cache="http://www.springframework.org/schema/cache"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
      http://www.springframework.org/schema/context
@@ -10,22 +10,27 @@
      http://www.springframework.org/schema/tx
      http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
     <!-- 加载配置文件 -->
     <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
-    <context:property-placeholder location="classpath:db.properties" ignore-unresolvable="true"/>
+    <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
+     如 @Value("${FTP_ADDRESS}")
+     private String FTP_ADDRESS;
+     前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
+    <context:property-placeholder location="classpath:db.properties,classpath:ftp.properties" ignore-unresolvable="true"/>
+
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
     <!-- Spring的扫描仅仅是扫描@Service @Repository，@Components标记!!!@Controller是有SpingMVC来扫描的 -->
     <context:component-scan base-package="cn.kanyun"/>
     <!-- Druid数据库连接池 -->
     <bean id="CpaDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
-        <property name="driverClassName" value="${driverClassName}"/>
-        <property name="url" value="${url}"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${password}"/>
-        <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall -->
-        <property name="filters" value="stat,log4j"/>
+        <property name="password" value="${jdbc.password}"/>
+        <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall，去掉后监控界面sql无法统计 -->
+        <property name="filters" value="stat"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
         <!-- 初始化连接数量 -->
@@ -39,37 +44,117 @@
         <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
         <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
 
-        <property name="validationQuery" value="SELECT 'x'"/>
-        <property name="testWhileIdle" value="true"/>
-        <property name="testOnBorrow" value="false"/>
-        <property name="testOnReturn" value="false"/>
+        <property name="validationQuery" value="${validationQuery}"/>
+        <property name="testWhileIdle" value="${testWhileIdle}"/>
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
         <!-- 打开removeAbandoned功能(连接泄漏监测，怀疑存在泄漏之后再打开) 超过时间限制是否回收 -->
-        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
         <!-- 180秒，也就是3分钟, 打开removeAbandoned功能  -->
-        <property name="removeAbandonedTimeout" value="180"/>
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
         <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
-        <property name="poolPreparedStatements" value="false"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <property name="poolPreparedStatements" value="${poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${maxPoolPreparedStatementPerConnectionSize}"/>
         <!-- 关闭abanded连接时输出错误日志 -->
         <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="logFilter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- Druid数据库连接池 -->
+    <bean id="CpaDataSource2" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc2.url}"/>
+        <property name="username" value="${jdbc2.username}"/>
+        <property name="password" value="${jdbc2.password}"/>
+        <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall -->
+        <property name="filters" value="stat"/>
+        <!-- 最大并发连接数 -->
+        <property name="maxActive" value="${maxActive}"/>
+        <!-- 初始化连接数量 -->
+        <property name="initialSize" value="${initialSize}"/>
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="${maxWait}"/>
+        <!-- 最小空闲连接数 -->
+        <property name="minIdle" value="${minIdle}"/>
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="${timeBetweenEvictionRunsMillis}"/>
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="${minEvictableIdleTimeMillis}"/>
+
+        <property name="validationQuery" value="${validationQuery}"/>
+        <property name="testWhileIdle" value="${testWhileIdle}"/>
+        <property name="testOnBorrow" value="${testOnBorrow}"/>
+        <property name="testOnReturn" value="${testOnReturn}"/>
+        <!-- 打开removeAbandoned功能(连接泄漏监测，怀疑存在泄漏之后再打开) 超过时间限制是否回收 -->
+        <property name="removeAbandoned" value="${removeAbandoned}"/>
+        <!-- 180秒，也就是3分钟, 打开removeAbandoned功能  -->
+        <property name="removeAbandonedTimeout" value="${removeAbandonedTimeout}"/>
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+        <property name="poolPreparedStatements" value="${poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${maxPoolPreparedStatementPerConnectionSize}"/>
+        <!-- 关闭abanded连接时输出错误日志 -->
+        <property name="logAbandoned" value="true"/>
+        <!-- 监控数据库 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="logFilter"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 输出的SQL-->
+    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
+        <property name="statementExecutableSqlLogEnable" value="true"/>
+    </bean>
+
+
+    <!-- 编写spring 配置文件的配置多数源映射关系(多数据源的作用主要是为了读写分离) ,动态控制数据源的类-->
+    <bean id="dynamicDataSource" class="cn.kanyun.cpa.dao.common.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <entry value-ref="CpaDataSource" key="master"></entry>
+                <entry value-ref="CpaDataSource2" key="slave"></entry>
+            </map>
+        </property>
+        <!--默认数据源-->
+        <property name="defaultTargetDataSource" ref="CpaDataSource">
+        </property>
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
+    <!--    <bean id="sessionFactory"
+              class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+            <property name="dataSource" ref="CpaDataSource"/>
+            &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
+            <property name="configLocation">
+                <value>classpath:hibernate.cfg.xml</value>
+            </property>
+            &lt;!&ndash;Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置&ndash;&gt;
+            &lt;!&ndash;<property name="hibernateProperties">&ndash;&gt;
+            &lt;!&ndash;<props>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>&ndash;&gt;
+            &lt;!&ndash;<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>&ndash;&gt;
+            &lt;!&ndash;</props>&ndash;&gt;
+            &lt;!&ndash;</property>&ndash;&gt;
+        </bean>-->
+
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
-        <property name="dataSource" ref="CpaDataSource"/>
+        <property name="dataSource" ref="dynamicDataSource"/>
         <!--将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误-->
         <property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
         </property>
-        <!--Hibernate与Spring整合有两种方式，一种是写hibernate.cfg.xml文件，一种不写hibernate的配置文件它和spring配置文件写在一起，故需如下配置-->
-        <!--<property name="hibernateProperties">-->
-            <!--<props>-->
-                <!--<prop key="hibernate.connection.url">jdbc:mysql://localhost:3306/cpa</prop>-->
-                <!--<prop key="hibernate.connection.driver_class">com.mysql.jdbc.Driver</prop>-->
-            <!--</props>-->
-        <!--</property>-->
     </bean>
+
     <!-- 报错找不到“找不到类型返回值的转换器”解决方案，同时应该加入这两个jar包 -->
     <mvc:annotation-driven>
         <mvc:message-converters register-defaults="true">
@@ -84,14 +169,95 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-    <!-- 启动对@AspectJ注解的支持 -->
-    <aop:aspectj-autoproxy/>
+    <!-- 启动对@AspectJ注解的支持,激活自动代理功能 -->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
     <!-- 事务配置 ，此不是必须的，只有需要支持事务控制的工程在才需要，不过一般都需要，所以一般都需要配置这个 -->
     <!-- 配置事务管理器bean,使用HibernateTransactionManager事务管理器 -->
     <bean id="transactionManager"
-          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/> <!-- 事务中获取session时，是从这里获取的 -->
+          class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <!--是否自动检测数据源,默认为true,如果设为flase,那么实体类发生变化,将不会自动更新表(生产环境适用),为ture将触发检测表机制,更改对象为默认数据源,其他节点的数据源依靠数据库本身的同步机制完成更新-->
+        <property name="autodetectDataSource" value="true" />
+        <!-- 事务中获取session时，是从这里获取的 -->
+        <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
-    <!-- 注解实现事务 -->
-    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <!--可选，使用动态数据源读写分离时必选 -->
+    <!--<bean id="transactionManager" class="cn.kanyun.cpa.dao.common.DynamicTransactionManager">-->
+    <!--<property name="sessionFactory" ref="sessionFactory" />-->
+    <!--</bean>-->
+
+    <!-- 缓存配置 -->
+    <!-- 启用缓存注解功能(请将其配置在Spring主配置文件中) -->
+    <!--<cache:annotation-driven cache-manager="cacheManager"/>-->
+    <!-- Spring自己的基于java.util.concurrent.ConcurrentHashMap实现的缓存管理器(该功能是从Spring3.1开始提供的) -->
+    <!--
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean name="myCache" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean"/>
+            </set>
+        </property>
+    </bean>
+     -->
+    <!-- 若只想使用Spring自身提供的缓存器,则注释掉下面的两个关于Ehcache配置的bean,并启用上面的SimpleCacheManager即可 -->
+    <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:ehcache.xml"/>
+        <property name="shared" value="true"/>
+    </bean>
+    <!-- Spring提供的基于的Ehcache实现的缓存管理器 -->
+    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处天上新设置的bead id-->
+    <!--<bean id="cacheManager"-->
+          <!--class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
+        <!--<property name="cacheManager" ref="ehCacheManagerFactory"/>-->
+    <!--</bean>-->
+
+    <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
+    <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->
+    <!--拦截器使用责任链模式,拦截器是基于java的反射机制的，而过滤器是基于函数回调。两者都是Aop的实现，拦截器不依赖与servlet容器，过滤器依赖与servlet容器。拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。-->
+    <!--在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。-->
+    <!--在mvc:interceptors标签下声明interceptor主要有两种方式：-->
+    <!--（1）直接定义一个Interceptor实现类的bean对象。使用这种方式声明的Interceptor拦截器将会对所有的请求进行拦截。-->
+    <!--（2）使用mvc:interceptor标签进行声明。使用这种方式进行声明的Interceptor可以通过mvc:mapping子标签来定义需要进行拦截的请求路径。-->
+    <mvc:interceptors>
+        <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+        <!--也就是说在此处定义的拦截器,是拦截所有action-->
+        <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        <mvc:interceptor>
+            <!--path="/**/*"表示拦截所有请求跟直接定义在mvc:interceptors根下效果一致,当然也可以自己定义拦截哪些请求-->
+            <mvc:mapping path="/**/*"/>
+            <!--mvc:exclude-mapping表示在mvc:interceptor的mvc:mapping拦截方法下,不拦截哪些请求-->
+            <!--path="/static/**"表示不拦截根目录下static目录下的所有文件-->
+            <mvc:exclude-mapping path="/static/**"/>
+            <!--path="/**/*.html"表示不拦截所有的以html结尾的文件-->
+            <mvc:exclude-mapping path="/**/*.html"/>
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <!--也就是说在此处定义的拦截器,是拦截所有上面定义的action-->
+            <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!--声明式事务配置-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <!--配置事务的传播特性-->
+        <!--<tx:attributes>-->
+        <!--<tx:method name="*" propagation="REQUIRED" />-->
+        <!--<tx:method name="*" read-only="true"/>-->
+        <!--</tx:attributes>-->
+    </tx:advice>
+    <!-- 那些类的哪些方法参与事务 -->
+    <aop:config>
+        <aop:pointcut id="allServiceMethod" expression="execution(* cn.kanyun.cpa.service.*.*(..))"/>
+        <aop:advisor pointcut-ref="allServiceMethod" advice-ref="txAdvice"/>
+    </aop:config>
+
+    <!-- 注解实现事务 @Transactional 当注解标于类前时，标示类中所有方法都进行事物处理,（给Service层配置事务是比较好的方式，因为一个Service层方法操作可以关联到多个DAO的操作。在Service层执行这些Dao操作，多DAO操作有失败全部回滚，成功则全部提交。）-->
+    <!--@Transactional 只能被应用到public方法上, 对于其它非public的方法,如果标记了@Transactional也不会报错,但方法没有事务功能.-->
+    <!--@Transactional 注解可以被应用于接口定义和接口方法、类定义和类的 public 方法上,Spring团队的建议是你在具体的类（或类的方法）上使用 @Transactional 注解，而不要使用在类所要实现的任何接口上。你当然可以在接口上使用 @Transactional 注解，但是这将只能当你设置了基于接口的代理时它才生效。因为注解是不能继承的，这就意味着如果你正在使用基于类的代理时，那么事务的设置将不能被基于类的代理所识别，而且对象也将不会被事务代理所包装（将被确认为严重的）。因此，请接受Spring团队的建议并且在具体的类上使用 @Transactional 注解。-->
+    <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
+
+    <!--引入其他模块配置文件，这样被引入的配置文件就不用写在web.xml中了，但需要注意的是resource中引入的文件的地址要用相对路径，不然会出错。-->
+    <!--<import resource="classpath:hibernate.cfg.xml"/>-->
 </beans>  

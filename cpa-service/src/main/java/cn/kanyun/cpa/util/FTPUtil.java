@@ -1,15 +1,20 @@
 package cn.kanyun.cpa.util;
 
-import java.io.*;
-
-import org.apache.commons.net.PrintCommandListener;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.RandomAccessFile;
 
 /**
  * 支持断点续传的FTP实用类
@@ -21,7 +26,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class FTPUtil {
-    private static final Logger logger = Logger.getLogger(FTPUtil.class);
+    private static final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
     /**
      * 在spring中配置<context:property-placeholder/>，可以在java类中以这种方式获取配置的属性值
      * 但是需要注意的是,需在此类添加@Commont注解，同时在spring配置文件中配置自动扫描，在调用该类时使用注入方式，而不是new

@@ -17,7 +17,7 @@
      如 @Value("${FTP_ADDRESS}")
      private String FTP_ADDRESS;
      前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
-    <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:db.properties,classpath:ftp.properties" ignore-unresolvable="true"/>
 
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
     <!-- Spring的扫描仅仅是扫描@Service @Repository，@Components标记!!!@Controller是有SpingMVC来扫描的 -->
@@ -30,7 +30,8 @@
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
         <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall，去掉后监控界面sql无法统计 -->
-        <property name="filters" value="stat,log4j"/>
+        <!--filter若使用log4j，tomcat lib需添加log4j.jar；若使用slf4j基于logback,需添加slf4j-api-->
+        <property name="filters" value="stat,wall,slf4j"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
         <!-- 初始化连接数量 -->
@@ -74,7 +75,8 @@
         <property name="username" value="${jdbc2.username}"/>
         <property name="password" value="${jdbc2.password}"/>
         <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall -->
-        <property name="filters" value="stat,log4j"/>
+        <!--filter若使用log4j，tomcat lib需添加log4j.jar；若使用slf4j基于logback,需添加slf4j-api-->
+        <property name="filters" value="stat,wall,slf4j"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
         <!-- 初始化连接数量 -->
@@ -111,7 +113,7 @@
     </bean>
 
     <!-- 输出的SQL-->
-    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+    <bean id="logFilter" class="com.alibaba.druid.filter.logging.Slf4jLogFilter">
         <property name="statementExecutableSqlLogEnable" value="true"/>
     </bean>
 

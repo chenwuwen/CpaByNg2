@@ -3,7 +3,6 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -12,6 +11,8 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ import java.util.Set;
  */
 public class TestHibernet {
     //获得log4j的记录器
-    private Logger logger = Logger.getLogger(TestHibernet.class);
+    private static final Logger logger = LoggerFactory.getLogger(TestHibernet.class);
     public static void main(String[]args){
 
     }
@@ -38,7 +39,7 @@ public class TestHibernet {
     public void getsession(){
         Session session1 = HibernateSessionFactory.getSessionFactory().openSession();
         Session session = HibernateSessionFactory.getSessionFactory().getCurrentSession();
-        logger.info(session);
+        logger.info(String.valueOf(session));
         System.out.println(session1);
     }
     @Test
