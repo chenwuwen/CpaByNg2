@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--logback配置文件-->
+<!--logback在性能上要明显优于log4j，尤其是在大量并发的环境下，并且新增了一些log4j所没有的功能（如将日志文件压缩成zip包等）-->
+<!--  logback与log4j一样，也需要在classpath中编写配置文件。但logback配置文件似乎比log4j复杂一些：log4j不仅支持xml格式的配置文件，
+  还支持properties格式的，而logback只支持xml格式的。好在官方提供了一个在线工具，可以将log4j的properties文件直接转换成logback的xml文件，
+  地址如下：http://logback.qos.ch/translator/  此配置文件，就是通过工具转换过来的-->
+<configuration>
+    <appender name="appendConsole" class="ch.qos.logback.core.ConsoleAppender">
+        <encoding>UTF-8</encoding>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %p %C.%M(%L):%m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+    </appender>
+    <appender name="appendFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+        <File>${cpa.root}/WEB-INF/logs/cpa.log</File>
+        <Append>true</Append>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} [%t] [%c] [%p] - %m%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>error</level>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+            <maxIndex>1</maxIndex>
+            <FileNamePattern>${cpa.root}/WEB-INF/logs/cpa.log.%i</FileNamePattern>
+        </rollingPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+    <root level="info">
+        <appender-ref ref="appendConsole"/>
+        <appender-ref ref="appendFile"/>
+    </root>
+</configuration>
