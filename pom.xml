@@ -334,11 +334,11 @@
                 <version>2.3.0</version>
             </dependency>
             <!--日志记录-->
-            <dependency>
-                <groupId>commons-logging</groupId>
-                <artifactId>commons-logging</artifactId>
-                <version>1.2</version>
-            </dependency>
+            <!--<dependency>-->
+            <!--<groupId>commons-logging</groupId>-->
+            <!--<artifactId>commons-logging</artifactId>-->
+            <!--<version>1.2</version>-->
+            <!--</dependency>-->
             <!--slf4j的核心包,只有日志的接口，并没有实现-->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -346,17 +346,17 @@
                 <version>1.7.9</version>
             </dependency>
             <!--slf4j转换各日志实现包-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>1.7.9</version>
-            </dependency>
+            <!--<dependency>-->
+            <!--<groupId>org.slf4j</groupId>-->
+            <!--<artifactId>slf4j-log4j12</artifactId>-->
+            <!--<version>1.7.9</version>-->
+            <!--</dependency>-->
             <!--日志实现包-->
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>1.2.17</version>
-            </dependency>
+            <!--<dependency>-->
+            <!--<groupId>log4j</groupId>-->
+            <!--<artifactId>log4j</artifactId>-->
+            <!--<version>1.2.17</version>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
@@ -368,9 +368,14 @@
                 <version>0.1.4</version>
             </dependency>
             <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>1.2.3</version>
+            </dependency>
+            <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>
-                <version>1.7.25</version>
+                <version>1.7.9</version>
             </dependency>
 
             <!--Excel导入导出-->
@@ -383,7 +388,7 @@
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml-schemas</artifactId>
-                <version>3.17</version>
+                <version>3.9</version>
             </dependency>
             <!--word模板渲染组件-->
             <dependency>

@@ -25,7 +25,7 @@
         /logs：就是tomcat下的日志路径，
         /ehrlog：如果没有目录会默认创建
     -->
-    <substitutionProperty name="logbase" value="${catalina.base}/logs/ehrLog/"/>
+    <substitutionProperty name="logbase" value="${catalina.base}/logs/cpaLog/"/>
     <!-- 时间戳：这个时间戳可以作为每日日志的名称 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
     <!-- 日志级别 -->
@@ -86,7 +86,13 @@
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
+        <!--是否追加-->
         <append>false</append>
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+            <!--<level>INFO</level>-->
+            <!--<onMatch>ACCEPT</onMatch>-->
+            <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
 
     </appender>
 
@@ -177,7 +183,7 @@
             additivity：是否要把当前的日志级别，给root根logger
             appender-ref：appender的引用
          -->
-    <logger name="cn.kanyun.cpa" level="trace" additivity="true">
+    <logger name="cn.kanyun.cpa" level="debug" additivity="true">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="logFile"/>
     </logger>
