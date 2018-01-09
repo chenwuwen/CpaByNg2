@@ -37,5 +37,14 @@
             <groupId>javax.persistence</groupId>
             <artifactId>persistence-api</artifactId>
         </dependency>
+
+        <!--参数校验，实体类字段可加@NotEmpty注解，且与@Controller方法参数@Valid注解配合使用-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
     </dependencies>
+
+
 </project>

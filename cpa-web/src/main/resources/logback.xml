@@ -16,7 +16,8 @@
          当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。
          默认值为false。
                   -->
-<configuration scan="true">
+<configuration scan="true" debug="true" scanPeriod="60 seconds">
+
     <!-- 日志存放路径 勿在 LogBack 的配置中使用相对路径
         下面的标签可以自己定义
         name：相当于Map的key
@@ -35,7 +36,7 @@
     <!-- 日志路径 -->
     <property name="log.base" value="logs"/>
     <!-- 模块名称， 影响日志配置名，日志文件名 -->
-    <property name="log.moduleName" value="ntytest"/>
+    <property name="log.moduleName" value="cpa"/>
     <!-- 日志文件大小 -->
     <property name="log.max.size" value="100MB"/>
 
@@ -52,62 +53,59 @@
             <pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%thread] [%level] - %m%n
             </pattern>
+            <charset>UTF-8</charset>
         </encoder>
     </appender>
-    <!-- 把日志存储
-        encoding：日志的编码
-        file：指定当前生成的日志文件名称
-        rollingPolicy：滚动策略
-        FileNamePattern：移动文件最后的名称，跟file标签结合使用，
-        比如file里面的内容是  1.txt
-        那么，FileNamePattern里面写的是2.txt，那么最后文件名就为2.txt
-        如果最后结尾是gz或者zip，那么，就会自动打成压缩包
-        -->
-    <appender name="logFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+    <!--普通日志记录-->
+    <appender name="logFile" class="ch.qos.logback.core.FileAppender">
         <!-- 编码 -->
         <Encoding>UTF-8</Encoding>
+        <!-- 日志名称 -->
+        <file>cpa.log</file>
+        <!-- 布局 -->
+        <encoder>
+            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
+        <append>false</append>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 -->
+        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
+        <!--<level>INFO</level>-->
+        <!--<onMatch>ACCEPT</onMatch>-->
+        <!--<onMismatch>DENY</onMismatch>-->
+        <!--</filter>-->
+
+    </appender>
+
+    <!-- 把日志存储
+       encoding：日志的编码
+       file：指定当前生成的日志文件名称
+       rollingPolicy：滚动策略
+       FileNamePattern：移动文件最后的名称，跟file标签结合使用，
+       比如file里面的内容是  1.txt
+       那么，FileNamePattern里面写的是2.txt，那么最后文件名就为2.txt
+       如果最后结尾是gz或者zip，那么，就会自动打成压缩包
+       -->
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
+    <appender name="rollingLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoding>UTF-8</encoding>
         <!-- 按照时间来 -->
         <file>${logbase}ehr.${bySecond}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
-            <!-- 按“天”生成日志文件，"%i"代表第几个文件（从0自增），并压缩成.zip包 -->
-            <FileNamePattern>${logbase}ehr.${label}.%d{yyyy-MM-dd}.%i.log.zip</FileNamePattern>
+            <!-- 按“天”生成日志文件，"%i"代表第几个文件（从0自增），如果后缀是zip或gzip,那么生成文件后自动压缩成.zip包 -->
+            <FileNamePattern>${LOG_HOME}/NTY-CORE-ERROR-%d{yyyy-MM-dd}-%i.log.zip
+            </FileNamePattern>
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
             <!-- 在基于时间的基础上，基于文件大小生成日志文件策略 -->
             <TimeBasedFileNamingAndTriggeringPolicy
                     class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <!-- 单个文件不能大于1024MB -->
-                <MaxFileSize>1024MB</MaxFileSize>
-            </TimeBasedFileNamingAndTriggeringPolicy>
-        </rollingPolicy>
-        <!-- 布局 -->
-        <encoder>
-            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
-        </encoder>
-        <!--是否追加-->
-        <append>false</append>
-        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-            <!--<level>INFO</level>-->
-            <!--<onMatch>ACCEPT</onMatch>-->
-            <!--<onMismatch>DENY</onMismatch>-->
-        <!--</filter>-->
-
-    </appender>
-
-    <!-- 配置错误日志，filter设置日志级别为ERROR -->
-    <appender name="ERROR-FILE"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <encoding>UTF-8</encoding>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <!--日志文件输出的文件名 -->
-            <FileNamePattern>${LOG_HOME}/NTY-CORE-ERROR-%d{yyyy-MM-dd}-%i.log
-            </FileNamePattern>
-            <!--日志文件保留天数 -->
-            <MaxHistory>30</MaxHistory>
-            <TimeBasedFileNamingAndTriggeringPolicy
-                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <MaxFileSize>1024MB</MaxFileSize>
             </TimeBasedFileNamingAndTriggeringPolicy>
         </rollingPolicy>
@@ -118,6 +116,9 @@
                 %msg%n
             </pattern>
         </encoder>
+        <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
+        <append>false</append>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -187,15 +188,21 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="logFile"/>
     </logger>
+
     <!-- 默认根节点是INFO级别的日志 -->
     <!-- root：logger的根节点，就这一个，默认名称就是root
         level：日志级别
         appender-ref：确定使用哪个appender
          -->
+    <!-- 特殊的<logger>元素，是根logger。只有一个level属性，应为已经被命名为"root".
+       level:设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。
+       <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。 -->
     <root level="info">
         <!-- 启用文件记录日志 -->
         <appender-ref ref="logFile"/>
         <!-- 启用控制台输出日志 -->
         <appender-ref ref="STDOUT"/>
+        <!--启用回滚日志-->
+        <appender-ref ref="rollingLog"/>
     </root>
 </configuration>

@@ -22,6 +22,10 @@
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
     <!-- Spring的扫描仅仅是扫描@Service @Repository，@Components标记!!!@Controller是有SpingMVC来扫描的 -->
     <context:component-scan base-package="cn.kanyun"/>
+
+    <!--支持hibernate-validator框架注解-->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+
     <!-- Druid数据库连接池 -->
     <bean id="CpaDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">

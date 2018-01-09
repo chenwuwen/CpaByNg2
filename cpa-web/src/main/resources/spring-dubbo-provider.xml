@@ -32,7 +32,7 @@
     <!-- 使用multicast广播注册中心暴露服务地址 -->
     <!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
     <!--使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper,设置check="false"，则在项目启动时，注册中心不存在也不报错-->
-    <dubbo:registry address="zookeeper://115.47.154.107:2181" check="false"/>
+    <dubbo:registry address="zookeeper://115.47.155.3:2181" check="false"/>
 
     <!-- 用dubbo协议在20880端口暴露服务 -->
     <!--协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受-->

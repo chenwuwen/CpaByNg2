@@ -11,6 +11,10 @@
         <groupId>cn.kanyun</groupId>
         <!-- 被继承的父项目的版本 -->
         <version>0.0.1-SNAPSHOT</version>
+        <!--relativePath配置出现在，项目工程是parent或者aggregation（即mutil-module的）的，也就是说出现在工程的子模块中-->
+        <!--relativePath是可选的,maven会首先搜索这个地址(默认值为../pom.xml,代表查找地址为当前模块的上级目录下的pom文件),在搜索本地远程repositories之前.-->
+        <!--查找顺序：relativePath元素中的地址–本地仓库–远程仓库,若设定一个空值将始终从仓库中获取，不从本地路径获取，如<relativePath />-->
+        <!--<relativePath></relativePath>-->
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cpa-web</artifactId>
@@ -86,6 +90,12 @@
             <type>pom</type>
         </dependency>
 
+        <!--参数校验 @Controller方法参数可加@Valid注解 ，且与实体类字段@NotEmpty注解配合使用-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
         <!--JSON解析和序列化-->
         <dependency>
             <groupId>net.sf.json-lib</groupId>
@@ -153,7 +163,6 @@
         </dependency>
 
 
-
         <!--Excel导入导出-->
         <dependency>
             <groupId>org.apache.poi</groupId>
@@ -201,8 +210,8 @@
                     <groupId>io.netty</groupId>
                 </exclusion>
                 <exclusion>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -264,7 +273,7 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
         </dependency>
-      
+
 
     </dependencies>
 

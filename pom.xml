@@ -37,7 +37,7 @@
         <repository>
             <id>nexus-repos</id>
             <name>Team Nexus Repository</name>
-            <url>http://115.47.154.107:8081/nexus/content/groups/public</url>
+            <url>http://115.47.155.3:8081/nexus/content/groups/public</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -269,6 +269,14 @@
                         <artifactId>jboss-logging</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <!--需要注意的是，Hibernate Validator 与 Hibernate 没有任何依赖关系，唯一有联系的只是都属于 JBoss 公司的开源项目而已。然后，我们需要在 Spring 配置文件中开启该特性，需添加如下配置：-->
+            <!--<bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>-->
+            <!--使用该框架，在javabean上加上@NotEmpty注解，并且在@Controller方法参数中添加@Valid注解实现参数验证,详情百度框架用法-->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-validator</artifactId>
+                <version>5.1.2.Final</version>
             </dependency>
             <!--使用Ehcache做Hibernate二级缓存,之前一直想用redis做二级缓存,但是redis还未有实现的案例,
             也有想过使用hibernate memcached来做,但是还需要安装memcached,也是不妥,最有优势的是采用JbossCache做二级缓存,其功能强大,但是又会造成方法冲突

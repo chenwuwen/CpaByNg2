@@ -28,6 +28,8 @@
     <aop:aspectj-autoproxy proxy-target-class="true"/>
 
     <!-- handlermapping 支持@RequestMapping,@ReponseBody,@Exceptionhandler 这是最简单的支持注解的方式,如果需要全局定义一些返回的值使用下面配置-->
+    <!-- 该配置会自动注册RequestMappingHandlerMapping与RequestMappingHandlerAdapter两个Bean，这是SpringMVC为@Controllers分发请求所必需的，
+        并提供了数据绑定支持、@NumberFormatannotation支持、 @DateTimeFormat支持、@Valid支持、读写XML的支持和读写JSON的支持等功能。 -->
     <!--<mvc:annotation-driven/>-->
     <!--配置-如果返回对象中有值为Null则返回JSON时不将其返回(即Key也消失了),以节省网络传输-->
     <!--有两种方法设置不返回null值属性.一种是如下配置,一种则是在被返回对象的类上添加注解@JsonInclude(Include.NON_NULL)即可-->

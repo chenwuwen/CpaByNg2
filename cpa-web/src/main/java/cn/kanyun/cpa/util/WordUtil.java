@@ -1,6 +1,5 @@
 package cn.kanyun.cpa.util;
 
-import cn.kanyun.cpa.controller.itempool.CpaRepertoryController;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
@@ -8,18 +7,14 @@ import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.management.resources.agent;
 
 import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigInteger;
 import java.net.URLEncoder;
-import java.nio.channels.FileChannel;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 /**
  * 实现Word模板读取替换内容输出

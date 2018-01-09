@@ -51,10 +51,16 @@
     <!--log4j配置结束-->
 
     <!--logback配置开始-->
-    <!--<context-param>-->
-        <!--<param-name>logbackConfigLocation</param-name>-->
-        <!--<param-value>classpath:logback.xml</param-value>-->
-    <!--</context-param>-->
+    <context-param>
+        <!--logback配置优先级顺序-->
+        <!--logback首先在classpath寻找logback.groovy文件，-->
+        <!--如果没找到，继续寻找logback-test.xml文件-->
+        <!--如果没找到，继续寻找logback.xml文件-->
+        <!--如果仍然没找到，则使用默认配置（打印到控制台）-->
+        <!--所以如果配置文件不重命名的话 不需要在web.xml中添加logbackConfigLocation,它自己会去找-->
+        <param-name>logbackConfigLocation</param-name>
+        <param-value>classpath:logback.xml</param-value>
+    </context-param>
     <!--<listener>-->
         <!--<listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>-->
     <!--</listener>-->
@@ -197,6 +203,32 @@
     </filter>
     <filter-mapping>
         <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 通过CORS技术实现AJAX跨域访问 -->
+    <filter>
+        <filter-name>corsFilter</filter-name>
+        <filter-class>cn.kanyun.cpa.filter.CorsFilter</filter-class>
+        <init-param>
+            <param-name>allowOrigin</param-name>
+            <param-value>http://localhost:4200</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowMethods</param-name>
+            <param-value>GET,POST,PUT,DELETE,OPTIONS</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowCredentials</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>allowHeaders</param-name>
+            <param-value>Content-Type,X-Token</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>corsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
