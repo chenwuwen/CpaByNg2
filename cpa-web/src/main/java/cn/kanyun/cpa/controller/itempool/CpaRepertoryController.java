@@ -90,7 +90,7 @@ public class CpaRepertoryController {
 
     /**
      * @Author: kanyun
-     * @Description: 保存单元测试（试题）
+     * @Description: 新增试题【保存单元测试】
      * @Date: 2017/9/18 17:21
      * @params: , List<CpaOption> cpaOptions,CpaSolution cpaSolution
      */
@@ -140,6 +140,26 @@ public class CpaRepertoryController {
             logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
         }
 
+    }
+
+    /**
+     * @describe: 删除试题【单元测试】
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/9  17:40
+     */
+    @RequestMapping("/delUnitExam/{reId}")
+    @ResponseBody
+    public CpaResult delUnitExam(@PathVariable("reId") Integer reId) {
+        CpaResult result = new CpaResult();
+        try {
+            cpaRepertoryService.deleteById(reId);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            result.setState(CpaConstants.OPERATION_ERROR);
+            logger.error("ERROR：/api/unitExam/delUnitExam " + e);
+        }
+        return result;
     }
 
 }
