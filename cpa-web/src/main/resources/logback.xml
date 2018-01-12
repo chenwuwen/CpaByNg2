@@ -18,15 +18,15 @@
                   -->
 <configuration scan="true" debug="true" scanPeriod="60 seconds">
 
-    <!-- 日志存放路径 勿在 LogBack 的配置中使用相对路径
+    <!-- 日志存放路径 可相对、和绝对路径
         下面的标签可以自己定义
         name：相当于Map的key
         value：就是map的value
         ${catalina.base}是tomcat的当前路径
-        /logs：就是tomcat下的日志路径，
-        /ehrlog：如果没有目录会默认创建
+        /logs：此处路径是相对classPath路径，
+        没有目录会默认创建
     -->
-    <substitutionProperty name="logbase" value="${catalina.base}/logs/cpaLog/"/>
+    <substitutionProperty name="logBase" value="${catalina.base}/logs/cpa/"/>
     <!-- 时间戳：这个时间戳可以作为每日日志的名称 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
     <!-- 日志级别 -->
@@ -39,6 +39,8 @@
     <property name="log.moduleName" value="cpa"/>
     <!-- 日志文件大小 -->
     <property name="log.max.size" value="100MB"/>
+    <!--定义生成日志路径,与第一行配置的不同,第一行配置的路径是相对tomcat路径,此处路径是相对classPath路径-->
+    <property name="LOG_HOME" value="/logs"/>
 
     <!-- appender：
         name相当于一个名称
@@ -62,7 +64,7 @@
         <!-- 编码 -->
         <Encoding>UTF-8</Encoding>
         <!-- 日志名称 -->
-        <file>cpa.log</file>
+        <file>${logBase}INFO级别.${bySecond}.log</file>
         <!-- 布局 -->
         <encoder>
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
@@ -72,11 +74,11 @@
         <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
         <append>false</append>
         <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 -->
-        <!--<filter class="ch.qos.logback.classic.filter.LevelFilter">-->
-        <!--<level>INFO</level>-->
-        <!--<onMatch>ACCEPT</onMatch>-->
-        <!--<onMismatch>DENY</onMismatch>-->
-        <!--</filter>-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
 
     </appender>
 
@@ -94,11 +96,11 @@
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoding>UTF-8</encoding>
         <!-- 按照时间来 -->
-        <file>${logbase}ehr.${bySecond}.log</file>
+        <file>${logBase}ERROR级别.${bySecond}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
             <!-- 按“天”生成日志文件，"%i"代表第几个文件（从0自增），如果后缀是zip或gzip,那么生成文件后自动压缩成.zip包 -->
-            <FileNamePattern>${LOG_HOME}/NTY-CORE-ERROR-%d{yyyy-MM-dd}-%i.log.zip
+            <FileNamePattern>${LOG_HOME}ERROR级别-%d{yyyy-MM-dd}-%i.log.zip
             </FileNamePattern>
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -135,7 +137,7 @@
         <encoding>UTF-8</encoding>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
-            <FileNamePattern>${LOG_HOME}/NTY-CORE-MONITOR-%d{yyyy-MM-dd}-%i.log
+            <FileNamePattern>${LOG_HOME}monitor日志-%d{yyyy-MM-dd}-%i.log
             </FileNamePattern>
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -152,7 +154,7 @@
             </pattern>
         </encoder>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>INFO</level>
+            <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
             <onMismatch>DENY</onMismatch>
         </filter>

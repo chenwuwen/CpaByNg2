@@ -1,10 +1,11 @@
 package cn.kanyun.cpa.controller.itempool;
 
+import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.entity.ExamEnum;
+import cn.kanyun.cpa.model.myenum.ExamEnum;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -15,14 +16,13 @@ import cn.kanyun.cpa.util.WordUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -60,29 +60,29 @@ public class CpaRepertoryController {
             Page page = new Page();
             pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
-            String key = where + StringUtils.join(params) + pageNo + pageSize;
+//            key由当前类名+方法名+查询条件+参数+分页组成,尽可能保证key的唯一性
+            String key = this.getClass().getName() + Thread.currentThread().getStackTrace()[1].getMethodName() + where + StringUtils.join(params) + pageNo + pageSize;
             logger.info("Redis缓存的Key：" + key);
             try {
                 result = (CpaResult) redisService.getCacheObject(key);
             } catch (Exception e) {
-                logger.error("/api/unitExam/getUnitExam Redis Error: " + e);
+                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}" + e);
             }
             if (null == result) {
-                //总记录数
-                Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
-                page.setTotalRecords(totalRecords.intValue());
                 Integer firstResult = page.countOffset(pageNo, pageSize);
                 result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
-                //总页数
+                //总记录数
+                page.setTotalRecords(result.getTotalCount().intValue());
+                //总页数(返回的记录中已包含总记录数,无需再次查询)
                 result.setTotalPage(page.getTotalPages());
                 try {
                     redisService.setCacheObject(key, result);
                 } catch (Exception e) {
-                    logger.error("/api/unitExam/getUnitExam Redis Error: " + e);
+                    logger.error("ERROR： /api/unitExam/getUnitExam Redis Error: {}" + e);
                 }
             }
         } catch (Exception e) {
-            logger.error("/api/unitExam/getUnitExam Error: " + e);
+            logger.error("ERROR： /api/unitExam/getUnitExam Error: {}" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
@@ -105,7 +105,7 @@ public class CpaRepertoryController {
             result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
-            logger.error("/api/unitExam/addUnitExam  新增试题异常：  " + e);
+            logger.error("ERROR： /api/unitExam/addUnitExam  新增试题异常：  {}" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
@@ -128,19 +128,55 @@ public class CpaRepertoryController {
         try {
             Object[] params = {typeCode};
             String where = "o.testType=? ";
-            Long totalRecords = cpaRepertoryService.getTotalCount(where, params);
             CpaResult result = cpaRepertoryService.getUnitExam(-1, -1, where, params);
             List<CpaRepertoryDto> list = (List) result.getData();
             Map map = new HashMap<>();
             map.put("cpaRepertoryDtos", list);
-            map.put("total", totalRecords);
+            map.put("total", result.getTotalCount());
             map.put("type", ExamEnum.valueOf(typeCode.toUpperCase()));
             WordUtil.exportWord(map, response);
         } catch (Exception e) {
-            logger.error("/api/unitExam/exportWord  导出word试题异常：  " + e);
+            logger.error("ERROR：/api/unitExam/exportWord  导出word试题异常：  {}" + e);
         }
 
     }
+
+    /**
+     * @describe: 获取单个试题详情
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/12  13:38
+     */
+    @RequestMapping("/getExamDetail/{id}")
+    public CpaResult getExamDetail(@PathVariable("id") Integer id) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaRepertory cpaRepertory = cpaRepertoryService.findById(id);
+            CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
+            cpaRepertoryDto.setTestStem(cpaRepertory.getTestStem());
+            cpaRepertoryDto.setBresult(cpaRepertory.getCpaSolution().getResult());
+            List<CpaOptionDto> cpaOptionDtoList = new ArrayList<>();
+            Set<CpaOption> cpaOptions = cpaRepertory.getCpaOptions();
+            List<CpaOption> cpaOptionList = new ArrayList(new HashSet(cpaOptions));
+//        Java 8 Lambda表达式对列表进行排序,但是这个方法还可以在进行精简
+//        Collections.sort(cpaOptionList, (o1, o2) -> o1.getSelectData().compareTo(o2.getSelectData()));
+            Collections.sort(cpaOptionList, Comparator.comparing(CpaOption::getSelectData));
+            cpaOptionList.forEach(cpaOption -> {
+                CpaOptionDto cpaOptionDto = new CpaOptionDto();
+                BeanUtils.copyProperties(cpaOption, cpaOptionDto);
+                cpaOptionDtoList.add(cpaOptionDto);
+            });
+            cpaRepertoryDto.setCpaOptionDtos(cpaOptionDtoList);
+            result.setData(cpaRepertoryDto);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR：/api/unitExam/getExamDetail: {}" + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+        return result;
+
+    }
+
 
     /**
      * @describe: 删除试题【单元测试】
@@ -157,7 +193,58 @@ public class CpaRepertoryController {
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             result.setState(CpaConstants.OPERATION_ERROR);
-            logger.error("ERROR：/api/unitExam/delUnitExam " + e);
+            logger.error("ERROR：/api/unitExam/delUnitExam: {}" + e);
+        }
+        return result;
+    }
+
+    /**
+     * @describe: 修改试题
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/11 0011 11:39
+     */
+    @RequestMapping("/updUnitExam")
+    @ResponseBody
+    public CpaResult updUnitExam(ItemForm itemForm) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
+            List<CpaOption> cpaOptions = itemForm.getCpaOptions();
+            CpaSolution cpaSolution = itemForm.getCpaSolution();
+            result.setData(cpaRepertoryService.updUnitExam(cpaRepertory, cpaOptions, cpaSolution));
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            result.setState(CpaConstants.OPERATION_ERROR);
+            logger.error("ERROR：/api/unitExam/updUnitExam: {}" + e);
+        }
+        return result;
+    }
+
+    /**
+     * @describe: 获取试题列表（仅试题本身,删除修改试题使用）
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/11  9:32
+     */
+    @RequestMapping("/getListExam")
+    @ResponseBody
+    public CpaResult getListExam(CpaRepertory cpaRepertory, Integer pageNo, Integer pageSize) {
+        CpaResult result = null;
+        Page page = new Page();
+        pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+        pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+        Integer firstResult = page.countOffset(pageNo, pageSize);
+        LinkedHashMap orderby = new LinkedHashMap() {{
+            put("id", "desc");
+        }};
+        try {
+            result = cpaRepertoryService.getListItem(cpaRepertory, firstResult, pageSize, orderby);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR：/api/unitExam/getListExam ：{}" + e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+
         }
         return result;
     }

@@ -116,6 +116,7 @@ public class UserStatusVerify {
         if (null == user) {
             CpaResult result = new CpaResult();
             result.setStatus(CpaConstants.USER_NOT_LOGIN);
+            result.setMsg("用户未登录");
             return result;
         }
 

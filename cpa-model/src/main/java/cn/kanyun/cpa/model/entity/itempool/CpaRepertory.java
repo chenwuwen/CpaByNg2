@@ -17,7 +17,7 @@ public class CpaRepertory implements java.io.Serializable {
     private Long id;
     private String testStem;
     private String testType;
-    private String choice ; //是否是多选题(默认为单选)
+    private String choice ; //题型：unique:单选题,multi:多选题,judge判断题
     private LocalDateTime insertDate;
     private Set cpaOptions = new HashSet(0);
     private CpaSolution cpaSolution;

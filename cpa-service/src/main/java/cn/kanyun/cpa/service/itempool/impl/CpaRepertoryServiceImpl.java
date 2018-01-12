@@ -142,5 +142,57 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
         return cpaRepertory.getId().intValue();
     }
 
+    @Override
+    public CpaResult getListItem(CpaRepertory cpaRepertory, Integer firstResult, Integer pageSize, LinkedHashMap orderby) {
+        CpaResult result;
+        if (null == cpaRepertory.getTestStem() && null == cpaRepertory.getTestType()) {
+            result = cpaRepertoryDao.getScrollData(firstResult, pageSize, null, null, orderby);
+        } else {
+            String typeCode = cpaRepertory.getTestType() == null ? null : cpaRepertory.getTestType();
+            String testStem = cpaRepertory.getTestStem() == null ? null : cpaRepertory.getTestStem();
+            StringBuilder where = new StringBuilder();
+            Object[] params;
+            LinkedList list = new LinkedList();
+            if (typeCode != null) {
+                where.append("o.typeCode=?");
+                list.add(typeCode);
+            }
+            if (testStem != null) {
+                where.append("o.testStem=?");
+                list.add(testStem);
+            }
+            params = list.toArray();
+            result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where.toString(), params, orderby);
+        }
+        List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
+        if (result.getTotalCount() > 0) {
+            List<CpaRepertory> cpaRepertorys = (List<CpaRepertory>) result.getData();
+            cpaRepertorys.forEach(cpaRepertory1 -> {
+                CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
+                cpaRepertoryDto.setTestStem(cpaRepertory1.getTestStem());
+                cpaRepertoryDto.setId(cpaRepertory1.getId());
+//                cpaRepertoryDto.setTestType(QuestionTypeEnum.cpaRepertory1.getTestType().toUpperCase());
+//                cpaRepertoryDto.setTypeCode(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()));
+                cpaRepertoryDtos.add(cpaRepertoryDto);
+            });
+        }
+        result.setData(cpaRepertoryDtos);
+        return result;
+    }
+
+    @Override
+    public Integer updUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        Set cpaOptions1 = new HashSet();
+        for (CpaOption cpaOption : cpaOptions) {
+            cpaOption.setCpaRepertory(cpaRepertory);
+            cpaOptions1.add(cpaOption);
+        }
+        cpaSolution.setCpaRepertory(cpaRepertory);
+        cpaRepertory.setCpaOptions(cpaOptions1);
+        cpaRepertory.setCpaSolution(cpaSolution);
+        cpaRepertoryDao.saveOrUpdate(cpaRepertory);
+        return cpaRepertory.getId().intValue();
+    }
+
 
 }
