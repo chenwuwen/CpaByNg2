@@ -171,6 +171,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaReper
                 CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
                 cpaRepertoryDto.setTestStem(cpaRepertory1.getTestStem());
                 cpaRepertoryDto.setId(cpaRepertory1.getId());
+                cpaRepertoryDto.setInsertDate(cpaRepertory1.getInsertDate());
 //                cpaRepertoryDto.setTestType(QuestionTypeEnum.cpaRepertory1.getTestType().toUpperCase());
 //                cpaRepertoryDto.setTypeCode(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()));
                 cpaRepertoryDtos.add(cpaRepertoryDto);
