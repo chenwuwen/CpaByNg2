@@ -6,7 +6,7 @@ import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import org.springframework.stereotype.Repository;
 
 @Repository(AnswerRecordDao.REPOSITORY_NAME)
-public class AnswerRecordDaoImpl extends CommonDaoImpl<Integer, AnswerRecord> implements AnswerRecordDao {
+public class AnswerRecordDaoImpl extends CommonDaoImpl<Long, AnswerRecord> implements AnswerRecordDao {
     //通过调用父类的构造函数指定clazz值，即实体类的类类型
     public AnswerRecordDaoImpl() {
         super(AnswerRecord.class);

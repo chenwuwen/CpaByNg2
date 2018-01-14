@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by Administrator on 2017/6/16.
  */
-public interface CpaRepertoryService extends CommonService<Integer, CpaRepertory> {
+public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
     public static final String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaRepertoryServiceImpl";
 
     /**

@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-public interface UserCommentService extends CommonService<Integer, UserComment> {
+public interface UserCommentService extends CommonService<Long, UserComment> {
 
     public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserCommentServiceImpl";
 

@@ -10,7 +10,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @Service(AnswerRecordService.SERVICE_NAME)
-public class AnswerRecordServiceImpl extends CommonServiceImpl<Integer, AnswerRecord> implements AnswerRecordService {
+public class AnswerRecordServiceImpl extends CommonServiceImpl<Long, AnswerRecord> implements AnswerRecordService {
 
     private static final LinkedBlockingQueue<AnswerRecord> answerRecords = new LinkedBlockingQueue<AnswerRecord>();
 

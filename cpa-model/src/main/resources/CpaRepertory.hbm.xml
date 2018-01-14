@@ -6,7 +6,8 @@
 -->
 <!--suppress ALL -->
 <hibernate-mapping>
-    <class name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" table="cpa_repertory" catalog="cpa">
+    <!--lazy="true" 类级别的加载策略(懒加载，默认为true),但仅对load方法有效,Session 的get() 方法及 Query 的 list() 方法在类级别总是使用立即检索策略-->
+    <class name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" table="cpa_repertory" catalog="cpa" lazy="true">
         <id name="id" type="java.lang.Long">
             <column name="id"/>
             <generator class="native"></generator>
@@ -31,7 +32,15 @@
                 <comment>插入时间</comment>
             </column>
         </property>
-        <set name="cpaOptions" inverse="true" cascade="all">
+        <!--inverse表示由那一端控制映射关系,一般由一的一端来控制映射关系,这样保存实体的时候可以不生成update语句-->
+        <!--cascade表示级联操作,一般开发中不用，建议手动控制-->
+        <!--order-by排序,值为关联表中的字段名（在查询的时候会自动加上排序）,刚开始开发的时候，我不知道有这个属性,所以取出来的选项顺序是乱的,我需要在代码中排序,加入此属性并设置即可-->
+        <!--<set> 元素的 batch-size 属性，用来为延迟检索策略或立即检索策略设定批量检索的数量. 批量检索能减少 SELECT 语句的数目, 提高延迟检索或立即检索的运行性能.(不设置的话,当前如果有多个对象要获取关联对象的时候，只能一条条发送sql语句)-->
+        <!--<set> 元素的 fetch 属性: 取值为 “select” 或 “subselect” 时,决定初始化 orders 的查询语句的形式;-->
+        <!--当 fetch 属性为 “subselect” 时，代表子查询-->
+        <!--–假定 Session 缓存中有 n 个 cpaOptions 集合代理类实例没有被初始化, Hibernate 能够通过带子查询的 select 语句, 来批量初始化 n 个 cpaOptions 集合代理类实例,batch-size 属性将被忽略-->
+        <!--当 fetch 属性为 “join”时，Hibernate将采用迫切左链接查询,懒加载将失效-->
+        <set name="cpaOptions" inverse="true" cascade="all" order-by="select_data asc" batch-size="10">
             <key>
                 <column name="re_id">
                     <comment>试题ID</comment>

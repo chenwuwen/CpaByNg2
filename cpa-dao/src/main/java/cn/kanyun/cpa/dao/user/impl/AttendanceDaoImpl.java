@@ -6,7 +6,7 @@ import cn.kanyun.cpa.model.entity.user.Attendance;
 import org.springframework.stereotype.Repository;
 
 @Repository(AttendanceDao.REPOSITORY_NAME)
-public class AttendanceDaoImpl extends CommonDaoImpl<Integer,Attendance> implements AttendanceDao {
+public class AttendanceDaoImpl extends CommonDaoImpl<Long,Attendance> implements AttendanceDao {
     /**
      * 保留指定clatt值的接口【通过子类显示调用父类的构造函数来指定】
      *

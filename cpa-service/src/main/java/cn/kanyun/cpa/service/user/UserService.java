@@ -5,7 +5,7 @@ import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonService;
 
-public interface UserService extends CommonService<Integer, CpaUser> {
+public interface UserService extends CommonService<Long, CpaUser> {
     public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserServiceImpl";
 //	CpaResult checkLogin(String username, String password);
 

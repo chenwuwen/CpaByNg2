@@ -16,7 +16,7 @@ import java.util.*;
  * Created by Administrator on 2017/6/16.
  */
 @Service(CpaSolutionService.SERVICE_NAME)
-public class CpaSolutionServiceImpl extends CommonServiceImpl<Integer, CpaSolution> implements CpaSolutionService {
+public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution> implements CpaSolutionService {
 
     @Resource
     private CpaSolutionDao cpaSolutionDao;

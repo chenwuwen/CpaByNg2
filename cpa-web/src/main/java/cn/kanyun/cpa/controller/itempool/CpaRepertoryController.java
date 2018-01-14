@@ -148,11 +148,13 @@ public class CpaRepertoryController {
      * @Date: 2018/1/12  13:38
      */
     @RequestMapping("/getExamDetail/{id}")
-    public CpaResult getExamDetail(@PathVariable("id") Integer id) {
+    @ResponseBody
+    public CpaResult getExamDetail(@PathVariable("id") Long id) {
         CpaResult result = new CpaResult();
         try {
             CpaRepertory cpaRepertory = cpaRepertoryService.findById(id);
             CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
+            cpaRepertoryDto.setId(id);
             cpaRepertoryDto.setTestStem(cpaRepertory.getTestStem());
             cpaRepertoryDto.setBresult(cpaRepertory.getCpaSolution().getResult());
             List<CpaOptionDto> cpaOptionDtoList = new ArrayList<>();
@@ -186,7 +188,7 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/delUnitExam/{reId}")
     @ResponseBody
-    public CpaResult delUnitExam(@PathVariable("reId") Integer reId) {
+    public CpaResult delUnitExam(@PathVariable("reId") Long reId) {
         CpaResult result = new CpaResult();
         try {
             cpaRepertoryService.deleteById(reId);

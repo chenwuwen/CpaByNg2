@@ -30,7 +30,7 @@ import java.util.*;
  */
 @Service(CpaRepertoryService.SERVICE_NAME)
 @Transactional
-public class CpaRepertoryServiceImpl extends CommonServiceImpl<Integer, CpaRepertory> implements CpaRepertoryService {
+public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertory> implements CpaRepertoryService {
     @Resource(name = CpaRepertoryDao.REPOSITORY_NAME)
     private CpaRepertoryDao cpaRepertoryDao;
     @Resource(name = CpaOptionDao.REPOSITORY_NAME)

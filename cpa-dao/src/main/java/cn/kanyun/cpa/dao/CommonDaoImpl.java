@@ -10,7 +10,11 @@ import org.hibernate.criterion.Projections;
 
 import javax.annotation.Resource;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -91,6 +95,14 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         Session session = getSession();
         @SuppressWarnings("unchecked")
         T t = (T) session.get(clatt, id);
+        return t;
+    }
+
+    @Override
+    public T loadById(K id) {
+        Session session = getSession();
+        @SuppressWarnings("unchecked")
+        T t = (T) session.load(clatt, id);
         return t;
     }
 

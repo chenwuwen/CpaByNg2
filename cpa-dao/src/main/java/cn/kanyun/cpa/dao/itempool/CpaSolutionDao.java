@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/6/16.
  */
-public interface CpaSolutionDao extends CommonDao<Integer, CpaSolution> {
+public interface CpaSolutionDao extends CommonDao<Long, CpaSolution> {
     public static final String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaSolutionDaoImpl";
 
     /**

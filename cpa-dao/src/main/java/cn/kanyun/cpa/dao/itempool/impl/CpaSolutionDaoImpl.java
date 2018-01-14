@@ -15,7 +15,7 @@ import java.util.Map;
  * Created by Administrator on 2017/6/16.
  */
 @Repository(CpaSolutionDao.REPOSITORY_NAME)
-public class CpaSolutionDaoImpl extends CommonDaoImpl<Integer, CpaSolution> implements CpaSolutionDao {
+public class CpaSolutionDaoImpl extends CommonDaoImpl<Long, CpaSolution> implements CpaSolutionDao {
 
     public CpaSolutionDaoImpl() {
         super(CpaSolution.class);

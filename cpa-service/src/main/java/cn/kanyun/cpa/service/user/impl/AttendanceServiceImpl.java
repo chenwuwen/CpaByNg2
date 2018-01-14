@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 
 @Service(AttendanceService.SERVICE_NAME)
 @Transactional
-public class AttendanceServiceImpl extends CommonServiceImpl<Integer, Attendance> implements AttendanceService {
+public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> implements AttendanceService {
     private static final Logger logger = LoggerFactory.getLogger(AttendanceServiceImpl.class);
 
     @Resource(name = AttendanceDao.REPOSITORY_NAME)

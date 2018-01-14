@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Service(UserCommentService.SERVICE_NAME)
 @Transactional
-public class UserCommentServiceImpl extends CommonServiceImpl<Integer, UserComment> implements UserCommentService {
+public class UserCommentServiceImpl extends CommonServiceImpl<Long, UserComment> implements UserCommentService {
     @Resource(name = UserCommentDao.REPOSITORY_NAME)
     private UserCommentDao userCommentDao;
 

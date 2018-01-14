@@ -32,11 +32,17 @@ public interface CommonDao<K extends Serializable ,T extends Serializable> {
      */  
     public void saveAll(Collection<T> ct);  
     /** 
-     * 根据Id查询实体对象 
+     * 根据Id查询实体对象 ,设置类级别的懒加载后,load可以实现懒加载效果
      * @param id 表记录中的对应的id字段 
      * @return 对应的实体对象 
      */  
-    public T findById(K id);  
+    public T findById(K id);
+    /**
+     * 根据Id查询代理对象
+     * @param id 表记录中的对应的id字段
+     * @return 对应的代理对象
+     */
+    public T loadById(K id);
     /** 
      * 更新一条记录 
      * @param t 待更新记录对应的实体对象 

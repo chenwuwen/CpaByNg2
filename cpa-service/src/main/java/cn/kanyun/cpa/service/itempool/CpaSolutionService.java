@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/6/16.
  */
-public interface CpaSolutionService extends CommonService<Integer,CpaSolution> {
+public interface CpaSolutionService extends CommonService<Long,CpaSolution> {
     public static final String SERVICE_NAME="cn.kanyun.cpa.Service.itempool.impl.CpaSolutionServiceImpl";
 
     /**

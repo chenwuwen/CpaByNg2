@@ -8,7 +8,7 @@ import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 @Repository(UserDao.REPOSITORY_NAME)
-public class UserDaoImpl extends CommonDaoImpl<Integer, CpaUser> implements UserDao {
+public class UserDaoImpl extends CommonDaoImpl<Long, CpaUser> implements UserDao {
     //通过调用父类的构造函数指定clazz值，即实体类的类类型
     public UserDaoImpl() {
         super(CpaUser.class);

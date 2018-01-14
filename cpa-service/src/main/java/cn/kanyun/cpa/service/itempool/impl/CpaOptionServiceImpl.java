@@ -10,6 +10,6 @@ import org.springframework.stereotype.Service;
  * Created by Administrator on 2017/6/16.
  */
 @Service(CpaOptionService.SERVICE_NAME)
-public class CpaOptionServiceImpl extends CommonServiceImpl<Integer, CpaOption> implements CpaOptionService {
+public class CpaOptionServiceImpl extends CommonServiceImpl<Long, CpaOption> implements CpaOptionService {
 
 }

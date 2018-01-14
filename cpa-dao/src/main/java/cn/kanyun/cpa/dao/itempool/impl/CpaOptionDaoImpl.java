@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
  * Created by Administrator on 2017/6/16.
  */
 @Repository(CpaOptionDao.REPOSITORY_NAME)
-public class CpaOptionDaoImpl extends CommonDaoImpl<Integer, CpaOption> implements CpaOptionDao {
+public class CpaOptionDaoImpl extends CommonDaoImpl<Long, CpaOption> implements CpaOptionDao {
 
     public CpaOptionDaoImpl() {
         super(CpaOption.class);

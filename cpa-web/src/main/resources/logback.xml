@@ -27,6 +27,11 @@
         没有目录会默认创建
     -->
     <substitutionProperty name="logBase" value="${catalina.base}/logs/cpa/"/>
+    <!--
+      <property>用来定义变量值的标签，<property> 有两个属性，name和value；
+        其中name的值是变量的名称,value的值时变量定义的值。
+        通过<property>定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。
+        -->
     <!-- 时间戳：这个时间戳可以作为每日日志的名称 -->
     <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
     <!-- 日志级别 -->
@@ -57,6 +62,15 @@
             </pattern>
             <charset>UTF-8</charset>
         </encoder>
+        <!-- ThresholdFilter： 临界值过滤器，过滤掉低于指定临界值的日志。当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--设置过滤级别-->
+            <level>DEBUG</level>
+            <!--用于配置符合过滤条件的操作-->
+            <onMatch>ACCEPT</onMatch>
+            <!--用于配置不符合过滤条件的操作-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
     </appender>
 
     <!--普通日志记录-->
@@ -73,7 +87,7 @@
         </encoder>
         <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
         <append>false</append>
-        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 -->
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch>
@@ -120,7 +134,7 @@
         </encoder>
         <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
         <append>false</append>
-        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 -->
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>ERROR</level>
             <onMatch>ACCEPT</onMatch>
@@ -153,6 +167,7 @@
                 %msg%n
             </pattern>
         </encoder>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
@@ -199,7 +214,7 @@
     <!-- 特殊的<logger>元素，是根logger。只有一个level属性，应为已经被命名为"root".
        level:设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。
        <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。 -->
-    <root level="info">
+    <root level="DEBUG">
         <!-- 启用文件记录日志 -->
         <appender-ref ref="logFile"/>
         <!-- 启用控制台输出日志 -->

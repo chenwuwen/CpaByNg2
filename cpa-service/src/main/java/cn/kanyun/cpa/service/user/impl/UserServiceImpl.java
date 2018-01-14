@@ -19,7 +19,7 @@ import java.util.Set;
 
 @Service(UserService.SERVICE_NAME)
 @Transactional
-public class UserServiceImpl extends CommonServiceImpl<Integer, CpaUser> implements UserService {
+public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements UserService {
     @Resource(name = UserDao.REPOSITORY_NAME)
     private UserDao userDao;
     @Resource(name = UserRoleDao.REPOSITORY_NAME)

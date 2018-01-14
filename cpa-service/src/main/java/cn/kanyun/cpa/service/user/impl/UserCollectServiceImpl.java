@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Service(UserCollectService.SERVICE_NAME)
 @Transactional
-public class UserCollectServiceImpl extends CommonServiceImpl<Integer, UserCollect> implements UserCollectService {
+public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect> implements UserCollectService {
     @Resource(name = UserCollectDao.REPOSITORY_NAME)
     private UserCollectDao userCollectDao;
 
