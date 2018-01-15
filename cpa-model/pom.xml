@@ -28,6 +28,11 @@
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
+        <!-- 支持java8 localDate等新时间类型的序列化 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
         <!--该依赖为谷歌Gson包，使用最多的是Gson类的toJson()和fromJson()方法-->
         <dependency>
             <groupId>com.google.code.gson</groupId>

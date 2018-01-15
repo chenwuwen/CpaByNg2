@@ -433,6 +433,12 @@
                 <artifactId>jackson-databind</artifactId>
                 <version>2.9.2</version>
             </dependency>
+            <!-- 支持java8 localDate等新时间类型的序列化 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.datatype</groupId>
+                <artifactId>jackson-datatype-jsr310</artifactId>
+                <version>2.9.2</version>
+            </dependency>
 
             <!--该依赖为谷歌Gson包，使用最多的是Gson类的toJson()和fromJson()方法-->
             <dependency>

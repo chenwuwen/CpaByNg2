@@ -211,36 +211,36 @@ CREATE TABLE `cpa_repertory` (
 -- ----------------------------
 -- Records of cpa_repertory
 -- ----------------------------
-INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', null, null);
+INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', null, 'unique');
 INSERT INTO `cpa_repertory` VALUES ('14', '反映企业经营成果的会计要素是（   ）', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', null, null);
-INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('26', '原始凭证是由（）取得或填制的。', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('28', '企业购买或出售交易性金融资产过程中发生的交易费用应直接记入的会计科目是（）', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', null, null);
-INSERT INTO `cpa_repertory` VALUES ('30', '根据借贷记账法的账户结构，在账户借方登记的是(     )。', 'statuteEthics', null, null);
+INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('26', '原始凭证是由（）取得或填制的。', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('28', '企业购买或出售交易性金融资产过程中发生的交易费用应直接记入的会计科目是（）', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', null, 'unique');
+INSERT INTO `cpa_repertory` VALUES ('30', '根据借贷记账法的账户结构，在账户借方登记的是(     )。', 'statuteEthics', null, 'unique');
 
 -- ----------------------------
 -- Table structure for cpa_role
