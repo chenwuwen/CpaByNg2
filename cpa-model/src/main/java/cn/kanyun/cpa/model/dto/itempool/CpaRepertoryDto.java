@@ -1,7 +1,5 @@
 package cn.kanyun.cpa.model.dto.itempool;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,7 +17,6 @@ public class CpaRepertoryDto implements java.io.Serializable {
     private String testStem;
     private String testType;
     private String choice; //是否是多选题
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;
     private String presult; //用户回答的答案
     private String bresult; //标准答案
@@ -31,7 +28,7 @@ public class CpaRepertoryDto implements java.io.Serializable {
     public CpaRepertoryDto() {
     }
 
-    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode,Long commentCount) {
+    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode, Long commentCount) {
         this.id = id;
         this.testStem = testStem;
         this.testType = testType;

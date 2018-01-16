@@ -11,6 +11,8 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.model.myenum.ExamEnum;
+import cn.kanyun.cpa.model.myenum.QuestionTypeEnum;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.service.user.UserCommentService;
@@ -172,8 +174,8 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
                 cpaRepertoryDto.setTestStem(cpaRepertory1.getTestStem());
                 cpaRepertoryDto.setId(cpaRepertory1.getId());
                 cpaRepertoryDto.setInsertDate(cpaRepertory1.getInsertDate());
-//                cpaRepertoryDto.setTestType(QuestionTypeEnum.cpaRepertory1.getTestType().toUpperCase());
-//                cpaRepertoryDto.setTypeCode(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()));
+                cpaRepertoryDto.setTestType(ExamEnum.valueOf(cpaRepertory1.getTestType().toUpperCase()).toString());
+                cpaRepertoryDto.setTypeCode(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             });
         }

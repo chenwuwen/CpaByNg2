@@ -210,7 +210,7 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/updUnitExam")
     @ResponseBody
-    public CpaResult updUnitExam(ItemForm itemForm) {
+    public CpaResult updUnitExam(@RequestBody ItemForm itemForm) {
         CpaResult result = new CpaResult();
         try {
             CpaRepertory cpaRepertory = itemForm.getCpaRepertory();

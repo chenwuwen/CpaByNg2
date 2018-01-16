@@ -2,7 +2,7 @@ package cn.kanyun.cpa.model.myenum;
 
 public enum QuestionTypeEnum {
     // 利用构造函数传参
-    UNIQUE("单选题"), MULTI("多选题"), JUDGE("判断题");
+    UNIQUE("单选题"), MULTIPLE("多选题"), JUDGE("判断题");
     // 定义私有变量
     private String value;
 
