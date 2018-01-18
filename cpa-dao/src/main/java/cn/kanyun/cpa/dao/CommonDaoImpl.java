@@ -350,8 +350,8 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
      * @return
      */
     public static String buildWhere(String where) {
-        //去掉where开头结尾空格(此处没有使用String的trim方法,是因为String的trim方法有一些其他缺陷,如不能去掉全角空格)
-        StringUtils.stripToEmpty(where);
+        //去掉where开头结尾空格(此处没有使用String的trim方法,是因为String的trim方法有一些其他缺陷,如不能去掉全角空格),需要使用where接收返回值,否则where值不变
+        where = StringUtils.stripToEmpty(where);
         int index = where.indexOf("and");
         /**
          * index == -1 表示当前where语句只存在一个参数,即没有and参数
