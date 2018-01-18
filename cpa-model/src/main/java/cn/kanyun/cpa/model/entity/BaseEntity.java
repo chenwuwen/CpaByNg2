@@ -7,15 +7,35 @@ import java.io.Serializable;
  */
 public class BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Long id;
+	private Long id;
 
-    public Long getId() {
-        return id;
-    }
+	private Integer pageNo;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private Integer pageSize;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Integer getPageNo() {
+		return pageNo;
+	}
+
+	public void setPageNo(Integer pageNo) {
+		this.pageNo = pageNo;
+	}
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
 }
