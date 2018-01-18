@@ -15,6 +15,11 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cpa-model</artifactId>
     <dependencies>
+        <!--Spring相关-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
         <!--JSON解析和序列化-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>

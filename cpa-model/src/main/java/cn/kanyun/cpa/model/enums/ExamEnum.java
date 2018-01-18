@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.model.myenum;
+package cn.kanyun.cpa.model.enums;
 
 public enum ExamEnum {
 

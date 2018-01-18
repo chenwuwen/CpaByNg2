@@ -1,5 +1,8 @@
 package cn.kanyun.cpa.model.dto.itempool;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,6 +20,8 @@ public class CpaRepertoryDto implements java.io.Serializable {
     private String testStem;
     private String testType;
     private String choice; //是否是多选题
+    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;
     private String presult; //用户回答的答案
     private String bresult; //标准答案

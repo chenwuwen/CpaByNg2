@@ -1,6 +1,7 @@
 package cn.kanyun.cpa.dao;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -226,7 +227,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
                                       String where, Object[] params, LinkedHashMap<String, String> orderby) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "
-                + where : "";
+                + buildWhere(where) : "";
         Session session = getSession();
         Query query = session.createQuery("select o from " + entityName + " o"
                 + whereql + buildOrderby(orderby));
@@ -264,7 +265,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     public List<Map<Object, Object>> getGroupByList(Object[] fields, String where, Map<String, Collection> params) {
         String entityName = clatt.getSimpleName();
         String whereql = where != null && !"".equals(where.trim()) ? " where "
-                + where : "";
+                + buildWhere(where) : "";
         Session session = getSession();
         Query queryList = session.createQuery("select count(o) as count, " + buildGroupBy(0, fields) + " from "
                 + entityName + " o" + whereql + " group by " + buildGroupBy(1, fields));
@@ -339,6 +340,28 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         }
 
         return sb.toString();
+    }
+
+    /**
+     * 组织where语句,当参数有查询参数有多个时,where语句可能存在多个 "and" 字符串,
+     * 该方法取出多余 "and" 字符串,返回正确的where,此处不必判空,如若where为空,不会执行此方法
+     *
+     * @param where
+     * @return
+     */
+    public static String buildWhere(String where) {
+        //去掉where开头结尾空格(此处没有使用String的trim方法,是因为String的trim方法有一些其他缺陷,如不能去掉全角空格)
+        StringUtils.stripToEmpty(where);
+        int index = where.indexOf("and");
+        /**
+         * index == -1 表示当前where语句只存在一个参数,即没有and参数
+         * index == 0 表示and 第一次出现在where语句的最前面
+         */
+        if (index != -1 && index == 0) {
+//            where.substring(3);
+            StringUtils.substringAfter(where, "and");
+        }
+        return where;
     }
 
 

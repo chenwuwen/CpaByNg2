@@ -11,8 +11,8 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.model.myenum.ExamEnum;
-import cn.kanyun.cpa.model.myenum.QuestionTypeEnum;
+import cn.kanyun.cpa.model.enums.ExamEnum;
+import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.service.user.UserCommentService;
@@ -154,14 +154,15 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
             String testStem = cpaRepertory.getTestStem() == null ? null : cpaRepertory.getTestStem();
             StringBuilder where = new StringBuilder();
             Object[] params;
+//            使用LinkedList,因为LinkedList是有序的,参数应与where条件一一对应
             LinkedList list = new LinkedList();
-            if (typeCode != null) {
-                where.append("o.typeCode=?");
+            if (typeCode != null && !typeCode.isEmpty()) {
+                where.append(" and o.typeCode=? ");
                 list.add(typeCode);
             }
-            if (testStem != null) {
-                where.append("o.testStem=?");
-                list.add(testStem);
+            if (testStem != null && !testStem.isEmpty()) {
+                where.append(" and o.testStem like ? ");
+                list.add("%" + testStem + "%");
             }
             params = list.toArray();
             result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where.toString(), params, orderby);

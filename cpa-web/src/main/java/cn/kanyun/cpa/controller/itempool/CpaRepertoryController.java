@@ -5,7 +5,7 @@ import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
 import cn.kanyun.cpa.model.entity.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.myenum.ExamEnum;
+import cn.kanyun.cpa.model.enums.ExamEnum;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
@@ -116,7 +116,6 @@ public class CpaRepertoryController {
      * @return Controller中定义void方法，这种场景一般是通过HttpServletResponse对象来输出页面内容。注意：Controller的void方法中一定要声明HttpServletResponse类型的方法入参！
      * 注意：在Controller中，@RequestMapping注解的方法，在调用这个方法时候，
      * 如果有定义HttpServletResponse类型的入参，Spring MVC框架会自动传入一个HttpServletResponse对象作为方法参数；
-     * 如果有定义HttpServletRequest类型的入参，Spring MVC框架会自动传入一个HttpServletRequest对象作为方法参数。
      * void方法不定义HttpServletResponse类型的入参，HttpServletResponse对象通过RequestContextHolder上下文获取
      * 注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
      * @author Kanyun
@@ -197,7 +196,7 @@ public class CpaRepertoryController {
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             result.setState(CpaConstants.OPERATION_ERROR);
-            logger.error("ERROR：/api/unitExam/delUnitExam: {}" + e);
+            logger.error("ERROR：/api/unitExam/delUnitExam: {}", e);
         }
         return result;
     }
@@ -233,9 +232,13 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getListExam")
     @ResponseBody
-    public CpaResult getListExam(CpaRepertory cpaRepertory, Integer pageNo, Integer pageSize) {
+
+    public CpaResult getListExam(@RequestBody ItemForm itemForm) {
         CpaResult result = null;
         Page page = new Page();
+        Integer pageNo = itemForm.getPageNo();
+        Integer pageSize = itemForm.getPageSize();
+        CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
         pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
         pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
         Integer firstResult = page.countOffset(pageNo, pageSize);

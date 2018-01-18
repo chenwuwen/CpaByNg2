@@ -1,6 +1,5 @@
 package cn.kanyun.cpa.model.entity.system;
 
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;

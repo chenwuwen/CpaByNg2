@@ -10,6 +10,9 @@ public class ItemForm {
     private CpaRepertory cpaRepertory;
     private List<CpaOption> cpaOptions;
     private CpaSolution cpaSolution;
+    private Integer pageNo;
+    private Integer pageSize;
+
 
     public ItemForm() {
     }
@@ -18,6 +21,22 @@ public class ItemForm {
         this.cpaRepertory = cpaRepertory;
         this.cpaOptions = cpaOptions;
         this.cpaSolution = cpaSolution;
+    }
+
+    public Integer getPageNo() {
+        return pageNo;
+    }
+
+    public void setPageNo(Integer pageNo) {
+        this.pageNo = pageNo;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
     }
 
     public CpaRepertory getCpaRepertory() {
