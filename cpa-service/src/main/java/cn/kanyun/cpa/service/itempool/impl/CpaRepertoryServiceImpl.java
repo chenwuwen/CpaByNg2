@@ -157,7 +157,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
 //            使用LinkedList,因为LinkedList是有序的,参数应与where条件一一对应
             LinkedList list = new LinkedList();
             if (typeCode != null && !typeCode.isEmpty()) {
-                where.append(" and o.typeCode=? ");
+                where.append(" and o.testType=? ");
                 list.add(typeCode);
             }
             if (testStem != null && !testStem.isEmpty()) {

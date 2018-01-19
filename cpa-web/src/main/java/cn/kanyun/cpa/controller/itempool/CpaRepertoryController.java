@@ -52,7 +52,7 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getUnitExam/{typeCode}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, Integer pageNo, Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, @RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
         CpaResult result = null;
         try {
             Object[] params = {typeCode};
@@ -71,9 +71,12 @@ public class CpaRepertoryController {
             if (null == result) {
                 Integer firstResult = page.countOffset(pageNo, pageSize);
                 result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+
                 //总记录数
                 page.setTotalRecords(result.getTotalCount().intValue());
                 //总页数(返回的记录中已包含总记录数,无需再次查询)
+                page.setPageSize(pageSize);
+                page.setPageNo(pageNo);
                 result.setTotalPage(page.getTotalPages());
                 try {
                     redisService.setCacheObject(key, result);
@@ -249,7 +252,7 @@ public class CpaRepertoryController {
             result = cpaRepertoryService.getListItem(cpaRepertory, firstResult, pageSize, orderby);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
-            logger.error("ERROR：/api/unitExam/getListExam ：{}" + e);
+            logger.error("ERROR：/api/unitExam/getListExam ：{}" , e);
             result.setState(CpaConstants.OPERATION_ERROR);
 
         }

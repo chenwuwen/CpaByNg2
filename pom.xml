@@ -380,6 +380,12 @@
                 <artifactId>logback-core</artifactId>
                 <version>1.2.3</version>
             </dependency>
+            <!--logback-access.jar包是通过互联网访问日志时需要的JAR包-->
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-access</artifactId>
+                <version>1.2.3</version>
+            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>jcl-over-slf4j</artifactId>

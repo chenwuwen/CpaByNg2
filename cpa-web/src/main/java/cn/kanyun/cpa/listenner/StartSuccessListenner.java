@@ -13,24 +13,6 @@ import java.io.*;
  * 1、写一个类继承spring的ApplicationListener监听，并监控ContextRefreshedEvent事件（容易初始化完成事件）
  * 2、定义简单的bean：<bean id="beanDefineConfigue" class="com.creatar.portal.webservice.BeanDefineConfigue"></bean> 或者直接使用@Component("BeanDefineConfigue")注解方式
  * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
  */
 
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
@@ -42,6 +24,7 @@ public class StartSuccessListenner implements ApplicationListener<ContextRefresh
     /**
      * 当一个ApplicationContext被初始化或刷新触发
      */
+
     /**
      * applicationontext和使用MVC之后的webApplicationontext会两次调用上面的方法，如何区分这个两种容器呢？
      *但是这个时候，会存在一个问题，在web 项目中（spring mvc），系统会存在两个容器，一个是root application context ,

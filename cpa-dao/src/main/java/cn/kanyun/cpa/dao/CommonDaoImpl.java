@@ -359,7 +359,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
          */
         if (index != -1 && index == 0) {
 //            where.substring(3);
-            StringUtils.substringAfter(where, "and");
+           where = StringUtils.substringAfter(where, "and");
         }
         return where;
     }
