@@ -36,6 +36,7 @@ public class SystemLogoutFilter extends LogoutFilter {
             WebUtil.removeSessionUser((HttpServletRequest) request);
         }
 
+//        注销后重定向到哪个页面,redirectUrl在shiro的配置文件中定义
         this.issueRedirect(request, response, redirectUrl);
         //返回false表示不执行后续的过滤器，直接返回跳转到登录页面
         return false;

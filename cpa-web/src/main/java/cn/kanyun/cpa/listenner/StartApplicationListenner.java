@@ -13,6 +13,7 @@ import java.io.*;
  * 1、写一个类继承spring的ApplicationListener监听，并监控ContextRefreshedEvent事件（容易初始化完成事件）
  * 2、定义简单的bean：<bean id="beanDefineConfigue" class="com.creatar.portal.webservice.BeanDefineConfigue"></bean> 或者直接使用@Component("BeanDefineConfigue")注解方式
  * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
+ * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
  */
 
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
@@ -54,7 +55,7 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
              * 不用区分相对路径和绝对路径。显然，此方法比较容易写出。推荐。
              */
 
-            this.readSystemOut1(path + "startBanner.txt");
+//            this.readSystemOut1(path + "startBanner.txt");
 //            this.readPrint(path + "startBanner.txt");
 //            this.readSystemOut(path + "startBanner.txt");
         }

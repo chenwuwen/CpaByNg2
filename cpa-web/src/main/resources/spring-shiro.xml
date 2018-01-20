@@ -99,6 +99,7 @@
     <!--下面的配置是shiro默认的logout过滤器的配置,也可以通过继承shiro的过滤器，自定义logout过滤器-->
     <!--<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">-->
     <bean id="logoutFilter" class="cn.kanyun.cpa.filter.SystemLogoutFilter">
+        <!--重定向的地址-->
         <property name="redirectUrl" value="/"/>
     </bean>
 

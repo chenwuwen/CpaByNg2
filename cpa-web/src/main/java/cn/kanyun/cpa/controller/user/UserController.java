@@ -165,7 +165,7 @@ public class UserController {
      * @param
      * @return
      * @author Kanyun
-     * @Description:
+     * @Description: 用户注销(已被shiro接管,shiro拦截此url,进入SysLogoutFilter过滤器)
      * @date 2017/11/25 15:57
      */
     @RequestMapping("/logout")
