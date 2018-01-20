@@ -42,6 +42,7 @@ public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
      * @Author: Kanyun
      * @Date: 2018/1/11  15:48
      */
+    @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
     CpaResult getListItem(CpaRepertory cpaRepertory, Integer firstResult, Integer pageSize, LinkedHashMap orderby);
 
     /**

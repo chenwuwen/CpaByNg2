@@ -18,11 +18,14 @@ import java.io.*;
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
 
 /**ContextRefreshedEvent为初始化完毕事件，spring还有很多事件可以利用*/
-@Component("StartSuccessListenner")
-public class StartSuccessListenner implements ApplicationListener<ContextRefreshedEvent> {
+@Component("StartApplicationListenner")
+public class StartApplicationListenner implements ApplicationListener<ContextRefreshedEvent> {
 
     /**
-     * 当一个ApplicationContext被初始化或刷新触发
+     *  ContextRefreshedEvent：ApplicationContext容器初始化或者刷新时触发该事件。
+     *  ContextStartedEvent：当使用ConfigurableApplicationContext接口的start()方法启动ApplicationContext容器时触发该事件。
+     *  ContextClosedEvent：当使用ConfigurableApplicationContext接口的close()方法关闭ApplicationContext容器时触发该事件。
+     *  ContextStopedEvent: 当使用ConfigurableApplicationContext接口的stop()方法停止ApplicationContext容器时触发该事件。
      */
 
     /**
@@ -51,9 +54,9 @@ public class StartSuccessListenner implements ApplicationListener<ContextRefresh
              * 不用区分相对路径和绝对路径。显然，此方法比较容易写出。推荐。
              */
 
-//            this.readSystemOut1(path + "banner.txt");
-            this.readPrint(path + "banner.txt");
-//            this.readSystemOut(path + "banner.txt");
+            this.readSystemOut1(path + "startBanner.txt");
+//            this.readPrint(path + "startBanner.txt");
+//            this.readSystemOut(path + "startBanner.txt");
         }
     }
 
@@ -68,7 +71,7 @@ public class StartSuccessListenner implements ApplicationListener<ContextRefresh
             put = new OutputStreamWriter(System.out);
             String len;
             while ((len = br.readLine()) != null) {
-                put.write(len);
+                put.write(len + "\r\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -131,7 +134,7 @@ public class StartSuccessListenner implements ApplicationListener<ContextRefresh
     }
 
     /**
-     * 系统气筒提示
+     * 系统启动提示
      * @param n  图案行数
      * @param m  图案列数
      */

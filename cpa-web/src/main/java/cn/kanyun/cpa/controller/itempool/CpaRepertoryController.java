@@ -46,13 +46,14 @@ public class CpaRepertoryController {
 
     /**
      * @Author: kanyun
-     * @Description: 获取试题列表（单元测试）
+     * @Description: 获取试题列表（单元测试）required = false表示参数为可选,
+     * 如果不加此配置,当请求的uri不带此参数时会报400错误码
      * @Date: 2017/8/16 14:58
      * @params:
      */
     @RequestMapping("/getUnitExam/{typeCode}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, @RequestParam("pageNo") Integer pageNo, @RequestParam("pageSize") Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, @RequestParam(name = "pageNo" ,required = false) Integer pageNo, @RequestParam(name = "pageSize" ,required = false) Integer pageSize) {
         CpaResult result = null;
         try {
             Object[] params = {typeCode};
@@ -66,7 +67,7 @@ public class CpaRepertoryController {
             try {
                 result = (CpaResult) redisService.getCacheObject(key);
             } catch (Exception e) {
-                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}" + e);
+                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}" , e);
             }
             if (null == result) {
                 Integer firstResult = page.countOffset(pageNo, pageSize);

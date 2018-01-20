@@ -20,20 +20,19 @@ public class CpaRepertoryDto implements java.io.Serializable {
     private String testStem;
     private String testType;
     private String choice; //是否是多选题
-    @DateTimeFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;
     private String presult; //用户回答的答案
     private String bresult; //标准答案
     private List<CpaOptionDto> cpaOptionDtos;
     private List<String> pAnswer;
-    private String typeCode;
     private Long commentCount;
 
     public CpaRepertoryDto() {
     }
 
-    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, String typeCode, Long commentCount) {
+    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, Long commentCount) {
         this.id = id;
         this.testStem = testStem;
         this.testType = testType;
@@ -43,7 +42,6 @@ public class CpaRepertoryDto implements java.io.Serializable {
         this.bresult = bresult;
         this.cpaOptionDtos = cpaOptionDtos;
         this.pAnswer = pAnswer;
-        this.typeCode = typeCode;
         this.commentCount = commentCount;
     }
 
@@ -119,13 +117,6 @@ public class CpaRepertoryDto implements java.io.Serializable {
         this.pAnswer = pAnswer;
     }
 
-    public String getTypeCode() {
-        return typeCode;
-    }
-
-    public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
-    }
 
     public Long getCommentCount() {
         return commentCount;

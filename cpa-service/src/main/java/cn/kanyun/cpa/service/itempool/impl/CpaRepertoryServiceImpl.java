@@ -176,7 +176,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
                 cpaRepertoryDto.setId(cpaRepertory1.getId());
                 cpaRepertoryDto.setInsertDate(cpaRepertory1.getInsertDate());
                 cpaRepertoryDto.setTestType(ExamEnum.valueOf(cpaRepertory1.getTestType().toUpperCase()).toString());
-                cpaRepertoryDto.setTypeCode(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
+                cpaRepertoryDto.setChoice(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             });
         }

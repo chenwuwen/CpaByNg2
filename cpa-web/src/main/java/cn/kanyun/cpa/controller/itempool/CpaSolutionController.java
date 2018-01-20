@@ -68,7 +68,7 @@ public class CpaSolutionController {
                     peopleAnswer.put(k, strr);
                 }
             }
-            result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTypeCode());
+            result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTestType());
             AnswerRecord answerRecord = this.patchAnswerRecord(result, user);
             answerRecordService.addAnswerRecord(answerRecord);
         } catch (Exception e) {
