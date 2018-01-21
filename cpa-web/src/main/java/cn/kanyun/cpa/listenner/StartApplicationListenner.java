@@ -56,8 +56,9 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
              */
 
 //            this.readSystemOut1(path + "startBanner.txt");
-//            this.readPrint(path + "startBanner.txt");
+            this.readPrint(path + "startBanner.txt");
 //            this.readSystemOut(path + "startBanner.txt");
+            System.out.println("+++++++++++++++++");
         }
     }
 
@@ -122,7 +123,7 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
      */
     private void readPrint(String path) {
 //        PrintWriter pw = new PrintWriter(System.out);
-        try (BufferedReader br = new BufferedReader(new FileReader(path)); PrintWriter pw = new PrintWriter(System.out)) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path)); PrintWriter pw = new PrintWriter(System.out,true)) {
 //            PrintWriter pw = new PrintWriter(System.out);
             String len;
             while ((len = br.readLine()) != null) {
