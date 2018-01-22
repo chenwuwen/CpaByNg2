@@ -2,7 +2,7 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"  metadata-complete="false">
     <!-- 默认欢迎页 -->
     <!-- Servlet2.5中可直接在此处执行Servlet应用,如<welcome-file>servlet/InitSystemParamServlet</welcome-file> -->
     <!-- 这里使用了SpringMVC提供的<mvc:view-controller>标签,实现了首页隐藏的目的,详见applicationContext.xml -->
@@ -26,6 +26,7 @@
         <exception-type>java.lang.Throwable</exception-type>
         <location>/WEB-INF/500.jsp</location>
     </error-page>
+
 
     <!--log4j配置开始-->
     <!-- 指定log4j配置文件log4j.properties的位置（如果是在classpath根路径下，可以不配置） -->

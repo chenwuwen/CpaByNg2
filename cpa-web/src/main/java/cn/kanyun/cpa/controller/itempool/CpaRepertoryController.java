@@ -51,12 +51,12 @@ public class CpaRepertoryController {
      * @Date: 2017/8/16 14:58
      * @params:
      */
-    @RequestMapping("/getUnitExam/{typeCode}")
+    @RequestMapping("/getUnitExam/{testType}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("typeCode") String typeCode, @RequestParam(name = "pageNo" ,required = false) Integer pageNo, @RequestParam(name = "pageSize" ,required = false) Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("testType") String testType, @RequestParam(name = "pageNo" ,required = false) Integer pageNo, @RequestParam(name = "pageSize" ,required = false) Integer pageSize) {
         CpaResult result = null;
         try {
-            Object[] params = {typeCode};
+            Object[] params = {testType};
             String where = "o.testType=?";
             Page page = new Page();
             pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身

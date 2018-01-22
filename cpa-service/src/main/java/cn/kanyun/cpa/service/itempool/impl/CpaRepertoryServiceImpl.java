@@ -150,15 +150,15 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
         if (null == cpaRepertory.getTestStem() && null == cpaRepertory.getTestType()) {
             result = cpaRepertoryDao.getScrollData(firstResult, pageSize, null, null, orderby);
         } else {
-            String typeCode = cpaRepertory.getTestType() == null ? null : cpaRepertory.getTestType();
+            String testType = cpaRepertory.getTestType() == null ? null : cpaRepertory.getTestType();
             String testStem = cpaRepertory.getTestStem() == null ? null : cpaRepertory.getTestStem();
             StringBuilder where = new StringBuilder();
             Object[] params;
 //            使用LinkedList,因为LinkedList是有序的,参数应与where条件一一对应
             LinkedList list = new LinkedList();
-            if (typeCode != null && !typeCode.isEmpty()) {
+            if (testType != null && !testType.isEmpty()) {
                 where.append(" and o.testType=? ");
-                list.add(typeCode);
+                list.add(testType);
             }
             if (testStem != null && !testStem.isEmpty()) {
                 where.append(" and o.testStem like ? ");

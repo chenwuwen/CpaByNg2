@@ -14,6 +14,7 @@ import java.io.*;
  * 2、定义简单的bean：<bean id="beanDefineConfigue" class="com.creatar.portal.webservice.BeanDefineConfigue"></bean> 或者直接使用@Component("BeanDefineConfigue")注解方式
  * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
  * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
+ * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
  */
 
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
@@ -56,14 +57,20 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
              */
 
 //            this.readSystemOut1(path + "startBanner.txt");
-            this.readPrint(path + "startBanner.txt");
-//            this.readSystemOut(path + "startBanner.txt");
-            System.out.println("+++++++++++++++++");
+//            this.readPrint(path + "startBanner.txt");
+            this.readSystemOut(path + "startBanner.txt");
         }
     }
 
     /**
      * 使用标准输出流(system.out)来做。
+     * flush方法：IO流中每一个类都实现了Closeable接口，它们进行资源操作之后都需要执行close()方法将流关闭 。
+     * 但字节流与字符流的不同之处在于：字节流是直接与数据产生交互，而字符流在与数据交互之前要经过一个缓冲区 。
+     * 所以如果要实现资源写入(在本例中为打印到控制台)有三种方法：
+     * 一是：关闭输出流,这时图案显示在控制台(close()方法会将自动将缓冲区里的数据flush出来),
+     * 二是：缓冲区满了(这个是不能自己控制的),缓冲区满了会自动调用flush方法
+     * 三是：使用flush方法，这时缓冲区的字符串被打印到控制台。
+     * 因此例不能关闭输出流(关闭输出流后将导致不能正常输出日志到控制台),所以手动执行flush方法,将内容输出
      */
     private void readSystemOut1(String path) {
         BufferedReader br = null;
@@ -75,13 +82,14 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
             while ((len = br.readLine()) != null) {
                 put.write(len + "\r\n");
             }
+            put.flush();
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             if (br != null || put != null) {
                 try {
-                    br.close(); // 关闭流
-                    put.close();
+//                    put.close();  //输出流不能关闭(关闭输出流之后,logger.info System.out 均不能在控制台输出)
+                    br.close(); // 关闭缓冲输入流
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -106,12 +114,15 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
      * @param path
      */
     private void readSystemOut(String path) {
-        try (BufferedReader br = new BufferedReader(new FileReader(path)); OutputStreamWriter put = new OutputStreamWriter(System.out)) {
+//        将输出流放到try块外,以免将输出流关闭,导致之后的任何形式的输出被屏蔽
+        OutputStreamWriter put = new OutputStreamWriter(System.out);
+        try (BufferedReader br = new BufferedReader(new FileReader(path)) ) {
 //            OutputStreamWriter put = new OutputStreamWriter(System.out);
             String len;
             while ((len = br.readLine()) != null) {
                 put.write(len + "\r\n");
             }
+            put.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -122,8 +133,9 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
      * 使用打印流; (PrintWriter)来做。
      */
     private void readPrint(String path) {
-//        PrintWriter pw = new PrintWriter(System.out);
-        try (BufferedReader br = new BufferedReader(new FileReader(path)); PrintWriter pw = new PrintWriter(System.out,true)) {
+//        将打印流放到try块外,以免将输出流关闭,导致之后的任何形式的输出被屏蔽
+        PrintWriter pw = new PrintWriter(System.out,true);
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
 //            PrintWriter pw = new PrintWriter(System.out);
             String len;
             while ((len = br.readLine()) != null) {

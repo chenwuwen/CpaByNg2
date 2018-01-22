@@ -51,4 +51,10 @@ public class CpaConstants {
 
     /**最大上传文件，超过此值上传文件将产生临时文件*/
     public static final Integer MIN_FILE_SIZE =2048;
+
+    /**当前活跃(在线)用户数*/
+    public static final String ONLINE_USER_COUNT = "online_user_count";
+
+    /**当前活跃(在线)用户*/
+    public static final String ONLINE_USER= "online_user";
 }
