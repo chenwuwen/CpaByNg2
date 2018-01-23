@@ -311,6 +311,8 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
                         .append(entry.getValue()).append(',');
             }
             sb.deleteCharAt(sb.length() - 1);
+        } else {
+            sb.append("order by o.id desc");
         }
         return sb.toString();
     }
@@ -359,7 +361,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
          */
         if (index != -1 && index == 0) {
 //            where.substring(3);
-           where = StringUtils.substringAfter(where, "and");
+            where = StringUtils.substringAfter(where, "and");
         }
         return where;
     }

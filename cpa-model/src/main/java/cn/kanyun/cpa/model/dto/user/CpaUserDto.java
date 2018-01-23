@@ -3,6 +3,7 @@ package cn.kanyun.cpa.model.dto.user;
 
 import cn.kanyun.cpa.model.entity.BaseEntity;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
@@ -26,6 +27,12 @@ public class CpaUserDto extends BaseEntity {
     private String validateCode; //验证码
     private String isRememberMe;
     private String salt; //盐
+    private LocalDateTime startRegisterDate; //注册开始时间
+    private LocalDateTime endRegisterDate;  //注册结束时间
+    private LocalDateTime regDate;  //注册时间
+    private LocalDateTime startlastLoginDate; //上次登录开始时间
+    private LocalDateTime endlastLoginDate;  //上次登录结束时间
+    private LocalDateTime lastLoginDate;  //上次登录时间
     private Set<String> roles; //角色集合
     private Set<String> permissions; //权限集合
     private String imgPath;
@@ -110,5 +117,53 @@ public class CpaUserDto extends BaseEntity {
 
     public void setImgPath(String imgPath) {
         this.imgPath = imgPath;
+    }
+
+    public LocalDateTime getStartRegisterDate() {
+        return startRegisterDate;
+    }
+
+    public void setStartRegisterDate(LocalDateTime startRegisterDate) {
+        this.startRegisterDate = startRegisterDate;
+    }
+
+    public LocalDateTime getEndRegisterDate() {
+        return endRegisterDate;
+    }
+
+    public void setEndRegisterDate(LocalDateTime endRegisterDate) {
+        this.endRegisterDate = endRegisterDate;
+    }
+
+    public LocalDateTime getStartlastLoginDate() {
+        return startlastLoginDate;
+    }
+
+    public void setStartlastLoginDate(LocalDateTime startlastLoginDate) {
+        this.startlastLoginDate = startlastLoginDate;
+    }
+
+    public LocalDateTime getEndlastLoginDate() {
+        return endlastLoginDate;
+    }
+
+    public void setEndlastLoginDate(LocalDateTime endlastLoginDate) {
+        this.endlastLoginDate = endlastLoginDate;
+    }
+
+    public LocalDateTime getRegDate() {
+        return regDate;
+    }
+
+    public void setRegDate(LocalDateTime regDate) {
+        this.regDate = regDate;
+    }
+
+    public LocalDateTime getLastLoginDate() {
+        return lastLoginDate;
+    }
+
+    public void setLastLoginDate(LocalDateTime lastLoginDate) {
+        this.lastLoginDate = lastLoginDate;
     }
 }

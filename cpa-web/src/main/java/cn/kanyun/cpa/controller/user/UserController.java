@@ -80,7 +80,7 @@ public class UserController {
      * @param
      * @return
      * @author Kanyun
-     * @Description: (新方法，统一返回值，保留旧方法)注册Ajax检查用户名是否可用
+     * @Description: (新方法 ， 统一返回值 ， 保留旧方法)注册Ajax检查用户名是否可用
      * @date 2017/11/13 10:21
      */
     @RequestMapping("/checkname")
@@ -165,7 +165,7 @@ public class UserController {
      * @param
      * @return
      * @author Kanyun
-     * @Description: 用户注销(已被shiro接管,shiro拦截此url,进入SysLogoutFilter过滤器)
+     * @Description: 用户注销(已被shiro接管, shiro拦截此url, 进入SysLogoutFilter过滤器)
      * @date 2017/11/25 15:57
      */
     @RequestMapping("/logout")
@@ -180,5 +180,18 @@ public class UserController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * @describe: 获取用户列表
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/23 0023 10:36
+     */
+    @RequestMapping("/getUserList")
+    @ResponseBody
+    public CpaResult getUserList(CpaUserDto cpaUserDto) {
+        CpaResult result = userService.findCpaUserByCondition(cpaUserDto, null);
+        return result;
     }
 }

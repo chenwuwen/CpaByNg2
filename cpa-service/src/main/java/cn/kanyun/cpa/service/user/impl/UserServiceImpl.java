@@ -3,18 +3,21 @@ package cn.kanyun.cpa.service.user.impl;
 import cn.kanyun.cpa.dao.system.UserRoleDao;
 import cn.kanyun.cpa.dao.user.UserDao;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
+import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.EndecryptUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 @Service(UserService.SERVICE_NAME)
@@ -91,6 +94,15 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
         /*直接保存CpaUser主表,这样可以把关联表UserRole保存了*/
         userDao.save(user);
         return user;
+    }
+
+    @Override
+    public CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderby) {
+        CpaResult result = userDao.findCpaUserByCondition(cpaUserDto,orderby);
+        CpaUser cpaUser = (CpaUser) result.getData();
+        BeanUtils.copyProperties(cpaUser,cpaUserDto);
+        result.setData(cpaUserDto);
+        return result;
     }
 
 

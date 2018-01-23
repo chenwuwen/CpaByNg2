@@ -154,17 +154,17 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
             String testStem = cpaRepertory.getTestStem() == null ? null : cpaRepertory.getTestStem();
             StringBuilder where = new StringBuilder();
             Object[] params;
-//            使用LinkedList,因为LinkedList是有序的,参数应与where条件一一对应
-            LinkedList list = new LinkedList();
+//            使用Queue,因为Queue是先进先出的,使用LinkedList作为Queue的实例，LinkedList实现了Queue的接口,参数应与where条件一一对应
+            Queue queue = new LinkedList();
             if (testType != null && !testType.isEmpty()) {
                 where.append(" and o.testType=? ");
-                list.add(testType);
+                queue.add(testType);
             }
             if (testStem != null && !testStem.isEmpty()) {
                 where.append(" and o.testStem like ? ");
-                list.add("%" + testStem + "%");
+                queue.add("%" + testStem + "%");
             }
-            params = list.toArray();
+            params = queue.toArray();
             result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where.toString(), params, orderby);
         }
         List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
