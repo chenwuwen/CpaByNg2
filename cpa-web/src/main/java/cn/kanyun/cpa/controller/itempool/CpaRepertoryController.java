@@ -53,7 +53,7 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getUnitExam/{testType}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("testType") String testType, @RequestParam(name = "pageNo" ,required = false) Integer pageNo, @RequestParam(name = "pageSize" ,required = false) Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("testType") String testType, @RequestParam(name = "pageNo", required = false) Integer pageNo, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
         CpaResult result = null;
         try {
             Object[] params = {testType};
@@ -67,7 +67,7 @@ public class CpaRepertoryController {
             try {
                 result = (CpaResult) redisService.getCacheObject(key);
             } catch (Exception e) {
-                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}" , e);
+                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}", e);
             }
             if (null == result) {
                 Integer firstResult = page.countOffset(pageNo, pageSize);
@@ -239,21 +239,12 @@ public class CpaRepertoryController {
 
     public CpaResult getListExam(@RequestBody ItemForm itemForm) {
         CpaResult result = null;
-        Page page = new Page();
-        Integer pageNo = itemForm.getPageNo();
-        Integer pageSize = itemForm.getPageSize();
-        CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-        pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
-        pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
-        Integer firstResult = page.countOffset(pageNo, pageSize);
-        LinkedHashMap orderby = new LinkedHashMap() {{
-            put("id", "desc");
-        }};
+        CpaRepertoryDto cpaRepertoryDto = itemForm.getCpaRepertoryDto();
         try {
-            result = cpaRepertoryService.getListItem(cpaRepertory, firstResult, pageSize, orderby);
+            result = cpaRepertoryService.getListItem(cpaRepertoryDto, null);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
-            logger.error("ERROR：/api/unitExam/getListExam ：{}" , e);
+            logger.error("ERROR：/api/unitExam/getListExam ：{}", e);
             result.setState(CpaConstants.OPERATION_ERROR);
 
         }

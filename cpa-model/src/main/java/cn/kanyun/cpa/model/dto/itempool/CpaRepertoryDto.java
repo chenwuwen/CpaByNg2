@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.model.dto.itempool;
 
+import cn.kanyun.cpa.model.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -11,7 +12,7 @@ import java.util.List;
  * CpaRepertory entity. @author MyEclipse Persistence Tools
  */
 
-public class CpaRepertoryDto implements java.io.Serializable {
+public class CpaRepertoryDto  extends BaseEntity {
 
 
     // Fields    

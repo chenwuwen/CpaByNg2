@@ -145,39 +145,19 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
     }
 
     @Override
-    public CpaResult getListItem(CpaRepertory cpaRepertory, Integer firstResult, Integer pageSize, LinkedHashMap orderby) {
-        CpaResult result;
-        if (null == cpaRepertory.getTestStem() && null == cpaRepertory.getTestType()) {
-            result = cpaRepertoryDao.getScrollData(firstResult, pageSize, null, null, orderby);
-        } else {
-            String testType = cpaRepertory.getTestType() == null ? null : cpaRepertory.getTestType();
-            String testStem = cpaRepertory.getTestStem() == null ? null : cpaRepertory.getTestStem();
-            StringBuilder where = new StringBuilder();
-            Object[] params;
-//            使用Queue,因为Queue是先进先出的,使用LinkedList作为Queue的实例，LinkedList实现了Queue的接口,参数应与where条件一一对应
-            Queue queue = new LinkedList();
-            if (testType != null && !testType.isEmpty()) {
-                where.append(" and o.testType=? ");
-                queue.add(testType);
-            }
-            if (testStem != null && !testStem.isEmpty()) {
-                where.append(" and o.testStem like ? ");
-                queue.add("%" + testStem + "%");
-            }
-            params = queue.toArray();
-            result = cpaRepertoryDao.getScrollData(firstResult, pageSize, where.toString(), params, orderby);
-        }
+    public CpaResult getListItem(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderby) {
+        CpaResult result = cpaRepertoryDao.findCpaRepertoryByCondition(cpaRepertoryDto, orderby);
         List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
         if (result.getTotalCount() > 0) {
             List<CpaRepertory> cpaRepertorys = (List<CpaRepertory>) result.getData();
             cpaRepertorys.forEach(cpaRepertory1 -> {
-                CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
-                cpaRepertoryDto.setTestStem(cpaRepertory1.getTestStem());
-                cpaRepertoryDto.setId(cpaRepertory1.getId());
-                cpaRepertoryDto.setInsertDate(cpaRepertory1.getInsertDate());
-                cpaRepertoryDto.setTestType(ExamEnum.valueOf(cpaRepertory1.getTestType().toUpperCase()).toString());
-                cpaRepertoryDto.setChoice(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
-                cpaRepertoryDtos.add(cpaRepertoryDto);
+                CpaRepertoryDto cpaRepertoryDto1 = new CpaRepertoryDto();
+                cpaRepertoryDto1.setTestStem(cpaRepertory1.getTestStem());
+                cpaRepertoryDto1.setId(cpaRepertory1.getId());
+                cpaRepertoryDto1.setInsertDate(cpaRepertory1.getInsertDate());
+                cpaRepertoryDto1.setTestType(ExamEnum.valueOf(cpaRepertory1.getTestType().toUpperCase()).toString());
+                cpaRepertoryDto1.setChoice(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
+                cpaRepertoryDtos.add(cpaRepertoryDto1);
             });
         }
         result.setData(cpaRepertoryDtos);
