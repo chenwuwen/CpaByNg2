@@ -1,12 +1,10 @@
 package cn.kanyun.cpa.util;
 
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FilenameUtils;
-import org.joda.time.DateTime;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.testng.annotations.Test;
 
 import java.io.File;
 import java.io.FileFilter;

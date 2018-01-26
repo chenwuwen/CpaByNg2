@@ -16,9 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Set;
+import java.util.*;
 
 @Service(UserService.SERVICE_NAME)
 @Transactional
@@ -67,7 +65,7 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
     }
 
     @Override
-    @Transactional(rollbackFor={RuntimeException.class, Exception.class})
+    @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
     public CpaUser saveUser(CpaUserDto userDto) {
         /*构建CpaUser*/
         CpaUser user = new CpaUser();
@@ -80,7 +78,7 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
         user.setStatus(1);
 
         /*构建CpaRole,但并不会保存CpaRole,因为没有配置级联关系,级联关系为默认*/
-        CpaRole role= new CpaRole();
+        CpaRole role = new CpaRole();
         role.setId(3);
 
         /*构建UserRole*/
@@ -98,10 +96,15 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
 
     @Override
     public CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderby) {
-        CpaResult result = userDao.findCpaUserByCondition(cpaUserDto,orderby);
-        CpaUser cpaUser = (CpaUser) result.getData();
-        BeanUtils.copyProperties(cpaUser,cpaUserDto);
-        result.setData(cpaUserDto);
+        CpaResult result = userDao.findCpaUserByCondition(cpaUserDto, orderby);
+        List<CpaUser> cpaUsers = (List<CpaUser>) result.getData();
+        List<CpaUserDto> cpaUserDtos = new ArrayList<>();
+        cpaUsers.forEach(cpaUser -> {
+            CpaUserDto userDto = new CpaUserDto();
+            BeanUtils.copyProperties(cpaUser, userDto);
+            cpaUserDtos.add(userDto);
+        });
+        result.setData(cpaUserDtos);
         return result;
     }
 

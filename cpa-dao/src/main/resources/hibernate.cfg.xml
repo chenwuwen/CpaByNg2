@@ -35,7 +35,10 @@
         <property name="hibernate.connection.autocommit">true</property>
         <!-- 将hibernate底层执行的sql语句从控制台显示 -->
         <property name="show_sql">true</property>
+        <!--格式化sql语句-->
         <property name="format_sql">true</property>
+        <!--显示sql参数-->
+        <property name="hibernate.use_sql_comments">true</property>
         <!-- 自动建表 -->
         <!--
  ## auto schema export  自动导出表结构. 自动建表

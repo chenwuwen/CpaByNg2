@@ -9,12 +9,11 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-import cn.kanyun.cpa.model.entity.Page;
 import org.apache.commons.io.IOUtils;
 import org.im4java.core.*;
 import org.im4java.process.ArrayListOutputConsumer;
 import org.im4java.process.ProcessStarter;
-import cn.kanyun.cpa.model.entity.GraphicImageConstants;
+import cn.kanyun.cpa.model.constants.GraphicImageConstants;
 
 /**
  * @ClassName: ImageUtil2.java

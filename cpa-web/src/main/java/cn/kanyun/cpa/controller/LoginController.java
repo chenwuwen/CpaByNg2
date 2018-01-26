@@ -2,7 +2,7 @@ package cn.kanyun.cpa.controller;
 
 import cn.kanyun.cpa.controller.user.UserController;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.system.UserRoleService;
@@ -69,7 +69,7 @@ public class LoginController {
     @ResponseBody
     public CpaResult toLogin(CpaUserDto user, HttpServletRequest request) {
         CpaResult result = new CpaResult();
-        String s_code = (String) request.getSession().getAttribute("validateCode");
+        String s_code = (String) request.getSession().getAttribute(CpaConstants.IDENTIFYING_CODE);
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
         if (!s_code.equalsIgnoreCase(user.getValidateCode())) {
             result.setState(CpaConstants.OPERATION_ERROR);

@@ -3,7 +3,7 @@ package cn.kanyun.cpa.controller.itempool;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.enums.ExamEnum;
 import cn.kanyun.cpa.model.entity.Page;

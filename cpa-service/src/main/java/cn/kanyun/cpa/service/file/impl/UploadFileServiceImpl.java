@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.service.file.impl;
 
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.service.file.FtpService;
 import cn.kanyun.cpa.service.file.UploadFileService;

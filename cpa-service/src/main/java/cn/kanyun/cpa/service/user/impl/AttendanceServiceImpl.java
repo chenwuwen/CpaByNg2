@@ -2,7 +2,7 @@ package cn.kanyun.cpa.service.user.impl;
 
 import cn.kanyun.cpa.dao.user.AttendanceDao;
 import cn.kanyun.cpa.dao.user.UserDao;
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.Attendance;
 import cn.kanyun.cpa.model.entity.user.CpaUser;

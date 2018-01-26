@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.aop;
 
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.util.WebUtil;

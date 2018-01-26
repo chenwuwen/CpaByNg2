@@ -65,7 +65,7 @@
         <!-- ThresholdFilter： 临界值过滤器，过滤掉低于指定临界值的日志。当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。 -->
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <!--设置过滤级别,其会覆盖ROOT节点设置的级别-->
-            <level>INFO</level>
+            <level>DEBUG</level>
             <!--用于配置符合过滤条件的操作-->
             <onMatch>ACCEPT</onMatch>
             <!--用于配置不符合过滤条件的操作-->

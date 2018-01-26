@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.listenner;
 
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;

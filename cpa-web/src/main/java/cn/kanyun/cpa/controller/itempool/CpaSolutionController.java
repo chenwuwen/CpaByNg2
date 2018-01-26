@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.controller.itempool;
 
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;

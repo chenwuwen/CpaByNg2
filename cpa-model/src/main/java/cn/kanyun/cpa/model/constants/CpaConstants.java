@@ -1,9 +1,13 @@
-package cn.kanyun.cpa.model.entity;
+package cn.kanyun.cpa.model.constants;
 
 
 
 //常量类
 public class CpaConstants {
+
+    /** 验证码*/
+    public static final String IDENTIFYING_CODE="validateCode";
+
     /** 用户名*/
     public static final String USER = "user";
 

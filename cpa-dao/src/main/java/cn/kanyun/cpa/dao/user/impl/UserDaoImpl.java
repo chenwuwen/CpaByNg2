@@ -54,13 +54,13 @@ public class UserDaoImpl extends CommonDaoImpl<Long, CpaUser> implements UserDao
             where.append("o.regDate < ?");
             queue.add(cpaUserDto.getEndRegisterDate());
         }
-        if (cpaUserDto.getStartlastLoginDate() != null) {
+        if (cpaUserDto.getStartLastLoginDate() != null) {
             where.append("o.lastLoginDate > ?");
-            queue.add(cpaUserDto.getStartlastLoginDate());
+            queue.add(cpaUserDto.getStartLastLoginDate());
         }
-        if (cpaUserDto.getEndlastLoginDate() != null) {
+        if (cpaUserDto.getEndLastLoginDate() != null) {
             where.append("o.lastLoginDate < ?");
-            queue.add(cpaUserDto.getEndlastLoginDate());
+            queue.add(cpaUserDto.getEndLastLoginDate());
         }
         params = queue.toArray();
         CpaResult result = getScrollData(firstResult, pageSize, where.toString(), params, orderby);

@@ -2,6 +2,7 @@ package cn.kanyun.cpa.model.dto.user;
 
 
 import cn.kanyun.cpa.model.entity.BaseEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -27,11 +28,15 @@ public class CpaUserDto extends BaseEntity {
     private String validateCode; //验证码
     private String isRememberMe;
     private String salt; //盐
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startRegisterDate; //注册开始时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endRegisterDate;  //注册结束时间
     private LocalDateTime regDate;  //注册时间
-    private LocalDateTime startlastLoginDate; //上次登录开始时间
-    private LocalDateTime endlastLoginDate;  //上次登录结束时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime startLastLoginDate; //上次登录开始时间
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDateTime endLastLoginDate;  //上次登录结束时间
     private LocalDateTime lastLoginDate;  //上次登录时间
     private Set<String> roles; //角色集合
     private Set<String> permissions; //权限集合
@@ -135,20 +140,20 @@ public class CpaUserDto extends BaseEntity {
         this.endRegisterDate = endRegisterDate;
     }
 
-    public LocalDateTime getStartlastLoginDate() {
-        return startlastLoginDate;
+    public LocalDateTime getStartLastLoginDate() {
+        return startLastLoginDate;
     }
 
-    public void setStartlastLoginDate(LocalDateTime startlastLoginDate) {
-        this.startlastLoginDate = startlastLoginDate;
+    public void setStartLastLoginDate(LocalDateTime startLastLoginDate) {
+        this.startLastLoginDate = startLastLoginDate;
     }
 
-    public LocalDateTime getEndlastLoginDate() {
-        return endlastLoginDate;
+    public LocalDateTime getEndLastLoginDate() {
+        return endLastLoginDate;
     }
 
-    public void setEndlastLoginDate(LocalDateTime endlastLoginDate) {
-        this.endlastLoginDate = endlastLoginDate;
+    public void setEndLastLoginDate(LocalDateTime endLastLoginDate) {
+        this.endLastLoginDate = endLastLoginDate;
     }
 
     public LocalDateTime getRegDate() {

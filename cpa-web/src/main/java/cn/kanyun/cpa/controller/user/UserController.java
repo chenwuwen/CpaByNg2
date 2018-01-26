@@ -2,7 +2,7 @@ package cn.kanyun.cpa.controller.user;
 
 
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
-import cn.kanyun.cpa.model.entity.CpaConstants;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.file.UploadFileService;
@@ -162,6 +162,26 @@ public class UserController {
     }
 
     /**
+     * @describe: 获取用户列表
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/23 0023 10:36
+     */
+    @RequestMapping("/getUserList")
+    @ResponseBody
+    public CpaResult getUserList(CpaUserDto cpaUserDto) {
+        CpaResult result = null;
+        try {
+            result = userService.findCpaUserByCondition(cpaUserDto, null);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR: api/user/getUserList {}", e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+        return result;
+    }
+
+    /**
      * @param
      * @return
      * @author Kanyun
@@ -182,16 +202,5 @@ public class UserController {
         }
     }
 
-    /**
-     * @describe: 获取用户列表
-     * @params:
-     * @Author: Kanyun
-     * @Date: 2018/1/23 0023 10:36
-     */
-    @RequestMapping("/getUserList")
-    @ResponseBody
-    public CpaResult getUserList(CpaUserDto cpaUserDto) {
-        CpaResult result = userService.findCpaUserByCondition(cpaUserDto, null);
-        return result;
-    }
+
 }
