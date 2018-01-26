@@ -229,7 +229,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         String whereql = where != null && !"".equals(where.trim()) ? " where "
                 + buildWhere(where) : "";
         Session session = getSession();
-        Query query = session.createQuery("select o from " + entityName + " o"
+        Query query = session.createQuery("select o from " + entityName + " o "
                 + whereql + buildOrderby(orderby));
         query.setCacheable(true);   //激活查询缓存,查询缓存,缓存的是对象的ID
         if (firstResult != -1 && maxResult != -1) {
@@ -312,7 +312,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
             }
             sb.deleteCharAt(sb.length() - 1);
         } else {
-            sb.append("order by o.id desc");
+            sb.append(" order by o.id desc ");
         }
         return sb.toString();
     }

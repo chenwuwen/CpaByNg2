@@ -1,8 +1,8 @@
 package cn.kanyun.cpa.controller.user;
 
 
-import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.constants.CpaConstants;
+import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.file.UploadFileService;
@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -176,6 +177,70 @@ public class UserController {
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("ERROR: api/user/getUserList {}", e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+        return result;
+    }
+
+    /**
+     * @describe: 获取用户详细信息
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/26 0026 16:39
+     */
+    @RequestMapping("/getUserDetail/{userId}")
+    @ResponseBody
+    public CpaResult getUserDetail(@PathVariable("userId") Long userId) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaUser user = userService.findById(userId);
+            CpaUserDto userDto = new CpaUserDto();
+            org.springframework.beans.BeanUtils.copyProperties(user, userDto);
+            result.setData(result);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR: api/user/getUserDetail {}", e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+        return result;
+    }
+
+    /**
+     * @describe: 删除用户
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/26 0026 16:39
+     */
+    @RequestMapping("/delUser/{userId}")
+    @ResponseBody
+    public CpaResult delUser(@PathVariable("userId") Long userId) {
+        CpaResult result = new CpaResult();
+        try {
+            userService.deleteById(userId);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR: api/user/delUser {}", e);
+            result.setState(CpaConstants.OPERATION_ERROR);
+        }
+        return result;
+    }
+
+    /**
+     * @describe: 修改用户
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/1/26 0026 16:39
+     */
+    @RequestMapping("/updUser")
+    @ResponseBody
+    public CpaResult updUser(CpaUserDto userDto) {
+        CpaResult result = new CpaResult();
+        try {
+            CpaUser user = new CpaUser();
+            userService.saveOrUpdate(user);
+            result.setState(CpaConstants.OPERATION_SUCCESS);
+        } catch (Exception e) {
+            logger.error("ERROR: api/user/updUser {}", e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
