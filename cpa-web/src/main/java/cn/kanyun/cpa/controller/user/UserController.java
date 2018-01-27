@@ -196,7 +196,7 @@ public class UserController {
             CpaUser user = userService.findById(userId);
             CpaUserDto userDto = new CpaUserDto();
             org.springframework.beans.BeanUtils.copyProperties(user, userDto);
-            result.setData(result);
+            result.setData(userDto);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("ERROR: api/user/getUserDetail {}", e);
