@@ -42,6 +42,8 @@ public class CpaUserDto extends BaseEntity {
     private Set<String> permissions; //权限集合
     private String imgPath;
     private String token;
+    private Integer status;
+
 
     public String getToken() {
         return token;
@@ -170,5 +172,13 @@ public class CpaUserDto extends BaseEntity {
 
     public void setLastLoginDate(LocalDateTime lastLoginDate) {
         this.lastLoginDate = lastLoginDate;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

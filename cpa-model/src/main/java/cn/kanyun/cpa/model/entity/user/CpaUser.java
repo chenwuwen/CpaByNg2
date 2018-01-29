@@ -22,7 +22,7 @@ public class CpaUser implements java.io.Serializable {
     private String petName;
     private LocalDateTime regDate;
     private LocalDateTime lastLoginDate;
-    private Integer status;
+    private Integer status;  //0:已删除，1:正常，2:锁定
     private String salt;
     private Set userRoles = new HashSet<>();
     private String imgPath;
