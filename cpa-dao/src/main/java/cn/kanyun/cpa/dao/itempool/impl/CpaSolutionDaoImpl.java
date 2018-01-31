@@ -39,8 +39,8 @@ public class CpaSolutionDaoImpl extends CommonDaoImpl<Long, CpaSolution> impleme
         query.setParameterList("respertoryIds", respertoryIds);
         Map<Integer, CpaSolution> mapSolution = new HashMap();
         List<CpaSolution> solutionList = query.list();
-        for (int i = 0; i < solutionList.size(); i++) {
-            mapSolution.put(solutionList.get(i).getId().intValue(), solutionList.get(i));
+        for (CpaSolution cpaSolution : solutionList) {
+            mapSolution.put(cpaSolution.getId().intValue(), cpaSolution);
         }
         return mapSolution;
     }
