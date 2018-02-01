@@ -30,18 +30,29 @@
 
     <!--定义需要被定时任务处理的类-->
     <!--<bean id="answerRecordService" class="cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl"></bean>-->
-    <bean id="answerRecordService" class="cn.kanyun.cpa.job.UserThingJob"></bean>
+    <bean id="userThingJob" class="cn.kanyun.cpa.job.UserThingJob"></bean>
+    <bean id="cleanCacheJob" class="cn.kanyun.cpa.job.CleanCacheJob"></bean>
 
     <!--配置调度程序quartz ，其中配置JobDetail有两种方式-->
     <!--方式一：使用JobDetailBean，任务类必须实现Job接口-->
     <!--方式二：使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法-->
 
-    <bean id="saveUserAnswerRecordJobDetail"
+    <bean id="userThing"
           class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <!--引入被定时任务处理的类-->
-        <property name="targetObject" ref="answerRecordService"/>
+        <property name="targetObject" ref="userThingJob"/>
         <!--引入被定时任务处理的方法-->
         <property name="targetMethod" value="saveUserAnswerRecord"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="cleanCache"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--引入被定时任务处理的类-->
+        <property name="targetObject" ref="cleanCacheJob"/>
+        <!--引入被定时任务处理的方法-->
+        <property name="targetMethod" value="cleanImg"/>
         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
         <property name="concurrent" value="false"/>
     </bean>
@@ -49,13 +60,26 @@
 
     <!-- 具体的Cron定时器 定义触发时间-->
     <bean id="saveAnswerRecord" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-        <property name="jobDetail" ref="saveUserAnswerRecordJobDetail"/>
+        <property name="jobDetail" ref="userThing"/>
         <!--cron表达式,设定任务什么时间执行-->
         <!--如果需要动态的设置任务的执行时间，就不能直接使用org.springframework.scheduling.quartz.CronTriggerFactoryBean，需要自己实现一个动态调度服务类，在其中构建CronTrigger或SimpleTrigger，动态配置时间。-->
         <!--每天凌晨两点执行-->
         <property name="cronExpression" value="0 0 2 * * ?"/>
         <!--每5秒执行一次-->
         <!--<property name="cronExpression" value="*/5 * * * * ?"/>-->
+        <!--设置时区-->
+        <property name="timeZone" value="GMT+8:00"/>
+    </bean>
+
+    <!-- 具体的Cron定时器 定义触发时间-->
+    <bean id="cleanImg" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cleanCache"/>
+        <!--cron表达式,设定任务什么时间执行-->
+        <!--如果需要动态的设置任务的执行时间，就不能直接使用org.springframework.scheduling.quartz.CronTriggerFactoryBean，需要自己实现一个动态调度服务类，在其中构建CronTrigger或SimpleTrigger，动态配置时间。-->
+        <!--每天凌晨两点执行-->
+        <property name="cronExpression" value="0 0 2 * * ?"/>
+        <!--每5秒执行一次-->
+        <!--<property name="cronExpression" value="*/20 * * * * ?"/>-->
         <!--设置时区-->
         <property name="timeZone" value="GMT+8:00"/>
     </bean>
@@ -81,6 +105,7 @@
             <!--存放需要触发的定时任务-->
             <list>
                 <ref bean="saveAnswerRecord"/>
+                <ref bean="cleanImg"/>
             </list>
         </property>
         <property name="taskExecutor" ref="executor"/>

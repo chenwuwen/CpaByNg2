@@ -142,10 +142,10 @@ public class UserController {
      */
     @RequestMapping("/upLoadUserHeaderImg")
     @ResponseBody
-    public CpaResult upLoadUserHeaderImg(@RequestParam("uploadedfile") MultipartFile uploadedfile, HttpServletRequest request) {
+    public CpaResult upLoadUserHeaderImg(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request) {
         CpaResult result = new CpaResult();
         try {
-            MultipartFile[] files = {uploadedfile};
+            MultipartFile[] files = {uploadFile};
             CpaResult imgResult = uploadFileService.upLoadImg(files);
             if (1 == imgResult.getState()) {
                 result.setData(imgResult.getData());

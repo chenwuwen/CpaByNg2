@@ -39,7 +39,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         CpaResult result = new CpaResult();
         for (MultipartFile file : files) {
             String newFileName = FileUtil.generateFileName(file.getOriginalFilename(), "", true);
-            String rootPath = UploadFileServiceImpl.class.getResource("/").getPath() + "image/";
+            String rootPath = UploadFileServiceImpl.class.getResource("/").getPath() + "images/";
             String filePath = rootPath + DateUtils.toYmdX(new Date()) + "/" + newFileName;
 
             try {
