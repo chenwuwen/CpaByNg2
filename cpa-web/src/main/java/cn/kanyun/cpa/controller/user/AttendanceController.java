@@ -4,6 +4,7 @@ import cn.kanyun.cpa.model.dto.user.AttendanceDto;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.user.AttendanceService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.slf4j.Logger;
@@ -36,7 +37,8 @@ public class AttendanceController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            result = attendanceService.signIn(user);
+            CpaUserExtend userExtend = user.getCpaUserExtend();
+            result = attendanceService.signIn(user, userExtend);
         } catch (Exception e) {
             logger.error("用户签到异常：" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
@@ -46,13 +48,14 @@ public class AttendanceController {
 
     @RequestMapping("/getSignIn")
     @ResponseBody
-    public CpaResult getReapSigInDay(HttpServletRequest request){
+    public CpaResult getReapSigInDay(HttpServletRequest request) {
         CpaResult result = new CpaResult();
         CpaUser user = WebUtil.getSessionUser(request);
+        CpaUserExtend userExtend = user.getCpaUserExtend();
         AttendanceDto attendanceDto = new AttendanceDto();
-        if (attendanceService.getReapSigInDay(user)){
-                attendanceDto.setReapSigInDay(user.getReapSigInDay());
-        }else {
+        if (attendanceService.getReapSigInDay(user)) {
+            attendanceDto.setReapSigInDay(userExtend.getReapSignInDay());
+        } else {
             attendanceDto.setReapSigInDay(0);
         }
         result.setData(attendanceDto);

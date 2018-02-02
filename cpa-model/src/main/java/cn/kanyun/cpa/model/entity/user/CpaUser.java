@@ -26,12 +26,12 @@ public class CpaUser implements java.io.Serializable {
     private String salt;
     private Set userRoles = new HashSet<>();
     private String imgPath;
-    private Integer reapSigInDay;
+    private CpaUserExtend cpaUserExtend;
 
     public CpaUser() {
     }
 
-    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, LocalDateTime regDate, LocalDateTime lastLoginDate, Integer status, Set userRoles, String imgPath,Integer reapSigInDay) {
+    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, LocalDateTime regDate, LocalDateTime lastLoginDate, Integer status, Set userRoles, String imgPath, CpaUserExtend cpaUserExtend) {
         this.id = id;
         this.userName = userName;
         this.password = password;
@@ -43,7 +43,7 @@ public class CpaUser implements java.io.Serializable {
         this.status = status;
         this.userRoles = userRoles;
         this.imgPath = imgPath;
-        this.reapSigInDay=reapSigInDay;
+        this.cpaUserExtend = cpaUserExtend;
     }
 
     public Long getId() {
@@ -144,29 +144,11 @@ public class CpaUser implements java.io.Serializable {
         this.imgPath = imgPath;
     }
 
-    public Integer getReapSigInDay() {
-        return reapSigInDay;
+    public CpaUserExtend getCpaUserExtend() {
+        return cpaUserExtend;
     }
 
-    public void setReapSigInDay(Integer reapSigInDay) {
-        this.reapSigInDay = reapSigInDay;
-    }
-
-    @Override
-    public String toString() {
-        return "CpaUser{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", gender='" + gender + '\'' +
-                ", email='" + email + '\'' +
-                ", petName='" + petName + '\'' +
-                ", regDate=" + regDate +
-                ", lastLoginDate=" + lastLoginDate +
-                ", status=" + status +
-                ", salt='" + salt + '\'' +
-                ", userRoles=" + userRoles +
-                ", imgPath='" + imgPath + '\'' +
-                '}';
+    public void setCpaUserExtend(CpaUserExtend cpaUserExtend) {
+        this.cpaUserExtend = cpaUserExtend;
     }
 }

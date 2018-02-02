@@ -57,9 +57,9 @@ import java.io.File;
 
 @Controller
 @RequestMapping("/api/share")
-public class ChainController {
+public class ShareController {
 
-    private static final Logger logger = LoggerFactory.getLogger(ChainController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ShareController.class);
 
     @Resource(name = CpaUserExtendService.SERVICE_NAME)
     private CpaUserExtendService cpaUserExtendService;
@@ -79,13 +79,14 @@ public class ChainController {
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();
-            String qrPic = ChainController.class.getClassLoader().getResource("").getPath() + "/share/" + System.currentTimeMillis() + ".jpg";
+            String qrPic = ShareController.class.getClassLoader().getResource("").getPath() + "/share/" + System.currentTimeMillis() + ".jpg";
             QrcodeUtils.gen(shareChain, new File(qrPic));
-            CpaUserExtend userExtend = new CpaUserExtend();
+            CpaUserExtend userExtend = user.getCpaUserExtend();
             String pirUrl = uploadFileService.upLoadQRPic(qrPic);
             userExtend.setShareQrUrl(pirUrl);
             userExtend.setCpaUser(user);
             userExtend.setShareChain(shareChain);
+            cpaUserExtendService.update(userExtend);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("ERROR：/api/share/generateChain 生成分享链接出错：", e);

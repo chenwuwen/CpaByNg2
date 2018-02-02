@@ -5,8 +5,10 @@ import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.file.UploadFileService;
 import cn.kanyun.cpa.service.system.UserRoleService;
+import cn.kanyun.cpa.service.user.CpaUserExtendService;
 import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -47,6 +48,8 @@ public class UserController {
     private UserRoleService userRoleService;
     @Resource(name = UploadFileService.SERVICE_NAME)
     private UploadFileService uploadFileService;
+    @Resource(name = CpaUserExtendService.SERVICE_NAME)
+    private CpaUserExtendService cpaUserExtendService;
 
 
     /**
@@ -103,16 +106,16 @@ public class UserController {
 
     /**
      * @Author: kanyun
-     * @Description: 用户注册
+     * @Description: 用户注册 @RequestMapping，value可以匹配多个多个路径
      * @Date: 2017/8/16 17:02
      * @params:
-     */
-    @RequestMapping("/register")
+     * */
+    @RequestMapping(value = {"/register/{inviteUser}", "/register"})
     @ResponseBody
-    public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, HttpSession session) throws NoSuchAlgorithmException {
+    public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, @PathVariable(value = "inviteUser", required = false) Long inviteUser) throws NoSuchAlgorithmException {
         CpaResult result = new CpaResult();
         // 获取session中保存的验证码
-        String s_code = (String) session.getAttribute("validateCode");
+        String s_code = (String) request.getSession().getAttribute("validateCode");
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
         if (!s_code.equalsIgnoreCase(userDto.getValidateCode())) {
             result.setState(CpaConstants.OPERATION_ERROR);
@@ -120,9 +123,16 @@ public class UserController {
         } else {
             try {
                 CpaUser user = userService.saveUser(userDto);
+                CpaUserExtend cpaUserExtend = new CpaUserExtend();
+                if (!(inviteUser == null) && !(inviteUser == 0)) {
+                    if (null != userService.findById(inviteUser)) {
+                        cpaUserExtend.setCpaUser(user);
+                    }
+                }
+                cpaUserExtendService.save(cpaUserExtend);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setMsg("注册成功,即将跳转至登陆页！");
-                session.setAttribute(CpaConstants.USER, user);
+                WebUtil.setSessionUser(request, user);
             } catch (Exception e) {
                 logger.info("/api/user/register  用户注册异常：  " + e);
                 result.setState(CpaConstants.OPERATION_ERROR);

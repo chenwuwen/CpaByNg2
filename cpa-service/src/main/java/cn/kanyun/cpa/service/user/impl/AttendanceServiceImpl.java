@@ -6,6 +6,7 @@ import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.Attendance;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.AttendanceService;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> i
 
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public CpaResult signIn(CpaUser user) {
+    public CpaResult signIn(CpaUser user,CpaUserExtend userExtend) {
         CpaResult result = new CpaResult();
         Attendance attendance = new Attendance();
         attendance.setAttendanceDate(LocalDateTime.now());
@@ -39,10 +40,10 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> i
         //判断当前未打卡前上一次打卡,与当前时间差值
         if (this.getReapSigInDay(user)) {
             //设置连续打卡时间,为之前连续打卡时间加1
-            user.setReapSigInDay(user.getReapSigInDay() + 1);
+            userExtend.setReapSignInDay(userExtend.getReapSignInDay() + 1);
         } else {
             //设置连续打卡时间为1
-            user.setReapSigInDay(1);
+            userExtend.setReapSignInDay(1);
         }
         save(attendance);
         userDao.update(user);

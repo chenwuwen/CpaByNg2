@@ -69,10 +69,6 @@
                 <comment>用户头像地址</comment>
             </column>
         </property>
-        <property name="reapSigInDay" type="java.lang.Integer">
-            <column name="reap_sigin_day">
-                <comment>用户连续打卡天数</comment>
-            </column>
-        </property>
+        <one-to-one name="cpaUserExtend" class="cn.kanyun.cpa.model.entity.user.CpaUserExtend" cascade="persist"/>
     </class>
 </hibernate-mapping>
