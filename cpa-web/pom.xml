@@ -57,6 +57,11 @@
             <artifactId>cpa-redis</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cn.kanyun</groupId>
+            <artifactId>cpa-util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <!--Spring相关-->
         <dependency>

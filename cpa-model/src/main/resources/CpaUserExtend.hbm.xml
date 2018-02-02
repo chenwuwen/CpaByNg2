@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="cn.kanyun.cpa.model.entity.user.CpaUserExtend" table="cpa_user_extend" schema="cpa">
+        <id name="id" type="java.lang.Long">
+            <column name="id" />
+            <generator class="native"></generator>
+        </id>
+        <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select" unique="true">
+            <column name="user_id">
+                <comment>用户ID</comment>
+            </column>
+        </many-to-one>
+        <property name="shareChain" type="java.lang.String">
+            <column name="share_chain" length="20">
+                <comment>分享链接</comment>
+            </column>
+        </property>
+        <property name="shareQrUrl" type="java.lang.String">
+            <column name="share_qr_url" length="20">
+                <comment>分享二维码图片地址</comment>
+            </column>
+        </property>
+        <property name="reapSignDay" type="java.lang.String">
+            <column name="reap_sign_day" length="20">
+                <comment>连续打卡天数</comment>
+            </column>
+        </property>
+        <property name="createDate" type="java.time.LocalDateTime">
+            <column name="create_date" length="19">
+                <comment>创建日期</comment>
+            </column>
+        </property>
+    </class>
+</hibernate-mapping>

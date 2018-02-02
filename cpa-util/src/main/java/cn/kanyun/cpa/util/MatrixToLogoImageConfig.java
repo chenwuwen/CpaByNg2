@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.util;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * 定制logo属性类

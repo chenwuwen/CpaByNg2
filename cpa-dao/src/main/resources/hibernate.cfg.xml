@@ -118,6 +118,7 @@
         <mapping resource="AnswerRecord.hbm.xml"/>
         <mapping resource="UserCollect.hbm.xml"/>
         <mapping resource="UserComment.hbm.xml"/>
+        <mapping resource="CpaUserExtend.hbm.xml"/>
 
         <!--指定需要缓存的对象类型:这里可以在映射文件中配置，也可以在hibernate核心配置文件中进行配置（推荐）-->
         <!--这个<class-cache>标签必须放在<mapping>标签的后面！-->

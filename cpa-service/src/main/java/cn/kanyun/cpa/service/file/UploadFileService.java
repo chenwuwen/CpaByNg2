@@ -1,10 +1,7 @@
 package cn.kanyun.cpa.service.file;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.entity.user.CpaUser;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Arrays;
 
 public interface UploadFileService {
     public static final String SERVICE_NAME="cn.kanyun.cpa.Service.file.impl.UploadFileServiceImpl";
@@ -19,5 +16,12 @@ public interface UploadFileService {
      */  
     CpaResult upLoadImg(MultipartFile[] files) throws Exception;
 
+    /**
+     * @describe: 上传二维码图片
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/2/2 0002 13:23
+     */
+    String upLoadQRPic(String filePath) throws Exception;
 
 }

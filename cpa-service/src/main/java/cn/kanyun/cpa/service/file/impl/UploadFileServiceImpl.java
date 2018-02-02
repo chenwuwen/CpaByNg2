@@ -5,6 +5,7 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.service.file.FtpService;
 import cn.kanyun.cpa.service.file.UploadFileService;
 import cn.kanyun.cpa.util.DateUtils;
+import cn.kanyun.cpa.util.FileHelper;
 import cn.kanyun.cpa.util.FileUtil;
 import cn.kanyun.cpa.util.FolderUtils;
 import net.coobird.thumbnailator.Thumbnails;
@@ -63,7 +64,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                 //上传文件到FTP
                 ftpService.uploadFTP(filePath, "/image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
-                result.setData(filePath.replace(rootPath,""));
+                result.setData(filePath.replace(rootPath, ""));
             } catch (IOException e) {
                 e.printStackTrace();
                 logger.error("UploadFileServiceImpl 上传图片或压缩图片出错: " + e);
@@ -71,6 +72,13 @@ public class UploadFileServiceImpl implements UploadFileService {
             }
         }
         return result;
+    }
+
+    @Override
+    public String upLoadQRPic(String filePath) throws Exception {
+        ftpService.uploadFTP(filePath, "/share/");
+        String url = "share" + FileHelper.getFileName(filePath);
+        return url;
     }
 
 

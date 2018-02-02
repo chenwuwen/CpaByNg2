@@ -1,18 +1,5 @@
 package cn.kanyun.cpa.util;
 
-import java.awt.BasicStroke;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Hashtable;
-import javax.imageio.ImageIO;
-
-import cn.kanyun.cpa.util.MatrixToLogoImageConfig;
-import org.apache.commons.io.IOUtils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -21,6 +8,13 @@ import com.google.zxing.client.j2se.MatrixToImageConfig;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.apache.commons.io.IOUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.Hashtable;
 
 /**
  * MatrixToImageWriterEx.java : 生成二维码logo扩展类，此类是在zxing的基础上进行扩展的，用于在二维码上定制自己的logo
@@ -40,7 +34,7 @@ public class MatrixToImageWriterEx {
      *            二维码照片高度
      * @param errorCorrectionLevel
      *            纠错等级
-     * @return a {@link com.google.zxing.common.BitMatrix} object.
+     * @return a {@link BitMatrix} object.
      * @since 0.0.7
      */
     public static BitMatrix createQRCode(String content, int width, int height,
@@ -68,7 +62,7 @@ public class MatrixToImageWriterEx {
      *            二维码照片宽度
      * @param height
      *            二维码照片高度
-     * @return a {@link com.google.zxing.common.BitMatrix} object.
+     * @return a {@link BitMatrix} object.
      * @since 0.0.7
      */
     public static BitMatrix createQRCode(String content, int width, int height) {
@@ -86,7 +80,7 @@ public class MatrixToImageWriterEx {
      *            二维码照片保存路径
      * @param logoPath
      *            logo路径
-     * @throws java.io.IOException
+     * @throws IOException
      *             if any.
      * @since 0.0.7
      */
@@ -110,14 +104,14 @@ public class MatrixToImageWriterEx {
      * </p>
      *
      * @param matrix
-     *            a {@link com.google.zxing.common.BitMatrix} object.
+     *            a {@link BitMatrix} object.
      * @param format
-     *            a {@link java.lang.String} object.
+     *            a {@link String} object.
      * @param imagePath
-     *            a {@link java.lang.String} object.
+     *            a {@link String} object.
      * @param logoInputStream
-     *            a {@link java.io.InputStream} object.
-     * @throws java.io.IOException
+     *            a {@link InputStream} object.
+     * @throws IOException
      *             if any.
      * @since 0.0.7
      */
@@ -142,7 +136,7 @@ public class MatrixToImageWriterEx {
      *            logo路径
      * @param logoConfig
      *            logo配置对象
-     * @throws java.io.IOException
+     * @throws IOException
      *             if any.
      * @since 0.0.7
      */
