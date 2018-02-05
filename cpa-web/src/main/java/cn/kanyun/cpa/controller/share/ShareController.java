@@ -40,6 +40,13 @@ import java.io.File;
  * 2.获取带部署环境上下文的域名，如： http://www.iteye.com/admin/
  * StringBuffer url = request.getRequestURL();
  * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
+ * <p>
+ * 1.获取域名，如：http://f0rb.iteye.com/
+ * StringBuffer url = request.getRequestURL();
+ * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
+ * 2.获取带部署环境上下文的域名，如： http://www.iteye.com/admin/
+ * StringBuffer url = request.getRequestURL();
+ * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
  */
 
 /**
@@ -68,7 +75,7 @@ public class ShareController {
 
 
     /**
-     * @describe: 生成分享二维码, 与链接, 同时生成
+     * @describe: 生成分享二维码, 与链接, 同时生成,(先查看该用户是否有二维码，有则返回,无则生成)
      * @param request
      * @return
      */
@@ -78,15 +85,18 @@ public class ShareController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();
-            String qrPic = ShareController.class.getClassLoader().getResource("").getPath() + "/share/" + System.currentTimeMillis() + ".jpg";
-            QrcodeUtils.gen(shareChain, new File(qrPic));
             CpaUserExtend userExtend = user.getCpaUserExtend();
-            String pirUrl = uploadFileService.upLoadQRPic(qrPic);
-            userExtend.setShareQrUrl(pirUrl);
-            userExtend.setCpaUser(user);
-            userExtend.setShareChain(shareChain);
-            cpaUserExtendService.update(userExtend);
+            if (null == userExtend.getShareQrUrl()) {
+                String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();
+                String qrPic = ShareController.class.getClassLoader().getResource("").getPath() + "/share/" + System.currentTimeMillis() + ".jpg";
+                QrcodeUtils.gen(shareChain, new File(qrPic));
+                String pirUrl = uploadFileService.upLoadQRPic(qrPic);
+                userExtend.setShareQrUrl(pirUrl);
+                userExtend.setCpaUser(user);
+                userExtend.setShareChain(shareChain);
+                cpaUserExtendService.update(userExtend);
+            }
+            result.setData(userExtend);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("ERROR：/api/share/generateChain 生成分享链接出错：", e);
