@@ -74,10 +74,11 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     public Session getSession() {
         return getSessionFactory().getCurrentSession();
     }
+
     @Override
-    public void lock(T t){
-        Session session=getSession();
-        session.lock(t.getClass(), LockMode.NONE);
+    public void lock(T t) {
+        Session session = getSession();
+        session.lock(t, LockMode.NONE);
     }
 
     @Override

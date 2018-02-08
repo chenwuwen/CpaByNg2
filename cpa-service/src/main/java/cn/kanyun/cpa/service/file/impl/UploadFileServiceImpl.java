@@ -77,7 +77,7 @@ public class UploadFileServiceImpl implements UploadFileService {
     @Override
     public String upLoadQRPic(String filePath) throws Exception {
         ftpService.uploadFTP(filePath, "/share/");
-        String url = "share" + FileHelper.getFileName(filePath);
+        String url = "share/" + FileHelper.getFileName(filePath);
         return url;
     }
 

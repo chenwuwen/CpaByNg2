@@ -74,8 +74,6 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
         user.setRegDate(LocalDateTime.now());
-        user.setSalt(userDto.getSalt());
-        user.setPassword(userDto.getPassword());
         user.setStatus(1);
 
         /*构建CpaRole,但并不会保存CpaRole,因为没有配置级联关系,级联关系为默认*/
@@ -89,7 +87,10 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
         userRole.setCpaRole(role);
         userRoles.add(userRole);
 
-        /*设置CpaUser外键关联对象CpaUserExtend*/
+        /*构建CpaUserExtend*/
+        userExtend.setCpaUser(user);
+
+        /*设置CpaUser外键关联对*/
         user.setUserRoles(Collections.singleton(userRole));
         user.setCpaUserExtend(userExtend);
 

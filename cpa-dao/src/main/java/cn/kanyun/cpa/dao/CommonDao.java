@@ -15,6 +15,11 @@ public interface CommonDao<K extends Serializable ,T extends Serializable> {
      * @return 
      */  
     public Session getSession();
+
+    /**
+     * 暂时还没有用
+     * @param t
+     */
     public void lock(T t);
     /**
      * 清除缓冲区内指定的缓冲对象

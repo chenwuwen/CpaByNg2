@@ -89,8 +89,6 @@ public class ShareController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            userService.lock(user);
-            CpaUser user1 = user;
             CpaUserExtend userExtend = user.getCpaUserExtend();
             if (null == userExtend.getShareQrUrl()) {
                 String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();

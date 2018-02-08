@@ -25,7 +25,10 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
         return commondao.save(t);
     }
 
-    public void lock(T t){commondao.lock(t);}
+    @Override
+    public void lock(T t) {
+        commondao.lock(t);
+    }
 
     @Override
     public void saveAll(Collection<T> ct) {
@@ -109,7 +112,7 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
     }
 
     @Override
-    public long getTotalCount(String where, Object[] params){
-        return commondao.getTotalCount(where,params);
+    public long getTotalCount(String where, Object[] params) {
+        return commondao.getTotalCount(where, params);
     }
 }

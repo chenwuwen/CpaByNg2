@@ -69,6 +69,6 @@
                 <comment>用户头像地址</comment>
             </column>
         </property>
-        <one-to-one name="cpaUserExtend" class="cn.kanyun.cpa.model.entity.user.CpaUserExtend" cascade="save-update"/>
+        <one-to-one name="cpaUserExtend" class="cn.kanyun.cpa.model.entity.user.CpaUserExtend" property-ref="cpaUser" fetch="join"   cascade="save-update"/>
     </class>
 </hibernate-mapping>

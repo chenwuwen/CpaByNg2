@@ -54,6 +54,6 @@
         <!--一对一主键关联：要求两个表的主键必须完全一致，通过两个表的主键建立关联关系：-->
         <!--外键关联：要求一表内有一个字段跟另一表的主键一致-->
         <!--两种形式的一对一的配置方式不一样-->
-        <one-to-one name="cpaSolution" class="cn.kanyun.cpa.model.entity.itempool.CpaSolution" cascade="all"/>
+        <one-to-one name="cpaSolution" class="cn.kanyun.cpa.model.entity.itempool.CpaSolution" property-ref="cpaRepertory" cascade="all"/>
     </class>
 </hibernate-mapping>
