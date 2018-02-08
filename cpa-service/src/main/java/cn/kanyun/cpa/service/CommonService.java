@@ -15,6 +15,8 @@ public interface CommonService <K extends Serializable,T extends Serializable>  
 	     * @return 实体对象的ID
 	     */
 	    public K save(T t);
+
+	    public void lock(T t);
 	    /**
 	     * 将实体对象【集合】保存到数据库中
 	     * @param ct 实体对象【集合】

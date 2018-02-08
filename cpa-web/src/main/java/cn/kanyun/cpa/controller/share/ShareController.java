@@ -6,6 +6,7 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.file.UploadFileService;
 import cn.kanyun.cpa.service.user.CpaUserExtendService;
+import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.QrcodeUtils;
 import cn.kanyun.cpa.util.WebPathUtil;
 import cn.kanyun.cpa.util.WebUtil;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.time.LocalDateTime;
 
 /**
  * String requestUrl = request.getScheme() //当前链接使用的协议
@@ -72,6 +74,8 @@ public class ShareController {
     private CpaUserExtendService cpaUserExtendService;
     @Resource(name = UploadFileService.SERVICE_NAME)
     private UploadFileService uploadFileService;
+    @Resource(name = UserService.SERVICE_NAME)
+    private UserService userService;
 
 
     /**
@@ -85,6 +89,8 @@ public class ShareController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
+            userService.lock(user);
+            CpaUser user1 = user;
             CpaUserExtend userExtend = user.getCpaUserExtend();
             if (null == userExtend.getShareQrUrl()) {
                 String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();
@@ -93,6 +99,7 @@ public class ShareController {
                 String pirUrl = uploadFileService.upLoadQRPic(qrPic);
                 userExtend.setShareQrUrl(pirUrl);
                 userExtend.setCpaUser(user);
+                userExtend.setCreateDate(LocalDateTime.now());
                 userExtend.setShareChain(shareChain);
                 cpaUserExtendService.update(userExtend);
             }

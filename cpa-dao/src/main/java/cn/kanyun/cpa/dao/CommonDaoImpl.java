@@ -2,10 +2,7 @@ package cn.kanyun.cpa.dao;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
 import org.apache.commons.lang3.StringUtils;
-import org.hibernate.Criteria;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
+import org.hibernate.*;
 import org.hibernate.criterion.CriteriaSpecification;
 import org.hibernate.criterion.Projections;
 
@@ -76,6 +73,11 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     @Override
     public Session getSession() {
         return getSessionFactory().getCurrentSession();
+    }
+    @Override
+    public void lock(T t){
+        Session session=getSession();
+        session.lock(t.getClass(), LockMode.NONE);
     }
 
     @Override

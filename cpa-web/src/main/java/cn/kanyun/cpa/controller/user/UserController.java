@@ -109,7 +109,7 @@ public class UserController {
      * @Description: 用户注册 @RequestMapping，value可以匹配多个多个路径
      * @Date: 2017/8/16 17:02
      * @params:
-     * */
+     */
     @RequestMapping(value = {"/register/{inviteUser}", "/register"})
     @ResponseBody
     public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, @PathVariable(value = "inviteUser", required = false) Long inviteUser) throws NoSuchAlgorithmException {
@@ -122,19 +122,20 @@ public class UserController {
             result.setMsg("验证码错误！");
         } else {
             try {
-                CpaUser user = userService.saveUser(userDto);
+                /* 如果存在推荐人,将推荐人ID set进对象*/
                 CpaUserExtend cpaUserExtend = new CpaUserExtend();
                 if (!(inviteUser == null) && !(inviteUser == 0)) {
                     if (null != userService.findById(inviteUser)) {
-                        cpaUserExtend.setCpaUser(user);
+                        cpaUserExtend.setInviteUser(inviteUser);
                     }
                 }
-                cpaUserExtendService.save(cpaUserExtend);
+//                级联保存CpaUser
+                CpaUser user = userService.saveUser(userDto, cpaUserExtend);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setMsg("注册成功,即将跳转至登陆页！");
                 WebUtil.setSessionUser(request, user);
             } catch (Exception e) {
-                logger.info("/api/user/register  用户注册异常：  " + e);
+                logger.info("ERROR：/api/user/register  用户注册异常：  " + e);
                 result.setState(CpaConstants.OPERATION_ERROR);
                 result.setMsg("注册失败,请重试！");
             }

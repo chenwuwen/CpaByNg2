@@ -7,6 +7,7 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.system.CpaRole;
 import cn.kanyun.cpa.model.entity.system.UserRole;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.EndecryptUtils;
@@ -66,12 +67,12 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
 
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public CpaUser saveUser(CpaUserDto userDto) {
+    public CpaUser saveUser(CpaUserDto userDto, CpaUserExtend userExtend) {
         /*构建CpaUser*/
-        CpaUser user = new CpaUser();
+        CpaUser user;
+        user = EndecryptUtils.md5Password(userDto.getUserName(), userDto.getPassword());
         user.setEmail(userDto.getEmail());
         user.setUserName(userDto.getUserName());
-        userDto = EndecryptUtils.md5Password(userDto.getUserName(), userDto.getPassword());
         user.setRegDate(LocalDateTime.now());
         user.setSalt(userDto.getSalt());
         user.setPassword(userDto.getPassword());
@@ -87,6 +88,10 @@ public class UserServiceImpl extends CommonServiceImpl<Long, CpaUser> implements
         userRole.setCpaUser(user);
         userRole.setCpaRole(role);
         userRoles.add(userRole);
+
+        /*设置CpaUser外键关联对象CpaUserExtend*/
+        user.setUserRoles(Collections.singleton(userRole));
+        user.setCpaUserExtend(userExtend);
 
         user.setUserRoles(userRoles);
         /*直接保存CpaUser主表,这样可以把关联表UserRole保存了*/

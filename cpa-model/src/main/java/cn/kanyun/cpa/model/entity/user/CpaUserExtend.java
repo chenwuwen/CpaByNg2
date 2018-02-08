@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 public class CpaUserExtend implements java.io.Serializable {
     private long id;
     private CpaUser cpaUser;
+    private Long inviteUser;
     private String shareChain;
     private String shareQrUrl;
     private Integer reapSignInDay;
@@ -14,9 +15,10 @@ public class CpaUserExtend implements java.io.Serializable {
     public CpaUserExtend() {
     }
 
-    public CpaUserExtend(long id, CpaUser cpaUser, String shareChain, String shareQrUrl, Integer reapSignInDay, LocalDateTime createDate) {
+    public CpaUserExtend(long id, CpaUser cpaUser,Long inviteUser, String shareChain, String shareQrUrl, Integer reapSignInDay, LocalDateTime createDate) {
         this.id = id;
         this.cpaUser = cpaUser;
+        this.inviteUser = inviteUser;
         this.shareChain = shareChain;
         this.shareQrUrl = shareQrUrl;
         this.reapSignInDay = reapSignInDay;
@@ -77,5 +79,11 @@ public class CpaUserExtend implements java.io.Serializable {
         this.createDate = createDate;
     }
 
+    public Long getInviteUser() {
+        return inviteUser;
+    }
 
+    public void setInviteUser(Long inviteUser) {
+        this.inviteUser = inviteUser;
+    }
 }

@@ -25,6 +25,8 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
         return commondao.save(t);
     }
 
+    public void lock(T t){commondao.lock(t);}
+
     @Override
     public void saveAll(Collection<T> ct) {
         commondao.saveAll(ct);

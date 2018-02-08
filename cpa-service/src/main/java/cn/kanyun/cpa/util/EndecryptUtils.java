@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.util;
 
-import cn.kanyun.cpa.model.dto.user.CpaUserDto;
+import cn.kanyun.cpa.model.entity.user.CpaUser;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import org.apache.shiro.codec.Base64;
@@ -79,7 +79,7 @@ public final class EndecryptUtils {
      * @param password 密码
      * @return 密文和salt
      */
-    public static CpaUserDto md5Password(String username, String password) {
+    public static CpaUser md5Password(String username, String password) {
         Preconditions.checkArgument(!Strings.isNullOrEmpty(username), "username不能为空");
         Preconditions.checkArgument(!Strings.isNullOrEmpty(password), "password不能为空");
         SecureRandomNumberGenerator secureRandomNumberGenerator = new SecureRandomNumberGenerator();
@@ -87,7 +87,7 @@ public final class EndecryptUtils {
         String salt = secureRandomNumberGenerator.nextBytes().toHex();
         //组合username,四次迭代，对密码进行加密
         String password_cipherText = new Md5Hash(password, username + salt, 4).toHex();
-        CpaUserDto user = new CpaUserDto();
+        CpaUser user = new CpaUser();
         user.setPassword(password_cipherText);
         user.setSalt(salt);
         return user;
