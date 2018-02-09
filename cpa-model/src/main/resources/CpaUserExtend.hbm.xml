@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.user.CpaUserExtend" table="cpa_user_extend" catalog="cpa" lazy="true">
+    <class name="cn.kanyun.cpa.model.entity.user.CpaUserExtend" table="cpa_user_extend" catalog="cpa">
         <id name="id" type="java.lang.Long">
             <column name="id"/>
             <generator class="native"></generator>
@@ -14,6 +14,7 @@
                 <comment>用户ID</comment>
             </column>
         </many-to-one>
+
         <property name="inviteUser" type="java.lang.Long">
             <column name="invite_user" length="20">
                 <comment>邀请人ID</comment>
