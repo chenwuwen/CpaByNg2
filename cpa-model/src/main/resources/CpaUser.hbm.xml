@@ -6,7 +6,7 @@
 -->
 <!--suppress ALL -->
 <hibernate-mapping>
-    <class name="cn.kanyun.cpa.model.entity.user.CpaUser" table="cpa_user" catalog="cpa">
+    <class name="cn.kanyun.cpa.model.entity.user.CpaUser" table="cpa_user" catalog="cpa" lazy="true">
         <id name="id" type="java.lang.Long">
             <column name="id"/>
             <generator class="native"></generator>
@@ -69,6 +69,7 @@
                 <comment>用户头像地址</comment>
             </column>
         </property>
-        <one-to-one name="cpaUserExtend" class="cn.kanyun.cpa.model.entity.user.CpaUserExtend" property-ref="cpaUser" fetch="join"   cascade="save-update"/>
+        <one-to-one name="cpaUserExtend" class="cn.kanyun.cpa.model.entity.user.CpaUserExtend" property-ref="cpaUser"
+                    fetch="join" constrained="true" cascade="save-update"/>
     </class>
 </hibernate-mapping>

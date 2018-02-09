@@ -49,7 +49,7 @@
             <one-to-many class="cn.kanyun.cpa.model.entity.itempool.CpaOption"/>
         </set>
         <!-- 配置一对一外键关系的关联 -->
-        <!--property-ref="CpaRepertory" 表明CpaSolution的CpaRepertory属性建立了从CpaRepertory对象到CpaSolution对象的关联-->
+        <!--property-ref="CpaRepertory" 表明CpaSolution的CpaRepertory属性建立了从CpaRepertory对象到CpaSolution对象的关联(需要注意的是:如果不配置该属性,默认是CpaSolution的主键与CpaRepertory的主键关联,所以当数据库配置的是外键关联的时候,需要配置该属性)-->
         <!--数据表间一对一关系的表现有两种，一种是外键关联，一种是主键关联。-->
         <!--一对一主键关联：要求两个表的主键必须完全一致，通过两个表的主键建立关联关系：-->
         <!--外键关联：要求一表内有一个字段跟另一表的主键一致-->
