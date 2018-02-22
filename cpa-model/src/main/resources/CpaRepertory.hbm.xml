@@ -13,7 +13,7 @@
             <generator class="native"></generator>
         </id>
         <property name="testStem" type="java.lang.String">
-            <column name="test_stem" length="2">
+            <column name="test_stem">
                 <comment>题干</comment>
             </column>
         </property>

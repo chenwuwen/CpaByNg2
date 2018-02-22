@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-01-16 13:51:28
+Date: 2018-02-22 14:46:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -21,22 +21,21 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `answer_record`;
 CREATE TABLE `answer_record` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `user_id` bigint(20) DEFAULT NULL COMMENT '??ID',
-  `username` varchar(255) DEFAULT NULL COMMENT '???',
-  `petname` varchar(255) DEFAULT NULL COMMENT '????',
-  `item_type` varchar(255) DEFAULT NULL COMMENT '????',
-  `score` int(11) DEFAULT NULL COMMENT '??',
-  `totalcount` int(11) DEFAULT NULL COMMENT '???',
-  `correctcount` int(11) DEFAULT NULL COMMENT '???',
-  `errorcount` int(11) DEFAULT NULL COMMENT '???',
-  `answer_date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
+  `username` varchar(255) DEFAULT NULL COMMENT '用户名',
+  `petname` varchar(255) DEFAULT NULL COMMENT '用户昵称',
+  `item_type` varchar(255) DEFAULT NULL COMMENT '试题类型',
+  `score` int(11) DEFAULT NULL COMMENT '得分',
+  `totalcount` int(11) DEFAULT NULL COMMENT '总题数',
+  `correctcount` int(11) DEFAULT NULL COMMENT '答对数',
+  `errorcount` int(11) DEFAULT NULL COMMENT '答错数',
+  `answer_date` datetime DEFAULT NULL COMMENT '答题日期',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of answer_record
 -- ----------------------------
-INSERT INTO `answer_record` VALUES ('1', '8', 'kanyun', null, 'basicAccount', '3', '10', '3', '7', '2017-10-26 23:58:04');
 
 -- ----------------------------
 -- Table structure for cpa_option
@@ -48,10 +47,9 @@ CREATE TABLE `cpa_option` (
   `select_data` varchar(2) DEFAULT NULL COMMENT '选择内容即ABCD',
   `option_data` varchar(100) DEFAULT NULL COMMENT '选项内容',
   PRIMARY KEY (`id`),
-  KEY `re_id` (`re_id`),
-  CONSTRAINT `FK31o5kexwcgr9so8n5iikw91y5` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`),
-  CONSTRAINT `cpa_option_ibfk_1` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8 COMMENT='试题库选项表';
+  KEY `FK31o5kexwcgr9so8n5iikw91y5` (`re_id`),
+  CONSTRAINT `FK31o5kexwcgr9so8n5iikw91y5` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_option
@@ -156,18 +154,26 @@ INSERT INTO `cpa_option` VALUES ('97', '25', 'A', '非正常消耗的直接材�
 INSERT INTO `cpa_option` VALUES ('98', '25', 'B', '仓储费用');
 INSERT INTO `cpa_option` VALUES ('99', '25', 'C', '购买存货的相关税费  ');
 INSERT INTO `cpa_option` VALUES ('100', '25', 'D', '不能归属于使存货达到目前场所和状态的其他支出');
+INSERT INTO `cpa_option` VALUES ('101', '26', 'A', '总账会计 ');
+INSERT INTO `cpa_option` VALUES ('102', '26', 'B', '业务经办单位或人员');
+INSERT INTO `cpa_option` VALUES ('103', '26', 'C', '会计主管    ');
+INSERT INTO `cpa_option` VALUES ('104', '26', 'D', '出纳人员');
 INSERT INTO `cpa_option` VALUES ('105', '27', 'A', '详细反映经济业务的发生情况 ');
 INSERT INTO `cpa_option` VALUES ('106', '27', 'B', '可以做到试算平衡');
 INSERT INTO `cpa_option` VALUES ('107', '27', 'C', '便于了解账户之间的对应关系 ');
 INSERT INTO `cpa_option` VALUES ('108', '27', 'D', '处理手续简便');
+INSERT INTO `cpa_option` VALUES ('109', '28', 'A', '交易性金融资产 ');
+INSERT INTO `cpa_option` VALUES ('110', '28', 'B', '投资收益');
+INSERT INTO `cpa_option` VALUES ('111', '28', 'C', '主营业务收入');
+INSERT INTO `cpa_option` VALUES ('112', '28', 'D', '营业外支出');
 INSERT INTO `cpa_option` VALUES ('113', '29', 'A', '财务会计部门  ');
 INSERT INTO `cpa_option` VALUES ('114', '29', 'B', '档案部门');
 INSERT INTO `cpa_option` VALUES ('115', '29', 'C', '人事部门');
 INSERT INTO `cpa_option` VALUES ('116', '29', 'D', '指定专人');
-INSERT INTO `cpa_option` VALUES ('121', '31', 'D', '用于预算单位办理转账、提取现金等结算业务');
-INSERT INTO `cpa_option` VALUES ('122', '31', 'B', '用于与财政部门零余额账户进行清算');
-INSERT INTO `cpa_option` VALUES ('123', '31', 'C', '用于与预算单位零余额账户进行清算');
-INSERT INTO `cpa_option` VALUES ('124', '31', 'A', '用于记录、核算和反映纳入预算管理的财政收入和财政支出活动');
+INSERT INTO `cpa_option` VALUES ('117', '30', 'A', '费用的增加 ');
+INSERT INTO `cpa_option` VALUES ('118', '30', 'B', '收入的增加');
+INSERT INTO `cpa_option` VALUES ('119', '30', 'C', '费用的减少 ');
+INSERT INTO `cpa_option` VALUES ('120', '30', 'D', '所有者权益的增加');
 
 -- ----------------------------
 -- Table structure for cpa_permission
@@ -175,8 +181,8 @@ INSERT INTO `cpa_option` VALUES ('124', '31', 'A', '用于记录、核算和反�
 DROP TABLE IF EXISTS `cpa_permission`;
 CREATE TABLE `cpa_permission` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `permission_code` varchar(255) DEFAULT NULL COMMENT '权限内容',
-  `permission_description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `permission_code` varchar(255) NOT NULL,
+  `permission_description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
@@ -193,45 +199,47 @@ INSERT INTO `cpa_permission` VALUES ('4', 'insert', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_repertory`;
 CREATE TABLE `cpa_repertory` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-  `test_stem` varchar(200) DEFAULT NULL COMMENT '题干',
-  `test_type` varchar(20) DEFAULT NULL COMMENT '试题类型',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `test_stem` varchar(255) DEFAULT NULL COMMENT '题干',
+  `test_type` varchar(255) DEFAULT NULL COMMENT '试题类型',
+  `choice` varchar(255) DEFAULT NULL COMMENT '题的类型(单选多选)',
   `insert_date` datetime DEFAULT NULL COMMENT '插入时间',
-  `choice` varchar(255) DEFAULT NULL COMMENT '????(????)',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='题库表';
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_repertory
 -- ----------------------------
-INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', '2018-01-01 13:47:27', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', '2017-12-14 13:47:33', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', '2017-12-12 13:47:38', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', '2017-11-29 13:47:44', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', '2016-06-16 13:47:49', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', '2016-11-16 13:47:56', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', '2017-09-13 13:48:03', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', '2017-11-20 13:48:14', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', '2017-11-16 13:48:20', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', '2015-07-29 13:48:27', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', '2017-11-14 13:48:41', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', '2017-10-16 13:48:49', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', '2018-01-14 13:49:01', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('14', '反映企业经营成果的会计要素是（   ）', 'cpuAccount', '2017-12-10 13:49:07', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', '2017-11-09 13:49:13', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', '2017-11-08 13:49:20', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', '2018-01-03 13:49:27', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', '2018-01-05 13:49:32', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', '2018-01-06 13:49:36', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', '2017-12-23 13:49:40', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', '2018-01-05 13:49:45', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', '2017-10-10 13:49:49', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', '2016-11-22 13:49:54', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', '2018-07-24 13:50:02', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', '2018-03-27 13:50:09', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', '2018-03-14 13:50:16', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', '2018-01-02 13:50:21', 'unique');
-INSERT INTO `cpa_repertory` VALUES ('31', '下列关于国库单一账户的表述中，正确的有()', 'basicAccount', '2018-01-15 16:55:10', 'multiple');
+INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', 'unique', '2018-01-01 14:13:46');
+INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', 'unique', '2017-12-01 14:14:01');
+INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', 'unique', '2018-02-22 11:14:07');
+INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', 'unique', '2018-01-16 14:14:14');
+INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', 'unique', '2018-02-22 14:14:20');
+INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', 'unique', '2018-02-19 14:14:27');
+INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', 'unique', '2018-02-12 12:14:32');
+INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', 'unique', '2018-02-05 14:14:39');
+INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', 'unique', '2017-10-24 14:14:49');
+INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', 'unique', '2017-07-20 14:14:58');
+INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'unique', '2018-01-18 14:15:07');
+INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', 'unique', '2018-05-30 14:15:12');
+INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', 'unique', '2017-09-26 14:15:20');
+INSERT INTO `cpa_repertory` VALUES ('14', '反映企业经营成果的会计要素是（   ）', 'cpuAccount', 'unique', '2017-02-21 14:15:26');
+INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', 'unique', '2017-04-25 14:15:35');
+INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', 'unique', '2018-02-03 14:15:44');
+INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', 'unique', '2018-02-01 14:15:51');
+INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', 'unique', '2017-10-10 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'unique', '2018-02-17 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', 'unique', '2017-11-22 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', 'unique', '2017-12-12 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', 'unique', '2018-02-07 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', 'unique', '2016-11-23 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', 'unique', '2018-02-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', 'unique', '2018-02-04 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('26', '原始凭证是由（）取得或填制的。', 'statuteEthics', 'unique', '2018-02-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', 'unique', '2017-10-17 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('28', '企业购买或出售交易性金融资产过程中发生的交易费用应直接记入的会计科目是（）', 'statuteEthics', 'unique', '2017-04-27 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', 'unique', '2017-08-30 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('30', '根据借贷记账法的账户结构，在账户借方登记的是(     )。', 'statuteEthics', 'unique', '2016-12-20 14:15:54');
 
 -- ----------------------------
 -- Table structure for cpa_role
@@ -239,8 +247,8 @@ INSERT INTO `cpa_repertory` VALUES ('31', '下列关于国库单一账户的表�
 DROP TABLE IF EXISTS `cpa_role`;
 CREATE TABLE `cpa_role` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `role_name` varchar(10) DEFAULT NULL COMMENT ' 角色名称',
-  `description` varchar(255) DEFAULT NULL COMMENT '描述',
+  `role_name` varchar(255) DEFAULT NULL COMMENT '角色名称',
+  `description` varchar(255) DEFAULT NULL COMMENT '角色描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
@@ -256,14 +264,13 @@ INSERT INTO `cpa_role` VALUES ('3', 'normal', null);
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_solution`;
 CREATE TABLE `cpa_solution` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `re_id` bigint(20) DEFAULT NULL COMMENT '题库ID',
   `result` varchar(20) DEFAULT NULL COMMENT '正确答案选项',
   PRIMARY KEY (`id`),
-  KEY `re_id` (`re_id`),
-  CONSTRAINT `FKh4999mnolnr2xxldwcna8o727` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`),
-  CONSTRAINT `cpa_solution_ibfk_1` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8 COMMENT='题库答案表';
+  KEY `FKh4999mnolnr2xxldwcna8o727` (`re_id`),
+  CONSTRAINT `FKh4999mnolnr2xxldwcna8o727` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_solution
@@ -293,39 +300,61 @@ INSERT INTO `cpa_solution` VALUES ('22', '22', 'A');
 INSERT INTO `cpa_solution` VALUES ('23', '23', 'A');
 INSERT INTO `cpa_solution` VALUES ('24', '24', 'C');
 INSERT INTO `cpa_solution` VALUES ('25', '25', 'C');
+INSERT INTO `cpa_solution` VALUES ('26', '26', 'B');
 INSERT INTO `cpa_solution` VALUES ('27', '27', 'C');
+INSERT INTO `cpa_solution` VALUES ('28', '28', 'B');
 INSERT INTO `cpa_solution` VALUES ('29', '29', 'A');
-INSERT INTO `cpa_solution` VALUES ('31', '31', 'A,B,C');
+INSERT INTO `cpa_solution` VALUES ('30', '30', 'A');
 
 -- ----------------------------
 -- Table structure for cpa_user
 -- ----------------------------
 DROP TABLE IF EXISTS `cpa_user`;
 CREATE TABLE `cpa_user` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户表主键ID',
-  `username` varchar(255) NOT NULL COMMENT '登录名',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL COMMENT '用户名',
   `password` varchar(255) NOT NULL COMMENT '登陆密码',
-  `gender` char(2) DEFAULT '' COMMENT '性别',
-  `email` varchar(255) DEFAULT '' COMMENT 'Email',
-  `lastlogindate` datetime DEFAULT NULL COMMENT '上次登陆时间',
-  `pet_name` varchar(20) DEFAULT '',
-  `reg_date` datetime DEFAULT NULL,
-  `last_login_date` datetime DEFAULT NULL,
-  `status` tinyint(2) DEFAULT NULL,
-  `salt` varchar(40) DEFAULT NULL,
+  `gender` varchar(2) DEFAULT NULL COMMENT '性别',
+  `email` varchar(255) DEFAULT NULL COMMENT 'Email',
+  `pet_name` varchar(20) DEFAULT NULL COMMENT '用户昵称',
+  `reg_date` datetime DEFAULT NULL COMMENT '注册时间',
+  `last_login_date` datetime DEFAULT NULL COMMENT '上次登陆时间',
+  `status` int(11) DEFAULT NULL COMMENT '用户状态',
+  `salt` varchar(40) DEFAULT NULL COMMENT '盐',
   `img_path` varchar(255) DEFAULT NULL COMMENT '用户头像地址',
-  `reap_sigin_day` int(11) DEFAULT NULL COMMENT '用户连续打卡天数',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UserName` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COMMENT='用户表';
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_user
 -- ----------------------------
-INSERT INTO `cpa_user` VALUES ('1', 'admin', '0997cdf3576e93e1562a3d8b8467cc47', null, null, null, null, null, null, '1', '567841dde604e0bde6bd2837ac992feb', null, null);
-INSERT INTO `cpa_user` VALUES ('8', 'kanyun', 'ea0bd5db8ae426453038a77be3951627', null, null, null, null, '2017-03-13 21:21:02', null, '1', '85d20b4f7c329ae648a9631c630a00d5', null, null);
-INSERT INTO `cpa_user` VALUES ('9', 'chenwuwen', '279747a0e7eb66a87ca32defad059bd7', null, null, null, null, '2017-04-17 09:44:08', null, null, '7e44463994010a0e2c89358d4dd0881c', null, null);
-INSERT INTO `cpa_user` VALUES ('10', 'test2014', '4dbace3b07d5d222b27a0f977ee4edbd', null, '2504849@qq.com', null, null, '2018-01-05 16:37:23', null, '1', '231e4cbb8475083df34c4005e2ddb34c', null, null);
+INSERT INTO `cpa_user` VALUES ('1', 'admin', '0997cdf3576e93e1562a3d8b8467cc47', null, '2504849@qq.com', null, '2018-02-22 14:40:11', null, '1', '567841dde604e0bde6bd2837ac992feb', null);
+INSERT INTO `cpa_user` VALUES ('2', 'kanyun', 'ea0bd5db8ae426453038a77be3951627', null, '2504849@qq.com', null, '2018-02-22 14:44:29', null, '1', '85d20b4f7c329ae648a9631c630a00d5', null);
+INSERT INTO `cpa_user` VALUES ('3', 'chenwuwen', '7052506b83e0d190b99422c486b4aa79', null, '2504849@qq.com', null, '2018-02-22 14:45:31', null, '1', 'd6c6b261c31f8e41d3593088ceb42b4c', null);
+
+-- ----------------------------
+-- Table structure for cpa_user_extend
+-- ----------------------------
+DROP TABLE IF EXISTS `cpa_user_extend`;
+CREATE TABLE `cpa_user_extend` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `invite_user` bigint(20) DEFAULT NULL COMMENT '邀请人ID',
+  `share_chain` varchar(20) DEFAULT NULL COMMENT '分享链接',
+  `share_qr_url` varchar(20) DEFAULT NULL COMMENT '分享二维码图片地址',
+  `reap_signIn_day` int(11) DEFAULT NULL COMMENT '连续打卡天数',
+  `create_date` datetime DEFAULT NULL COMMENT '创建日期',
+  PRIMARY KEY (`id`),
+  KEY `FK9sy9t4lajbaspcuryir7vll5y` (`user_id`),
+  CONSTRAINT `FK9sy9t4lajbaspcuryir7vll5y` FOREIGN KEY (`user_id`) REFERENCES `cpa_user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of cpa_user_extend
+-- ----------------------------
+INSERT INTO `cpa_user_extend` VALUES ('1', '1', null, null, null, null, null);
+INSERT INTO `cpa_user_extend` VALUES ('2', '2', null, null, null, null, null);
+INSERT INTO `cpa_user_extend` VALUES ('3', '3', null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for role_permission
@@ -336,11 +365,8 @@ CREATE TABLE `role_permission` (
   `role_id` int(11) DEFAULT NULL COMMENT '角色ID',
   `permission_id` int(11) DEFAULT NULL COMMENT '权限ID',
   PRIMARY KEY (`id`),
-  KEY `FKBD40D538902585DF` (`permission_id`),
-  KEY `FKBD40D5389752B83F` (`role_id`),
-  KEY `FKBD40D538BA24E2A` (`permission_id`),
-  CONSTRAINT `FKBD40D5389752B83F` FOREIGN KEY (`role_id`) REFERENCES `cpa_role` (`id`),
-  CONSTRAINT `FKBD40D538BA24E2A` FOREIGN KEY (`permission_id`) REFERENCES `cpa_permission` (`id`),
+  KEY `FKpf6l392icfk87b08q5wyquy1w` (`role_id`),
+  KEY `FKc8p811lptx37fje7mw7b8rag5` (`permission_id`),
   CONSTRAINT `FKc8p811lptx37fje7mw7b8rag5` FOREIGN KEY (`permission_id`) REFERENCES `cpa_permission` (`id`),
   CONSTRAINT `FKpf6l392icfk87b08q5wyquy1w` FOREIGN KEY (`role_id`) REFERENCES `cpa_role` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
@@ -361,40 +387,38 @@ INSERT INTO `role_permission` VALUES ('7', '2', '3');
 -- ----------------------------
 DROP TABLE IF EXISTS `user_collect`;
 CREATE TABLE `user_collect` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) DEFAULT NULL COMMENT ' 用户ID',
-  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
-  `collect_date` datetime DEFAULT NULL COMMENT '收藏日期',
-  `status` int(11) DEFAULT NULL COMMENT '收藏状态： 0 取消收藏 1 已收藏',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `petname` varchar(255) DEFAULT NULL COMMENT '用户昵称',
+  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
+  `collect_date` datetime DEFAULT NULL COMMENT '收藏时间',
+  `status` int(11) DEFAULT NULL COMMENT '收藏状态 1：已收藏，0：收藏又取消收藏',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_collect
 -- ----------------------------
-INSERT INTO `user_collect` VALUES ('1', '8', '1', '2017-10-26 23:52:06', '1', null, null);
 
 -- ----------------------------
 -- Table structure for user_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `user_comment`;
 CREATE TABLE `user_comment` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
-  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
-  `comment_date` datetime DEFAULT NULL COMMENT '评论时间',
-  `comment` varchar(255) DEFAULT NULL COMMENT '评论内容',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
   `username` varchar(255) DEFAULT NULL COMMENT '用户名',
   `petname` varchar(255) DEFAULT NULL COMMENT '用户昵称',
+  `re_id` bigint(20) DEFAULT NULL COMMENT '试题ID',
+  `comment_date` datetime DEFAULT NULL COMMENT '评论时间',
+  `comment` varchar(255) DEFAULT NULL COMMENT '收藏内容',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_comment
 -- ----------------------------
-INSERT INTO `user_comment` VALUES ('1', '8', '1', '2017-10-26 23:50:47', '附近的收购南斯拉夫', null, null);
 
 -- ----------------------------
 -- Table structure for user_role
@@ -405,18 +429,15 @@ CREATE TABLE `user_role` (
   `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `role_id` int(11) DEFAULT NULL COMMENT '角色ID',
   PRIMARY KEY (`id`),
-  KEY `FK143BF46A9752B83F` (`role_id`),
-  KEY `FK143BF46A8172B5BB` (`user_id`),
-  CONSTRAINT `FK143BF46A8172B5BB` FOREIGN KEY (`user_id`) REFERENCES `cpa_user` (`id`),
-  CONSTRAINT `FK143BF46A9752B83F` FOREIGN KEY (`role_id`) REFERENCES `cpa_role` (`id`),
+  KEY `FK5rlinoeaq40qamiqsegr84akq` (`user_id`),
+  KEY `FK1paraflpnxfte8gnxukt9dm6a` (`role_id`),
   CONSTRAINT `FK1paraflpnxfte8gnxukt9dm6a` FOREIGN KEY (`role_id`) REFERENCES `cpa_role` (`id`),
   CONSTRAINT `FK5rlinoeaq40qamiqsegr84akq` FOREIGN KEY (`user_id`) REFERENCES `cpa_user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
 INSERT INTO `user_role` VALUES ('1', '1', '1');
-INSERT INTO `user_role` VALUES ('2', '8', '2');
-INSERT INTO `user_role` VALUES ('3', '9', '3');
-INSERT INTO `user_role` VALUES ('4', '10', '3');
+INSERT INTO `user_role` VALUES ('2', '2', '2');
+INSERT INTO `user_role` VALUES ('3', '3', '3');
