@@ -1,9 +1,15 @@
 package cn.kanyun.cpa.util;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.LineNumberReader;
+import java.net.*;
+import java.util.Enumeration;
 
 /**
  *   
@@ -97,6 +103,85 @@ public class IpMacUtil {
             return "";
         }
         return macAddress;
+    }
+
+    /*===============获取服务器本机ip===============*/
+
+    /**
+     * 获得内网IP
+     * 需要注意的是，如果本机存在多块网卡(包括虚拟网卡),返回的结果可能存在问题，所以尽量禁用不用的网卡
+     * @return 内网IP
+     */
+    public static String getIntranetIp() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    /**
+     * 获取公网IP,通过请求ip.chinaz.com来实现，相对来说是比较准确的，前提是本地服务器可以接入公网
+     * 通过请求 "http://ip.chinaz.com/getip.aspx" 返回回来的是一个json字符串 格式如下 ： {ip:'221.221.239.44',address:'北京市海淀区 联通'}
+     * 没有接入公网的话会报“java.net.UnknownHostException”异常 ，个人感觉这个方法局限性比较大，因为大部分应用服务器都接的是局域网
+     * 用以避免外网直接访问应用服务器，其接收请求大都通过外网访问web服务器(如Nginx),nginx通过反向代理将请求转发到应用服务器上，所以应用
+     * 服务器是无法连接公网的，所以局限性很大
+     *
+     * @return 返回数组类型 ，0 为ip地址 ，1 为区域地址
+     * @throws IOException
+     */
+    public static String[] getPublicNetWorkIp() throws IOException {
+        String chinaz = "http://ip.chinaz.com/getip.aspx";
+        URL url = null;
+        HttpURLConnection urlConnection = null;
+        BufferedReader in = null;
+        StringBuilder sb = new StringBuilder();
+        String read = "";
+        url = new URL(chinaz);
+        urlConnection = (HttpURLConnection) url.openConnection();
+        in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
+        while ((read = in.readLine()) != null) {
+            sb.append(read);
+        }
+//        sb.toString();
+        JSONObject jb = JSON.parseObject(sb.toString());
+//        jb.get("ip");
+//        jb.get("address");
+        String[] ip = {String.valueOf(jb.get("ip")), String.valueOf(jb.get("address"))};
+        return ip;
+    }
+
+    /**
+     * 获得外网IP
+     * @return 外网IP
+     */
+    public static String getInternetIp(){
+        try{
+            Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+            InetAddress ip = null;
+            Enumeration<InetAddress> addrs;
+            while (networks.hasMoreElements())
+            {
+                addrs = networks.nextElement().getInetAddresses();
+                while (addrs.hasMoreElements())
+                {
+                    ip = addrs.nextElement();
+                    if (ip != null
+                            && ip instanceof Inet4Address
+                            && ip.isSiteLocalAddress()
+                            && !ip.getHostAddress().equals(getIntranetIp()))
+                    {
+                        return ip.getHostAddress();
+                    }
+                }
+            }
+
+            // 如果没有外网IP，就返回内网IP
+            return getIntranetIp();
+        } catch(Exception e){
+            throw new RuntimeException(e);
+        }
     }
 
 }

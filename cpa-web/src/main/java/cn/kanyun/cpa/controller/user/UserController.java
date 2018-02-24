@@ -258,6 +258,17 @@ public class UserController {
     }
 
     /**
+     * @describe: 跳转网页 (目前只是使用在用户扫描二维码,跳转到注册页面)
+     * @params: inviteUser:推荐人ID
+     * @Author: Kanyun
+     * @Date: 2018/2/23 0023 17:48
+     */
+    @RequestMapping(value = {"/skipWebPage/{inviteUser}", "/skipWebPage/"})
+    public String skipWebPage(@PathVariable(value = "inviteUser", required = false) Long inviteUser) {
+        return "index";
+    }
+
+    /**
      * @param
      * @return
      * @author Kanyun

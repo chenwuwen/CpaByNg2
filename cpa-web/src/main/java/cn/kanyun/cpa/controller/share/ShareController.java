@@ -91,12 +91,11 @@ public class ShareController {
             CpaUser user = WebUtil.getSessionUser(request);
             CpaUserExtend userExtend = user.getCpaUserExtend();
             if (null == userExtend.getShareQrUrl()) {
-                String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/register/" + user.getId();
+                String shareChain = WebPathUtil.getRequestPath(request, true, false) + "api/user/skipWebPage/" + user.getId();
                 String qrPic = ShareController.class.getClassLoader().getResource("").getPath() + "/share/" + System.currentTimeMillis() + ".jpg";
                 QrcodeUtils.gen(shareChain, new File(qrPic));
                 String pirUrl = uploadFileService.upLoadQRPic(qrPic);
                 userExtend.setShareQrUrl(pirUrl);
-                userExtend.setCpaUser(user);
                 userExtend.setCreateDate(LocalDateTime.now());
                 userExtend.setShareChain(shareChain);
                 cpaUserExtendService.update(userExtend);

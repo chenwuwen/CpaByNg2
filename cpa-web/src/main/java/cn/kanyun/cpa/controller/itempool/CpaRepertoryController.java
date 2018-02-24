@@ -236,10 +236,11 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getListExam")
     @ResponseBody
-
-    public CpaResult getListExam(@RequestBody ItemForm itemForm) {
+    public CpaResult getListExam(@RequestBody ItemForm itemForm, @RequestParam(required = false) Integer pageNo,  @RequestParam(required = false) Integer pageSize) {
         CpaResult result = null;
         CpaRepertoryDto cpaRepertoryDto = itemForm.getCpaRepertoryDto();
+        cpaRepertoryDto.setPageNo(pageNo);
+        cpaRepertoryDto.setPageSize(pageSize);
         try {
             result = cpaRepertoryService.getListItem(cpaRepertoryDto, null);
             result.setState(CpaConstants.OPERATION_SUCCESS);

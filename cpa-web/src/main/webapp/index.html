@@ -21,6 +21,21 @@
     <!--为使IE浏览器(IE10以上)支持sweetalert2需引入该脚本-->
     <script src="js/es6-promise.min.js"></script>
     <script type="text/javascript">
+        /*Jquery初始化*/
+        $(function () {
+            /*获取当前浏览器地址栏地址*/
+            var url = window.location.href;
+            var inviteUser;
+            if (url.indexOf("/") > -1) {
+                /*获取邀请人ID*/
+                inviteUser = url.substr(url.lastIndexOf("/") + 1);
+                /*跳到注册表单页面*/
+                window.location.href = "./index.html#toregister"
+                /*设置注册表单请求地址*/
+                $("#registerform").attr("action", "/api/user/register/" + inviteUser);
+            }
+        })
+        /*点击更换验证码*/
         function reloadValidateCode() {
             $(".changecode").attr("src", "/api/validateCode?data=" + new Date() + Math.floor(Math.random() * 24));
         }
@@ -76,7 +91,8 @@
                                            placeholder="验&nbsp;证&nbsp;码">
                                 </div>
                                 <div class="col-md-4">
-                                    <img src="/api/validateCode" class="changecode" class="img-responsive" title="点击重新获取验证码"
+                                    <img src="/api/validateCode" class="changecode" class="img-responsive"
+                                         title="点击重新获取验证码"
                                          alt="验证码" onclick="javascript:reloadValidateCode()">
                                 </div>
                             </div>
@@ -99,7 +115,7 @@
                 <!--注册-->
                 <div id="register" class="animate form">
                     <form role="form" method="post" id="registerform"
-                          action="/api/user/register" autocomplete="on">
+                          action="/api/user/register/" autocomplete="on">
                         <h2> Sign up </h2>
                         <div class="form-group">
                             <label class="sr-only sr-only-focusable"
@@ -147,7 +163,8 @@
                                            placeholder="验&nbsp;证&nbsp;码">
                                 </div>
                                 <div class="col-md-4">
-                                    <img src="/api/validateCode" class="changecode" class="img-responsive" title="点击重新获取验证码"
+                                    <img src="/api/validateCode" class="changecode" class="img-responsive"
+                                         title="点击重新获取验证码"
                                          alt="验证码" onclick="javascript:reloadValidateCode()">
                                 </div>
                             </div>

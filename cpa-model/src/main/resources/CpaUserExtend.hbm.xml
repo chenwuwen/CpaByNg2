@@ -16,27 +16,27 @@
         </many-to-one>
 
         <property name="inviteUser" type="java.lang.Long">
-            <column name="invite_user" length="20">
+            <column name="invite_user">
                 <comment>邀请人ID</comment>
             </column>
         </property>
         <property name="shareChain" type="java.lang.String">
-            <column name="share_chain" length="20">
+            <column name="share_chain">
                 <comment>分享链接</comment>
             </column>
         </property>
         <property name="shareQrUrl" type="java.lang.String">
-            <column name="share_qr_url" length="20">
+            <column name="share_qr_url">
                 <comment>分享二维码图片地址</comment>
             </column>
         </property>
         <property name="reapSignInDay" type="java.lang.Integer">
-            <column name="reap_signIn_day" length="20">
+            <column name="reap_signIn_day">
                 <comment>连续打卡天数</comment>
             </column>
         </property>
         <property name="createDate" type="java.time.LocalDateTime">
-            <column name="create_date" length="19">
+            <column name="create_date">
                 <comment>创建日期</comment>
             </column>
         </property>
