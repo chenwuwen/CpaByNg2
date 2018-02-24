@@ -1,15 +1,15 @@
 package cn.kanyun.cpa.controller.itempool;
 
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.dto.itempool.ItemForm;
-import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
-import cn.kanyun.cpa.model.enums.ExamEnum;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.model.enums.ExamEnum;
 import cn.kanyun.cpa.redis.service.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
@@ -234,13 +234,13 @@ public class CpaRepertoryController {
      * @Author: Kanyun
      * @Date: 2018/1/11  9:32
      */
-    @RequestMapping("/getListExam")
+    @RequestMapping(value = "/getListExam", produces = {"application/json;charset=utf-8"})
     @ResponseBody
-    public CpaResult getListExam(@RequestBody ItemForm itemForm, @RequestParam(required = false) Integer pageNo,  @RequestParam(required = false) Integer pageSize) {
+    public CpaResult getListExam(@RequestBody ItemForm itemForm) {
         CpaResult result = null;
         CpaRepertoryDto cpaRepertoryDto = itemForm.getCpaRepertoryDto();
-        cpaRepertoryDto.setPageNo(pageNo);
-        cpaRepertoryDto.setPageSize(pageSize);
+        cpaRepertoryDto.setPageNo(itemForm.getPageNo());
+        cpaRepertoryDto.setPageSize(itemForm.getPageSize());
         try {
             result = cpaRepertoryService.getListItem(cpaRepertoryDto, null);
             result.setState(CpaConstants.OPERATION_SUCCESS);
