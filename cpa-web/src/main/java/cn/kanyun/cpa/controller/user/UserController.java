@@ -13,6 +13,8 @@ import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -129,6 +131,9 @@ public class UserController {
                         cpaUserExtend.setInviteUser(inviteUser);
                     }
                 }
+//                去除字符串中所有空白符
+                userDto.setUserName(StringUtils.deleteWhitespace(userDto.getUserName()));
+                userDto.setPassword(StringUtils.deleteWhitespace(userDto.getPassword()));
 //                级联保存CpaUser
                 CpaUser user = userService.saveUser(userDto, cpaUserExtend);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
@@ -248,6 +253,7 @@ public class UserController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = new CpaUser();
+            BeanUtils.copyProperties(user,userDto);
             userService.saveOrUpdate(user);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
