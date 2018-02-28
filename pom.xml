@@ -18,7 +18,7 @@
         <module>cpa-util</module>
         <module>cpa-lucene</module>
     </modules>
-    <!--上传私服 pom.xml 配置-->
+    <!--上传私服 pom.xml 配置,发布自己的jar包-->
     <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
     <!--<distributionManagement>-->
     <!--<repository>-->
@@ -258,6 +258,16 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
                 <version>5.0.2.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>5.0.3.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-messaging</artifactId>
+                <version>5.0.3.RELEASE</version>
             </dependency>
             <!--spring bom 解决spring依赖多版本问题,引入该POM文件后,再引入其他spring的jar包可不标明版本-->
             <dependency>
@@ -557,6 +567,12 @@
                 <scope>provided</scope>
                 <version>3.0.1</version>
             </dependency>
+            <dependency>
+                <groupId>javax.websocket</groupId>
+                <artifactId>javax.websocket-api</artifactId>
+                <scope>provided</scope>
+                <version>1.1</version>
+            </dependency>
 
 
             <!--文件上传-->
@@ -691,6 +707,12 @@
                 <artifactId>lucene-highlighter</artifactId>
                 <version>6.6.0</version>
             </dependency>
+            <!--搜索结果分组,类似搜索框,输入一段文件后，出现一下预想值-->
+            <!--<dependency>-->
+                <!--<groupId>org.apache.lucene</groupId>-->
+                <!--<artifactId>lucene-facet</artifactId>-->
+                <!--<version>5.2.0-SNAPSHOT</version>-->
+            <!--</dependency>-->
 
             <!--其他-->
             <dependency>
@@ -702,6 +724,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.7</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-collections</groupId>
+                <artifactId>commons-collections</artifactId>
+                <version>3.2.2</version>
             </dependency>
             <dependency>
                 <groupId>org.bitbucket.cowwoc</groupId>
