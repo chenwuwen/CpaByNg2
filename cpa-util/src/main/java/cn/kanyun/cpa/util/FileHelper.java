@@ -701,7 +701,7 @@ public class FileHelper {
 
 	/**
 	 * 
-	 * 描述：根据document生成Xml文件 作者：刘宝 时间：Jun 9, 2010 3:16:11 PM
+	 * 描述：根据document生成Xml文件
 	 * 
 	 * @param fileName
 	 *            生成文件的路径
@@ -710,7 +710,7 @@ public class FileHelper {
 	 *            编码格式
 	 * @return
 	 */
-	public static boolean WriteToXMLFile(String fileName, Document document, String encoding) {
+	public static boolean writeToXMLFile(String fileName, Document document, String encoding) {
 		createNewFile(fileName);
 		boolean success = false;
 		/** 格式化输出,类型IE浏览一样 */
@@ -875,6 +875,27 @@ public class FileHelper {
         File newFile = new File(newPath);  
         return file.renameTo(newFile);  
     }
+
+	/**
+	 * 随机生成文件名
+	 * @param nameLength ：生成文件名长度
+	 * @return
+	 */
+	public static String randomFileName(int nameLength){
+		String base = "1234567890abcdefghijklmnopqrstuvwxzyABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		StringBuffer temp = new StringBuffer();
+		temp.append(System.currentTimeMillis());
+		for (int i = 0; i < nameLength; i++) {
+//			double类型强转int会去掉小数位：如(int)5.9 -> 5
+			int p = (int) (Math.random() * 63);
+			if (p > 61) {
+				p = 61;
+			}
+			temp.append(base.substring(p, p + 1));
+		}
+		return temp.toString();
+		}
+	}
     
  // 删除文件夹  
     // param folderPath 文件夹完整绝对路径  
