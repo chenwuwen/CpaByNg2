@@ -35,7 +35,7 @@ public class UserCollectController {
      */
     @RequestMapping("/toggleCollect/{reId}")
     @ResponseBody
-    public CpaResult toggleCollect(@PathVariable("reId")Integer reId, HttpServletRequest request) {
+    public CpaResult toggleCollect(@PathVariable("reId")Long reId, HttpServletRequest request) {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);

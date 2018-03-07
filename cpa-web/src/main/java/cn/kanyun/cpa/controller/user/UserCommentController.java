@@ -94,7 +94,7 @@ public class UserCommentController {
      */
     @RequestMapping("/getItemComment/{reId}")
     @ResponseBody
-    public CpaResult getItemComment(@PathVariable("reId") Integer reId, Integer pageNo, Integer pageSize) {
+    public CpaResult getItemComment(@PathVariable("reId") Long reId, Integer pageNo, Integer pageSize) {
         CpaResult result = new CpaResult();
         try {
             Page page = new Page();

@@ -20,7 +20,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect>
 
 
     @Override
-    public Integer toggleUserCollect(Integer reId, CpaUser user) {
+    public Integer toggleUserCollect(Long reId, CpaUser user) {
         UserCollect userCollect = new UserCollect();
         userCollect.setReId(reId.longValue());
         userCollect.setUserId(user.getId());

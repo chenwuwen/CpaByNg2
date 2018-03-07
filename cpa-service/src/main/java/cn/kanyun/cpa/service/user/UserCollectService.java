@@ -8,5 +8,11 @@ import cn.kanyun.cpa.service.CommonService;
 public interface UserCollectService extends CommonService<Long, UserCollect> {
     public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserCollectServiceImpl";
 
-    Integer toggleUserCollect(Integer reId, CpaUser user);
+    /**
+     * @Author: kanyun
+     * @Description: 试题收藏或取消收藏
+     * @Date: 2017/8/16 17:02
+     * @params:
+     */
+    Integer toggleUserCollect(Long reId, CpaUser user);
 }
