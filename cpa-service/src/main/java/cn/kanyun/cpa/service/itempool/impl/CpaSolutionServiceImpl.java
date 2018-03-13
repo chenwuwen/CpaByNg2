@@ -7,6 +7,8 @@ import cn.kanyun.cpa.redis.service.RedisService;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.spi.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -18,19 +20,29 @@ import java.util.*;
 @Service(CpaSolutionService.SERVICE_NAME)
 public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution> implements CpaSolutionService {
 
+    private static final Logger logger = org.slf4j.LoggerFactory.getLogger(CpaSolutionServiceImpl.class);
+
     @Resource
     private CpaSolutionDao cpaSolutionDao;
     @Resource
     private RedisService redisService;
 
     @Override
-    public Map<Integer, String[]> getSolution(List<Integer> respertoryIds, String typeCode) {
-        Map mapSolution;
+    public Map<Integer, String[]> getSolution(List<Long> respertoryIds, String typeCode) {
+        Map mapSolution = null;
         String key = typeCode + StringUtils.join(",", respertoryIds.toArray());
-        mapSolution = redisService.getCacheMap(key);
+        try {
+            mapSolution = redisService.getCacheMap(key);
+        } catch (Exception e) {
+            logger.error("Error: 从Redis获取数据出错：{}", e);
+        }
         if (null == mapSolution) {
             mapSolution = cpaSolutionDao.getAnswer(respertoryIds);
-            redisService.setCacheMap(key, mapSolution);
+            try{
+                redisService.setCacheMap(key, mapSolution);
+            }catch (Exception e) {
+                logger.error("Error: Redis保存数据出错：{}", e);
+            }
         }
         Map<Integer, String[]> basicAnswer = new HashMap();
         Iterator iterator = mapSolution.entrySet().iterator();
@@ -43,9 +55,9 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution>
     }
 
     @Override
-    public CpaResult compareAnswer(Map<Integer, String[]> peopleAnswer, String typeCode) {
+    public CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, String typeCode) {
         CpaResult result = new CpaResult();
-        Map<Integer, String[]> basicAnswer = getSolution((new ArrayList<Integer>(peopleAnswer.keySet())), typeCode);
+        Map<Integer, String[]> basicAnswer = getSolution((new ArrayList(peopleAnswer.keySet())), typeCode);
         Iterator iterator = peopleAnswer.entrySet().iterator();
         Integer score = 0;
         Map resultmap = new HashMap();

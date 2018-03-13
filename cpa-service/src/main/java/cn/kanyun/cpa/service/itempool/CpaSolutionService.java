@@ -10,22 +10,22 @@ import java.util.Map;
 /**
  * Created by Administrator on 2017/6/16.
  */
-public interface CpaSolutionService extends CommonService<Long,CpaSolution> {
-    public static final String SERVICE_NAME="cn.kanyun.cpa.Service.itempool.impl.CpaSolutionServiceImpl";
+public interface CpaSolutionService extends CommonService<Long, CpaSolution> {
+    public static final String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaSolutionServiceImpl";
 
     /**
-     *@Author: zhaoyingxu
-     *@Description: 根据试题ID获取答案
-     *@Date: 2017/8/16 15:27
-     *@params:
+     * @Author: zhaoyingxu
+     * @Description: 根据试题ID获取答案
+     * @Date: 2017/8/16 15:27
+     * @params:
      */
-    public Map<Integer,String[]> getSolution(List<Integer> respertoryIds,String typeCode);
+    Map<Integer, String[]> getSolution(List<Long> respertoryIds, String typeCode);
 
     /**
-     *@Author: kanyun
-     *@Description: 检测试题答案
-     *@Date: 2017/8/16 15:06
-     *@params:
+     * @Author: kanyun
+     * @Description: 检测试题答案
+     * @Date: 2017/8/16 15:06
+     * @params:
      */
-    CpaResult compareAnswer(Map<Integer,String[]> peopleAnswer,String typeCode);
+    CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, String typeCode);
 }

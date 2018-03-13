@@ -32,7 +32,7 @@ public class CpaSolutionDaoImpl extends CommonDaoImpl<Long, CpaSolution> impleme
     }
 
     @Override
-    public Map<Integer, CpaSolution> getAnswer(List<Integer> respertoryIds) {
+    public Map<Integer, CpaSolution> getAnswer(List<Long> respertoryIds) {
         Session session = getSession();
         String hql = "from CpaSolution o where o.id in (:respertoryIds)";
         Query query = session.createQuery(hql);

@@ -51,13 +51,13 @@ public class CpaSolutionController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = WebUtil.getSessionUser(request);
-            Map<Integer, String[]> peopleAnswer = new HashMap<>();
+            Map<Long, String[]> peopleAnswer = new HashMap<>();
             Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
             while (iterator.hasNext()) {
                 String str = (String) iterator.next();
                 if (null != str && !"".equals(str)) {
                     String[] strr = str.split("-");
-                    Integer k = Integer.valueOf(strr[0]); //获取试题ID（数组中第一项）
+                    long k = Integer.valueOf(strr[0]); //获取试题ID（数组中第一项）
                     strr[0] = strr[strr.length - 1]; //（数组中其他项为value做数组，将数组最后一个值赋给数组第一个值）
                     strr = Arrays.copyOf(strr, strr.length - 1); //数组缩容
               /*  处理数组第二种方法,需要再建立一个数组 使用System.arraycopy方法：如果是数组比较大，那么使用System.arraycopy会比较有优势，因为其使用的是内存复制，省去了大量的数组寻址访问等时间*/
@@ -70,7 +70,8 @@ public class CpaSolutionController {
             }
             result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTestType());
             AnswerRecord answerRecord = this.patchAnswerRecord(result, user);
-            answerRecordService.addAnswerRecord(answerRecord);
+//            TODO 添加测试记录,这个地方考虑使用任务队列,将做题记录保存在队列里,然后定时执行此队列
+//            answerRecordService.addAnswerRecord(answerRecord);
         } catch (Exception e) {
             logger.error("Error : /api/solution/correctItem " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
