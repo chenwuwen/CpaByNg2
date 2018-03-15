@@ -310,7 +310,9 @@ public class ExcelUtil {
         }
     }
 
-    //Web 导出excel
+    /**
+     * web 导出excel
+     */
     public static void downloadExcelFile(String title, Map<String, String> headMap, JSONArray ja, HttpServletResponse response) {
         try {
             ByteArrayOutputStream os = new ByteArrayOutputStream();
