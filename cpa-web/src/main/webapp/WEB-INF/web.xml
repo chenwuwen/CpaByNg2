@@ -99,15 +99,19 @@
     <!--但是自己测试没用,如果自定义了一个过滤器,切过滤器的范围是(/*),那么即使配置如下还是会把静态资源文件过滤掉,只能在自定义的过滤器中使用endWith(".css")来判断是否需要过滤-->
     <servlet-mapping>
         <servlet-name>default</servlet-name>
-        <url-pattern>/js/*</url-pattern>
-        <url-pattern>/css/*</url-pattern>
-        <url-pattern>/images/*</url-pattern>
-        <url-pattern>/fonts/*</url-pattern>
-
+        <url-pattern>*.jpg</url-pattern>
     </servlet-mapping>
-    <!-- springmvc配置 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <!-- SpringMvc配置 -->
     <servlet>
-        <servlet-name>springmvc</servlet-name>
+        <servlet-name>springMvc</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <init-param>
             <param-name>contextConfigLocation</param-name>
@@ -122,7 +126,8 @@
         <async-supported>true</async-supported>
     </servlet>
     <servlet-mapping>
-        <servlet-name>springmvc</servlet-name>
+        <servlet-name>springMvc</servlet-name>
+        <!--之前一直使用*.do来做的，但是觉的*.do很丑，于是就改用“/”来配置，如果你的DispatcherServlet拦截"/"，为了实现REST风格，拦截了所有的请求，那么同时对*.js,*.jpg等静态文件的访问也就被拦截了。解决方法：激活Tomcat的defaultServlet来处理静态文件,如上面所配置的-->
         <url-pattern>/</url-pattern>
     </servlet-mapping>
     <!--druid访问监控界面 /druid/index.html-->
@@ -233,6 +238,7 @@
         <filter-name>corsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <!--自定义的检测登录状态的过滤器,此过滤器将返回包含有登录状态的json对象-->
     <filter>
         <filter-name>LoginStatusFilter</filter-name>
         <filter-class>cn.kanyun.cpa.filter.UserLoginStatusFilter</filter-class>

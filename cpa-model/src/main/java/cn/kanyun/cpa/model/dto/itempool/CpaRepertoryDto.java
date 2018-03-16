@@ -2,6 +2,15 @@ package cn.kanyun.cpa.model.dto.itempool;
 
 import cn.kanyun.cpa.model.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.JSR310DateTimeDeserializerBase;
+import com.fasterxml.jackson.datatype.jsr310.deser.JSR310StringParsableDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -12,7 +21,7 @@ import java.util.List;
  * CpaRepertory entity. @author MyEclipse Persistence Tools
  */
 
-public class CpaRepertoryDto  extends BaseEntity {
+public class CpaRepertoryDto extends BaseEntity {
 
 
     // Fields    
@@ -22,7 +31,8 @@ public class CpaRepertoryDto  extends BaseEntity {
     private String testType;
     private String choice; //是否是多选题
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime insertDate;
     private String presult; //用户回答的答案
     private String bresult; //标准答案
