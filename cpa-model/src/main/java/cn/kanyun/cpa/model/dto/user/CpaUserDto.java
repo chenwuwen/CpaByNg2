@@ -2,6 +2,9 @@ package cn.kanyun.cpa.model.dto.user;
 
 
 import cn.kanyun.cpa.model.entity.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -32,11 +35,15 @@ public class CpaUserDto extends BaseEntity {
     private LocalDateTime startRegisterDate; //注册开始时间
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endRegisterDate;  //注册结束时间
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime regDate;  //注册时间
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startLastLoginDate; //上次登录开始时间
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime endLastLoginDate;  //上次登录结束时间
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDate;  //上次登录时间
     private Set<String> roles; //角色集合
     private Set<String> permissions; //权限集合
