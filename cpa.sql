@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50720
 File Encoding         : 65001
 
-Date: 2018-02-22 14:46:31
+Date: 2018-03-19 20:58:41
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -49,7 +49,7 @@ CREATE TABLE `cpa_option` (
   PRIMARY KEY (`id`),
   KEY `FK31o5kexwcgr9so8n5iikw91y5` (`re_id`),
   CONSTRAINT `FK31o5kexwcgr9so8n5iikw91y5` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=121 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=129 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_option
@@ -174,6 +174,14 @@ INSERT INTO `cpa_option` VALUES ('117', '30', 'A', '费用的增加 ');
 INSERT INTO `cpa_option` VALUES ('118', '30', 'B', '收入的增加');
 INSERT INTO `cpa_option` VALUES ('119', '30', 'C', '费用的减少 ');
 INSERT INTO `cpa_option` VALUES ('120', '30', 'D', '所有者权益的增加');
+INSERT INTO `cpa_option` VALUES ('121', '31', 'A', '付款人名称 无忧考网：https://www.51test.net/show/8684757.html');
+INSERT INTO `cpa_option` VALUES ('122', '31', 'B', '收款人名称 无忧考网：https://www.51test.net/show/8684757.html');
+INSERT INTO `cpa_option` VALUES ('123', '31', 'C', '出票日期 无忧考网：https://www.51test.net/show/8684757.html');
+INSERT INTO `cpa_option` VALUES ('124', '31', 'D', '支票的金额 无忧考网：https://www.51test.net/show/8684757.html');
+INSERT INTO `cpa_option` VALUES ('125', '32', 'D', '提供修理劳务的汽车行 无忧考网：https://www.51test.net/show/8684761.html');
+INSERT INTO `cpa_option` VALUES ('126', '32', 'A', '进口货物的企业 无忧考网：https://www.51test.net/show/8684761.html');
+INSERT INTO `cpa_option` VALUES ('127', '32', 'B', '提供娱乐服务的游戏厅 无忧考网：https://www.51test.net/show/8684761.html');
+INSERT INTO `cpa_option` VALUES ('128', '32', 'C', '批发货物的超市 无忧考网：https://www.51test.net/show/8684761.html');
 
 -- ----------------------------
 -- Table structure for cpa_permission
@@ -205,41 +213,43 @@ CREATE TABLE `cpa_repertory` (
   `choice` varchar(255) DEFAULT NULL COMMENT '题的类型(单选多选)',
   `insert_date` datetime DEFAULT NULL COMMENT '插入时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_repertory
 -- ----------------------------
-INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', 'unique', '2018-01-01 14:13:46');
-INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', 'unique', '2017-12-01 14:14:01');
-INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', 'unique', '2018-02-22 11:14:07');
-INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', 'unique', '2018-01-16 14:14:14');
-INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', 'unique', '2018-02-22 14:14:20');
-INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', 'unique', '2018-02-19 14:14:27');
-INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', 'unique', '2018-02-12 12:14:32');
-INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', 'unique', '2018-02-05 14:14:39');
-INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', 'unique', '2017-10-24 14:14:49');
-INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', 'unique', '2017-07-20 14:14:58');
-INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'unique', '2018-01-18 14:15:07');
-INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', 'unique', '2018-05-30 14:15:12');
-INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', 'unique', '2017-09-26 14:15:20');
-INSERT INTO `cpa_repertory` VALUES ('14', '反映企业经营成果的会计要素是（   ）', 'cpuAccount', 'unique', '2017-02-21 14:15:26');
-INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', 'unique', '2017-04-25 14:15:35');
-INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', 'unique', '2018-02-03 14:15:44');
-INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', 'unique', '2018-02-01 14:15:51');
-INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', 'unique', '2017-10-10 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'unique', '2018-02-17 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', 'unique', '2017-11-22 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', 'unique', '2017-12-12 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', 'unique', '2018-02-07 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', 'unique', '2016-11-23 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', 'unique', '2018-02-20 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', 'unique', '2018-02-04 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('26', '原始凭证是由（）取得或填制的。', 'statuteEthics', 'unique', '2018-02-20 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', 'unique', '2017-10-17 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('28', '企业购买或出售交易性金融资产过程中发生的交易费用应直接记入的会计科目是（）', 'statuteEthics', 'unique', '2017-04-27 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', 'unique', '2017-08-30 14:15:54');
-INSERT INTO `cpa_repertory` VALUES ('30', '根据借贷记账法的账户结构，在账户借方登记的是(     )。', 'statuteEthics', 'unique', '2016-12-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('1', '会计分期是建立的在（）基础上的。', 'basicAccount', 'single', '2018-01-01 14:13:46');
+INSERT INTO `cpa_repertory` VALUES ('2', '下列不属于会计核算专门方法的是（）', 'basicAccount', 'single', '2017-12-01 14:14:01');
+INSERT INTO `cpa_repertory` VALUES ('3', '某企业资产总额为100万元，现发生一笔以银行存款10万元偿还银行借款的经济业务，此时，该企业的权益总额为（）。', 'basicAccount', 'single', '2018-02-22 11:14:07');
+INSERT INTO `cpa_repertory` VALUES ('4', '某企业9月份的资产总额为50 000元，负债总额为20 000元。9月份发生如下业务：9月份取得收入共计24 000元，发生费用共计15 000元，则9月份该企业的所有者权益总额为（）元。', 'basicAccount', 'single', '2018-01-16 14:14:14');
+INSERT INTO `cpa_repertory` VALUES ('5', '下列等式不正确的是（）。', 'basicAccount', 'single', '2018-02-22 14:14:20');
+INSERT INTO `cpa_repertory` VALUES ('6', '某企业月初有短期借款40万元，本月向银行借入短期借款45万元，以银行存款偿还短期借款20万元，则月末“短期借款”账户的余额为(     )。', 'basicAccount', 'single', '2018-02-19 14:14:27');
+INSERT INTO `cpa_repertory` VALUES ('7', '根据借贷记账法的账户结构，在账户借方登记的是(     )', 'basicAccount', 'single', '2018-02-12 12:14:32');
+INSERT INTO `cpa_repertory` VALUES ('8', '某企业月末编制的试算平衡表中，全部账户的本月借方发生额合计为900000元，除“应付账款”以外其他账户的本月贷方发生额合计为895000元，则应付账款账户(     )', 'basicAccount', 'single', '2018-02-05 14:14:39');
+INSERT INTO `cpa_repertory` VALUES ('9', '“本年利润”账户的期末余额一般在(     )', 'basicAccount', 'single', '2017-10-24 14:14:49');
+INSERT INTO `cpa_repertory` VALUES ('10', '汇总记账凭证账务处理程序的优点是(     )', 'basicAccount', 'single', '2017-07-20 14:14:58');
+INSERT INTO `cpa_repertory` VALUES ('11', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'single', '2018-01-18 14:15:07');
+INSERT INTO `cpa_repertory` VALUES ('12', '年度终了结账时，有余额的账户，要将其余额结转下年，结转的方法是(     )', 'cpuAccount', 'single', '2018-05-30 14:15:12');
+INSERT INTO `cpa_repertory` VALUES ('13', '收入是指企业在销售商品、提供劳务及让渡资产所有权等日常活动中所形成的（    ）', 'cpuAccount', 'single', '2017-09-26 14:15:20');
+INSERT INTO `cpa_repertory` VALUES ('14', '反映企业经营成果的会计要素是（   ）', 'cpuAccount', 'single', '2017-02-21 14:15:26');
+INSERT INTO `cpa_repertory` VALUES ('15', '某公司某会计期间期初资产总额为200 000元，当期期末负债总额比期初减少20 000元，期末所有者权益比期初增加60 000元。则该企业期末资产总额为(    )元', 'cpuAccount', 'single', '2017-04-25 14:15:35');
+INSERT INTO `cpa_repertory` VALUES ('16', '下列经济业务中，引起资产类项目和负债类项目同时减少的是(   )', 'cpuAccount', 'single', '2018-02-03 14:15:44');
+INSERT INTO `cpa_repertory` VALUES ('17', '资产类账户的结构与权益类账户的结构(     )', 'cpuAccount', 'single', '2018-02-01 14:15:51');
+INSERT INTO `cpa_repertory` VALUES ('18', '会计科目和账户之间的显著区别是(     )。', 'cpuAccount', 'single', '2017-10-10 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('19', '将现金存入银行，按规定应编制(     )。', 'cpuAccount', 'single', '2018-02-17 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('20', '固定资产明细账的外表形式一般采用(     )', 'cpuAccount', 'single', '2017-11-22 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('21', '更正错账时，划线更正法的适用范围是(     )', 'statuteEthics', 'single', '2017-12-12 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('22', '“长期待摊费用”账户按照经济内容分类，应属于(     )类账户。', 'statuteEthics', 'single', '2018-02-07 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('23', '应收账款明细账一般采用的格式是(     )。', 'statuteEthics', 'single', '2016-11-23 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('24', '对于大堆、笨重的材料物资盘存及确定，一般采用(     )法', 'statuteEthics', 'single', '2018-02-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('25', '企业的下列费用中应计入存货成本的是（   ）。', 'statuteEthics', 'single', '2018-02-04 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('26', '原始凭证是由（）取得或填制的。', 'statuteEthics', 'single', '2018-02-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('27', '汇总记账凭证账务处理程序的优点是(     )', 'statuteEthics', 'single', '2017-10-17 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('28', '企业购买或出售交易性金融资产过程中发生的交易费用应直接记入的会计科目是（）', 'statuteEthics', 'single', '2017-04-27 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('29', '各单位每年形成的会计档案，都应由本单位(     ) 负责整理立卷，装订成册，编制会计档案保管清册。', 'statuteEthics', 'single', '2017-08-30 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('30', '根据借贷记账法的账户结构，在账户借方登记的是(     )。', 'statuteEthics', 'single', '2016-12-20 14:15:54');
+INSERT INTO `cpa_repertory` VALUES ('31', '　　根据《票据法》的规定，支票的记载事项可以授权补记的有()。 无忧考网：https://www.51test.net/show/8684757.html', 'basicAccount', 'multiple', '2018-03-03 11:11:04');
+INSERT INTO `cpa_repertory` VALUES ('32', '下列各项中，属于增值税纳税人的有()。 无忧考网：https://www.51test.net/show/8684761.html', 'basicAccount', 'multiple', '2018-03-14 21:44:44');
 
 -- ----------------------------
 -- Table structure for cpa_role
@@ -270,7 +280,7 @@ CREATE TABLE `cpa_solution` (
   PRIMARY KEY (`id`),
   KEY `FKh4999mnolnr2xxldwcna8o727` (`re_id`),
   CONSTRAINT `FKh4999mnolnr2xxldwcna8o727` FOREIGN KEY (`re_id`) REFERENCES `cpa_repertory` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cpa_solution
@@ -305,6 +315,8 @@ INSERT INTO `cpa_solution` VALUES ('27', '27', 'C');
 INSERT INTO `cpa_solution` VALUES ('28', '28', 'B');
 INSERT INTO `cpa_solution` VALUES ('29', '29', 'A');
 INSERT INTO `cpa_solution` VALUES ('30', '30', 'A');
+INSERT INTO `cpa_solution` VALUES ('31', '31', 'D,B');
+INSERT INTO `cpa_solution` VALUES ('32', '32', 'A,B,C,D');
 
 -- ----------------------------
 -- Table structure for cpa_user
@@ -314,7 +326,7 @@ CREATE TABLE `cpa_user` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL COMMENT '用户名',
   `password` varchar(255) NOT NULL COMMENT '登陆密码',
-  `gender` varchar(2) DEFAULT NULL COMMENT '性别',
+  `gender` tinyint(2) DEFAULT NULL COMMENT '性别',
   `email` varchar(255) DEFAULT NULL COMMENT 'Email',
   `pet_name` varchar(20) DEFAULT NULL COMMENT '用户昵称',
   `reg_date` datetime DEFAULT NULL COMMENT '注册时间',
@@ -340,8 +352,8 @@ CREATE TABLE `cpa_user_extend` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
   `invite_user` bigint(20) DEFAULT NULL COMMENT '邀请人ID',
-  `share_chain` varchar(255) DEFAULT NULL COMMENT '分享链接',
-  `share_qr_url` varchar(255) DEFAULT NULL COMMENT '分享二维码图片地址',
+  `share_chain` varchar(20) DEFAULT NULL COMMENT '分享链接',
+  `share_qr_url` varchar(20) DEFAULT NULL COMMENT '分享二维码图片地址',
   `reap_signIn_day` int(11) DEFAULT NULL COMMENT '连续打卡天数',
   `create_date` datetime DEFAULT NULL COMMENT '创建日期',
   PRIMARY KEY (`id`),
@@ -395,11 +407,14 @@ CREATE TABLE `user_collect` (
   `collect_date` datetime DEFAULT NULL COMMENT '收藏时间',
   `status` int(11) DEFAULT NULL COMMENT '收藏状态 1：已收藏，0：收藏又取消收藏',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_collect
 -- ----------------------------
+INSERT INTO `user_collect` VALUES ('1', '2', 'kanyun', null, '31', '2018-03-10 21:35:27', '1');
+INSERT INTO `user_collect` VALUES ('2', '2', 'kanyun', null, '17', '2018-03-10 21:40:55', '0');
+INSERT INTO `user_collect` VALUES ('3', '2', 'kanyun', null, '16', '2018-03-10 21:42:31', '1');
 
 -- ----------------------------
 -- Table structure for user_comment
@@ -414,11 +429,14 @@ CREATE TABLE `user_comment` (
   `comment_date` datetime DEFAULT NULL COMMENT '评论时间',
   `comment` varchar(255) DEFAULT NULL COMMENT '收藏内容',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_comment
 -- ----------------------------
+INSERT INTO `user_comment` VALUES ('1', '1', '1', '1', '1', '2018-03-27 11:15:03', null);
+INSERT INTO `user_comment` VALUES ('2', '3', '3', '3', '3', null, null);
+INSERT INTO `user_comment` VALUES ('3', '2', 'kanyun', null, '31', '2018-03-10 21:36:30', '这不是打广告么');
 
 -- ----------------------------
 -- Table structure for user_role
