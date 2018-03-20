@@ -211,7 +211,11 @@ public class UserController {
         try {
             CpaUser user = userService.findById(userId);
             CpaUserDto userDto = new CpaUserDto();
-            org.springframework.beans.BeanUtils.copyProperties(user, userDto);
+            userDto.setGender(user.getGender());
+            userDto.setUserName(user.getUserName());
+            userDto.setEmail(user.getEmail());
+            userDto.setStatus(user.getStatus());
+//            userDto.setRoles(user.getUserRoles());
             result.setData(userDto);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
@@ -254,7 +258,7 @@ public class UserController {
         try {
             CpaUser user = new CpaUser();
             BeanUtils.copyProperties(user,userDto);
-            userService.saveOrUpdate(user);
+            userService.update(user);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             logger.error("ERROR: api/user/updUser {}", e);

@@ -50,6 +50,7 @@ public class CpaUserDto extends BaseEntity {
     private String imgPath;
     private String token;
     private Integer status;
+    private Byte gender;  //性别 0：女，1：男
 
 
     public String getToken() {
@@ -187,5 +188,13 @@ public class CpaUserDto extends BaseEntity {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Byte getGender() {
+        return gender;
+    }
+
+    public void setGender(Byte gender) {
+        this.gender = gender;
     }
 }

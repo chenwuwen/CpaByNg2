@@ -17,7 +17,7 @@ public class CpaUser implements java.io.Serializable {
     private Long id;
     private String userName;
     private String password;
-    private String gender;
+    private Byte gender;  //性别 0：女，1：男
     private String email;
     private String petName;
     private LocalDateTime regDate;
@@ -31,20 +31,7 @@ public class CpaUser implements java.io.Serializable {
     public CpaUser() {
     }
 
-    public CpaUser(Long id, String userName, String password, String gender, String email, String petName, LocalDateTime regDate, LocalDateTime lastLoginDate, Integer status, Set userRoles, String imgPath, CpaUserExtend cpaUserExtend) {
-        this.id = id;
-        this.userName = userName;
-        this.password = password;
-        this.gender = gender;
-        this.email = email;
-        this.petName = petName;
-        this.regDate = regDate;
-        this.lastLoginDate = lastLoginDate;
-        this.status = status;
-        this.userRoles = userRoles;
-        this.imgPath = imgPath;
-        this.cpaUserExtend = cpaUserExtend;
-    }
+
 
     public Long getId() {
         return id;
@@ -70,11 +57,11 @@ public class CpaUser implements java.io.Serializable {
         this.password = password;
     }
 
-    public String getGender() {
+    public Byte getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(Byte gender) {
         this.gender = gender;
     }
 

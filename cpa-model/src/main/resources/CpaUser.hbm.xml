@@ -21,7 +21,7 @@
                 <comment>登陆密码</comment>
             </column>
         </property>
-        <property name="gender" type="java.lang.String">
+        <property name="gender" type="java.lang.Byte">
             <column name="gender" length="2">
                 <comment>性别</comment>
             </column>

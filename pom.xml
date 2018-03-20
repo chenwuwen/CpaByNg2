@@ -440,6 +440,11 @@
                 <artifactId>poi-ooxml</artifactId>
                 <version>3.9</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.poi</groupId>
+                <artifactId>poi</artifactId>
+                <version>3.9</version>
+            </dependency>
             <!--上面的包是精简包，为了节省空间，里面放的只有一些常用的模块，所以要引用另外一些功能的话就需要引用完全版的ooxml-schemas.jar包-->
             <dependency>
                 <groupId>org.apache.poi</groupId>

@@ -25,6 +25,7 @@ public class CpaRepertoryDto extends BaseEntity {
     private String choice; //是否是多选题
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+//    下面这两个注解保证该字段返回Json是 yyyy-MM-dd HH:mm:ss 格式的字符串
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;

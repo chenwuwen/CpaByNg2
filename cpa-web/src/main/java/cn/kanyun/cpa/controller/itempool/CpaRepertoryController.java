@@ -104,7 +104,12 @@ public class CpaRepertoryController {
         CpaResult result = new CpaResult();
         try {
             CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-            List<CpaOption> cpaOptions = itemForm.getCpaOptions();
+            cpaRepertory.setTestStem(StringUtils.trimToEmpty(cpaRepertory.getTestStem()));
+            List<CpaOption> cpaOptions = new ArrayList<>();
+            itemForm.getCpaOptions().forEach(cpaOption -> {
+                cpaOption.setOptionData(StringUtils.trimToEmpty(cpaOption.getOptionData()));
+                cpaOptions.add(cpaOption);
+            });
             CpaSolution cpaSolution = itemForm.getCpaSolution();
             result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
@@ -217,7 +222,12 @@ public class CpaRepertoryController {
         CpaResult result = new CpaResult();
         try {
             CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-            List<CpaOption> cpaOptions = itemForm.getCpaOptions();
+            cpaRepertory.setTestStem(StringUtils.trimToEmpty(cpaRepertory.getTestStem()));
+            List<CpaOption> cpaOptions = new ArrayList<>();
+            itemForm.getCpaOptions().forEach(cpaOption -> {
+                cpaOption.setOptionData(StringUtils.trimToEmpty(cpaOption.getOptionData()));
+                cpaOptions.add(cpaOption);
+            });
             CpaSolution cpaSolution = itemForm.getCpaSolution();
             result.setData(cpaRepertoryService.updUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
