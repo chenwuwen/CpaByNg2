@@ -15,6 +15,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -31,12 +32,21 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 /**
- * 
- * @author H__D
- * @date 2016年10月19日 上午11:27:25
+ * 使用HttpClient保持会话(主要是JSESSIONID,当然可以换成TOKEN)有两种方式：
+ * 1.登录方法，与请求方法与登录方法之间存在调用关系,即:远程登录完毕之后立即调用请求方法,最后结束
+ * 这种方式保持会话的关键是：BasicHttpContext BasicHttpContext里有个Map<Object,Object>的对象用来记录一次请求响应的信息，当响应信息返回时，
+ * 就会被set到context里，当然响应的cookie信息也就被存储在context里,包括传回的sessionId，当第二次请求的时候传入相同的context，那么请求的过程中会将context里的sessionId提取出来传给服务器，
+ * sessionId一样，自然而然的就是同一个session对象，总结来说代表一个逻辑相关的会话的多个请求序列应该具有相同的HttpContext实例以确保请求之间的信息状态的自动传播
+ * 那么对于这种方式，我们需要做的就是定义一个全局的Context
+ * private static HttpContext localContext = new BasicHttpContext();
+ * private static HttpClientContext context = HttpClientContext.adapt(localContext);
+ * 定义好之后，只要顺序执行(即先登录,后请求) excute(httpClient,context)就可以了
+ * 详见地址：https://blog.csdn.net/z69183787/article/details/70809497
  *
  */
 @SuppressWarnings("deprecation")
@@ -53,6 +63,11 @@ public class HttpClientHelper {
 
     // HTTP内容类型。相当于form表单的形式，提交数据
     private static final String CONTENT_TYPE_JSON_URL = "application/json;charset=utf-8";
+
+    //保持会话的关键：全局的context,但是需要在一个线程里面执行,也就是一个方法完成登录及其他请求(需要保证是同一个HttpClient对象),但是如果登录之后获取JESSIOINID,之后在请求的方法里带上JESSIONID保持会话是不能实现的
+    private static HttpContext localContext = new BasicHttpContext();
+    private static HttpClientContext context = HttpClientContext.adapt(localContext);
+
     
 
     // 连接管理器
