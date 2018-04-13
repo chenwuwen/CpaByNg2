@@ -54,6 +54,7 @@
                         </property>
                         <property name="serializationInclusion">
                             <!-- 这种是将字段为null的清理掉不在结果Json中显示出来,其余的还有以下几种配置: ALWAYS, NON_NULL, NON_DEFAULT, NON_EMPTY-->
+                            <!--使用 NON_NULL 在全局中不显示为null的字段，虽然在一定程度上节省宽带，但不利于调试,开发阶段,建议不开启此配置-->
                             <value type="com.fasterxml.jackson.annotation.JsonInclude.Include">NON_NULL</value>
                         </property>
                     </bean>
