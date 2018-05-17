@@ -1,8 +1,8 @@
 package cn.kanyun.cpa.controller;
 
 import cn.kanyun.cpa.controller.user.UserController;
-import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.constants.CpaConstants;
+import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.service.system.UserRoleService;
@@ -12,8 +12,6 @@ import cn.kanyun.cpa.util.WebUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -24,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+
 @Controller
 @RequestMapping("/api")
 public class LoginController {
@@ -48,6 +48,7 @@ public class LoginController {
 
     /**
      * GET 登录
+     *
      * @return {String}
      */
     @GetMapping("/login")
@@ -60,14 +61,14 @@ public class LoginController {
     }
 
     /**
-     *@Author: kanyun
-     *@Description:  用户登录，shiro
-     *@Date: 2017/8/16 17:01
-     *@params:
+     * @Author: kanyun
+     * @Description: 用户登录，shiro
+     * @Date: 2017/8/16 17:01
+     * @params:
      */
     @PostMapping("/login")
     @ResponseBody
-    public CpaResult toLogin(CpaUserDto user, HttpServletRequest request) {
+    public CpaResult login(CpaUserDto user, HttpServletRequest request) {
         CpaResult result = new CpaResult();
         String s_code = (String) request.getSession().getAttribute(CpaConstants.IDENTIFYING_CODE);
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)
@@ -90,22 +91,23 @@ public class LoginController {
             try {
                 // 回调doGetAuthenticationInfo，进行认证, 回调reaml里的一个方法,验证用户
                 currentUser.login(token);
-                if(currentUser.hasRole("admin")){
-                    logger.info("角色为admin的用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ")) +" 登录系统"+",登录IP为:"+ WebUtil.getClientAddr(request));
-                }else if (currentUser.hasRole("manager")){
-                    logger.info("角色为manager的用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统"+",登录IP为:"+ WebUtil.getClientAddr(request));
-                }else if (currentUser.hasRole("normal")){
-                    logger.info("角色为normal的用户: "+user.getUserName()+" 于时间:"+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统"+",登录IP为:"+ WebUtil.getClientAddr(request));
-                }else{
-                    logger.info("用户: "+user.getUserName()+" 于时间: "+ DateTime.now().toString(DateTimeFormat.forPattern("y-M-d zz H:m:s.SSS ZZ"))  +" 登录系统未分配角色"+",登录IP为:"+ WebUtil.getClientAddr(request));
+
+                if (currentUser.hasRole("admin")) {
+                    logger.info("角色为admin的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
+                } else if (currentUser.hasRole("manager")) {
+                    logger.info("角色为manager的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
+                } else if (currentUser.hasRole("normal")) {
+                    logger.info("角色为normal的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
+                } else {
+                    logger.info("用户: {} 于时间: {} 该用户未分配角色,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
                 }
                 CpaUser u = userService.findByUserName(user.getUserName());
-                WebUtil.setSessionUser(request,u);
+                WebUtil.setSessionUser(request, u);
                 user.setRoles(userRoleService.findRoleByUser(u));
                 user.setPermissions(userRoleService.findPermissionByUer(u));
                 user.setId(u.getId());
                 user.setPassword(null);
-                user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u),u.getUserName(),CpaConstants.JWT_ISSUSER,CpaConstants.JWT_REFRESH_INTERVAL,CpaConstants.JWT_SECRET));
+                user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u), u.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_REFRESH_INTERVAL, CpaConstants.JWT_SECRET));
                 user.setImgPath(u.getImgPath());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);

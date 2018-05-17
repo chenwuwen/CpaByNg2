@@ -51,9 +51,9 @@ public class CpaRepertoryController {
      * @Date: 2017/8/16 14:58
      * @params:
      */
-    @RequestMapping("/getUnitExam/{testType}")
+    @RequestMapping("/getUnitExam/{testType}/{pageNo}/{pageSize}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("testType") String testType, @RequestParam(name = "pageNo", required = false) Integer pageNo, @RequestParam(name = "pageSize", required = false) Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("testType") String testType, @PathVariable(value = "pageNo",required = false) Integer pageNo, @PathVariable(value = "pageSize",required = false) Integer pageSize) {
         CpaResult result = null;
         try {
             Object[] params = {testType};

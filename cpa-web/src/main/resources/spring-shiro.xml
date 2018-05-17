@@ -79,6 +79,7 @@
     <!--通过配置sessionIdCookie属性，解决被服务器重写cookie中会话ID-->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
         <constructor-arg name="name" value="SHRIOSESSIONID"/>
+        <property name="path" value="/"/>
     </bean>
 
     <!-- 安全管理器 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
