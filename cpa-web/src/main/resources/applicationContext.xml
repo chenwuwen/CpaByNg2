@@ -212,11 +212,11 @@
         <property name="shared" value="true"/>
     </bean>
     <!-- Spring提供的基于的Ehcache实现的缓存管理器 -->
-    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处天上新设置的bead id-->
-    <!--<bean id="cacheManager"-->
-          <!--class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
-        <!--<property name="cacheManager" ref="ehCacheManagerFactory"/>-->
-    <!--</bean>-->
+    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处添加新设置的bead id-->
+    <bean id="cacheManager"
+          class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManagerFactory"/>
+    </bean>
 
     <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
     <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->

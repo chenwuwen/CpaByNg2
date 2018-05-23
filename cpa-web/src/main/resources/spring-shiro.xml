@@ -34,7 +34,7 @@
     </bean>
 
     <!-- 定义缓存管理器,可使用多种缓存组件-->
-    <bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
         <!--<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>-->
         <!--以上配置可能会报错：net.sf.ehcache.CacheException: Another unnamed CacheManager already exists in the same VM. Please provide unique names for each CacheManager in the config or do one of following-->
         <!--配置shiro的缓存时用到了EhCacheCacheManager，因为系统只能创建一个EhCacheCacheManager,所以要让自己的和系统的创建方式来自同一个地方,即在applicationContext.xml中配置缓存工厂,这边进行引用-->
@@ -70,7 +70,7 @@
         <property name="globalSessionTimeout" value="6000000"/>
         <!-- 删除失效的session -->
         <property name="deleteInvalidSessions" value="true"/>
-        <!-- 相隔多久检查一次session的有效性   -->
+        <!-- 相隔多久检查一次session的有效性,定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话   -->
         <property name="sessionValidationInterval" value="1800000"/>
         <property name="sessionValidationSchedulerEnabled" value="true"/>
         <property name="sessionIdCookie" ref="sessionIdCookie"/>
@@ -78,7 +78,8 @@
 
     <!--通过配置sessionIdCookie属性，解决被服务器重写cookie中会话ID-->
     <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
-        <constructor-arg name="name" value="SHRIOSESSIONID"/>
+        <!--<constructor-arg name="name" value="SHIRO_SESSIONID"/>-->
+        <constructor-arg name="name" value="SHIROSESSION"/>
         <property name="path" value="/"/>
     </bean>
 
@@ -86,7 +87,7 @@
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="myRealm"/>
         <!-- 使用配置的缓存管理器 -->
-        <property name="cacheManager" ref="cacheManager"></property>
+        <property name="cacheManager" ref="shiroCacheManager"></property>
         <!-- 会话管理 -->
         <property name="sessionManager" ref="sessionManager"/>
         <!--记住我-->
@@ -136,7 +137,7 @@
         <property name="filterChainDefinitions">
             <value>
                 <!--anon 表示不需要认证和授权-->
-                <!--authc 表示需要认证,没有登是不能访问的-->
+                <!--authc 表示需要认证,没有登陆是不能访问的-->
                 <!--perms 表示需要该权限才能访问的页面-->
                 <!--roles 表示需要角色才能访问的页面-->
 

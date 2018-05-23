@@ -89,7 +89,7 @@ public class LoginController {
                 token.setRememberMe(true);
             }
             try {
-                // 回调doGetAuthenticationInfo，进行认证, 回调reaml里的一个方法,验证用户
+                // 回调doGetAuthenticationInfo，进行认证, 回调realm里的一个方法,验证用户
                 currentUser.login(token);
 
                 if (currentUser.hasRole("admin")) {
