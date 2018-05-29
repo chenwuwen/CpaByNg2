@@ -82,7 +82,7 @@ public class RedisCacheAspect {
                 return obj;
             }
             if (null != obj) {
-                jedisCluster.setnx(cacheKey, JSONObject.toJSONString(obj));
+                jedisCluster.setex(cacheKey, redisCacheProfiler.expire(),JSONObject.toJSONString(obj));
             }
             return obj;
 

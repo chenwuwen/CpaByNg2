@@ -12,9 +12,6 @@ import java.io.*;
  * 所以当我们去使用这个类做事情时发现包空指针错误，这是因为我们这个类有可能已经初始化完成，但是引用的其他类不一定初始化完成，所以发生了空指针错误，解决方案如下：
  * 1、写一个类继承spring的ApplicationListener监听，并监控ContextRefreshedEvent事件（容易初始化完成事件）
  * 2、定义简单的bean：<bean id="beanDefineConfigue" class="com.creatar.portal.webservice.BeanDefineConfigue"></bean> 或者直接使用@Component("BeanDefineConfigue")注解方式
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
- * 系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情
  */
 
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
