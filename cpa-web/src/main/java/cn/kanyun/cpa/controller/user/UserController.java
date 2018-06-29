@@ -26,6 +26,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,9 +58,10 @@ public class UserController {
      * @Date: 2017/8/16 17:02
      * @params:
      */
-    @RequestMapping("/checkname1")
+    @Deprecated
+    @RequestMapping(value = {"/checkname"}, method = RequestMethod.GET)
     @ResponseBody
-    public String checkName1(String username) {
+    public String checkName_old(String username) {
         boolean b = true;
         Object[] params = {username};
         String where = "o.userName=? ";
@@ -254,7 +256,7 @@ public class UserController {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = new CpaUser();
-            BeanUtils.copyProperties(user,userDto);
+            BeanUtils.copyProperties(user, userDto);
             userService.update(user);
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {

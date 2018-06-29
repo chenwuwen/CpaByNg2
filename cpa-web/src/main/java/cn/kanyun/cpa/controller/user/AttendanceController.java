@@ -16,6 +16,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * 用户签到
+ */
+
 @Controller
 @RequestMapping("/api/user")
 public class AttendanceController {

@@ -5,6 +5,7 @@ import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.queue.UserAnswerLogTask;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import cn.kanyun.cpa.service.user.AnswerRecordService;
 import cn.kanyun.cpa.util.WebUtil;
@@ -71,7 +72,7 @@ public class CpaSolutionController {
             result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTestType());
             AnswerRecord answerRecord = this.patchAnswerRecord(result, user);
 //            TODO 添加测试记录,这个地方考虑使用任务队列,将做题记录保存在队列里,然后定时执行此队列
-//            answerRecordService.addAnswerRecord(answerRecord);
+            UserAnswerLogTask.exec(answerRecord);
         } catch (Exception e) {
             logger.error("Error : /api/solution/correctItem " + e);
             result.setState(CpaConstants.OPERATION_ERROR);

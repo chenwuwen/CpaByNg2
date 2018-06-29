@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
@@ -30,20 +31,31 @@ public class RedisCacheAspect {
     @Value("${redis.host}")
     private static String host;
     @Value("${redis.port}")
-    private static String port;
+    private static int port;
     @Value("${redis.password}")
     private static String password;
 
-    public static JedisCluster getJedisCluster() {
-        if (jedisCluster == null) {
-            synchronized (JedisCluster.class) {
-                if (jedisCluster == null) {
-                    jedisCluster = new JedisCluster();
-                }
-            }
-        }
-        return jedisCluster;
+    private static class InnerClass {
+        private static HostAndPort hostAndPort = new HostAndPort(host, port);
+        private static final JedisCluster jedisCluster = new JedisCluster(hostAndPort);
     }
+
+    private RedisCacheAspect() {
+    }
+
+    public static final JedisCluster getJedisCluster() {
+        return InnerClass.jedisCluster;
+    }
+//    public static JedisCluster getJedisCluster() {
+//        if (jedisCluster == null) {
+//            synchronized (JedisCluster.class) {
+//                if (jedisCluster == null) {
+//                    jedisCluster = new JedisCluster();
+//                }
+//            }
+//        }
+//        return jedisCluster;
+//    }
 
 
     @Pointcut("@annotation(cn.kanyun.cpa.dao.common.annotation.RedisCacheProfiler)")
@@ -82,7 +94,7 @@ public class RedisCacheAspect {
                 return obj;
             }
             if (null != obj) {
-                jedisCluster.setex(cacheKey, redisCacheProfiler.expire(),JSONObject.toJSONString(obj));
+                jedisCluster.setex(cacheKey, redisCacheProfiler.expire(), JSONObject.toJSONString(obj));
             }
             return obj;
 
