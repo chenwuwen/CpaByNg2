@@ -72,7 +72,7 @@ public class CpaSolutionController {
             result = cpaSolutionService.compareAnswer(peopleAnswer, cpaRepertoryDto.getTestType());
             AnswerRecord answerRecord = this.patchAnswerRecord(result, user);
 //            TODO 添加测试记录,这个地方考虑使用任务队列,将做题记录保存在队列里,然后定时执行此队列
-            UserAnswerLogTask.exec(answerRecord);
+            UserAnswerLogTask.execute(answerRecord);
         } catch (Exception e) {
             logger.error("Error : /api/solution/correctItem " + e);
             result.setState(CpaConstants.OPERATION_ERROR);

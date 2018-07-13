@@ -15,21 +15,21 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param t 待保存的实体对象
      * @return 实体对象的ID
      */
-    public K save(T t);
+    K save(T t);
 
     /**
      * 暂时还没有用
      *
      * @param t
      */
-    public void lock(T t);
+    void lock(T t);
 
     /**
      * 将实体对象【集合】保存到数据库中
      *
      * @param ct 实体对象【集合】
      */
-    public void saveAll(Collection<T> ct);
+    void saveAll(Collection<T> ct);
 
     /**
      * 根据Id查询实体对象
@@ -37,7 +37,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param id 表记录中的对应的id字段
      * @return 对应的实体对象
      */
-    public T findById(K id);
+    T findById(K id);
 
     /**
      * 更新一条记录
@@ -45,7 +45,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param t 待更新记录对应的实体对象
      * @return 更新后的实体对象
      */
-    public T update(T t);
+    T update(T t);
 
     /**
      * 保存或更新一个实体对象到表记录中
@@ -53,21 +53,21 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param t 待更新的实体对象
      * @return 更新后的实体对象
      */
-    public T saveOrUpdate(T t);
+    T saveOrUpdate(T t);
 
     /**
      * 删除一个实体对象对应的表记录
      *
      * @param t 待删除的实体对象
      */
-    public void delete(T t);
+    void delete(T t);
 
     /**
      * 删除一组记录
      *
      * @param ct 待删除记录集合
      */
-    public void deleteAll(Collection<T> ct);
+    void deleteAll(Collection<T> ct);
 
     /**
      * 根据id删除一条记录
@@ -75,14 +75,14 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param id 待删除记录id
      * @return 是否删除成功（id是否有效）
      */
-    public boolean deleteById(K id);
+    boolean deleteById(K id);
 
     /**
      * 加载所有记录集合
      *
      * @return 所有记录集合
      */
-    public CpaResult<T> loadAll();
+    CpaResult<T> loadAll();
 
     /**
      * 分页加载记录集合
@@ -91,7 +91,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param rows 每页最多多少行数据
      * @return 第page页的数据集合
      */
-    public CpaResult<T> load(int page, int rows);
+    CpaResult<T> load(int page, int rows);
 
     /**
      * 获取总记录数
@@ -99,7 +99,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return 总数
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public long getTotalCount();
+    long getTotalCount();
     /******************************HQL******************************/
     /**
      * 分页获取所有记录
@@ -107,7 +107,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public CpaResult<T> getScrollData();
+    CpaResult<T> getScrollData();
 
     /**
      * 根据条件获取总记录数
@@ -117,7 +117,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return 总数
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public long getTotalCount(String where, Object[] params);
+    long getTotalCount(String where, Object[] params);
 
     /**
      * 分页获取记录
@@ -127,7 +127,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public CpaResult<T> getScrollData(int firstResult, int maxResult);
+    CpaResult<T> getScrollData(int firstResult, int maxResult);
 
     /**
      * 分页获取记录
@@ -141,7 +141,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public CpaResult<T> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
+    CpaResult<T> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
 
     /**
      * 分页获取记录
@@ -153,7 +153,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public CpaResult getScrollData(int firstResult, int maxResult, String where, Object[] params);
+    CpaResult getScrollData(int firstResult, int maxResult, String where, Object[] params);
 
     /**
      * 分页获取记录
@@ -169,7 +169,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    public CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
+    CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
 
 }
 

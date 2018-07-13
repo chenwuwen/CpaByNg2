@@ -16,9 +16,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 //@Component
 public class UserAnswerLogTask {
-    @Resource
+    @Resource(name = AnswerRecordService.SERVICE_NAME)
     private AnswerRecordService answerRecordService;
-
+    //    设置队列最大容量为1000
     private static final int maxSize = 1000;
     //    设定最小阈值为80%
     private static final float minThreshold = 0.8F;
@@ -31,7 +31,7 @@ public class UserAnswerLogTask {
     //    实例化CountDownLatch,且设置当其实例发送连个count请求时，开始消费
     private static CountDownLatch countDownLatch = new CountDownLatch(1);
 
-    //    当前队列大小
+    //    当前队列大小(使用原子类,保证变量原子性)
     private static final AtomicInteger size = new AtomicInteger(0);
 
     private static final int corePoolSize = 2;  // 核心线程数 即 初始化线程数
@@ -93,7 +93,7 @@ public class UserAnswerLogTask {
         }
     }
 
-    public static void exec(AnswerRecord answerRecord) {
+    public static void execute(AnswerRecord answerRecord) {
 //        UserAnswerLogTask userAnswerLogTask = new UserAnswerLogTask();
         userAnswerLogTask = getInstance();
         ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
