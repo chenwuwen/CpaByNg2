@@ -25,7 +25,8 @@
     <context:component-scan base-package="cn.kanyun"/>
 
     <!--支持扫描@Scheduled(cron表达式) 定时任务注解,该注解是写在方法上的,所以如果需要定时执行,还需要在类上添加@Component注解或者@Controller,@Service注解等-->
-    <task:annotation-driven/>
+    <!--需要注意的是,当项目中存在其他定时器配置文件时,下面配置,会导致项目启动时实例化两次定时器,报异常BeanDefinitionParsingException: Configuration problem: Only one AsyncAnnotationBeanPostProcessor may exist within the context.所以需要去掉如下配置-->
+    <!--<task:annotation-driven/>-->
 
     <!--支持hibernate-validator框架注解-->
     <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>

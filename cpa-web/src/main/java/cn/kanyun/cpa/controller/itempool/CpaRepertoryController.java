@@ -53,13 +53,14 @@ public class CpaRepertoryController {
      */
     @RequestMapping("/getUnitExam/{testType}/{pageNo}/{pageSize}")
     @ResponseBody
-    public CpaResult getUnitExam(@PathVariable("testType") String testType, @PathVariable(value = "pageNo",required = false) Integer pageNo, @PathVariable(value = "pageSize",required = false) Integer pageSize) {
+    public CpaResult getUnitExam(@PathVariable("testType") String testType, @PathVariable(value = "pageNo", required = false) Integer pageNo, @PathVariable(value = "pageSize", required = false) Integer pageSize) {
         CpaResult result = null;
         try {
             Object[] params = {testType};
             String where = "o.testType=?";
             Page page = new Page();
-            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+//            如果pageNo为0，则设置pageNo为1,否则为本身
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
 //            key由当前类名+方法名+查询条件+参数+分页组成,尽可能保证key的唯一性
             String key = this.getClass().getName() + Thread.currentThread().getStackTrace()[1].getMethodName() + where + StringUtils.join(params) + pageNo + pageSize;

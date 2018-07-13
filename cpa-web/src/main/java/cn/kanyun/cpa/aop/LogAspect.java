@@ -30,13 +30,30 @@ import java.util.Map;
 @Aspect
 public class LogAspect {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private String requestPath = null; // 请求地址
-    private String userName = null; // 用户名
-    private Map<?, ?> inputParamMap = null; // 传入参数
-    private Map<String, Object> outputParamMap = null; // 存放输出结果
-    private long startTimeMillis = 0; // 开始时间
-    private long endTimeMillis = 0; // 结束时间
+    /**
+     * 请求地址
+     */
+    private String requestPath = null;
+    /**
+     * 用户名
+     */
+    private String userName = null;
+    /**
+     * 传入参数
+     */
+    private Map<?, ?> inputParamMap = null;
+    /**
+     * 存放输出结果
+     */
+    private Map<String, Object> outputParamMap = null;
+    /**
+     * 开始时间
+     */
+    private long startTimeMillis = 0;
+    /**
+     * 结束时间
+     */
+    private long endTimeMillis = 0;
 
     /**
      * @param joinPoint
@@ -46,7 +63,8 @@ public class LogAspect {
      */
     @Before("execution(* cn.kanyun.cpa.*.*.*(..))")
     public void doBeforeInServiceLayer(JoinPoint joinPoint) {
-        startTimeMillis = System.currentTimeMillis(); // 记录方法开始执行的时间
+        // 记录方法开始执行的时间
+        startTimeMillis = System.currentTimeMillis();
     }
 
     /**
@@ -57,7 +75,8 @@ public class LogAspect {
      */
     @After("execution(* cn.kanyun.cpa.*.*.*(..))")
     public void doAfterInServiceLayer(JoinPoint joinPoint) {
-        endTimeMillis = System.currentTimeMillis(); // 记录方法执行完成的时间
+        // 记录方法执行完成的时间
+        endTimeMillis = System.currentTimeMillis();
         this.printOptLog();
     }
 
@@ -78,7 +97,6 @@ public class LogAspect {
         RequestAttributes ra = RequestContextHolder.getRequestAttributes();
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
-        HttpSession session = request.getSession();
         // 从session中获取用户信息
         CpaUser user = WebUtil.getSessionUser(request);
         if (null != user) {
@@ -93,8 +111,9 @@ public class LogAspect {
 
         // 执行完方法的返回值：调用proceed()方法，就会触发切入点方法执行
         outputParamMap = new HashMap<String, Object>();
-        Object result = pjp.proceed();// result的值就是被拦截方法的返回值
-//        outputParamMap.put("result", result);
+        // result的值就是被拦截方法的返回值
+        Object result = pjp.proceed();
+        outputParamMap.put("result", result);
         return result;
     }
 
@@ -103,11 +122,12 @@ public class LogAspect {
      * @Description: 输出日志
      */
     private void printOptLog() {
-        Gson gson = new Gson(); // 需要用到google的gson解析包
+//      需要用到google的gson解析包
+        Gson gson = new Gson();
         String optTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(startTimeMillis);
-        logger.info("\n 用户名：" + userName
-                + "  请求地址：" + requestPath + "; 开始时间：" + optTime + " 处理时间：" + (endTimeMillis - startTimeMillis) + "ms ;"
-                + " 请求参数：" + gson.toJson(inputParamMap) + ";" + "\n 返回结果：" + gson.toJson(outputParamMap));
+        logger.info("\n 用户名：{}  请求地址：{} ; 开始时间：{} 处理时间： {}ms ; 请求参数：{} \n 返回结果：", userName
+                , requestPath, optTime, (endTimeMillis - startTimeMillis), gson.toJson(inputParamMap), gson.toJson(outputParamMap));
+
     }
 }
 

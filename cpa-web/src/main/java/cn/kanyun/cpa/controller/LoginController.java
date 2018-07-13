@@ -2,6 +2,7 @@ package cn.kanyun.cpa.controller;
 
 import cn.kanyun.cpa.controller.user.UserController;
 import cn.kanyun.cpa.model.constants.CpaConstants;
+import cn.kanyun.cpa.model.constants.RoleConstants;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
@@ -24,6 +25,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
+/**
+ * @author Administrator
+ *         登录类
+ */
 @Controller
 @RequestMapping("/api")
 public class LoginController {
@@ -38,7 +43,6 @@ public class LoginController {
     /**
      * 首页
      *
-     * @param model
      * @return
      */
     @GetMapping("/index")
@@ -76,7 +80,7 @@ public class LoginController {
             result.setState(CpaConstants.OPERATION_ERROR);
             result.setMsg("验证码错误！");
         } else {
-        /*就是代表当前的用户。*/
+            //就是代表当前的用户
             Subject currentUser = SecurityUtils.getSubject();
             //获取基于用户名和密码的令牌
             //这里的token大家叫他令牌，也就相当于一张表格，你要去验证，你就得填个表，里面写好用户名密码，交给公安局的同志给你验证。
@@ -92,11 +96,11 @@ public class LoginController {
                 // 回调doGetAuthenticationInfo，进行认证, 回调realm里的一个方法,验证用户
                 currentUser.login(token);
 
-                if (currentUser.hasRole("admin")) {
+                if (currentUser.hasRole(RoleConstants.ADMIN)) {
                     logger.info("角色为admin的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
-                } else if (currentUser.hasRole("manager")) {
+                } else if (currentUser.hasRole(RoleConstants.MANAGER)) {
                     logger.info("角色为manager的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
-                } else if (currentUser.hasRole("normal")) {
+                } else if (currentUser.hasRole(RoleConstants.NORMAL)) {
                     logger.info("角色为normal的用户: {} 于时间:{}  登录系统,,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
                 } else {
                     logger.info("用户: {} 于时间: {} 该用户未分配角色,登录IP为:{}", user.getUserName(), LocalDateTime.now(), WebUtil.getClientAddr(request));
