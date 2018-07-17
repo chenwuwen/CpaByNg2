@@ -22,11 +22,13 @@
         下面的标签可以自己定义
         name：相当于Map的key
         value：就是map的value
-        ${catalina.base}是tomcat的当前路径
-        /logs：此处路径是相对classPath路径，
-        没有目录会默认创建
+        ${catalina.base}是tomcat的当前路径[(工作目录)：指向每个Tomcat目录私有信息的位置，就是conf、logs、temp、webapps和work的父目录]
+        ${catalina.home}(安装目录)：指向公用信息的位置，就是bin和lib的父目录。
+        仅运行一个Tomcat实例时，这两个属性指向的位置是相同的。
+        不配置路径的话,（使用tomcat）默认是输出到tomcat的bin目录下的
+        定义的目录不存在会默认创建
     -->
-    <substitutionProperty name="logBase" value="${catalina.base}/logs/cpa/"/>
+    <substitutionProperty name="logBase" value="../logs/cpa/"/>
     <!--
       <property>用来定义变量值的标签，<property> 有两个属性，name和value；
         其中name的值是变量的名称,value的值时变量定义的值。
@@ -38,14 +40,12 @@
     <property name="log.root.level" value="DEBUG"/>
     <!-- 其他日志级别 -->
     <property name="log.other.level" value="INFO"/>
-    <!-- 日志路径 -->
-    <property name="log.base" value="logs"/>
     <!-- 模块名称， 影响日志配置名，日志文件名 -->
     <property name="log.moduleName" value="cpa"/>
     <!-- 日志文件大小 -->
     <property name="log.max.size" value="100MB"/>
-    <!--定义生成日志路径,与第一行配置的不同,第一行配置的路径是相对tomcat路径,此处路径是相对classPath路径-->
-    <property name="LOG_HOME" value="/logs"/>
+    <!--定义生成日志路径,另一个路径变量,使用相对路径,如果是用 /logs 则路径为与当前tomcat路径一致-->
+    <property name="LOG_HOME" value="../logs"/>
 
     <!-- appender：
         name相当于一个名称
