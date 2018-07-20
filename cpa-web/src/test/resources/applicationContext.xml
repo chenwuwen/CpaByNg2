@@ -3,6 +3,7 @@
        xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:aop="http://www.springframework.org/schema/aop" xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
      http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
      http://www.springframework.org/schema/context
@@ -10,18 +11,26 @@
      http://www.springframework.org/schema/tx
      http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
      http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
-     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd">
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
     <!-- 加载配置文件 -->
     <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常-->
     <!-- 这里location值为参数配置文件的位置,该配置可以将${ }这种形式的变量用在spring提供的注解当中，为注解的属性提供值,
      如 @Value("${FTP_ADDRESS}")
      private String FTP_ADDRESS;
      前提是使用该注解的类，必须在类上加上@Component，同时要配置context:component-scan，还有该类再被调用的时候需要使用注入的方式（@Resource或者@AutoWrite），而不能使用new方式或者实例,否则无法获取属性值-->
-    <context:property-placeholder location="classpath:db.properties,classpath:ftp.properties" ignore-unresolvable="true"/>
+    <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
 
     <!-- 1：注解的方式，引入组件的自动扫描，在类和方法上可以添加对注解的支持 -->
     <!-- Spring的扫描仅仅是扫描@Service @Repository，@Components标记!!!@Controller是有SpingMVC来扫描的 -->
     <context:component-scan base-package="cn.kanyun"/>
+
+    <!--支持扫描@Scheduled(cron表达式) 定时任务注解,该注解是写在方法上的,所以如果需要定时执行,还需要在类上添加@Component注解或者@Controller,@Service注解等-->
+    <!--需要注意的是,当项目中存在其他定时器配置文件时,下面配置,会导致项目启动时实例化两次定时器,报异常BeanDefinitionParsingException: Configuration problem: Only one AsyncAnnotationBeanPostProcessor may exist within the context.所以需要去掉如下配置-->
+    <!--<task:annotation-driven/>-->
+
+    <!--支持hibernate-validator框架注解-->
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+
     <!-- Druid数据库连接池 -->
     <bean id="CpaDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
@@ -30,7 +39,8 @@
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
         <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall，去掉后监控界面sql无法统计 -->
-        <property name="filters" value="stat"/>
+        <!--filter若使用log4j，tomcat lib需添加log4j.jar；若使用slf4j基于logback,需添加slf4j-api-->
+        <property name="filters" value="stat,wall,slf4j"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
         <!-- 初始化连接数量 -->
@@ -74,7 +84,8 @@
         <property name="username" value="${jdbc2.username}"/>
         <property name="password" value="${jdbc2.password}"/>
         <!-- 通过别名的方式配置扩展插件，常用的插件有：监控统计用的filter:stat 日志用的filter:log4j 防御sql注入的filter:wall -->
-        <property name="filters" value="stat"/>
+        <!--filter若使用log4j，tomcat lib需添加log4j.jar；若使用slf4j基于logback,需添加slf4j-api-->
+        <property name="filters" value="stat,wall,slf4j"/>
         <!-- 最大并发连接数 -->
         <property name="maxActive" value="${maxActive}"/>
         <!-- 初始化连接数量 -->
@@ -202,14 +213,15 @@
     <!-- 若只想使用Spring自身提供的缓存器,则注释掉下面的两个关于Ehcache配置的bean,并启用上面的SimpleCacheManager即可 -->
     <bean id="ehCacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation" value="classpath:ehcache.xml"/>
+        <!-- 由于hibernate也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
         <property name="shared" value="true"/>
     </bean>
     <!-- Spring提供的基于的Ehcache实现的缓存管理器 -->
-    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处天上新设置的bead id-->
-    <!--<bean id="cacheManager"-->
-          <!--class="org.springframework.cache.ehcache.EhCacheCacheManager">-->
-        <!--<property name="cacheManager" ref="ehCacheManagerFactory"/>-->
-    <!--</bean>-->
+    <!--此处bean的id需要谨慎设置,因为在spring-shiro.xml中设置了bean id为cacheManager,所以此处需要设置新名称,同时在上面注解处添加新设置的bead id-->
+    <bean id="cacheManager"
+          class="org.springframework.cache.ehcache.EhCacheCacheManager">
+        <property name="cacheManager" ref="ehCacheManagerFactory"/>
+    </bean>
 
     <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
     <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->
@@ -238,6 +250,19 @@
             <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+
+    <!--定义solr的server-->
+    <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
+        <constructor-arg index="0" value="${solr.url}"/>
+        <!-- 设置响应解析器 -->
+        <property name="parser">
+            <bean class="org.apache.solr.client.solrj.impl.XMLResponseParser"/>
+        </property>
+        <!-- 设置重试次数-->
+        <property name="maxRetries" value="${solr.maxRetries}"/>
+        <!-- 建立连接的最长时间 -->
+        <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
+    </bean>
 
     <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">

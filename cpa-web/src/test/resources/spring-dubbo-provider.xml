@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <description>dubbo服务提供者配置</description>
+
+    <!--说明：-->
+    <!--dubbo:registry 标签一些属性的说明：-->
+    <!--1）register是否向此注册中心注册服务，如果设为false，将只订阅，不注册。-->
+    <!--2）check注册中心不存在时，是否报错。-->
+    <!--3）subscribe是否向此注册中心订阅服务，如果设为false，将只注册，不订阅。-->
+    <!--4）timeout注册中心请求超时时间(毫秒)。-->
+    <!--5）address可以Zookeeper集群配置，地址可以多个以逗号隔开等。-->
+    <!--dubbo:service标签的一些属性说明：-->
+    <!--1）interface服务接口的路径-->
+    <!--2）ref引用对应的实现类的Bean的ID-->
+    <!--3）registry向指定注册中心注册，在多个注册中心时使用，值为<dubbo:registry>的id属性，多个注册中心ID用逗号分隔，如果不想将该服务注册到任何registry，可将值设为N/A-->
+    <!--4）register 默认true ，该协议的服务是否注册到注册中心。-->
+    <!--dubbo:reference 的一些属性的说明：-->
+    <!--1）interface调用的服务接口-->
+    <!--2）check 启动时检查提供者是否存在，true报错，false忽略-->
+    <!--3）registry 从指定注册中心注册获取服务列表，在多个注册中心时使用，值为<dubbo:registry>的id属性，多个注册中心ID用逗号分隔-->
+    <!--4）loadbalance 负载均衡策略，可选值：random,roundrobin,leastactive，分别表示：随机，轮循，最少活跃调用-->
+
+    <!--定义了提供方应用信息，用于计算依赖关系；在 dubbo-admin 或 dubbo-monitor 会显示这个名字，方便辨识,其值常设置为项目名-->
+    <dubbo:application name="cn.kanyun.cpa" owner="kanyun" organization="dubbox"/>
+
+    <!-- 使用multicast广播注册中心暴露服务地址 -->
+    <!--<dubbo:registry address="multicast://224.5.6.7:1234" /> -->
+    <!--使用 zookeeper 注册中心暴露服务，注意要先开启 zookeeper,设置check="false"，则在项目启动时，注册中心不存在也不报错-->
+    <dubbo:registry address="zookeeper://115.47.155.3:2181" check="false"/>
+
+    <!-- 用dubbo协议在20880端口暴露服务 -->
+    <!--协议配置，用于配置提供服务的协议信息，协议由提供方指定，消费方被动接受-->
+    <dubbo:protocol name="dubbo" port="20880"/>
+    <!-- 是否纳入调用统计报表（可选）计数 -->
+    <!--监控中心配置，用于配置连接监控中心相关信息，可选。-->
+    <dubbo:monitor protocol="registry"/>
+
+    <!--使用 dubbo 协议实现定义好的 api.PermissionService 接口-->
+    <!-- 声明需要暴露的服务接口 -->
+    <!--这里我讲试题库的接口提供出去-->
+    <dubbo:service interface="cn.kanyun.cpa.service.itempool.CpaRepertoryService" ref="cpaRepertoryService"
+                   protocol="dubbo"/>
+    <!--具体实现该接口的 bean-->
+    <!--试题库的接口的实现类-->
+    <bean id="cpaRepertoryService" class="cn.kanyun.cpa.service.itempool.impl.CpaRepertoryServiceImpl"/>
+
+    <!-- 服务者与消费者的默认配置 -->
+    <!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试  统一的超时和重连配置 -->
+    <dubbo:provider delay="-1" timeout="6000" retries="0"/>
+    <!--<dubbo:consumer timeout="6000" retries="0"/>-->
+</beans>

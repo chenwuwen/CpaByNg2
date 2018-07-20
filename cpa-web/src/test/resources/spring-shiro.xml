@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-lazy-init="true">
+    <description>Shiro安全配置</description>
+    <!-- 继承自AuthorizingRealm的自定义Realm,即指定Shiro验证用户登录的类为自定义的ShiroDbRealm -->
+    <!-- Shiro配置,继承自AuthorizingRealm的自定义Realm (解决初始化时的依赖循环问题，通过这里向realm中注入userservice实现)-->
+    <!--应该注意的是shiro的realm属于Filter,简单说就是初始化realm时,spring还未加载相关业务Bean,那么解决办法就是将springmvc的配置文件加载提前。-->
+    <bean id="myRealm" class="cn.kanyun.cpa.shiro.MyRealm">
+        <!--自定义Realm中如果有带有参数的构造方法,也需要加入下列配置,如果有无参的构造函数则不需要一下配置-->
+        <!--<constructor-arg index="0" ref=""/>-->
+        <!--<constructor-arg index="1" ref=""/>-->
+        <!-- 配置密码匹配器 密码凭证器-->
+        <property name="credentialsMatcher">
+            <bean class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
+                <!-- 指定散列算法为MD5,需要和生成密码时的一样 -->
+                <property name="hashAlgorithmName" value="MD5"></property>
+                <!-- 散列迭代次数，需要和生成密码时的一样 -->
+                <property name="hashIterations" value="4"></property>
+                <!--是否存储散列后的密码为16进制，需要和生成密码时的一样，默认是base64-->
+                <property name="storedCredentialsHexEncoded" value="true"></property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!-- 7. 配置ModularRealmAuthenticator，可以实现多Realm认证 -->
+    <bean id="authenticator" class="org.apache.shiro.authc.pam.ModularRealmAuthenticator">
+        <!-- 配置认证策略，只要有一个Realm认证成功即可，并且返回所有认证成功信息 -->
+        <property name="authenticationStrategy">
+            <bean class="org.apache.shiro.authc.pam.AtLeastOneSuccessfulStrategy"></bean>
+        </property>
+    </bean>
+
+    <!-- 定义缓存管理器,可使用多种缓存组件-->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <!--<property name="cacheManagerConfigFile" value="classpath:ehcache.xml"/>-->
+        <!--以上配置可能会报错：net.sf.ehcache.CacheException: Another unnamed CacheManager already exists in the same VM. Please provide unique names for each CacheManager in the config or do one of following-->
+        <!--配置shiro的缓存时用到了EhCacheCacheManager，因为系统只能创建一个EhCacheCacheManager,所以要让自己的和系统的创建方式来自同一个地方,即在applicationContext.xml中配置缓存工厂,这边进行引用-->
+        <property name="cacheManager" ref="ehCacheManagerFactory"/>
+    </bean>
+
+    <!-- 记住我cookie -->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!--<constructor-arg value="v_v-re-baidu"/>-->
+        <!--<property name="httpOnly" value="true"/>-->
+        <!-- 配置存储rememberMe Cookie的domain为 一级域名 -->
+        <!--<property name="domain" value=".itboy.net"/>-->
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 30天时间，记住我30天 -->
+    </bean>
+
+    <!-- rememberMe管理器 记住我 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位）-->
+        <!--rememberMe管理器，cipherKey是加密rememberMe Cookie的密钥；默认AES算法；-->
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
+
+    <!-- Shiro默认会使用Servlet容器的Session,可通过sessionMode属性来指定使用Shiro原生Session,即如下配置 -->
+    <!--<bean id="sessionManager" class="org.apache.shiro.web.session.mgt.ServletContainerSessionManager">-->
+    <!-- 即<property name="sessionMode" value="native"/>,详细说明见官方文档 -->
+    <bean id="sessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <!-- session的失效时长，单位毫秒, -->
+        <!--如果上面配置的Class是DefaultWebSecurityManager，则session的失效时间取决于下面的配置，如果上面配置的Class是ServletContainerSessionManager，则session的失效时间取决与web.xml设置的时间-->
+        <property name="globalSessionTimeout" value="6000000"/>
+        <!-- 删除失效的session -->
+        <property name="deleteInvalidSessions" value="true"/>
+        <!-- 相隔多久检查一次session的有效性,定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话   -->
+        <property name="sessionValidationInterval" value="1800000"/>
+        <property name="sessionValidationSchedulerEnabled" value="true"/>
+        <property name="sessionIdCookie" ref="sessionIdCookie"/>
+    </bean>
+
+    <!--通过配置sessionIdCookie属性，解决被服务器重写cookie中会话ID-->
+    <bean id="sessionIdCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <!--<constructor-arg name="name" value="SHIRO_SESSIONID"/>-->
+        <constructor-arg name="name" value="SHIROSESSION"/>
+        <property name="path" value="/"/>
+    </bean>
+
+    <!-- 安全管理器 这里主要是设置自定义的单Realm应用,若有多个Realm,可使用'realms'属性代替 -->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myRealm"/>
+        <!-- 使用配置的缓存管理器 -->
+        <property name="cacheManager" ref="shiroCacheManager"></property>
+        <!-- 会话管理 -->
+        <property name="sessionManager" ref="sessionManager"/>
+        <!--记住我-->
+        <property name="rememberMeManager" ref="rememberMeManager"/>
+    </bean>
+
+    <!-- 会话ID生成器 -->
+    <bean id="sessionIdGenerator" class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
+
+    <!--定义退出过滤器,此处先执行LogoutFilter的退出清空缓存操作，然后重定向，value为重定向的地址-->
+    <!--下面的配置是shiro默认的logout过滤器的配置,也可以通过继承shiro的过滤器，自定义logout过滤器-->
+    <!--<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">-->
+    <bean id="logoutFilter" class="cn.kanyun.cpa.filter.SystemLogoutFilter">
+        <!--重定向的地址-->
+        <property name="redirectUrl" value="/"/>
+    </bean>
+
+    <!-- Shiro 的Web过滤器 -->
+    <!--================================================1、与web.xml对应的bean===================================-->
+    <!-- Shiro主过滤器本身功能十分强大,其强大之处就在于它支持任何基于URL路径表达式的、自定义的过滤器的执行 -->
+    <!-- Web应用中,Shiro可控制的Web请求必须经过Shiro主过滤器的拦截,Shiro对基于Spring的Web应用提供了完美的支持 -->
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+        <!-- Shiro的核心安全接口,这个属性是必须的 -->
+        <property name="securityManager" ref="securityManager"/>
+        <!-- 要求登录时的链接(可根据项目的URL进行替换),非必须的属性,默认会自动寻找Web工程根目录下的"/login.jsp"页面 -->
+        <property name="loginUrl" value="/index.html"/>
+        <!-- 登录成功后要跳转的连接(本例中此属性用不到,因为登录成功后由Js进行跳转了) -->
+        <!-- <property name="successUrl" value="/system/main"/> -->
+        <!-- 用户访问未对其授权的资源时,所显示的连接 没有权限跳转的地址 -->
+        <!-- 若想更明显的测试此属性可以修改它的值,如unauthor.jsp,然后用登录后访问/admin/listUser.jsp就看见浏览器会显示unauthor.jsp 没有权限页面-->
+        <property name="unauthorizedUrl" value="/"/>
+        <!-- 自定义filter配置 -->
+        <property name="filters">
+            <map>
+                <!-- 将自定义 的FormAuthenticationFilter注入shiroFilter中-->
+                <entry key="authc" value-ref="formAuthenticationFilter"/>
+                <!--退出过滤器-->
+                <entry key="logout" value-ref="logoutFilter"/>
+            </map>
+        </property>
+        <!--过滤定义，从上而下，蒋匿名的anon放最下面-->
+        <!-- Shiro连接约束配置,即过滤链的定义 -->
+        <!-- 此处可配合这篇文章来理解各个过滤连的作用http://blog.csdn.net/jadyer/article/details/12172839 -->
+        <!-- 下面value值的第一个'/'代表的路径是相对于HttpServletRequest.getContextPath()的值来的 -->
+        <!-- anon：它对应的过滤器里面是空的,什么都没做,这里.do和.jsp后面的*表示参数,比方说login.jsp?main这种 -->
+        <!-- authc：该过滤器下的页面必须验证后才能访问,它是Shiro内置的一个拦截器org.apache.shiro.web.filter.authc.FormAuthenticationFilter -->
+        <property name="filterChainDefinitions">
+            <value>
+                <!--anon 表示不需要认证和授权-->
+                <!--authc 表示需要认证,没有登陆是不能访问的-->
+                <!--perms 表示需要该权限才能访问的页面-->
+                <!--roles 表示需要角色才能访问的页面-->
+
+                <!--页面点击退出时：拦截/api/user/logout找到对应logout-->
+                /api/user/logout = logout
+
+                <!--没有参数，表示可以匿名使用。-->
+                /api/**=anon
+
+                <!--表示需要认证(登录)才能使用，没有参数-->
+                /api/solution/**=authc
+                <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。-->
+                /api/unitExam/addUnitExam=roles[admin]
+                <!--参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。-->
+                /admins/user/**=perms[user:add:*]
+                <!--根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。-->
+                /admins/user/**=rest[user]
+                <!--当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。-->
+                /admins/user/**=port[8081]
+                <!--没有参数表示httpBasic认证-->
+                /admins/user/**=authcBasic
+                <!--没有参数，表示安全的url请求，协议为https-->
+                /admins/user/**=ssl
+                <!--没有参数表示必须存在用户，当登入操作时不做检查-->
+                /admins/user/**=user
+
+            </value>
+        </property>
+
+        <!-- 读取初始自定义权限内容-->
+        <!--   <property name="filterChainDefinitions" value="#{shiroManager.loadFilterChainDefinitions()}"/>
+           <property name="filters">
+               <util:map>
+                   <entry key="login" value-ref="login"></entry>
+                   <entry key="role" value-ref="role"></entry>
+               </util:map>
+           </property>-->
+
+    </bean>
+
+    <!-- 保证实现了Shiro内部lifecycle函数的bean执行 Shiro生命周期处理器-->
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+
+    <!-- 开启Shiro的注解(如@RequiresRoles,@RequiresPermissions),需借助SpringAOP扫描使用Shiro注解的类,并在必要时进行安全逻辑验证 -->
+    <!-- 配置以下两个bean即可实现此功能 -->
+    <!-- Enable Shiro Annotations for Spring-configured beans. Only run after the lifecycleBeanProcessor has run -->
+    <!-- 由于本例中并未使用Shiro注解,故注释掉这两个bean(个人觉得将权限通过注解的方式硬编码在程序中,查看起来不是很方便,没必要使用) -->
+    <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>
+     <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+         <property name="securityManager" ref="securityManager"/>
+     </bean>-->
+
+    <!-- 基于Form表单的身份验证过滤器，不配置将也会注册此过虑器，表单中的用户账号、密码及loginurl将采用默认值，建议配置 -->
+
+    <bean id="formAuthenticationFilter"
+
+          class="org.apache.shiro.web.filter.authc.FormAuthenticationFilter">
+
+        <!-- 表单中账号的input名称 -->
+
+        <property name="usernameParam" value="username"/>
+
+        <!-- 表单中密码的input名称 -->
+
+        <property name="passwordParam" value="password"/>
+
+        <!--记住我input框名称-->
+        <property name="rememberMeParam" value="rememberMe"/>
+
+        <!-- loginurl：用户登陆地址，此地址是可以http访问的url地址 -->
+
+        <property name="loginUrl" value="/login"/>
+
+    </bean>
+</beans>
+        <!-- ============================================================================ -->
+        <!--整个认证流程：-->
+        <!--(1). 在Controller中通过Security.getSubject()获取当前的Subject；-->
+        <!--(2). 通过Subject的isAuthenticated()验证当前用户是否已经被认证；-->
+        <!--(3). 如果没有被认证，开始认证。-->
+        <!--(4). 将从前台传来的用户名（邮箱）和密码封装到一个UsernamePasswordToken对象upToken中；-->
+        <!--(5). 调用当前Subject的login(upToken)方法，这会把upToken作为参数传递到自定义的Realm的doGetAuthenticationInfo(AuthenticationToken)方法中；-->
+        <!--(6). 在doGetAuthenticationInfo(AuthenticationToken)方法中，首先将AuthenticationToken转换为UsernamePasswordToken对象upToken，然后调用Service层，根据upToken中的用户名到数据库中查询密码；-->
+        <!--(7). 由shiro完成密码的比对。密码的比对是通过AuthenticatingRealm的credentialsMatcher属性来进行比对的-->

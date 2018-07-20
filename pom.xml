@@ -221,7 +221,8 @@
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
                 <version>5.0.2.RELEASE</version>
-                <scope>test</scope>
+                <!--把<scope></scope>标签去掉 否则无法使用 @ContextConfiguration-->
+                <!--<scope>test</scope>-->
             </dependency>
             <!--Spring相关-->
             <dependency>

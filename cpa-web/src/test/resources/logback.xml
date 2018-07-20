@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--logback配置文件-->
+<!--logback在性能上要明显优于log4j，尤其是在大量并发的环境下，并且新增了一些log4j所没有的功能（如将日志文件压缩成zip包等）-->
+<!--  logback与log4j一样，也需要在classpath中编写配置文件。但logback配置文件似乎比log4j复杂一些：log4j不仅支持xml格式的配置文件，
+  还支持properties格式的，而logback只支持xml格式的。好在官方提供了一个在线工具，可以将log4j的properties文件直接转换成logback的xml文件，
+  地址如下：http://logback.qos.ch/translator/ -->
+
+<!-- 这个是根配置文件，一定要有的
+     scan：
+         是当配置文件被修改后会被重新加载
+     scanPeriod:
+         设置监测配置文件是否有修改的时间间隔，如果没有给出时间单位，
+         默认单位是毫秒。当scan为true时，此属性生效。默认的时间间隔为1分钟。
+      debug：
+         当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。
+         默认值为false。
+                  -->
+<configuration scan="true" debug="true" scanPeriod="60 seconds">
+
+    <!-- 日志存放路径 可相对、和绝对路径
+        下面的标签可以自己定义
+        name：相当于Map的key
+        value：就是map的value
+        ${catalina.base}是tomcat的当前路径[(工作目录)：指向每个Tomcat目录私有信息的位置，就是conf、logs、temp、webapps和work的父目录]
+        ${catalina.home}(安装目录)：指向公用信息的位置，就是bin和lib的父目录。
+        仅运行一个Tomcat实例时，这两个属性指向的位置是相同的。
+        不配置路径的话,（使用tomcat）默认是输出到tomcat的bin目录下的
+        定义的目录不存在会默认创建
+    -->
+    <substitutionProperty name="logBase" value="../logs/cpa/"/>
+    <!--
+      <property>用来定义变量值的标签，<property> 有两个属性，name和value；
+        其中name的值是变量的名称,value的值时变量定义的值。
+        通过<property>定义的值会被插入到logger上下文中。定义变量后，可以使“${}”来使用变量。
+        -->
+    <!-- 时间戳：这个时间戳可以作为每日日志的名称 -->
+    <timestamp key="bySecond" datePattern="yyyy-MM-dd"/>
+    <!-- 日志级别 -->
+    <property name="log.root.level" value="DEBUG"/>
+    <!-- 其他日志级别 -->
+    <property name="log.other.level" value="INFO"/>
+    <!-- 模块名称， 影响日志配置名，日志文件名 -->
+    <property name="log.moduleName" value="cpa"/>
+    <!-- 日志文件大小 -->
+    <property name="log.max.size" value="100MB"/>
+    <!--定义生成日志路径,另一个路径变量,使用相对路径,如果是用 /logs 则路径为与当前tomcat路径一致-->
+    <property name="LOG_HOME" value="../logs"/>
+
+    <!-- appender：
+        name相当于一个名称
+        class：确定要加载哪个类
+        encoder：一定要加 encoder ，
+        默认配置为PatternLayoutEncoder
+        patter：必填
+        ConsoleAppender：也明白是什么意思，就是输出在控制台上-->
+    <!-- 配置控制台输出 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] [%level] - %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- ThresholdFilter： 临界值过滤器，过滤掉低于指定临界值的日志。当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <!--设置过滤级别,其会覆盖ROOT节点设置的级别-->
+            <level>DEBUG</level>
+            <!--用于配置符合过滤条件的操作-->
+            <onMatch>ACCEPT</onMatch>
+            <!--用于配置不符合过滤条件的操作-->
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--普通日志记录-->
+    <appender name="logFile" class="ch.qos.logback.core.FileAppender">
+        <!-- 编码 -->
+        <Encoding>UTF-8</Encoding>
+        <!-- 日志名称 -->
+        <file>${logBase}INFO级别.${bySecond}.log</file>
+        <!-- 布局 -->
+        <encoder>
+            <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
+        <append>false</append>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+
+    </appender>
+
+    <!-- 把日志存储
+       encoding：日志的编码
+       file：指定当前生成的日志文件名称
+       rollingPolicy：滚动策略
+       FileNamePattern：移动文件最后的名称，跟file标签结合使用，
+       比如file里面的内容是  1.txt
+       那么，FileNamePattern里面写的是2.txt，那么最后文件名就为2.txt
+       如果最后结尾是gz或者zip，那么，就会自动打成压缩包
+       -->
+    <!-- 滚动记录文件，先将日志记录到指定文件，当符合某个条件时，将日志记录到其他文件 -->
+    <appender name="rollingLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoding>UTF-8</encoding>
+        <!-- 按照时间来 -->
+        <file>${logBase}ERROR级别.${bySecond}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <!-- 按“天”生成日志文件，"%i"代表第几个文件（从0自增），如果后缀是zip或gzip,那么生成文件后自动压缩成.zip包 -->
+            <FileNamePattern>${LOG_HOME}ERROR级别-%d{yyyy-MM-dd}-%i.log.zip
+            </FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>30</MaxHistory>
+            <!-- 在基于时间的基础上，基于文件大小生成日志文件策略 -->
+            <TimeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 单个文件不能大于1024MB -->
+                <MaxFileSize>1024MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} |%-5level |NTY|NA|%thread|
+                %logger{50} -
+                %msg%n
+            </pattern>
+        </encoder>
+        <!--append: true,日志被追加到文件结尾; false,清空现存文件;默认是true -->
+        <append>false</append>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 配置monitor日志，主要用于公司发送告警邮件，设置logger即可，
+    调用：Logger logger = LoggerFactory.getLogger("MONITOR");
+        就能把日志打印到monitor文件中。
+     -->
+    <appender name="MONITOR-FILE"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoding>UTF-8</encoding>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <FileNamePattern>${LOG_HOME}monitor日志-%d{yyyy-MM-dd}-%i.log
+            </FileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>30</MaxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>1024MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} |%-5level |NTY|NA|%thread|
+                %logger{50}|NA|
+                %msg%n
+            </pattern>
+        </encoder>
+        <!-- LevelFilter: 级别过滤器，根据日志级别进行过滤 所有INFO级别的日志交给appender处理，非INFO级别的日志，被过滤掉。-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>WARN</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- 配置monitor日志输出 -->
+    <logger name="MONITOR">
+        <appender-ref ref="MONITOR-FILE"/>
+    </logger>
+
+
+    <!-- 常用loger配置 -->
+    <!-- show parameters for hibernate sql 专为 Hibernate 定制 -->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicExtractor" level="DEBUG"/>
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>
+
+    <!--myibatis log configure-->
+    <!-- <logger name="com.apache.ibatis" level="TRACE"/>
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/> -->
+
+    <!-- logger：日志单位
+            name：是你当前扫描的哪个包
+            level：日志的级别
+            additivity：是否要把当前的日志级别，给root根logger，additivity属性为false，表示此loger的打印信息不再向上级传递
+            appender-ref：appender的引用
+         -->
+    <logger name="cn.kanyun.cpa" level="debug" additivity="true">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="logFile"/>
+    </logger>
+
+    <!-- 默认根节点是INFO级别的日志 -->
+    <!-- root：logger的根节点，就这一个，默认名称就是root
+        level：日志级别
+        appender-ref：确定使用哪个appender
+         -->
+    <!-- 特殊的<logger>元素，是根logger。只有一个level属性，应为已经被命名为"root".
+       level:设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。
+       <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。 -->
+    <root level="DEBUG">
+        <!-- 启用文件记录日志 -->
+        <appender-ref ref="logFile"/>
+        <!-- 启用控制台输出日志 -->
+        <appender-ref ref="STDOUT"/>
+        <!--启用回滚日志-->
+        <appender-ref ref="rollingLog"/>
+    </root>
+</configuration>

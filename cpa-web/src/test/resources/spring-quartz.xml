@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/task
+		http://www.springframework.org/schema/task/spring-task.xsd">
+
+    <!--开启注解实现定时任务，在需要定时执行的方法上添加注解@Scheduled(cron="0 0 0 * * ?")   //每天零点执行-->
+    <task:annotation-driven/>
+    <!--扫描带有注解的bean-->
+    <context:component-scan base-package="cn.kanyun.cpa"/>
+    <!--<context:annotation-config> 是用于激活那些已经在spring容器里注册过的bean（无论是通过xml的方式还是通过package sanning的方式）上面的注解-->
+    <!--<context:component-scan>除了具有<context:annotation-config>的功能之外，<context:component-scan>还可以在指定的package下扫描以及注册javabean 。-->
+    <context:annotation-config/>
+
+    <!-- 配置线程池 -->
+    <bean name="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="10"/>
+        <property name="maxPoolSize" value="40"/>
+        <property name="queueCapacity" value="25"/>
+        <property name="keepAliveSeconds" value="30000"/>
+        <property name="WaitForTasksToCompleteOnShutdown" value="true"/>
+    </bean>
+
+    <!--定义需要被定时任务处理的类-->
+    <!--<bean id="answerRecordService" class="cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl"></bean>-->
+    <bean id="userThingJob" class="cn.kanyun.cpa.job.UserThingJob"></bean>
+    <bean id="cleanCacheJob" class="cn.kanyun.cpa.job.CleanCacheJob"></bean>
+
+    <!--配置调度程序quartz ，其中配置JobDetail有两种方式-->
+    <!--方式一：使用JobDetailBean，任务类必须实现Job接口-->
+    <!--方式二：使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法-->
+
+    <bean id="userThing"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--引入被定时任务处理的类-->
+        <property name="targetObject" ref="userThingJob"/>
+        <!--引入被定时任务处理的方法-->
+        <property name="targetMethod" value="saveUserAnswerRecord"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+        <property name="concurrent" value="false"/>
+    </bean>
+
+    <bean id="cleanCache"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--引入被定时任务处理的类-->
+        <property name="targetObject" ref="cleanCacheJob"/>
+        <!--引入被定时任务处理的方法-->
+        <property name="targetMethod" value="cleanImg"/>
+        <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+        <property name="concurrent" value="false"/>
+    </bean>
+
+
+    <!-- 具体的Cron定时器 定义触发时间-->
+    <bean id="saveAnswerRecord" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="userThing"/>
+        <!--cron表达式,设定任务什么时间执行-->
+        <!--如果需要动态的设置任务的执行时间，就不能直接使用org.springframework.scheduling.quartz.CronTriggerFactoryBean，需要自己实现一个动态调度服务类，在其中构建CronTrigger或SimpleTrigger，动态配置时间。-->
+        <!--每天凌晨两点执行-->
+        <property name="cronExpression" value="0 0 2 * * ?"/>
+        <!--每5秒执行一次-->
+        <!--<property name="cronExpression" value="*/5 * * * * ?"/>-->
+        <!--设置时区-->
+        <property name="timeZone" value="GMT+8:00"/>
+    </bean>
+
+    <!-- 具体的Cron定时器 定义触发时间-->
+    <bean id="cleanImg" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="cleanCache"/>
+        <!--cron表达式,设定任务什么时间执行-->
+        <!--如果需要动态的设置任务的执行时间，就不能直接使用org.springframework.scheduling.quartz.CronTriggerFactoryBean，需要自己实现一个动态调度服务类，在其中构建CronTrigger或SimpleTrigger，动态配置时间。-->
+        <!--每天凌晨两点执行-->
+        <property name="cronExpression" value="0 0 2 * * ?"/>
+        <!--每5秒执行一次-->
+        <!--<property name="cronExpression" value="*/20 * * * * ?"/>-->
+        <!--设置时区-->
+        <property name="timeZone" value="GMT+8:00"/>
+    </bean>
+
+    <!-- 配置调度工厂 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
+    <bean id="quartzScheduler" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <!-- 添加自定义的JobFactory -->
+        <!--<property name="jobFactory" ref="autowiringBeanJobFactory"/>-->
+        <!-- 加载quartz配置文件 -->
+        <property name="configLocation" value="classpath:quartz.properties"/>
+        <!-- 数据源 -->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!-- 事务 -->
+        <!--<property name="transactionManager" ref="transactionManager"/>-->
+        <!-- 唯一名称，会保存到数据库中 -->
+        <property name="schedulerName" value="quartzScheduler"/>
+        <!-- 每台集群机器部署应用的时候会更新触发器 -->
+        <property name="overwriteExistingJobs" value="true"/>
+        <!--org.springframework.scheduling.quartz.SchedulerFactoryBean这个类中把spring上下 文以key/value的方式存放在了quartz的上下文中，然后可以用applicationContextSchedulerContextKey所定义的key得到对应的spring上下文-->
+        <property name="applicationContextSchedulerContextKey" value="applicationContextKey"/>
+        <property name="triggers">
+            <!--存放需要触发的定时任务-->
+            <list>
+                <ref bean="saveAnswerRecord"/>
+                <ref bean="cleanImg"/>
+            </list>
+        </property>
+        <property name="taskExecutor" ref="executor"/>
+    </bean>
+
+
+</beans>
