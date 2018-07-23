@@ -8,10 +8,12 @@ import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import java.util.LinkedHashMap;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface CpaRepertoryDao extends CommonDao<Long, CpaRepertory> {
-    public static final String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaRepertoryDaoImpl";
+     String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaRepertoryDaoImpl";
 
     /**
      * @describe: 通过条件获取试题列表

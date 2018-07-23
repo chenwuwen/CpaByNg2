@@ -6,8 +6,11 @@ import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 
 import java.util.LinkedHashMap;
 
-public interface CpaUserExtendDao extends CommonDao<Long,CpaUserExtend> {
-    public static final String REPOSITORY_NAME="cn.kanyun.cpa.dao.user.impl.CpaUserExtendDaoImpl";
+/**
+ * @author Administrator
+ */
+public interface CpaUserExtendDao extends CommonDao<Long, CpaUserExtend> {
+    String REPOSITORY_NAME = "cn.kanyun.cpa.dao.user.impl.CpaUserExtendDaoImpl";
 
     /**
      * @describe: 根据条件获取用户扩展信息

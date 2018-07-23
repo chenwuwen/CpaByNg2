@@ -6,7 +6,9 @@ import cn.kanyun.cpa.model.entity.system.CpaRole;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(CpaRoleDao.REPOSITORY_NAME)
 public class CpaRoleDaoImpl extends CommonDaoImpl<Integer,CpaRole> implements CpaRoleDao {

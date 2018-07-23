@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface CpaSolutionDao extends CommonDao<Long, CpaSolution> {
-    public static final String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaSolutionDaoImpl";
+    String REPOSITORY_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaSolutionDaoImpl";
 
     /**
      * @Author: kanyun

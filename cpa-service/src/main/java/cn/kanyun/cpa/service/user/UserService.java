@@ -9,12 +9,23 @@ import cn.kanyun.cpa.service.CommonService;
 
 import java.util.LinkedHashMap;
 
+/**
+ * @author Administrator
+ */
 public interface UserService extends CommonService<Long, CpaUser> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserServiceImpl";
-//	CpaResult checkLogin(String username, String password);
+
+    String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserServiceImpl";
 
     /**
-     * @describe: 根据用户名,查找用户.
+     * @describe: 检测登录,2017.7用户登录由shiro接管
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/23 9:43
+     */
+    CpaResult checkLogin(String username, String password);
+
+    /**
+     * @describe: 根据用户名, 查找用户.
      * @params:
      * @Author: Kanyun
      * @Date: 2017/8/16 14:37

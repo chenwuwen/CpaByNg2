@@ -6,7 +6,9 @@ import cn.kanyun.cpa.model.entity.system.CpaPermission;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(CpaPermissionDao.REPOSITORY_NAME)
 public class CpaPermissionDaoImpl extends CommonDaoImpl<Integer,CpaPermission> implements CpaPermissionDao {

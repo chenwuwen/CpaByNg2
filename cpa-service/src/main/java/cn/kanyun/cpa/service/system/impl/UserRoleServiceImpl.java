@@ -14,7 +14,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Service(UserRoleService.SERVICE_NAME)
 public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> implements UserRoleService {
@@ -23,13 +24,31 @@ public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> im
     @Resource(name = RolePermissionDao.REPOSITORY_NAME)
     private RolePermissionDao rolePermissionDao;
 
+    @Deprecated
     @Override
-    public Set<String> findRoleByUserId(Integer userId) {
+    public Set<String> findRoleByUserId(Long userId) {
         Set<UserRole> setUserRoles = userRoleDao.findRoleByUserId(userId);
         Set<String> set = new HashSet<>();
         for (UserRole userRole : setUserRoles) {
 //            set.add(String.valueOf(role.getId())); //shiro中要的是roleName不是roleId
             set.add(userRole.getCpaRole().getRoleName());
+        }
+        return set;
+    }
+
+    @Deprecated
+    @Override
+    public Set<String> findPermissionByUserId(Long userId) {
+        Set<UserRole> setUserRoles = userRoleDao.findRoleByUserId(userId);
+        Set<Integer> roleIds = new HashSet<>();
+        for (UserRole userRole : setUserRoles) {
+            roleIds.add(userRole.getCpaRole().getId());
+        }
+        Set<RolePermission> setRolePermissions = rolePermissionDao.findPermissionByRoleId(roleIds);
+        Set<String> set = new HashSet<>();
+        for (RolePermission rolePermission : setRolePermissions) {
+
+            set.add(rolePermission.getCpaPermission().getPermissionCode());
         }
         return set;
     }
@@ -45,7 +64,7 @@ public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> im
     }
 
     @Override
-    public Set<String> findPermissionByUer(CpaUser cpaUser) {
+    public Set<String> findPermissionByUser(CpaUser cpaUser) {
         Set<UserRole> userRoles = cpaUser.getUserRoles();
         Set<String> permissions = new HashSet<>();
         for (UserRole userRole : userRoles) {
@@ -57,19 +76,5 @@ public class UserRoleServiceImpl extends CommonServiceImpl<Integer, UserRole> im
         return permissions;
     }
 
-    @Override
-    public Set<String> findPermissionByUerId(Integer userId) {
-        Set<UserRole> setUserRoles = userRoleDao.findRoleByUserId(userId);
-        Set<Integer> roleIds = new HashSet<>();
-        for (UserRole userRole : setUserRoles) {
-            roleIds.add(userRole.getCpaRole().getId());
-        }
-        Set<RolePermission> setRolePermissions = rolePermissionDao.findPermissionByRoleId(roleIds);
-        Set<String> set = new HashSet<>();
-        for (RolePermission rolePermission : setRolePermissions) {
 
-            set.add(rolePermission.getCpaPermission().getPermissionCode());
-        }
-        return set;
-    }
 }

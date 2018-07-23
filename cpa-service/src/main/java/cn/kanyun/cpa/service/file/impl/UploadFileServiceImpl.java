@@ -20,12 +20,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @author Kanyun
+ */
 @Service(UploadFileService.SERVICE_NAME)
 public class UploadFileServiceImpl implements UploadFileService {
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(UploadFileServiceImpl.class);
 
-    //初始化List（双括号初始化法）
+    /**
+     * @describe: 这个方法的作用是初始化图片大小列表, 初始化List（双括号初始化法）
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/23 9:55
+     */
     public List<String> imgSizes = new ArrayList<String>() {{
         add("200-220");
         /*圆形头像*/

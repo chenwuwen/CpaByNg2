@@ -10,9 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 public interface UserCommentService extends CommonService<Long, UserComment> {
 
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserCommentServiceImpl";
+    String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.UserCommentServiceImpl";
 
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
     CpaResult getUserComment(Integer firstResult, Integer pageSize, String where, Object[] params);

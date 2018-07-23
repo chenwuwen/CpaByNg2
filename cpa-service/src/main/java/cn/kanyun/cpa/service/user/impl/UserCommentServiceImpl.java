@@ -14,6 +14,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Administrator
+ */
 @Service(UserCommentService.SERVICE_NAME)
 @Transactional
 public class UserCommentServiceImpl extends CommonServiceImpl<Long, UserComment> implements UserCommentService {

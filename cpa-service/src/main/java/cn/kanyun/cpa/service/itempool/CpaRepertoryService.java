@@ -13,10 +13,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaRepertoryServiceImpl";
+
+     String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaRepertoryServiceImpl";
 
     /**
      * @Author: kanyun

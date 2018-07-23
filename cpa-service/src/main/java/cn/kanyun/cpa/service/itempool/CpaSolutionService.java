@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Kanyun
+ * @date 2017/6/16
  */
 public interface CpaSolutionService extends CommonService<Long, CpaSolution> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaSolutionServiceImpl";
+
+    String SERVICE_NAME = "cn.kanyun.cpa.Service.itempool.impl.CpaSolutionServiceImpl";
 
     /**
      * @Author: zhaoyingxu
@@ -19,7 +22,7 @@ public interface CpaSolutionService extends CommonService<Long, CpaSolution> {
      * @Date: 2017/8/16 15:27
      * @params:
      */
-    Map<Integer, String[]> getSolution(List<Long> respertoryIds, String typeCode);
+    Map<Integer, String[]> getSolution(List<Long> questionIds, String typeCode);
 
     /**
      * @Author: kanyun

@@ -13,7 +13,9 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(UserRoleDao.REPOSITORY_NAME)
 public class UserRoleDaoImpl extends CommonDaoImpl<Integer,UserRole> implements UserRoleDao {
@@ -31,7 +33,7 @@ public class UserRoleDaoImpl extends CommonDaoImpl<Integer,UserRole> implements 
     }
 
     @Override
-    public Set<UserRole> findRoleByUserId(Integer userId) {
+    public Set<UserRole> findRoleByUserId(Long userId) {
         Session session = getSession();
         String hql = " from UserRole o where userId = :userId";
         Query query = session.createQuery(hql);

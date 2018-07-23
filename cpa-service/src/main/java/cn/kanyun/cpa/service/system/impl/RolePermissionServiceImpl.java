@@ -11,7 +11,9 @@ import javax.annotation.Resource;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Service(RolePermissionService.SERVICE_NAME)
 public class RolePermissionServiceImpl extends CommonServiceImpl<Integer,RolePermission> implements RolePermissionService {

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
 
+/**
+ * @author Kanyun
+ */
 @Service(FtpService.SERVICE_NAME)
 public class FtpServiceImpl implements FtpService {
     @Resource

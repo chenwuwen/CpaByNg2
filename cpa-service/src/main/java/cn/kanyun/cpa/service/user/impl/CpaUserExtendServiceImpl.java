@@ -5,6 +5,9 @@ import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.user.CpaUserExtendService;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Administrator
+ */
 @Service(CpaUserExtendService.SERVICE_NAME)
 public class CpaUserExtendServiceImpl extends CommonServiceImpl<Long, CpaUserExtend> implements CpaUserExtendService {
 }

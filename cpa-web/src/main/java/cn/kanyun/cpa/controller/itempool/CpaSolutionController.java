@@ -25,7 +25,9 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * Created by KANYUN on 2017/6/17.
+ *
+ * @author KANYUN
+ * @date 2017/6/17
  */
 @Controller
 @RequestMapping("/api/solution")

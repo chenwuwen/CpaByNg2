@@ -108,7 +108,7 @@ public class LoginController {
                 CpaUser u = userService.findByUserName(user.getUserName());
                 WebUtil.setSessionUser(request, u);
                 user.setRoles(userRoleService.findRoleByUser(u));
-                user.setPermissions(userRoleService.findPermissionByUer(u));
+                user.setPermissions(userRoleService.findPermissionByUser(u));
                 user.setId(u.getId());
                 user.setPassword(null);
                 user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u), u.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_REFRESH_INTERVAL, CpaConstants.JWT_SECRET));

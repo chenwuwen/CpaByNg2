@@ -12,6 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 
+/**
+ * @author Administrator
+ */
 @Service(UserCollectService.SERVICE_NAME)
 @Transactional
 public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect> implements UserCollectService {

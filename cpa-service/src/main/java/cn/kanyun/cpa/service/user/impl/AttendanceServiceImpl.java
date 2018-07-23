@@ -19,6 +19,9 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 
+/**
+ * @author Administrator
+ */
 @Service(AttendanceService.SERVICE_NAME)
 @Transactional
 public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> implements AttendanceService {

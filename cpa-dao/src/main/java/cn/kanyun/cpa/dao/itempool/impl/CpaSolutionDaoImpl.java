@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(CpaSolutionDao.REPOSITORY_NAME)
 public class CpaSolutionDaoImpl extends CommonDaoImpl<Long, CpaSolution> implements CpaSolutionDao {

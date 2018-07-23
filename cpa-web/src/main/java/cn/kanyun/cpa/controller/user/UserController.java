@@ -35,6 +35,7 @@ import java.util.Map;
  * 通过redirect返回String类型跳转，注意这种方法不允许Spring控制器用@RestController注解，
  * 因为@RestController相当于类中的所有方法都标注了@ResponseBody，这些方法不会返回一个视图，而是返回一个json对象，
  * 这样的话只是在页面上打印出字符串，而不跳转。控制器用@Controller注解即可
+ * @author Kanyun
  */
 @Controller
 @RequestMapping("/api/user")

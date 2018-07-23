@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
+/**
+ * @author Kanyun
+ */
 @Transactional
 public abstract class CommonServiceImpl<K extends Serializable, T extends Serializable>
         implements CommonService<K, T> {

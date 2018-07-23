@@ -6,16 +6,17 @@ import cn.kanyun.cpa.model.entity.system.RolePermission;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
-public interface RolePermissionDao extends CommonDao<Integer,RolePermission> {
-    public static final String REPOSITORY_NAME="cn.kanyun.cpa.dao.system.impl.RolePermissionDaoImpl";
+public interface RolePermissionDao extends CommonDao<Integer, RolePermission> {
+    String REPOSITORY_NAME = "cn.kanyun.cpa.dao.system.impl.RolePermissionDaoImpl";
 
     /**
-     *@Author: zhaoyingxu
-     *@Description: 根据角色id获取权限
-     *@Date: 2017/8/16 15:38
-     *@params:
+     * @Author: Kanyun
+     * @Description: 根据角色id获取权限
+     * @Date: 2017/8/16 15:38
+     * @params:
      */
     Set<RolePermission> findPermissionByRoleId(Set roleIds);
 }

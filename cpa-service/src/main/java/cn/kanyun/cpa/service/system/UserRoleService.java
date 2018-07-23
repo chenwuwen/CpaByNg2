@@ -8,14 +8,29 @@ import cn.kanyun.cpa.service.CommonService;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface UserRoleService extends CommonService<Integer, UserRole> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.service.system.impl.UserRoleServiceImpl";
+     String SERVICE_NAME = "cn.kanyun.cpa.service.system.impl.UserRoleServiceImpl";
 
-    Set<String> findRoleByUserId(Integer userId);
+    /**
+     * @describe: 通过用户ID获取用户角色名称集合[已弃用]
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/23 9:35
+     */
+    Set<String> findRoleByUserId(Long userId);
 
-    Set<String> findPermissionByUerId(Integer userId);
+
+    /**
+     * @describe: 通过用户ID获取用户权限名称集合[已弃用]
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/23 9:35
+     */
+    Set<String> findPermissionByUserId(Long userId);
 
     /**
      * @param
@@ -33,6 +48,6 @@ public interface UserRoleService extends CommonService<Integer, UserRole> {
      * @Description: 通过用户对象获取用户权限名称集合(之前方法已弃用(主要是之前一直采用的mybatis的那种写法), 由于表是主外键关联, 同时hibernate也配置了关联关系，所以采用新方式)
      * @date 2017/11/14 14:28
      */
-    Set<String> findPermissionByUer(CpaUser cpaUser);
+    Set<String> findPermissionByUser(CpaUser cpaUser);
 
 }

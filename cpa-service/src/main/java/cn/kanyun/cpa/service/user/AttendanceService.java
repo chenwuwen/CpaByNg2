@@ -6,8 +6,11 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.CommonService;
 
+/**
+ * @author Administrator
+ */
 public interface AttendanceService extends CommonService<Long,Attendance> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.AttendanceServiceImpl";
+     String SERVICE_NAME = "cn.kanyun.cpa.service.user.impl.AttendanceServiceImpl";
 
     /**
      * @describe:  签到打卡

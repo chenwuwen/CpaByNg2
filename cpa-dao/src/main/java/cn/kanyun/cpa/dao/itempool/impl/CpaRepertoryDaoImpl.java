@@ -14,7 +14,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(CpaRepertoryDao.REPOSITORY_NAME)
 public class CpaRepertoryDaoImpl extends CommonDaoImpl<Long, CpaRepertory> implements CpaRepertoryDao {

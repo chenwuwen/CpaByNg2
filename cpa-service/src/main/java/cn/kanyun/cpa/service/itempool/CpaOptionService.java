@@ -4,8 +4,10 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.service.CommonService;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
-public interface CpaOptionService extends CommonService<Long,CpaOption> {
-    public static final String SERVICE_NAME="cn.kanyun.cpa.dao.itempool.impl.CpaOptionServiceImpl";
+public interface CpaOptionService extends CommonService<Long, CpaOption> {
+
+    String SERVICE_NAME = "cn.kanyun.cpa.dao.itempool.impl.CpaOptionServiceImpl";
 }

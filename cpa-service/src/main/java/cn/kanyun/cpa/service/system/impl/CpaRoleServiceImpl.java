@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Service(CpaRoleService.SERVICE_NAME)
 public class CpaRoleServiceImpl extends CommonServiceImpl<Integer, CpaRole> implements CpaRoleService {

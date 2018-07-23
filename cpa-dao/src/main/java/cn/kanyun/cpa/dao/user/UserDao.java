@@ -8,8 +8,11 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 
 import java.util.LinkedHashMap;
 
+/**
+ * @author Administrator
+ */
 public interface UserDao extends CommonDao<Long,CpaUser> {
-	public static final String REPOSITORY_NAME="cn.kanyun.cpa.dao.user.impl.UserDaoImpl";
+	String REPOSITORY_NAME="cn.kanyun.cpa.dao.user.impl.UserDaoImpl";
 
 	/**
 	 *@Author: kanyun

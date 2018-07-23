@@ -6,7 +6,9 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 @Repository(CpaOptionDao.REPOSITORY_NAME)
 public class CpaOptionDaoImpl extends CommonDaoImpl<Long, CpaOption> implements CpaOptionDao {

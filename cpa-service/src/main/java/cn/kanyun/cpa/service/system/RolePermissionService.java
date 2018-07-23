@@ -8,10 +8,12 @@ import cn.kanyun.cpa.service.CommonService;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface RolePermissionService extends CommonService<Integer, RolePermission> {
-    public static final String SERVICE_NAME = "cn.kanyun.cpa.service.system.impl.RolePermissionServiceImpl";
+    String SERVICE_NAME = "cn.kanyun.cpa.service.system.impl.RolePermissionServiceImpl";
 
     @DataSource(targetDataSource = "slave")
     Set<CpaPermission> findPermissionByRoleId(Set roleIds);

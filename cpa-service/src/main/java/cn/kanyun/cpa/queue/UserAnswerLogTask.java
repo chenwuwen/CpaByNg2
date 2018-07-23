@@ -16,6 +16,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by KANYUN on 2017/10/21.
+ *
+ * 当把一个任务交给线程池来处理的时候，线程池的执行原理:
+ * ①首先会判断核心线程池里是否有线程可执行，有空闲线程则创建一个线程来执行任务。
+ * ②当核心线程池里已经没有线程可执行的时候，此时将任务丢到任务队列中去。
+ * ③如果任务队列（有界）也已经满了的话，但运行的线程数小于最大线程池的数量的时候，
+ * 此时将会新建一个线程用于执行任务，但如果运行的线程数已经达到最大线程池的数量的时候，此时将无法创建线程执行任务。(此时执行拒绝策略)
  */
 //@Component
 public class UserAnswerLogTask {
@@ -62,7 +68,7 @@ public class UserAnswerLogTask {
     /**
      * 最大线程数
      */
-    private static final int maximumPoolSize = 2;
+    private static final int maxPoolSize = 10;
     /**
      * 线程存活时间
      */
@@ -70,15 +76,15 @@ public class UserAnswerLogTask {
     /**
      * 存活时间单位
      */
-    private static final TimeUnit unit = TimeUnit.SECONDS;
+    private static final TimeUnit unit = TimeUnit.MINUTES;
     /**
-     * 线程池内的工作队列[这里设置为无界队列]
+     * 线程池内的工作队列[这里设置为有界队列]
      */
-    private static BlockingQueue workQueue = new LinkedBlockingQueue();
+    private static BlockingQueue workQueue = new ArrayBlockingQueue(5);
     /**
      * 实例化线程池
      */
-    private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+    private static ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime, unit, workQueue);
 
     /**
      * 初始化类实例为空（双重锁单例模式）
@@ -149,7 +155,11 @@ public class UserAnswerLogTask {
      */
     public static void execute(AnswerRecord answerRecord) {
         userAnswerLogTask = getInstance();
+        logger.info("判断是否是单例模式,当前类实例：{}",userAnswerLogTask.toString());
+        logger.info("执行任务前,空闲线程数：{}",threadPoolExecutor.getActiveCount());
         threadPoolExecutor.execute(() -> userAnswerLogTask.putAnswerRecord(answerRecord));
         threadPoolExecutor.execute(() -> userAnswerLogTask.consumeAnswerRecord());
+        logger.info("执行任务后,空闲线程数：{}",threadPoolExecutor.getActiveCount());
+        logger.info("已有答题记录数：{}",taskQueue.size());
     }
 }

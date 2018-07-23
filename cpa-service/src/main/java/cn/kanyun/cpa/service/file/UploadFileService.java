@@ -3,17 +3,19 @@ package cn.kanyun.cpa.service.file;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * @author Kanyun
+ */
 public interface UploadFileService {
-    public static final String SERVICE_NAME="cn.kanyun.cpa.Service.file.impl.UploadFileServiceImpl";
+    String SERVICE_NAME = "cn.kanyun.cpa.Service.file.impl.UploadFileServiceImpl";
 
-    /**    
-     *   
-     * @author Kanyun 
-     * @Description:  上传图片服务
+    /**
+     * @param
+     * @return
+     * @author Kanyun
+     * @Description: 上传图片服务
      * @date 2017/11/21 22:17
-     * @param   
-     * @return   
-     */  
+     */
     CpaResult upLoadImg(MultipartFile[] files) throws Exception;
 
     /**

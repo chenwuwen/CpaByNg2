@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 
+/**
+ * @author Kanyun
+ */
 public interface CommonService<K extends Serializable, T extends Serializable> {
     /**
      * 将实体对象保存到数据库中

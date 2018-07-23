@@ -6,10 +6,12 @@ import cn.kanyun.cpa.model.entity.system.UserRole;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/6/16.
+ * @author Administrator
+ * @date 2017/6/16
  */
 public interface UserRoleDao extends CommonDao<Integer,UserRole> {
-    public static final String REPOSITORY_NAME="cn.kanyun.cpa.dao.system.impl.UserRoleDaoImpl";
+
+     String REPOSITORY_NAME="cn.kanyun.cpa.dao.system.impl.UserRoleDaoImpl";
 
     /**
      *@Author: kanyun
@@ -17,5 +19,5 @@ public interface UserRoleDao extends CommonDao<Integer,UserRole> {
      *@Date: 2017/8/16 15:39
      *@params:
      */
-    Set<UserRole> findRoleByUserId(Integer userId);
+    Set<UserRole> findRoleByUserId(Long userId);
 }
