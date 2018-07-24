@@ -19,7 +19,7 @@ public interface CpaSolutionDao extends CommonDao<Long, CpaSolution> {
      * @Date: 2017/8/16 15:41
      * @params:
      */
-    Map<Integer, CpaSolution> getAnswer(List<Long> respertoryIds);
+    Map<Integer, CpaSolution> getAnswer(List<Long> questionIds);
 
 
 }

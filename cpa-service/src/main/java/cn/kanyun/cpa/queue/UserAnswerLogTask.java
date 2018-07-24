@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by KANYUN on 2017/10/21.
- *
+ * <p>
  * 当把一个任务交给线程池来处理的时候，线程池的执行原理:
  * ①首先会判断核心线程池里是否有线程可执行，有空闲线程则创建一个线程来执行任务。
  * ②当核心线程池里已经没有线程可执行的时候，此时将任务丢到任务队列中去。
@@ -52,9 +52,17 @@ public class UserAnswerLogTask {
      */
     private static volatile Boolean workStatus = false;
     /**
-     * 实例化CountDownLatch,且设置当其实例发送连个count请求时，开始消费
+     * 实例化CountDownLatch,且设置当其实例发送一个count请求时，开始消费[不再使用CountDownLatch,因为其不能复用(使用CountDownLatch需要注意的是
+     * CountDownLatch是线程组之间的等待，即一个(或多个)线程等待N个线程完成某件事情之后再执行,所以我们尽量不要使用await() 方法，因为他会一直阻塞线程
+     * 在countDown() 方法执行前,所以我们需要使用 await(long timeout, TimeUnit unit)设定超时时间，如果超时，将返回false,
+     * 这样我们得知超时后，可以做异常处理，而await()是void类型，没有返回值，我们无法得知超时信息)]
      */
-    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+//    private static CountDownLatch countDownLatch = new CountDownLatch(1);
+
+    /**
+     * 实例化CyclicBarrier,且设置当其实例发送一个await请求[即参与一个线程]时，开始执行消费
+     */
+    private CyclicBarrier cyclicBarrier = new CyclicBarrier(1,()-> consumeAnswerRecord());
 
     /**
      * 当前队列大小(使用原子类,保证变量原子性)
@@ -62,7 +70,7 @@ public class UserAnswerLogTask {
     private static final AtomicInteger size = new AtomicInteger(0);
 
     /**
-     * 核心线程数 即 初始化线程数
+     * 核心线程数 即 初始化线程数[默认情况下核心线程会一直存活，即使处于闲置状态也不会受存keepAliveTime限制。除非将allowCoreThreadTimeOut设置为true]
      */
     private static final int corePoolSize = 2;
     /**
@@ -116,7 +124,15 @@ public class UserAnswerLogTask {
         taskQueue.add(answerRecord);
         size.incrementAndGet(); // size自加
         if (size.intValue() / maxSize >= maxThreshold) {
-            countDownLatch.countDown();
+//            不使用CountDownLatch作为同步的工具,其不能复用
+//            countDownLatch.countDown();
+            try {
+                cyclicBarrier.await();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (BrokenBarrierException e) {
+                e.printStackTrace();
+            }
             logger.info("当前时间：{}，线程：{}，插入一条答题记录，目前队列中存在 {} 条数据，通知消费线程执行", LocalDateTime.now(), Thread.currentThread().getName(), size.get());
         }
         logger.info("当前时间：{}，线程：{}，插入一条答题记录，目前队列中存在 {} 条数据！", LocalDateTime.now(), Thread.currentThread().getName(), size.get());
@@ -131,7 +147,8 @@ public class UserAnswerLogTask {
     public void consumeAnswerRecord() {
         try {
             logger.info("当前时间：{}，线程：{}，插入一条答题记录，目前队列中存在{}条数据！消费线程被阻塞", LocalDateTime.now(), Thread.currentThread().getName(), size.get());
-            countDownLatch.await();
+//           不使用CountDownLatch作为同步的工具,同时注意await()方法有两个实现,需要根据具体业务来选择使用
+//            countDownLatch.await(1L, TimeUnit.SECONDS);
             List<AnswerRecord> answerRecords = new ArrayList<>();
             while (true) {
                 answerRecords.add(taskQueue.poll());
@@ -142,7 +159,9 @@ public class UserAnswerLogTask {
             }
             logger.info("当前时间：{}，线程：{}，插入一条答题记录，目前队列中存在 {} 条数据！消费线程开始消费", LocalDateTime.now(), Thread.currentThread().getName(), size.get());
             answerRecordService.saveAll(answerRecords);
-        } catch (InterruptedException e) {
+//            消费完成后重置CyclicBarrier
+            cyclicBarrier.reset();
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -155,11 +174,11 @@ public class UserAnswerLogTask {
      */
     public static void execute(AnswerRecord answerRecord) {
         userAnswerLogTask = getInstance();
-        logger.info("判断是否是单例模式,当前类实例：{}",userAnswerLogTask.toString());
-        logger.info("执行任务前,空闲线程数：{}",threadPoolExecutor.getActiveCount());
+        logger.info("判断是否是单例模式,当前执行线程：{} , 当前类实例：{}", Thread.currentThread().getName(), userAnswerLogTask.toString());
+        logger.info("执行任务前,当前执行线程：{} , 空闲线程数：{}", Thread.currentThread().getName(), threadPoolExecutor.getActiveCount());
         threadPoolExecutor.execute(() -> userAnswerLogTask.putAnswerRecord(answerRecord));
         threadPoolExecutor.execute(() -> userAnswerLogTask.consumeAnswerRecord());
-        logger.info("执行任务后,空闲线程数：{}",threadPoolExecutor.getActiveCount());
-        logger.info("已有答题记录数：{}",taskQueue.size());
+        logger.info("执行任务后,当前执行线程：{} , 空闲线程数：{}", Thread.currentThread().getName(), threadPoolExecutor.getActiveCount());
+        logger.info("已有答题记录数：{} ,当前执行线程： {}", taskQueue.size(), Thread.currentThread().getName());
     }
 }

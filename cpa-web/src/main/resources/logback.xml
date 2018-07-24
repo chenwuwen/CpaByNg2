@@ -28,7 +28,7 @@
         不配置路径的话,（使用tomcat）默认是输出到tomcat的bin目录下的
         定义的目录不存在会默认创建
     -->
-    <substitutionProperty name="logBase" value="../logs/cpa/"/>
+    <substitutionProperty name="logBase" value="/logs/cpa/"/>
     <!--
       <property>用来定义变量值的标签，<property> 有两个属性，name和value；
         其中name的值是变量的名称,value的值时变量定义的值。
@@ -45,7 +45,7 @@
     <!-- 日志文件大小 -->
     <property name="log.max.size" value="100MB"/>
     <!--定义生成日志路径,另一个路径变量,使用相对路径,如果是用 /logs 则路径为与当前tomcat路径一致-->
-    <property name="LOG_HOME" value="../logs"/>
+    <property name="LOG_HOME" value="/logs"/>
 
     <!-- appender：
         name相当于一个名称
@@ -198,13 +198,15 @@
     <!-- logger：日志单位
             name：是你当前扫描的哪个包
             level：日志的级别
-            additivity：是否要把当前的日志级别，给root根logger，additivity属性为false，表示此loger的打印信息不再向上级传递
+            additivity：是否要把当前的日志级别，给root根logger，additivity属性为false，表示此logger的打印信息不再向上级传递
             appender-ref：appender的引用
          -->
-    <logger name="cn.kanyun.cpa" level="debug" additivity="true">
-        <appender-ref ref="STDOUT"/>
-        <appender-ref ref="logFile"/>
-    </logger>
+    <!--需要注意的是,该logger元素内的 appender的引用,应在本配置中出现一次,否则会造成重复打印,例如,在该元素中引用了"STDOUT"[即打印到控制台配置],
+            如果下面的root元素也引用了它,那么会造成控制台打印两次的情况,所以在没有特殊需求的情况下,最简单的处理方式是 只配置一个logger元素,故注释如下配置,仅保留root元素-->
+    <!--<logger name="cn.kanyun.cpa" level="info" additivity="true">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+        <!--<appender-ref ref="logFile"/>-->
+    <!--</logger>-->
 
     <!-- 默认根节点是INFO级别的日志 -->
     <!-- root：logger的根节点，就这一个，默认名称就是root
@@ -213,8 +215,8 @@
          -->
     <!-- 特殊的<logger>元素，是根logger。只有一个level属性，应为已经被命名为"root".
        level:设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL 和 OFF，不能设置为INHERITED或者同义词NULL。默认是DEBUG。
-       <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个loger。 -->
-    <root level="DEBUG">
+       <root>可以包含零个或多个<appender-ref>元素，标识这个appender将会添加到这个logger。 -->
+    <root level="INFO">
         <!-- 启用文件记录日志 -->
         <appender-ref ref="logFile"/>
         <!-- 启用控制台输出日志 -->
