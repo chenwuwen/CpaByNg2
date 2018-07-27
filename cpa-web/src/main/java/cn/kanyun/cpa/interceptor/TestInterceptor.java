@@ -26,7 +26,6 @@ public class TestInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
         logger.info("===============进入拦截器preHandle方法==================");
-//        return false;
         return true;
     }
 

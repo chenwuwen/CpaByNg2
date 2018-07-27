@@ -37,6 +37,7 @@ import java.net.UnknownHostException;
  *  web项目打包以后classes文件在磁盘中的绝对路径
  */
 public class WebPathUtil {
+
     public static String getWebPath(Class clazz) {
         String webPath = "";
         File classesFile = new File(clazz.getClassLoader().getResource("").getPath());

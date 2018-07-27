@@ -161,6 +161,29 @@ import java.util.Map;
  * <option   value="application/vnd.visio">VISIO</option>
  * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
  * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ * <p>
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
  */
 
 /**
@@ -219,7 +242,12 @@ public class WordUtil {
     }
 
 
-    //    匿名类获取类实例（单例模式）
+    /**
+     * @describe: 匿名类获取类实例（单例模式）
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/27 17:24
+     */
     private static class SingletonHolder {
         private final static WordUtil instance = new WordUtil();
     }
@@ -349,15 +377,15 @@ public class WordUtil {
             parsFooter[0] = footerParagraph;
             policy.createFooter(XWPFHeaderFooterPolicy.DEFAULT, parsFooter);
 
-            /*一般在Servlet中，习惯性的会首先设置请求以及响应的内容类型以及编码方式*/
+//            一般在Servlet中，习惯性的会首先设置请求以及响应的内容类型以及编码方式
 //            response.setCharacterEncoding("utf-8");
-            /*response.setContentType(MIME)的作用是使客户端浏览器，区分不同种类的数据，并根据不同的MIME调用浏览器内不同的程序嵌入模块来处理相应的数据(MIME映射策略就是在网页中使用哪个应用程序（即插件），打开哪种文件).例如web浏览器就是通过MIME类型来判断文件是GIF图片。通过MIME类型来处理json字符串。*/
+//            response.setContentType(MIME)的作用是使客户端浏览器，区分不同种类的数据，并根据不同的MIME调用浏览器内不同的程序嵌入模块来处理相应的数据(MIME映射策略就是在网页中使用哪个应用程序（即插件），打开哪种文件).例如web浏览器就是通过MIME类型来判断文件是GIF图片。通过MIME类型来处理json字符串
             response.setContentType("application/msword,charset=utf-8");
 
             //告诉浏览器用下载的方式打开,将文件名进行URL编码
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
 //            String agent = request.getHeader("USER-AGENT").toLowerCase();
-            //火狐浏览器特殊处理
+//            火狐浏览器特殊处理
 //            if (agent.contains("firefox")) {
 //                response.setHeader("content-disposition", "attachment;filename=" + new String(fileName.getBytes(), "ISO8859-1") + ".xlsx");
 //            }
@@ -365,7 +393,7 @@ public class WordUtil {
             document.write(fos);
 //            document.write(os);
 
-            /*清空内存，将内存中的数据立刻写出*/
+//            清空内存，将内存中的数据立刻写出
             os.flush();
             os.close();
 
@@ -386,7 +414,7 @@ public class WordUtil {
         //dataMap 要填入模本的数据文件
         //设置模本装置方法和路径,FreeMarker支持多种模板装载方法。可以重servlet，classpath，数据库装载，
         //这里我们的模板是放在classpath下面
-        /*几种配置路径的方法*/
+//        几种配置路径的方法
 //        WordUtil.class
 //        WordUtil wordUtil = new WordUtil(); wordUtil.getClass();
 //        Class.forName(WordUtil.getClassNameForStatic())
@@ -430,32 +458,27 @@ public class WordUtil {
      * @return
      */
     public static void exportWord(Map<String, Object> data, HttpServletResponse response) {
-        File file = null;
-        file = createDoc(data);
+        File file = createDoc(data);
         logger.info("生成word文件大小为（Long型）：" + file.length());
-        FileInputStream fis = null;
-        ServletOutputStream out = null;
-        try {
-            fis = new FileInputStream(file);
+        try (FileInputStream fis = new FileInputStream(file); ServletOutputStream out = response.getOutputStream()) {
             logger.info("读取word输入流大小（int型,如果文件太大,不准确，使用NIO下的FileChannel）: " + fis.available());
 //            FileChannel fc= null;
 //            fc=fis.getChannel();
 //            logger.info("转换为NIO流的大小"+fc.size());
             response.setContentType("application/msword,charset=utf-8");
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "utf-8"));
-            out = response.getOutputStream();
             byte[] buffer = new byte[512];  // 缓冲区
-            int bytesToRead ;
+            int bytesToRead;
             while ((bytesToRead = fis.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesToRead);
             }
             out.flush();
-            out.close();
-            fis.close();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if(file != null) file.delete(); // 删除临时文件
+            if (file != null){
+                file.delete(); // 删除临时文件
+            }
         }
 
     }

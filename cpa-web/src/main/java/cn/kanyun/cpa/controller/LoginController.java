@@ -111,7 +111,7 @@ public class LoginController {
                 user.setPermissions(userRoleService.findPermissionByUser(u));
                 user.setId(u.getId());
                 user.setPassword(null);
-                user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u), u.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_REFRESH_INTERVAL, CpaConstants.JWT_SECRET));
+                user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u), u.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET));
                 user.setImgPath(u.getImgPath());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);

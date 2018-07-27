@@ -15,16 +15,28 @@ public class onLineUser implements HttpSessionBindingListener {
     public onLineUser() {
     }
 
-    //保存在线用户的向量
+    /**
+     * 保存在线用户的向量
+     */
     private Vector users = new Vector();
 
-    //得到用户总数
+    /**
+     * @describe: 得到用户总数
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/27 17:23
+     */
     public int getCount() {
         users.trimToSize();
         return users.capacity();
     }
 
-    //判断是否存在指定的用户
+    /**
+     * @describe: 判断是否存在指定的用户
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/27 17:23
+     */
     public boolean existUser(String userName) {
         users.trimToSize();
         boolean existUser = false;
@@ -37,7 +49,12 @@ public class onLineUser implements HttpSessionBindingListener {
         return existUser;
     }
 
-    //删除指定的用户
+    /**
+     * @describe: 删除指定的用户
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/27 17:23
+     */
     public boolean deleteUser(String userName) {
         users.trimToSize();
         if (existUser(userName)) {
@@ -57,21 +74,29 @@ public class onLineUser implements HttpSessionBindingListener {
         return false;
     }
 
-    //得到当前在线用户的列表
+    /**
+     * @describe: 得到当前在线用户的列表
+     * @params:
+     * @Author: Kanyun
+     * @Date: 2018/7/27 17:23
+     */
     public Vector getOnLineUser() {
         return users;
     }
 
+    @Override
     public void valueBound(HttpSessionBindingEvent e) {
         users.trimToSize();
         if (!existUser(e.getName())) {
             users.add(e.getName());
             System.out.print(e.getName() + "\t  登入到系统\t" + (new Date()));
             System.out.println("     在线用户数为：" + getCount());
-        } else
+        } else {
             System.out.println(e.getName() + "已经存在");
+        }
     }
 
+    @Override
     public void valueUnbound(HttpSessionBindingEvent e) {
         users.trimToSize();
         String userName = e.getName();

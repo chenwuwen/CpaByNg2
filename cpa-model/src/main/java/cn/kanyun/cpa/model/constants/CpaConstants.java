@@ -85,7 +85,7 @@ public class CpaConstants {
     /**
      * JWT生成Token设置ISSUSER
      */
-    public static String JWT_ISSUSER = "kanyun.cpa.com";
+    public static String JWT_ISSUSER = "cpa.kanyun.com";
 
     /**
      * 最大上传文件，超过此值上传文件将产生临时文件
