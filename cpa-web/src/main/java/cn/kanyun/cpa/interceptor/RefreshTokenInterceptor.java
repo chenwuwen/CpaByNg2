@@ -1,7 +1,6 @@
 package cn.kanyun.cpa.interceptor;
 
 import cn.kanyun.cpa.model.constants.CpaConstants;
-import cn.kanyun.cpa.util.DateUtils;
 import cn.kanyun.cpa.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import org.slf4j.Logger;
@@ -47,6 +46,8 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
             String audience = claims.getAudience();
 //            生成新Token
             String newToken = JwtUtil.createJWT(sub, audience, CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
+//            将新token写到响应头中
+            response.setHeader("Authorization", newToken);
         }
     }
 }

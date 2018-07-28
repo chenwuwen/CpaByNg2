@@ -2,7 +2,7 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
-    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"  metadata-complete="false">
+    http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" metadata-complete="false">
     <!-- 默认欢迎页 -->
     <!-- Servlet2.5中可直接在此处执行Servlet应用,如<welcome-file>servlet/InitSystemParamServlet</welcome-file> -->
     <!-- 这里使用了SpringMVC提供的<mvc:view-controller>标签,实现了首页隐藏的目的,详见applicationContext.xml -->
@@ -229,9 +229,10 @@
             <param-name>allowCredentials</param-name>
             <param-value>true</param-value>
         </init-param>
+        <!--自定义的请求头字段-->
         <init-param>
             <param-name>allowHeaders</param-name>
-            <param-value>Content-Type,X-Token</param-value>
+            <param-value>Content-Type,Authorization,Accept,Origin,X-Requested-With</param-value>
         </init-param>
     </filter>
     <filter-mapping>

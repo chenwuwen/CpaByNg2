@@ -558,6 +558,12 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+            <!--Curator解决了很多ZooKeeper客户端非常底层的细节开发工作，包括连接重连、反复注册Watcher和NodeExistsException异常等,除了封装一些开发人员不需要特别关注的底层细节之外，Curator还在ZooKeeper原生API的基础上进行了包装，提供了一套易用性和可读性更强的Fluent风格的客户端API框架-->
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-framework</artifactId>
+                <version>4.0.1</version>
+            </dependency>
 
             <!--为防止与tomcat中的servlet发生冲突,导致服务无法启动,所以加上scope定义该jar包的使用范围-->
             <dependency>
