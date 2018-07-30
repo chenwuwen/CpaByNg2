@@ -22,8 +22,7 @@ public class CleanCacheJob {
         try {
             FileUtils.cleanDirectory(new File(path));
         } catch (IOException e) {
-            logger.error("定时清除图片任务异常：", e);
-            e.printStackTrace();
+            logger.error("定时清除图片任务异常：{}", e);
         }
     }
 }
