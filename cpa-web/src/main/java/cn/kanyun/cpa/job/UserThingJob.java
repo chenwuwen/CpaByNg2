@@ -9,10 +9,14 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.framework.recipes.locks.InterProcessSemaphoreMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.CreateMode;
+import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.Assert;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -34,7 +38,7 @@ public class UserThingJob {
     private static Integer timeout = 100;
 
     /**
-     * 锁路径
+     * 锁路径,该类的操作都是基于该目录进行的
      */
     private static String lockPath = "/temp";
 
@@ -53,6 +57,14 @@ public class UserThingJob {
         curatorFramework = CuratorFrameworkFactory.builder().connectString(zkAddr).sessionTimeoutMs(timeout).retryPolicy(retryPolicy).build();
 //        开启连接
         curatorFramework.start();
+        try {
+//            判断锁节点是否存在
+            Stat stat = curatorFramework.checkExists().forPath(lockPath);
+//            建立锁路径节点,指定节点类型（不加withMode默认为持久类型节点）、路径
+            curatorFramework.create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(lockPath);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void testJob() {
@@ -88,6 +100,7 @@ public class UserThingJob {
      * 这种做法可能引发羊群效应，从而降低锁的性能
      */
     public void testzkDistributedlock() {
+
 //      创建锁，为可重入锁，即是获锁后，还可以再次获取
         final InterProcessMutex lock = new InterProcessMutex(curatorFramework, lockPath);
 //        创建锁，为不可重入锁，即是获锁后，不可以再次获取，这里不作例子，使用和重入锁类似
@@ -95,7 +108,9 @@ public class UserThingJob {
         try {
 //           获取锁
             lock.acquire();
-//            todo 执行相应代码
+//            测试是否可以重入,超时获取锁对象(第一个参数为时间,第二个参数为时间单位),因为锁已经被获取,所以返回 false
+//            Assert.assertFalse(lock.acquire(2, TimeUnit.SECONDS));
+//            todo 执行相应业务代码
             logger.info("IP为：{} 的节点成功执行了代码,时间：{}", IpMacUtil.getInternetIp(), LocalDateTime.now());
         } catch (Exception e) {
             e.printStackTrace();
