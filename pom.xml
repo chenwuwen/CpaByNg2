@@ -17,6 +17,7 @@
         <module>cpa-redis</module>
         <module>cpa-util</module>
         <module>cpa-lucene</module>
+        <module>cpa-provide</module>
     </modules>
     <!--上传私服 pom.xml 配置,发布自己的jar包-->
     <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
@@ -34,7 +35,7 @@
     <!--</distributionManagement>-->
     <!--增加仓库配置,不然可能插件找不到,导致报错-->
     <repositories>
-        <!--如有Nexus私服, 取消注释并指向正确的服务器地址-->
+        <!--如有Nexus私服, 取消注释并指向正确的服务器地址,需要注意的是配置私服后,所有的jar包将在从私服中下载,如果私服中没有,则私服从其他仓库下载到私服内,再下载到本地的开发环境,所以如果私服从其他仓库下载的jar包不完整,那么本地的jar包也是不完整的,这个时候需要注释掉私服的配置,使开发环境从其他仓库下载,或者操作私服重新下载jar包-->
         <repository>
             <id>nexus-repos</id>
             <name>Team Nexus Repository</name>
@@ -65,17 +66,15 @@
             </snapshots>
         </repository>
         <repository>
-            <id>people.apache.snapshots</id>
-            <url>
-                http://repository.apache.org/content/groups/snapshots-group/
-            </url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
+            <id>mvn-repository</id>
+            <name>Mvn Repository</name>
+            <url>http://mvnrepository.com/repos</url>
+            <layout>default</layout>
             <snapshots>
-                <enabled>true</enabled>
+                <enabled>false</enabled>
             </snapshots>
         </repository>
+
     </repositories>
 
     <!--构建该项目或使用该插件所需要的Maven的最低版本-->
@@ -222,7 +221,7 @@
                 <artifactId>spring-test</artifactId>
                 <version>5.0.2.RELEASE</version>
                 <!--把<scope></scope>标签去掉 否则无法使用 @ContextConfiguration-->
-                <!--<scope>test</scope>-->
+                <!--<scope>lombok</scope>-->
             </dependency>
             <!--Spring相关-->
             <dependency>
@@ -564,6 +563,16 @@
                 <artifactId>curator-framework</artifactId>
                 <version>4.0.0</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-client</artifactId>
+                <version>4.0.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.curator</groupId>
+                <artifactId>curator-recipes</artifactId>
+                <version>4.0.0</version>
+            </dependency>
 
             <!--为防止与tomcat中的servlet发生冲突,导致服务无法启动,所以加上scope定义该jar包的使用范围-->
             <dependency>
@@ -639,11 +648,12 @@
                 <artifactId>commons-email</artifactId>
                 <version>1.5</version>
             </dependency>
-            <!-- project lombok -->
+            <!-- project lombok 项目中使用Lombok可以减少很多重复代码的书写。比如说getter/setter/toString等方法的编写-->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.16.10</version>
+                <version>1.16.22</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>io.github.jupf.staticlog</groupId>
@@ -752,11 +762,7 @@
                 <artifactId>validation-api</artifactId>
                 <version>1.1.0.Final</version>
             </dependency>
-            <dependency>
-                <groupId>javax.el</groupId>
-                <artifactId>javax.el-api</artifactId>
-                <version>3.0.1-b04</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>org.javassist</groupId>

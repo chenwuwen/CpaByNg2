@@ -126,6 +126,8 @@
 
     <!-- 同时打包源码和依赖的jar文件。运行方式 ：assembly:assembly -->
     <build>
+        <!--该配置修改打包后的文件名-->
+        <finalName>cpa-util</finalName>
         <plugins>
             <!--打jar 带依赖 -->
             <plugin>

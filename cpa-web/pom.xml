@@ -286,6 +286,14 @@
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-framework</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+        </dependency>
 
         <!--为防止与tomcat中的servlet发生冲突,导致服务无法启动,所以加上scope定义该jar包的使用范围-->
         <dependency>
@@ -318,13 +326,18 @@
             <artifactId>spring-data-redis</artifactId>
         </dependency>
 
+        <!-- project lombok 项目中使用Lombok可以减少很多重复代码的书写。比如说getter/setter/toString等方法的编写-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
 
     </dependencies>
 
     <build>
         <!--定制打包后的包名,默认打包后包名为 ${project.artifactId}-${project.version} -->
-        <finalName>cpaweb</finalName>
+        <finalName>cpa-web</finalName>
         <plugins>
             <!--设置maven编译的JDK版本-->
             <plugin>

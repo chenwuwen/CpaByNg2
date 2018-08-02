@@ -13,8 +13,15 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <!-- 项目产生的构件类型，例如jar、war、ear、pom。插件可以创建他们自己的构件类型，所以前面列的不是全部构件类型 -->
+    <packaging>jar</packaging>
     <artifactId>cpa-dao</artifactId>
+
+    <build>
+        <!--该配置修改打包后的文件名-->
+        <finalName>cpa-dao</finalName>
+    </build>
+
     <dependencies>
         <!--项目模块依赖-->
         <dependency>

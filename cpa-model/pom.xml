@@ -12,9 +12,31 @@
         <!-- 被继承的父项目的版本 -->
         <version>0.0.1-SNAPSHOT</version>
     </parent>
+    <!-- 项目产生的构件类型，例如jar、war、ear、pom。插件可以创建他们自己的构件类型，所以前面列的不是全部构件类型 -->
+    <packaging>jar</packaging>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>cpa-model</artifactId>
+    <name>cpa-model</name>
+
+    <build>
+        <!--该配置修改打包后的文件名-->
+        <finalName>cpa-model</finalName>
+    </build>
+
     <dependencies>
+
+        <!--Junit单元测试-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <!--日志记录-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
         <!--Spring相关-->
         <dependency>
             <groupId>org.springframework</groupId>
@@ -52,6 +74,12 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
+        </dependency>
+
+        <!-- project lombok 项目中使用Lombok可以减少很多重复代码的书写。比如说getter/setter/toString等方法的编写-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
 
