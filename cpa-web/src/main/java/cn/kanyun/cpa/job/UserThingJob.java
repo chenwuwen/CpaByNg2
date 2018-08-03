@@ -30,7 +30,7 @@ public class UserThingJob {
     /**
      * zookeeper地址[加端口号]，多个地址以逗号分隔
      */
-    private static String zkAddr = "";
+    private static String zkAddr = "115.47.155.3:2181";
 
     /**
      * 超时时间

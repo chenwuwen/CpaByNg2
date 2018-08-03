@@ -116,7 +116,7 @@
                         <!--path就是地址的配置，默认值是/${project.artifactId}-->
                         <path>/</path>
                         <!-- 与settings.xml文件中Server的id相同 -->
-                        <server>tomcat7</server>
+                        <server>tomcat8</server>
                         <username>tomcat</username>
                         <password>tomcat</password>
                         <uriEncoding>UTF-8</uriEncoding>
