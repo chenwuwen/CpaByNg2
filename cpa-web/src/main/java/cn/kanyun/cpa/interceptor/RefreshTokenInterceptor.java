@@ -3,6 +3,7 @@ package cn.kanyun.cpa.interceptor;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.util.JwtUtil;
 import io.jsonwebtoken.Claims;
+import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
@@ -41,23 +42,26 @@ public class RefreshTokenInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, @Nullable Exception ex) throws Exception {
+//        获取token
         String token = request.getHeader("Authorization");
-        Claims claims = JwtUtil.parseJWT(token, CpaConstants.JWT_SECRET);
-        logger.info("{} ,请求地址：{} ,当前Token：", LocalDateTime.now(), request.getRequestURI(), token);
+        if (null != token) {
+            Claims claims = JwtUtil.parseJWT(token, CpaConstants.JWT_SECRET);
+            logger.info("{} ,请求地址：{} ,当前Token：", LocalDateTime.now(), request.getRequestURI(), token);
 //        获得过期时间
-        Date expDate = claims.getExpiration();
+            Date expDate = claims.getExpiration();
 //        如果过期时间距离当前时间小于20分钟,则重新生成token
-        if (System.currentTimeMillis() - expDate.getTime() < timeLeft) {
+            if (System.currentTimeMillis() - expDate.getTime() < timeLeft) {
 //            获得个人信息
-            String sub = claims.getSubject();
+                String sub = claims.getSubject();
 //            获得接收对象
-            String audience = claims.getAudience();
+                String audience = claims.getAudience();
 //            生成新Token
-            String newToken = JwtUtil.createJWT(sub, audience, CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
+                String newToken = JwtUtil.createJWT(sub, audience, CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
 
-            logger.info("当前Token有效期不足20分钟,刷新Token,新Token为：", newToken);
+                logger.info("当前Token有效期不足20分钟,刷新Token,新Token为：", newToken);
 //            将新token写到响应头中
-            response.setHeader("Authorization", newToken);
+                response.setHeader("Authorization", newToken);
+            }
         }
     }
 }

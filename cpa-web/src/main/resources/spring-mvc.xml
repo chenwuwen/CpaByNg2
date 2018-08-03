@@ -91,15 +91,40 @@
     </bean>
 
 
-    <!-- 拦截器 -->
-    <!--<mvc:interceptors>-->
-    <!--&lt;!&ndash; 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 &ndash;&gt;-->
-    <!--<mvc:interceptor>-->
-    <!--<mvc:mapping path="/lombok/number.do" />-->
-    <!--&lt;!&ndash;定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 &ndash;&gt;-->
-    <!--<bean class="com.host.app.web.interceptor.LoginInterceptor" />-->
-    <!--</mvc:interceptor>-->
-    <!--</mvc:interceptors>-->
+    <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
+    <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->
+    <!--拦截器使用责任链模式,拦截器是基于java的反射机制的，而过滤器是基于函数回调。两者都是Aop的实现，拦截器不依赖与servlet容器，过滤器依赖与servlet容器。拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。-->
+    <!--在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。-->
+    <!--在mvc:interceptors标签下声明interceptor主要有两种方式：-->
+    <!--（1）直接定义一个Interceptor实现类的bean对象。使用这种方式声明的Interceptor拦截器将会对所有的请求进行拦截。-->
+    <!--（2）使用mvc:interceptor标签进行声明。使用这种方式进行声明的Interceptor可以通过mvc:mapping子标签来定义需要进行拦截的请求路径。-->
+    <mvc:interceptors>
+        <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
+        <!--也就是说在此处定义的拦截器,是拦截所有action-->
+        <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        <mvc:interceptor>
+            <!--path="/**/*"表示拦截所有请求跟直接定义在mvc:interceptors根下效果一致,当然也可以自己定义拦截哪些请求-->
+            <mvc:mapping path="/**/*"/>
+            <!--mvc:exclude-mapping表示在mvc:interceptor的mvc:mapping拦截方法下,不拦截哪些请求-->
+            <!--path="/static/**"表示不拦截根目录下static目录下的所有文件-->
+            <mvc:exclude-mapping path="/static/**"/>
+            <!--path="/**/*.html"表示不拦截所有的以html结尾的文件,然而实际上拦截器只能拦截Action请求-->
+            <mvc:exclude-mapping path="/**/*.html"/>
+            <mvc:exclude-mapping path="/**/*.css"/>
+            <mvc:exclude-mapping path="/**/*.js"/>
+            <mvc:exclude-mapping path="/**/*.jpg"/>
+            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
+            <!--也就是说在此处定义的拦截器,是拦截所有上面定义的action-->
+            <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
+        </mvc:interceptor>
+
+        <!--刷新Token拦截器-->
+        <mvc:interceptor>
+            <mvc:mapping path="/api/*"/>
+            <bean class="cn.kanyun.cpa.interceptor.RefreshTokenInterceptor"/>
+        </mvc:interceptor>
+
+    </mvc:interceptors>
 
 
     <!-- 文件上传配置 -->
