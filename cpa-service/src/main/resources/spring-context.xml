@@ -229,18 +229,6 @@
     </bean>
 
 
-    <!--定义solr的server-->
-    <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
-        <constructor-arg index="0" value="${solr.url}"/>
-        <!-- 设置响应解析器 -->
-        <property name="parser">
-            <bean class="org.apache.solr.client.solrj.impl.XMLResponseParser"/>
-        </property>
-        <!-- 设置重试次数-->
-        <property name="maxRetries" value="${solr.maxRetries}"/>
-        <!-- 建立连接的最长时间 -->
-        <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
-    </bean>
 
     <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -262,5 +250,5 @@
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
     <!--引入其他模块配置文件，这样被引入的配置文件就不用写在web.xml中了，但需要注意的是resource中引入的文件的地址要用相对路径，不然会出错。-->
-    <!--<import resource="classpath:hibernate.cfg.xml"/>-->
+    <import resource="spring-dubbo-provider.xml"/>
 </beans>  

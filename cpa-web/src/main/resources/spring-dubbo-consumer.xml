@@ -15,6 +15,9 @@
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <dubbo:reference id="testService" interface="com.ruifight.oa.service.TestService" check="false"/>
 
+    <!--开启Dubbo消费者注解方式,来避免上面一条配置,当需要注入service时,需要添加@Reference注解,而非@Resource @AutoWrite注解,需要注意的是,需要将该文件导入到spring-mvc.xml配置文件中,否则注入服务可能为Null-->
+    <dubbo:annotation package="cn.kanyun.cpa.service" />
+
     <!-- 服务者与消费者的默认配置 -->
     <!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试   -->
     <!--<dubbo:provider delay="-1" timeout="6000" retries="0"/>-->

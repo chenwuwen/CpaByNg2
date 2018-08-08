@@ -140,4 +140,5 @@
         </property>
     </bean>
 
+    <import resource="spring-dubbo-consumer.xml"></import>
 </beans>

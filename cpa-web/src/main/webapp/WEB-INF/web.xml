@@ -76,8 +76,7 @@
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>
-            classpath:applicationContext.xml,classpath:spring-shiro.xml,classpath:spring-redis.xml,classpath:spring-quartz.xml,
-            classpath:spring-dubbo-consumer.xml, classpath:spring-dubbo-provider.xml
+            classpath:applicationContext.xml,classpath:spring-shiro.xml,classpath:spring-redis.xml,classpath:spring-quartz.xml
         </param-value>
     </context-param>
     <!-- 防止发生java.beans.Introspector内存泄露,应将它配置在ContextLoaderListener的前面 -->

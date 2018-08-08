@@ -46,9 +46,14 @@
     <!--这里我讲试题库的接口提供出去-->
     <dubbo:service interface="cn.kanyun.cpa.service.itempool.CpaRepertoryService" ref="cpaRepertoryService"
                    protocol="dubbo"/>
+
     <!--具体实现该接口的 bean-->
     <!--试题库的接口的实现类-->
     <bean id="cpaRepertoryService" class="cn.kanyun.cpa.service.itempool.impl.CpaRepertoryServiceImpl"/>
+
+    <!-- 使用Dubbo提供者注解方式暴露接口,使用了注解方式暴露接口,就可以避免上面两条配置,需要注意的是:需要添加dubbo 下的@Service注解,而非spring下的@Service注解 -->
+    <dubbo:annotation package="cn.kanyun.cpa.service" />
+
 
     <!-- 服务者与消费者的默认配置 -->
     <!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试  统一的超时和重连配置 -->
