@@ -30,7 +30,7 @@
 
     <!--定义需要被定时任务处理的类-->
     <!--<bean id="answerRecordService" class="cn.kanyun.cpa.service.user.impl.AnswerRecordServiceImpl"></bean>-->
-    <bean id="userThingJob" class="cn.kanyun.cpa.job.UserThingJob"></bean>
+    <bean id="userThingJob" class="cn.kanyun.cpa.job.SaveUserAnswerRecordJob"></bean>
     <bean id="cleanCacheJob" class="cn.kanyun.cpa.job.CleanCacheJob"></bean>
 
     <!--配置调度程序quartz ，其中配置JobDetail有两种方式-->

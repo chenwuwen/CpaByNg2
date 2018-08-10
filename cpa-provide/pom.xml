@@ -8,15 +8,41 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <packaging>jar</packaging>
+    <!--该模块主要给调用方提供依赖[因此此模块需要打成jar包,并且上传到maven私服,调用方(如web模块)在pom文件中引入该依赖],-->
+    <!--具体实现是cpa-service模块来完成的,其打成jar包并不上传到maven私服,而是将其上传到服务器直接java -jar xxx.jar来启动运行的-->
+    <!--其模块内有main方法，可以直接启动-->
     <artifactId>cpa-provide</artifactId>
     <dependencies>
         <dependency>
             <groupId>cn.kanyun</groupId>
-            <artifactId>cpa-dao</artifactId>
+            <artifactId>cpa-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
+
+    <!--上传私服 pom.xml 配置,发布自己的jar包-->
+    <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
+    <!--执行deploy命令，如果返回401错误，则需要用户验证或验证的信息有误。则需要在maven安装目录下找到setting.xml配置文件的servers标签下添加如下代码-->
+    <!--<server>-->
+    <!--其中此处的id，必须为pom文件中配置的repository的id-->
+        <!--<id>releases</id>-->
+        <!--<username>admin</username>-->
+        <!--<password>admin</password>-->
+    <!--</server>-->
+    <!--执行maven deploy命令成功之后，登录私服进行查询，即可看到对应的jar包-->
+    <distributionManagement>
+        <repository>
+            <!--这个ID需要与你的release仓库的Repository ID一致-->
+            <id>releases</id>
+            <url>http://192.168.1.11:8081/nexus/content/repositories/releases</url>
+        </repository>
+        <snapshotRepository>
+            <!--这个ID需要与你的snapshots仓库的Repository ID一致-->
+            <id>snapshots</id>
+            <url>http://192.168.1.11:8081/nexus/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
 
 
 </project>

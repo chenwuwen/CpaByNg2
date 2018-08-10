@@ -3,6 +3,7 @@ package cn.kanyun.cpa.job;
 import cn.kanyun.cpa.util.IpMacUtil;
 import com.alibaba.druid.support.http.util.IPAddress;
 import com.alibaba.dubbo.common.URL;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
@@ -25,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  * @Author: Kanyun
  * @Date: 2017/12/15 0015 14:47
  */
-public class UserThingJob {
-    private static final Logger logger = LoggerFactory.getLogger(UserThingJob.class);
+@Slf4j
+public class SaveUserAnswerRecordJob {
     /**
      * zookeeper地址[加端口号]，多个地址以逗号分隔
      */
@@ -68,7 +69,7 @@ public class UserThingJob {
     }
 
     public void testJob() {
-        logger.info("=====定时任务执行=====");
+        log.info("=====定时任务执行=====");
     }
 
     /**
@@ -111,7 +112,7 @@ public class UserThingJob {
 //            测试是否可以重入,超时获取锁对象(第一个参数为时间,第二个参数为时间单位),因为锁已经被获取,所以返回 false
 //            Assert.assertFalse(lock.acquire(2, TimeUnit.SECONDS));
 //            todo 执行相应业务代码
-            logger.info("IP为：{} 的节点成功执行了代码,时间：{}", IpMacUtil.getInternetIp(), LocalDateTime.now());
+            log.info("IP为：{} 的节点成功执行了代码,时间：{}", IpMacUtil.getInternetIp(), LocalDateTime.now());
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -132,6 +133,6 @@ public class UserThingJob {
      * @Date: 2017/12/15 0015 15:07
      */
     public void saveUserAnswerRecord() {
-        logger.info("=====定时任务执行=====");
+        log.info("=====定时任务执行=====");
     }
 }
