@@ -14,7 +14,7 @@ import java.io.IOException;
  * @Date: 2018/2/1 0001 17:18
  */
 public class CleanCacheJob {
-    private static final Logger logger = LoggerFactory.getLogger(UserThingJob.class);
+    private static final Logger logger = LoggerFactory.getLogger(CleanCacheJob.class);
 
     public void cleanImg() {
         logger.info("======清除图片定时任务======");
