@@ -47,8 +47,7 @@ import java.security.SecureRandom;
  * @since 1.5
  */
 @Deprecated
-public final class UUID implements java.io.Serializable
-{
+public final class UUID implements java.io.Serializable {
 
     /**
      * Explicit serialVersionUID for interoperability.
@@ -110,14 +109,15 @@ public final class UUID implements java.io.Serializable
     /*
      * Private constructor which uses a byte array to construct the new UUID.
      */
-    private UUID(byte[] data)
-    {
+    private UUID(byte[] data) {
         long msb = 0;
         long lsb = 0;
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 8; i++) {
             msb = (msb << 8) | (data[i] & 0xff);
-        for (int i = 8; i < 16; i++)
+        }
+        for (int i = 8; i < 16; i++) {
             lsb = (lsb << 8) | (data[i] & 0xff);
+        }
         this.mostSigBits = msb;
         this.leastSigBits = lsb;
     }
@@ -131,8 +131,7 @@ public final class UUID implements java.io.Serializable
      * @param mostSigBits
      * @param leastSigBits
      */
-    public UUID(long mostSigBits, long leastSigBits)
-    {
+    public UUID(long mostSigBits, long leastSigBits) {
         this.mostSigBits = mostSigBits;
         this.leastSigBits = leastSigBits;
     }
@@ -146,8 +145,7 @@ public final class UUID implements java.io.Serializable
      * @return a randomly generated <tt>UUID</tt>.
      */
     @SuppressWarnings("unused")
-	public static UUID randomUUID()
-    {
+	public static UUID randomUUID() {
         SecureRandom ng = numberGenerator;
         if (ng == null)
         {
@@ -171,8 +169,7 @@ public final class UUID implements java.io.Serializable
      * @param name a byte array to be used to construct a <tt>UUID</tt>.
      * @return a <tt>UUID</tt> generated from the specified array.
      */
-    public static UUID nameUUIDFromBytes(byte[] name)
-    {
+    public static UUID nameUUIDFromBytes(byte[] name) {
         MessageDigest md;
         try
         {
@@ -199,13 +196,14 @@ public final class UUID implements java.io.Serializable
      * @throws IllegalArgumentException if name does not conform to the
      *                                  string representation as described in {@link #toString}.
      */
-    public static UUID fromString(String name)
-    {
+    public static UUID fromString(String name) {
         String[] components = name.split("-");
-        if (components.length != 5)
+        if (components.length != 5) {
             throw new IllegalArgumentException("Invalid UUID string: " + name);
-        for (int i = 0; i < 5; i++)
+        }
+        for (int i = 0; i < 5; i++) {
             components[i] = "0x" + components[i];
+        }
 
         long mostSigBits = Long.decode(components[0]).longValue();
         mostSigBits <<= 16;
@@ -256,8 +254,7 @@ public final class UUID implements java.io.Serializable
      *
      * @return the version number of this <tt>UUID</tt>.
      */
-    public int version()
-    {
+    public int version() {
         if (version < 0)
         {
             // Version is bits masked by 0x000000000000F000 in MS long
@@ -280,8 +277,7 @@ public final class UUID implements java.io.Serializable
      *
      * @return the variant number of this <tt>UUID</tt>.
      */
-    public int variant()
-    {
+    public int variant() {
         if (variant < 0)
         {
             // This field is composed of a varying number of bits
@@ -316,8 +312,7 @@ public final class UUID implements java.io.Serializable
      * @throws UnsupportedOperationException if this UUID is not a
      *                                       version 1 UUID.
      */
-    public long timestamp()
-    {
+    public long timestamp() {
         if (version() != 1)
         {
             throw new UnsupportedOperationException("Not a time-based UUID");
@@ -348,8 +343,7 @@ public final class UUID implements java.io.Serializable
      * @throws UnsupportedOperationException if this UUID is not a
      *                                       version 1 UUID.
      */
-    public int clockSequence()
-    {
+    public int clockSequence() {
         if (version() != 1)
         {
             throw new UnsupportedOperationException("Not a time-based UUID");
@@ -377,8 +371,7 @@ public final class UUID implements java.io.Serializable
      * @throws UnsupportedOperationException if this UUID is not a
      *                                       version 1 UUID.
      */
-    public long node()
-    {
+    public long node() {
         if (version() != 1)
         {
             throw new UnsupportedOperationException("Not a time-based UUID");
@@ -416,8 +409,8 @@ public final class UUID implements java.io.Serializable
      *
      * @return a string representation of this <tt>UUID</tt>.
      */
-    public String toString()
-    {
+    @Override
+    public String toString() {
         return (digits(mostSigBits >> 32, 8) + "-" +
                 digits(mostSigBits >> 16, 4) + "-" +
                 digits(mostSigBits, 4) + "-" +
@@ -428,8 +421,7 @@ public final class UUID implements java.io.Serializable
     /**
      * Returns val represented by the specified number of hex digits.
      */
-    private static String digits(long val, int digits)
-    {
+    private static String digits(long val, int digits) {
         long hi = 1L << (digits * 4);
         return Long.toHexString(hi | (val & (hi - 1))).substring(1);
     }
@@ -439,8 +431,8 @@ public final class UUID implements java.io.Serializable
      *
      * @return a hash code value for this <tt>UUID</tt>.
      */
-    public int hashCode()
-    {
+    @Override
+    public int hashCode() {
         if (hashCode == -1)
         {
             hashCode = (int) ((mostSigBits >> 32) ^
@@ -461,12 +453,14 @@ public final class UUID implements java.io.Serializable
      * @return <code>true</code> if the objects are the same;
      *         <code>false</code> otherwise.
      */
-    public boolean equals(Object obj)
-    {
-        if (!(obj instanceof UUID))
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof UUID)) {
             return false;
-        if (((UUID) obj).variant() != this.variant())
+        }
+        if (((UUID) obj).variant() != this.variant()) {
             return false;
+        }
         UUID id = (UUID) obj;
         return (mostSigBits == id.mostSigBits &&
                 leastSigBits == id.leastSigBits);
@@ -484,8 +478,7 @@ public final class UUID implements java.io.Serializable
      * @return -1, 0 or 1 as this <tt>UUID</tt> is less than, equal
      *         to, or greater than <tt>val</tt>.
      */
-    public int compareTo(UUID val)
-    {
+    public int compareTo(UUID val) {
         // The ordering is intentionally set up so that the UUIDs
         // can simply be numerically compared as two numbers
         return (this.mostSigBits < val.mostSigBits ? -1 :
@@ -502,8 +495,7 @@ public final class UUID implements java.io.Serializable
      * on demand.
      */
     private void readObject(java.io.ObjectInputStream in)
-            throws java.io.IOException, ClassNotFoundException
-    {
+            throws java.io.IOException, ClassNotFoundException {
 
         in.defaultReadObject();
 

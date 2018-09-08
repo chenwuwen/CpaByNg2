@@ -44,6 +44,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param value 缓存的值
      * @return 缓存的对象
      */
+    @Override
     public void setCacheObject(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
@@ -55,6 +56,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param operation
      * @return 缓存键值对应的数据
      */
+    @Override
     public Object getCacheObject(String key/*,ValueOperations<String,T> operation*/) {
         return redisTemplate.opsForValue().get(key);
     }
@@ -66,6 +68,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param dataList 待缓存的List数据
      * @return 缓存的对象
      */
+    @Override
     public Object setCacheList(String key, List<Object> dataList) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
         if (null != dataList) {
@@ -83,6 +86,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param key 缓存的键值
      * @return 缓存键值对应的数据
      */
+    @Override
     public List<Object> getCacheList(String key) {
         List<Object> dataList = new ArrayList<Object>();
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
@@ -106,6 +110,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @Title: range
      * @Description: TODO(这里用一句话描述这个方法的作用)
      */
+    @Override
     public List<Object> range(String key, long start, long end) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
         return listOperation.range(key, start, end);
@@ -117,6 +122,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param key
      * @return
      */
+    @Override
     public Long listSize(String key) {
         return redisTemplate.opsForList().size(key);
     }
@@ -129,6 +135,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param String value 值
      * @return 状态码
      */
+    @Override
     public void listSet(String key, int index, Object obj) {
         redisTemplate.opsForList().set(key, index, obj);
     }
@@ -140,6 +147,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param String value
      * @return 记录总数
      */
+    @Override
     public long leftPush(String key, Object obj) {
         return redisTemplate.opsForList().leftPush(key, obj);
     }
@@ -151,6 +159,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param String value
      * @return 记录总数
      */
+    @Override
     public long rightPush(String key, Object obj) {
         return redisTemplate.opsForList().rightPush(key, obj);
     }
@@ -163,6 +172,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param int    end 记录的结束位置（如果为-1则表示最后一个，-2，-3以此类推）
      * @return 执行状态码
      */
+    @Override
     public void trim(String key, int start, int end) {
         redisTemplate.opsForList().trim(key, start, end);
     }
@@ -175,6 +185,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param Object obj 要匹配的值
      * @return 删除后的List中的记录数
      */
+    @Override
     public long remove(String key, long i, Object obj) {
         return redisTemplate.opsForList().remove(key, i, obj);
     }
@@ -186,6 +197,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param dataSet 缓存的数据
      * @return 缓存数据的对象
      */
+    @Override
     public BoundSetOperations<String, Object> setCacheSet(String key, Set<Object> dataSet) {
         BoundSetOperations<String, Object> setOperation = redisTemplate.boundSetOps(key);
         /*T[] t = (T[]) dataSet.toArray();
@@ -205,6 +217,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param operation
      * @return
      */
+    @Override
     public Set<Object> getCacheSet(String key/*,BoundSetOperations<String,T> operation*/) {
         Set<Object> dataSet = new HashSet<Object>();
         BoundSetOperations<String, Object> operation = redisTemplate.boundSetOps(key);
@@ -223,6 +236,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param dataMap
      * @return
      */
+    @Override
     public int setCacheMap(String key, Map<String, Object> dataMap) {
         if (null != dataMap) {
             HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
@@ -247,6 +261,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param hashOperation
      * @return
      */
+    @Override
     public Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
         /*Map<String, T> map = hashOperation.entries(key);*/
@@ -260,6 +275,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param dataMap
      * @return
      */
+    @Override
     public void setCacheIntegerMap(String key, Map<Integer, Object> dataMap) {
         HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
         if (null != dataMap) {
@@ -278,6 +294,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param hashOperation
      * @return
      */
+    @Override
     public Map<Object, Object> getCacheIntegerMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
         /*Map<String, T> map = hashOperation.entries(key);*/
@@ -290,6 +307,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param String
      * @return 状态码，1成功，0失败
      */
+    @Override
     public long deleteMap(String key) {
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate.opsForHash().delete(key);
@@ -303,6 +321,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param unit
      * @return
      */
+    @Override
     public boolean expire(String key, long time, TimeUnit unit) {
         return redisTemplate.expire(key, time, unit);
     }
@@ -314,6 +333,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param step
      * @return
      */
+    @Override
     public long increment(String key, long step) {
         return redisTemplate.opsForValue().increment(key, step);
     }
@@ -333,17 +353,21 @@ public class RedisServiceImpl<T> implements RedisService<T> {
             }
         });
     }*/
+    @Override
     public long del(final byte[] key) {
         return (long) redisTemplateSerializable.execute(new RedisCallback<Object>() {
+            @Override
             public Long doInRedis(RedisConnection connection) {
                 return connection.del(key);
             }
         });
     }
 
+    @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public byte[] get(final byte[] key) {
         return (byte[]) redisTemplateSerializable.execute(new RedisCallback() {
+            @Override
             public byte[] doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.get(key);
             }
@@ -355,8 +379,10 @@ public class RedisServiceImpl<T> implements RedisService<T> {
      * @param value
      * @param liveTime
      */
+    @Override
     public void set(final byte[] key, final byte[] value, final long liveTime) {
         redisTemplateSerializable.execute(new RedisCallback<Object>() {
+            @Override
             public Long doInRedis(RedisConnection connection) throws DataAccessException {
                 connection.set(key, value);
                 if (liveTime > 0) {

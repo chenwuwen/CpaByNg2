@@ -126,6 +126,7 @@ public final class ThreadPool {
     }
 
     //覆盖toString()方法，返回线程池信息，工作线程个数和已完成任务个数
+    @Override
     public String toString() {
         return "WorkThread number: " + worker_num + "  finished task number: "
                 + finished_task + " wait task number: " + getWaitTasknumber();

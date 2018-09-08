@@ -187,8 +187,9 @@ public class ConvertHelper
 				length = arg2;
 			}
 			for (int i = 0; i < length; i++) {
-				if (arg1 == null)
-					arg1 = "";
+				if (arg1 == null) {
+                    arg1 = "";
+                }
 				sb.append(arg0[i]).append(arg1);
 			}
 			sb.delete(sb.lastIndexOf(arg1), sb.length());
@@ -343,8 +344,9 @@ public class ConvertHelper
 		} else {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < arg1; i++) {
-				if (arg2 == null)
-					arg2 = "";
+				if (arg2 == null) {
+                    arg2 = "";
+                }
 				sb.append(arg0).append(arg2);
 			}
 			if (sb.length() > 0) {

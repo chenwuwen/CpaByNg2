@@ -130,8 +130,9 @@ public class MD5Code {
 		byte[] block = new byte[64];
 		index = (int) (count[0] >>> 3) & 0x3F;
 		// /* Update number of bits */
-		if ((count[0] += (inputLen << 3)) < (inputLen << 3))
-			count[1]++;
+		if ((count[0] += (inputLen << 3)) < (inputLen << 3)) {
+            count[1]++;
+        }
 		count[1] += (inputLen >>> 29);
 		partLen = 64 - index;
 		// Transform as many times as possible.
@@ -143,8 +144,9 @@ public class MD5Code {
 				md5Transform(block);
 			}
 			index = 0;
-		} else
-			i = 0;
+		} else {
+            i = 0;
+        }
 		// /* Buffer remaining input */
 		md5Memcpy(buffer, inbuf, index, i, inputLen - i);
 	}
@@ -167,8 +169,9 @@ public class MD5Code {
 	private void md5Memcpy(byte[] output, byte[] input, int outpos, int inpos,
 			int len) {
 		int i;
-		for (i = 0; i < len; i++)
-			output[outpos + i] = input[inpos + i];
+		for (i = 0; i < len; i++) {
+            output[outpos + i] = input[inpos + i];
+        }
 	}
 
 	private void md5Transform(byte block[]) {
@@ -261,9 +264,10 @@ public class MD5Code {
 
 	private void Decode(long[] output, byte[] input, int len) {
 		int i, j;
-		for (i = 0, j = 0; j < len; i++, j += 4)
-			output[i] = b2iu(input[j]) | (b2iu(input[j + 1]) << 8)
-					| (b2iu(input[j + 2]) << 16) | (b2iu(input[j + 3]) << 24);
+		for (i = 0, j = 0; j < len; i++, j += 4) {
+            output[i] = b2iu(input[j]) | (b2iu(input[j + 1]) << 8)
+                    | (b2iu(input[j + 2]) << 16) | (b2iu(input[j + 3]) << 24);
+        }
 		return;
 	}
 

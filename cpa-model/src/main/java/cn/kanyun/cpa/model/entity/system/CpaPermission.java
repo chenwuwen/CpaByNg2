@@ -65,13 +65,21 @@ public class CpaPermission implements java.io.Serializable {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         CpaPermission that = (CpaPermission) o;
 
-        if (!permissionCode.equals(that.permissionCode)) return false;
-        if (!permissionDescription.equals(that.permissionDescription)) return false;
+        if (!permissionCode.equals(that.permissionCode)) {
+            return false;
+        }
+        if (!permissionDescription.equals(that.permissionDescription)) {
+            return false;
+        }
         return rolePermissions.equals(that.rolePermissions);
     }
 

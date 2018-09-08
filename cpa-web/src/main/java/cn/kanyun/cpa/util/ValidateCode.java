@@ -63,8 +63,9 @@ public class ValidateCode {
      */
     public static String generateTextCode(int type, int length, String exChars) {
 
-        if (length <= 0)
+        if (length <= 0) {
             return "";
+        }
 
         StringBuffer code = new StringBuffer();
         int i = 0;

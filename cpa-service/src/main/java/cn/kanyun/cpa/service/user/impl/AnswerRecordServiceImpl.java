@@ -19,10 +19,11 @@ public class AnswerRecordServiceImpl extends CommonServiceImpl<Long, AnswerRecor
 
     @Resource(name = AnswerRecordDao.REPOSITORY_NAME)
     private AnswerRecordDao answerRecordDao;
+
     @Override
     public void saveUserAnswerRecord() {
 
-        answerRecordDao.saveAll(this.answerRecords);
+        answerRecordDao.saveAll(answerRecords);
     }
 
     @Override

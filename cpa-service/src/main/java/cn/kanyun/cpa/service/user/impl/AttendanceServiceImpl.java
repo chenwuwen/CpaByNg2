@@ -65,7 +65,8 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> i
         Attendance attendance = (Attendance) result.getData();
         //获取上次签到时间
         Timestamp lastSiginTime = Timestamp.valueOf(attendance.getAttendanceDate());
-        if (System.currentTimeMillis() - lastSiginTime.getTime() > 24 * 60 * 60 * 1000) {
+        long time = 24 * 60 * 60 * 1000;
+        if (System.currentTimeMillis() - lastSiginTime.getTime() > time) {
             //上次签到时间与当前相差一天
             return false;
         }

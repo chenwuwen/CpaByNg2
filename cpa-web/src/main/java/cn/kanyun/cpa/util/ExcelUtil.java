@@ -56,7 +56,9 @@ public class ExcelUtil {
      * @param out         输出流
      */
     public static void exportExcel(String title, Map<String, String> headMap, JSONArray jsonArray, String datePattern, int colWidth, OutputStream out) {
-        if (datePattern == null) datePattern = DEFAULT_DATE_PATTERN;
+        if (datePattern == null) {
+            datePattern = DEFAULT_DATE_PATTERN;
+        }
         // 声明一个工作薄
         HSSFWorkbook workbook = new HSSFWorkbook();
         workbook.createInformationProperties();
@@ -134,7 +136,9 @@ public class ExcelUtil {
         int rowIndex = 0;
         for (Object obj : jsonArray) {
             if (rowIndex == 65535 || rowIndex == 0) {
-                if (rowIndex != 0) sheet = workbook.createSheet();//如果数据超过了，则在第二页显示
+                if (rowIndex != 0) {
+                    sheet = workbook.createSheet();//如果数据超过了，则在第二页显示
+                }
 
                 HSSFRow titleRow = sheet.createRow(0);//表头 rowIndex=0
                 titleRow.createCell(0).setCellValue(title);
@@ -156,9 +160,13 @@ public class ExcelUtil {
 
                 Object o = jo.get(properties[i]);
                 String cellValue = "";
-                if (o == null) cellValue = "";
-                else if (o instanceof Date) cellValue = new SimpleDateFormat(datePattern).format(o);
-                else cellValue = o.toString();
+                if (o == null) {
+                    cellValue = "";
+                } else if (o instanceof Date) {
+                    cellValue = new SimpleDateFormat(datePattern).format(o);
+                } else {
+                    cellValue = o.toString();
+                }
 
                 newCell.setCellValue(cellValue);
                 newCell.setCellStyle(cellStyle);
@@ -192,7 +200,9 @@ public class ExcelUtil {
      * @param out         输出流
      */
     public static void exportExcelX(String title, Map<String, String> headMap, JSONArray jsonArray, String datePattern, int colWidth, OutputStream out) {
-        if (datePattern == null) datePattern = DEFAULT_DATE_PATTERN;
+        if (datePattern == null) {
+            datePattern = DEFAULT_DATE_PATTERN;
+        }
         // 声明一个工作薄
         SXSSFWorkbook workbook = new SXSSFWorkbook(1000);//缓存
         workbook.setCompressTempFiles(true);
@@ -252,7 +262,9 @@ public class ExcelUtil {
         int rowIndex = 0;
         for (Object obj : jsonArray) {
             if (rowIndex == 65535 || rowIndex == 0) {
-                if (rowIndex != 0) sheet = (SXSSFSheet) workbook.createSheet();//如果数据超过了，则在第二页显示
+                if (rowIndex != 0) {
+                    sheet = (SXSSFSheet) workbook.createSheet();//如果数据超过了，则在第二页显示
+                }
 
                 SXSSFRow titleRow = (SXSSFRow) sheet.createRow(0);//表头 rowIndex=0
                 titleRow.createCell(0).setCellValue(title);
@@ -274,11 +286,15 @@ public class ExcelUtil {
 
                 Object o = jo.get(properties[i]);
                 String cellValue = "";
-                if (o == null) cellValue = "";
-                else if (o instanceof Date) cellValue = new SimpleDateFormat(datePattern).format(o);
-                else if (o instanceof Float || o instanceof Double)
+                if (o == null) {
+                    cellValue = "";
+                } else if (o instanceof Date) {
+                    cellValue = new SimpleDateFormat(datePattern).format(o);
+                } else if (o instanceof Float || o instanceof Double) {
                     cellValue = new BigDecimal(o.toString()).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-                else cellValue = o.toString();
+                } else {
+                    cellValue = o.toString();
+                }
 
                 newCell.setCellValue(cellValue);
                 newCell.setCellStyle(cellStyle);
@@ -806,11 +822,13 @@ public class ExcelUtil {
     }
 
     public static String rightTrim(String str) {
-        if (str == null)
+        if (str == null) {
             return "";
+        }
         int length = str.length();
-        for (int i = length - 1; i >= 0 && str.charAt(i) == ' '; i--)
+        for (int i = length - 1; i >= 0 && str.charAt(i) == ' '; i--) {
             length--;
+        }
 
         return str.substring(0, length);
     }

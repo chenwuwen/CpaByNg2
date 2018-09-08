@@ -95,8 +95,9 @@ public class WebUtil {
     public static boolean isMobileDevice(HttpServletRequest request) {
         String requestHeader = request.getHeader("user-agent");
         String[] deviceArray = new String[]{"android", "mac os", "windows phone"};
-        if (requestHeader == null)
+        if (requestHeader == null) {
             return false;
+        }
         requestHeader = requestHeader.toLowerCase();
         for (int i = 0; i < deviceArray.length; i++) {
             if (requestHeader.indexOf(deviceArray[i]) > 0) {

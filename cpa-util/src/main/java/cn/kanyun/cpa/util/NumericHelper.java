@@ -126,8 +126,9 @@ public class NumericHelper {
 		} else {
 			StringBuffer sb = new StringBuffer();
 			for (int i = 0; i < arg1; i++) {
-				if (arg2 == null)
-					arg2 = "";
+				if (arg2 == null) {
+                    arg2 = "";
+                }
 				sb.append(arg0).append(arg2);
 			}
 			if (sb.length() > 0) {

@@ -74,8 +74,9 @@ public class URLHelper {
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Map toMap(String url) {
-		if (url == null)
-			return null;
+		if (url == null) {
+            return null;
+        }
 
 		Map paramMap = new HashMap();
 		String[] paramArray = url.split("&");

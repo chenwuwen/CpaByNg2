@@ -33,24 +33,27 @@ public class FileUtil {
         java.io.File f = new java.io.File(path);
 
         if (f.exists()) {
-            if (f.isFile())
+            if (f.isFile()) {
                 return f.delete();
-            else if (f.isDirectory()) {
+            } else if (f.isDirectory()) {
                 File[] files = f.listFiles();
 
                 for (int i = 0; i < files.length; i++) {
 
                     if (files[i].lastModified() < deletetime.getTimeInMillis()) {
 
-                        if (!deleteFile(files[i]))
+                        if (!deleteFile(files[i])) {
                             return false;
+                        }
                     }
                 }
                 return true;
-            } else
+            } else {
                 return false;
-        } else
+            }
+        } else {
             return false;
+        }
     }
 
     /**
@@ -92,14 +95,15 @@ public class FileUtil {
         File[] subFolders = folder.listFiles(new FileFilter() {// 运用内部匿名类获得文件
             @Override
             public boolean accept(File pathname) {// 实现FileFilter类的accept方法
-                if (pathname.isFile())// 如果是文件
+                if (pathname.isFile()) { // 如果是文件
                     countFiles++;
-                else
-                    // 如果是目录
+                } else { // 如果是目录
                     countFolders++;
+                }
                 if (pathname.isDirectory()
-                        || (pathname.isFile() && pathname.getName().toLowerCase().contains(keyWord.toLowerCase())))// 目录或文件包含关键字
+                        || (pathname.isFile() && pathname.getName().toLowerCase().contains(keyWord.toLowerCase()))) { // 目录或文件包含关键字
                     return true;
+                }
                 return false;
             }
         });
@@ -125,21 +129,24 @@ public class FileUtil {
     // 迭代删除目录下的文件
     public static boolean deleteFile(File f) {
         if (f.exists()) {
-            if (f.isFile())
+            if (f.isFile()) {
                 return f.delete();
-            else if (f.isDirectory()) {
+            } else if (f.isDirectory()) {
                 File[] files = f.listFiles();
                 for (int i = 0; i < files.length; i++) {
-                    if (!deleteFile(files[i]))
+                    if (!deleteFile(files[i])) {
                         return false;
+                    }
                 }
 
                 // return f.delete(); 连带目录一起删除
                 return true;
-            } else
+            } else {
                 return false;
-        } else
+            }
+        } else {
             return false;
+        }
     }
 
     // 判断文件是否存在
@@ -148,22 +155,25 @@ public class FileUtil {
         java.io.File f = new java.io.File(path);
 
         if (f.exists()) {
-            if (f.isFile())
+            if (f.isFile()) {
                 return f.delete();
-            else if (f.isDirectory()) {
+            } else if (f.isDirectory()) {
                 File[] files = f.listFiles();
 
                 for (int i = 0; i < files.length; i++) {
                     // System.out.println((files[i].getName()).substring(10,18));
                     // System.out.println(time);
-                    if (((files[i].getName()).substring(10, 18)).equals(time))
+                    if (((files[i].getName()).substring(10, 18)).equals(time)) {
                         return true;
+                    }
                 }
                 return false;
-            } else
+            } else {
                 return false;
-        } else
+            }
+        } else {
             return false;
+        }
     }
 
     public static boolean isExists_file(String filepath) {
@@ -211,12 +221,12 @@ public class FileUtil {
      * @throws IOException
      */
     private File multipartToFile(MultipartFile multfile) throws IOException {
-        CommonsMultipartFile cf = (CommonsMultipartFile)multfile;
+        CommonsMultipartFile cf = (CommonsMultipartFile) multfile;
         //这个myfile是MultipartFile的
         DiskFileItem fi = (DiskFileItem) cf.getFileItem();
         File file = fi.getStoreLocation();
         //手动创建临时文件
-        if(file.length() < CpaConstants.MIN_FILE_SIZE){
+        if (file.length() < CpaConstants.MIN_FILE_SIZE) {
             File tmpFile = new File(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") +
                     file.getName());
             multfile.transferTo(tmpFile);

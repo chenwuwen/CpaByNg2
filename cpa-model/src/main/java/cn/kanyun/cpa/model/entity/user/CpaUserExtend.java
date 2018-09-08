@@ -28,6 +28,7 @@ public class CpaUserExtend extends BaseEntity {
     }
 
 
+    @Override
     public Long getId() {
         return id;
     }

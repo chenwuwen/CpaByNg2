@@ -3,7 +3,6 @@ package cn.kanyun.cpa.interceptor;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.util.JwtUtil;
 import io.jsonwebtoken.Claims;
-import lombok.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.lang.Nullable;
