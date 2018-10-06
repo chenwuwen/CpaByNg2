@@ -145,72 +145,7 @@
         在filter接口要实现三个方法：init(),destroy(),dofilter();分别是初始化，析构，和过滤，其中大部分时间花费在doFilter()方法上
         特点：可以在响应之前修改Request和Response的头部，只能转发请求，不能直接发出响应。filter可用来进行字符编码的过滤，检测用户是否登陆的过滤，禁止页面缓存等
         1).filter的init方法在容器初始化时加载。第一次加载容器执行顺序随机，以后再次加载顺序以第一次加载顺序为准。
-        2).filter的doFilter方法在请求url时执行，如果有多个filter匹配，则按照<filter-mapping>顺序执行(前提是doFilter方法里面最后要调用FilterChain的doFilter方法，这个方法作用是继续执行下个filter,如果没有加，则不执行下面的filter)-->
-
-    <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
-    <!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
-    <!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
-    <!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
-    <filter>
-        <filter-name>shiroFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
-        <init-param>
-            <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
-            <param-name>targetFilterLifecycle</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>shiroFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!--字符编码过滤-->
-    <filter>
-        <filter-name>Encoding</filter-name>
-        <filter-class>
-            org.springframework.web.filter.CharacterEncodingFilter
-        </filter-class>
-        <!--其中encoding用来设置编码格式，forceEncoding用来设置是否理会 request.getCharacterEncoding()方法，设置为true则强制覆盖之前的编码格式-->
-        <!--当Servlet容器启动的时候，会读取web.xml中对于过滤器的配置信息， 读取到<init-param>中的子标签<param-name>encoding和forceEncoding所对应的<param-value>的值，再通过调用该类setEncoding(String encoding)和setForceEncoding(boolean forceEncoding) 将值注入到这连个字段中-->
-        <init-param>
-            <param-name>encoding</param-name>
-            <param-value>utf8</param-value>
-        </init-param>
-        <!--设置foreEncoding为true会覆盖掉request.getCharacterEncoding()中的方法-->
-        <init-param>
-            <param-name>forceEncoding</param-name>
-            <param-value>true</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>Encoding</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!--此过滤器是为了解决hibernate报错：Could not obtain transaction-synchronized Session for current thread-->
-    <filter>
-        <filter-name>SpringOpenSessionInViewFilter</filter-name>
-        <filter-class>org.springframework.orm.hibernate5.support.OpenSessionInViewFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>SpringOpenSessionInViewFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
-    <!--druid WebStatFilter用于采集web-jdbc关联监控的数据-->
-    <filter>
-        <filter-name>DruidWebStatFilter</filter-name>
-        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
-        <init-param>
-            <param-name>exclusions</param-name>
-            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
-        </init-param>
-    </filter>
-    <filter-mapping>
-        <filter-name>DruidWebStatFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+        2).filter的doFilter方法在请求url时执行，如果有多个filter匹配，则按照<filter-mapping>顺序执行(前提是doFilter方法里面最后要调用FilterChain的doFilter方法，这个方法作用是继续执行下个filter,如果没有加，则不执行下面的filter,其执行顺序是根据filter在web.xml的注册顺序决定的)-->
 
     <!-- 通过CORS技术实现AJAX跨域访问 -->
     <filter>
@@ -238,6 +173,75 @@
         <filter-name>corsFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <!--字符编码过滤-->
+    <filter>
+        <filter-name>Encoding</filter-name>
+        <filter-class>
+            org.springframework.web.filter.CharacterEncodingFilter
+        </filter-class>
+        <!--其中encoding用来设置编码格式，forceEncoding用来设置是否理会 request.getCharacterEncoding()方法，设置为true则强制覆盖之前的编码格式-->
+        <!--当Servlet容器启动的时候，会读取web.xml中对于过滤器的配置信息， 读取到<init-param>中的子标签<param-name>encoding和forceEncoding所对应的<param-value>的值，再通过调用该类setEncoding(String encoding)和setForceEncoding(boolean forceEncoding) 将值注入到这连个字段中-->
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>utf8</param-value>
+        </init-param>
+        <!--设置foreEncoding为true会覆盖掉request.getCharacterEncoding()中的方法-->
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>Encoding</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 配置Shiro过滤器,先让Shiro过滤系统接收到的请求 -->
+    <!-- 这里filter-name必须对应applicationContext.xml中定义的<bean id="shiroFilter"/> -->
+    <!-- 使用[/*]匹配所有请求,保证所有的可控请求都经过Shiro的过滤 -->
+    <!-- 通常会将此filter-mapping放置到最前面(即其他filter-mapping前面),以保证它是过滤器链中第一个起作用的 -->
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <!-- 该值缺省为false,表示生命周期由SpringApplicationContext管理,设置为true则表示由ServletContainer管理 -->
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+
+    <!--此过滤器是为了解决hibernate报错：Could not obtain transaction-synchronized Session for current thread-->
+    <filter>
+        <filter-name>SpringOpenSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate5.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SpringOpenSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--druid WebStatFilter用于采集web-jdbc关联监控的数据-->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
     <!--自定义的检测登录状态的过滤器,此过滤器将返回包含有登录状态的json对象-->
     <filter>
         <filter-name>LoginStatusFilter</filter-name>

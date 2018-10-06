@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.model.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Page<E> {
@@ -101,4 +102,32 @@ public class Page<E> {
         this.pageNo = pageNo;
     }
 
+    /**
+     * 计算以当前页为中心的页面列表,如"首页,23,24,25,26,27,末页"，即页数过多,不能全部在页面显示,只能显示一部分
+     * @param count 需要计算的列表大小,即页面展示(count+1)个页码
+     * @return pageNo列表
+     * 在jsp页面可以使用
+     * <%
+     *      Page p = (Page) request.getAttribute("page");
+     *      List showPageNos = p.getSlider(6);
+     * %>
+     * page为response 返回的键值对的key,应根据实际代码来判断其取值
+     * 在需要循环的页码出使用 <c:forEach items="<%=showPageNos%>" var="page">即可
+     */
+    public List<Integer> getSlider(int count) {
+        int halfSize = count / 2;
+
+        int startPageNo = Math.max(getPageNo() - halfSize, 1);
+        int endPageNo = Math.min(startPageNo + count - 1, getTotalPages());
+
+        if (endPageNo - startPageNo < count) {
+            startPageNo = Math.max(endPageNo - count, 1);
+        }
+
+        List<Integer> showPageNums = new ArrayList();
+        for (int i = startPageNo; i <= endPageNo; i++) {
+            showPageNums.add(i);
+        }
+        return showPageNums;
+    }
 }
