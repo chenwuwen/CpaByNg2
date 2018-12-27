@@ -13,6 +13,10 @@ import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
@@ -40,6 +44,7 @@ import java.util.Map;
  * 这样的话只是在页面上打印出字符串，而不跳转。控制器用@Controller注解即可
  * @author Kanyun
  */
+@Api(value = "/api/user",tags = "用户管理模块")
 @Controller
 @RequestMapping("/api/user")
 public class UserController {
@@ -58,7 +63,8 @@ public class UserController {
 
     /**
      * @Author: kanyun
-     * @Description: 注册Ajax检查用户名是否可用
+     * @Description:
+     * 注册Ajax检查用户名是否可用
      * @Date: 2017/8/16 17:02
      * @params:
      */
@@ -92,7 +98,8 @@ public class UserController {
      * @Description: (新方法 ， 统一返回值 ， 保留旧方法)注册Ajax检查用户名是否可用
      * @date 2017/11/13 10:21
      */
-    @RequestMapping("/checkname")
+    @ApiOperation(value = "/checkName",notes = "注册Ajax检查用户名是否可用",httpMethod = "GET",response = CpaResult.class)
+    @RequestMapping("/checkName")
     @ResponseBody
     public CpaResult checkName(@RequestParam("username") String username) {
         Object[] params = {username};
@@ -111,10 +118,12 @@ public class UserController {
 
     /**
      * @Author: kanyun
-     * @Description: 用户注册 @RequestMapping，value可以匹配多个多个路径
+     * @Description:
+     * 用户注册通过分享链接 @RequestMapping，value可以匹配多个多个路径
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @ApiOperation(value = "/register/{inviteUser}",notes = "注册通过分享链接",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping(value = {"/register/{inviteUser}", "/register"})
     @ResponseBody
     public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, @PathVariable(value = "inviteUser", required = false) Long inviteUser) throws NoSuchAlgorithmException {
@@ -156,9 +165,11 @@ public class UserController {
      * @param
      * @return
      * @author Kanyun
-     * @Description: 上传用户头像
+     * @Description:
+     * 上传用户头像
      * @date 2017/11/21 20:31
      */
+    @ApiOperation(value = "/upLoadUserHeaderImg",notes = "上传用户头像",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping("/upLoadUserHeaderImg")
     @ResponseBody
     public CpaResult upLoadUserHeaderImg(@RequestParam("uploadFile") MultipartFile uploadFile, HttpServletRequest request) {
@@ -182,11 +193,13 @@ public class UserController {
     }
 
     /**
-     * @describe: 获取用户列表
+     * @describe:
+     * 获取用户列表
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/23 0023 10:36
      */
+    @ApiOperation(value = "/getUserList",notes = "获取用户列表",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping("/getUserList")
     @ResponseBody
     public CpaResult getUserList(CpaUserDto cpaUserDto) {
@@ -202,11 +215,13 @@ public class UserController {
     }
 
     /**
-     * @describe: 获取用户详细信息
+     * @describe:
+     * 获取用户详细信息
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/26 0026 16:39
      */
+    @ApiOperation(value = "/getUserDetail/{userId}",notes = "获取用户详细信息",response = CpaResult.class,httpMethod = "GET")
     @RequestMapping("/getUserDetail/{userId}")
     @ResponseBody
     public CpaResult getUserDetail(@PathVariable("userId") Long userId) {
@@ -229,11 +244,13 @@ public class UserController {
     }
 
     /**
-     * @describe: 删除用户
+     * @describe:
+     * 删除用户
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/26 0026 16:39
      */
+    @ApiOperation(value = "/delUser/{userId}",notes = "删除用户",httpMethod = "GET",response = CpaResult.class,produces="application/json")
     @RequestMapping("/delUser/{userId}")
     @ResponseBody
     public CpaResult delUser(@PathVariable("userId") Long userId) {
@@ -249,11 +266,13 @@ public class UserController {
     }
 
     /**
-     * @describe: 修改用户
+     * @describe:
+     * 修改用户
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/26 0026 16:39
      */
+    @ApiOperation(value = "/updUser",notes = "修改用户",httpMethod = "POST",response = CpaResult.class,produces="application/json")
     @RequestMapping("/updUser")
     @ResponseBody
     public CpaResult updUser(CpaUserDto userDto) {
@@ -272,12 +291,17 @@ public class UserController {
     }
 
     /**
-     * @describe: 跳转网页 (目前只是使用在用户扫描二维码,跳转到注册页面)
+     * @describe:
+     * 跳转网页 (目前只是使用在用户扫描二维码,跳转到注册页面)
      * @params: inviteUser:推荐人ID
      * @Author: Kanyun
      * @Date: 2018/2/23 0023 17:48
      */
     @RequestMapping(value = {"/skipWebPage/{inviteUser}", "/skipWebPage/"})
+    @ApiOperation(value = "跳转到注册页面",notes = "可能会携带推荐人ID,也可能不包含",httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "inviteUser",value = "推荐人ID",dataType = "Integer",paramType = "path",required = false)
+    })
     public String skipWebPage(@PathVariable(value = "inviteUser", required = false) Long inviteUser) {
         return "index";
     }
@@ -286,9 +310,11 @@ public class UserController {
      * @param
      * @return
      * @author Kanyun
-     * @Description: 用户注销(已被shiro接管, shiro拦截此url, 进入SysLogoutFilter过滤器)
+     * @Description:
+     * 用户注销(已被shiro接管, shiro拦截此url, 进入SysLogoutFilter过滤器)
      * @date 2017/11/25 15:57
      */
+    @Deprecated
     @RequestMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         CpaUser user = WebUtil.getSessionUser(request);

@@ -10,6 +10,8 @@ import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.QrcodeUtils;
 import cn.kanyun.cpa.util.WebPathUtil;
 import cn.kanyun.cpa.util.WebUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -36,19 +38,6 @@ import java.time.LocalDateTime;
  * StringBuffer url = request.getRequestURL();
  * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
  * <p>
- * 1.获取域名，如：http://f0rb.iteye.com/
- * StringBuffer url = request.getRequestURL();
- * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
- * 2.获取带部署环境上下文的域名，如： http://www.iteye.com/admin/
- * StringBuffer url = request.getRequestURL();
- * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
- * <p>
- * 1.获取域名，如：http://f0rb.iteye.com/
- * StringBuffer url = request.getRequestURL();
- * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append("/").toString();
- * 2.获取带部署环境上下文的域名，如： http://www.iteye.com/admin/
- * StringBuffer url = request.getRequestURL();
- * String tempContextUrl = url.delete(url.length() - request.getRequestURI().length(), url.length()).append(request.getServletContext().getContextPath()).append("/").toString();
  */
 
 /**
@@ -63,7 +52,7 @@ import java.time.LocalDateTime;
 /**
  * 该类为用户分享类,包括生成分享链接,二维码等,如果有用户是从分享链接注册的话,会有相应奖励
  */
-
+@Api(value = "/api/share",tags = "分享模块")
 @Controller
 @RequestMapping("/api/share")
 public class ShareController {
@@ -79,10 +68,12 @@ public class ShareController {
 
 
     /**
-     * @describe: 生成分享二维码, 与链接, 同时生成,(先查看该用户是否有二维码，有则返回,无则生成)
+     * @describe:
+     * 生成分享二维码, 与链接, 同时生成,(先查看该用户是否有二维码，有则返回,无则生成)
      * @param request
      * @return
      */
+    @ApiOperation(value = "/generateChain",notes = "生成分享二维码, 与链接, 同时生成,(先查看该用户是否有二维码，有则返回,无则生成)",httpMethod = "GET",response = CpaResult.class)
     @RequestMapping("/generateChain")
     @ResponseBody
     public CpaResult generateChain(HttpServletRequest request) {

@@ -7,6 +7,10 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserComment;
 import cn.kanyun.cpa.service.user.UserCommentService;
 import cn.kanyun.cpa.util.WebUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,8 +26,9 @@ import java.time.LocalDateTime;
 /**
  * Created by KANYUN on 2017/10/24.
  */
+@Api(value = "/api/userComment",tags = "试题评论模块",produces="application/json",consumes="application/json")
 @Controller
-@RequestMapping("/api/usercomment")
+@RequestMapping("/api/userComment")
 public class UserCommentController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserCommentController.class);
@@ -33,10 +38,12 @@ public class UserCommentController {
 
     /**
      * @Author: kanyun
-     * @Description: 保存用户评论
+     * @Description:
+     * 保存用户评论
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @ApiOperation(value = "/saveComment",notes = "保存用户评论",httpMethod = "POST",response = CpaResult.class,produces="application/json")
     @RequestMapping("/saveComment")
     @ResponseBody
     public CpaResult saveComment(@RequestBody UserComment userComment, HttpServletRequest request) {
@@ -62,10 +69,16 @@ public class UserCommentController {
 
     /**
      * @Author: kanyun
-     * @Description: 获取用户评论
+     * @Description:
+     * 获取用户评论列表[根据用户查询]
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @ApiOperation(value = "/getUserComment",notes = "获取用户评论列表[根据用户查询]",httpMethod = "GET",response = CpaResult.class,produces="application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "pageNo",value = "页码",dataType = "int",paramType = "query",example = "1"),
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量",dataType = "int",paramType = "query",example = "10")
+    })
     @RequestMapping("/getUserComment")
     @ResponseBody
     public CpaResult getUserComment(Integer pageNo, Integer pageSize, HttpServletRequest request) {
@@ -88,10 +101,17 @@ public class UserCommentController {
 
     /**
      * @Author: kanyun
-     * @Description: 获取评论
+     * @Description:
+     * 获取评论[根据试题查询]
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @ApiOperation(value = "/getItemComment/{reId}",notes = "获取评论[根据试题查询]",response = CpaResult.class,httpMethod = "GET",produces="application/json")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "reId",value = "试题ID",required=true,paramType="path"),
+            @ApiImplicitParam(name = "pageNo",value = "页码",paramType = "query"),
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量",paramType = "query")
+    })
     @RequestMapping("/getItemComment/{reId}")
     @ResponseBody
     public CpaResult getItemComment(@PathVariable("reId") Long reId, Integer pageNo, Integer pageSize) {

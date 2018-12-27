@@ -7,6 +7,8 @@ import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import cn.kanyun.cpa.service.user.AttendanceService;
 import cn.kanyun.cpa.util.WebUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 用户签到
  */
-
+@Api(value = "/api/user",tags = "签到模块")
 @Controller
 @RequestMapping("/api/user")
 public class AttendanceController {
@@ -31,10 +33,12 @@ public class AttendanceController {
 
     /**
      * @describe:
+     * 签到
      * @params:[request]
      * @Author: Kanyun
      * @Date: 2017/12/12 0012 13:33
      */
+    @ApiOperation(value = "/attendance",notes = "用户签到",response = CpaResult.class,produces="application/json")
     @RequestMapping("/attendance")
     @ResponseBody
     public CpaResult signIn(HttpServletRequest request) {

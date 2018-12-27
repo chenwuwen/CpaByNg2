@@ -82,6 +82,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
+        <!--swagger2 引用生成 RestAPI文档-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
 
     </dependencies>
 

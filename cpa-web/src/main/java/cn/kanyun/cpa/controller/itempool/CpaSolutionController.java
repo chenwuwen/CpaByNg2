@@ -9,6 +9,8 @@ import cn.kanyun.cpa.queue.UserAnswerLogTask;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import cn.kanyun.cpa.service.user.AnswerRecordService;
 import cn.kanyun.cpa.util.WebUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -29,6 +31,7 @@ import java.util.Map;
  * @author KANYUN
  * @date 2017/6/17
  */
+@Api(value = "/api/solution",tags = "答案管理模块")
 @Controller
 @RequestMapping("/api/solution")
 public class CpaSolutionController {
@@ -42,10 +45,12 @@ public class CpaSolutionController {
 
     /**
      * @Author: kanyun
-     * @Description: 检查试题答案
+     * @Description:
+     * 检查试题答案
      * @Date: 2017/8/16 15:03
      * @params:
      */
+    @ApiOperation(value = "correctItem",notes = "检查试题答案",httpMethod = "POST",response = CpaResult.class )
     @RequestMapping("/correctItem")
     @ResponseBody
 /*    @RequestBody接收的是一个Json对象的字符串，而不是一个Json对象。然而在ajax请求往往传的都是Json对象，后来发现用 JSON.stringify(data)的方式就能将对象变成字符串。
@@ -83,7 +88,8 @@ public class CpaSolutionController {
     }
 
     /**
-     * @Description: 拼凑AnswerRecord
+     * @Description:
+     * 拼凑AnswerRecord
      * @param result 回答记录的结果
      * @param user  回答试题用户
      * @return

@@ -13,16 +13,31 @@ import cn.kanyun.cpa.model.enums.ExamEnum;
 import cn.kanyun.cpa.redis.service.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -33,6 +48,7 @@ import java.util.*;
  * 方法，其实根据HTTP协议，HTTP支持一系列提交方法（GET，POST，PUT，DELETE），同一个URL都可以使用这几种提交方式
  * 事实上SpringMVC正是通过将同一个URL的不同提交方法对应到不同的方法上达到RESTful
  */
+@Api(value = "/api/unitExam",tags = "试题管理模块")
 @Controller
 @RequestMapping("/api/unitExam")
 public class CpaRepertoryController {
@@ -46,11 +62,18 @@ public class CpaRepertoryController {
 
     /**
      * @Author: kanyun
-     * @Description: 获取试题列表（单元测试）required = false表示参数为可选,
+     * @Description:
+     * 获取试题列表（单元测试）required = false表示参数为可选,
      * 如果不加此配置,当请求的uri不带此参数时会报400错误码
      * @Date: 2017/8/16 14:58
      * @params:
      */
+    @ApiOperation(value = "/getUnitExam/{testType}/{pageNo}/{pageSize}", notes = "请求试题列表【单元测试】", httpMethod = "POST", response = CpaResult.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "testType",value = "试题类型",dataType = "String",paramType = "path",required = true),
+            @ApiImplicitParam(name = "pageNo",value = "页码",dataType = "Integer",paramType = "path",required = false),
+            @ApiImplicitParam(name = "pageSize",value = "每页显示数量",dataType = "Integer",paramType = "path",required = false)
+    })
     @RequestMapping("/getUnitExam/{testType}/{pageNo}/{pageSize}")
     @ResponseBody
     public CpaResult getUnitExam(@PathVariable("testType") String testType, @PathVariable(value = "pageNo", required = false) Integer pageNo, @PathVariable(value = "pageSize", required = false) Integer pageSize) {
@@ -95,10 +118,12 @@ public class CpaRepertoryController {
 
     /**
      * @Author: kanyun
-     * @Description: 新增试题【保存单元测试】
+     * @Description:
+     * 新增试题【保存单元测试】
      * @Date: 2017/9/18 17:21
      * @params: , List<CpaOption> cpaOptions,CpaSolution cpaSolution
      */
+    @ApiOperation(value = "/addUnitExam",notes = "新增试题【保存单元测试】",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping("/addUnitExam")
     @ResponseBody
     public CpaResult addUnitExam(@RequestBody ItemForm itemForm) {
@@ -129,9 +154,14 @@ public class CpaRepertoryController {
      * void方法不定义HttpServletResponse类型的入参，HttpServletResponse对象通过RequestContextHolder上下文获取
      * 注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
      * @author Kanyun
-     * @Description: 导出word
+     * @Description:
+     * 试题导出到word
      * @date 2017/11/16 11:39
      */
+    @ApiOperation(value = "/exportWord/{typeCode}",notes = "试题导出到word",httpMethod = "GET")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "typeCode",value = "试题类型编码",dataType ="String",paramType = "path")
+    })
     @RequestMapping(value = "/exportWord/{typeCode}", method = RequestMethod.GET, produces = {"application/msword;charset=UTF-8"})
     public void exportWord(@PathVariable("typeCode") String typeCode, HttpServletResponse response) {
         try {
@@ -151,11 +181,16 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe: 获取单个试题详情
+     * @describe:
+     * 获取单个试题详情
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/12  13:38
      */
+    @ApiOperation(value = "/getExamDetail/{id}",notes = "获取单个试题详情",httpMethod = "GET",response = CpaResult.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "id",value = "试题ID",dataType = "Long",paramType = "path")
+    })
     @RequestMapping("/getExamDetail/{id}")
     @ResponseBody
     public CpaResult getExamDetail(@PathVariable("id") Long id) {
@@ -192,11 +227,16 @@ public class CpaRepertoryController {
 
 
     /**
-     * @describe: 删除试题【单元测试】
+     * @describe:
+     * 删除试题【单元测试】
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/9  17:40
      */
+    @ApiOperation(value = "/delUnitExam/{reId}",notes = "删除试题【单元测试】",httpMethod = "GET",response = CpaResult.class)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "reId",value = "试题ID",dataType = "Long",paramType = "path")
+    })
     @RequestMapping("/delUnitExam/{reId}")
     @ResponseBody
     public CpaResult delUnitExam(@PathVariable("reId") Long reId) {
@@ -212,11 +252,13 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe: 修改试题
+     * @describe:
+     * 修改试题
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/11 0011 11:39
      */
+    @ApiOperation(value = "/updUnitExam",notes = "修改试题",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping("/updUnitExam")
     @ResponseBody
     public CpaResult updUnitExam(@RequestBody ItemForm itemForm) {
@@ -240,11 +282,13 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe: 获取试题列表（仅试题本身,删除修改试题使用）
+     * @describe:
+     * 获取试题列表（仅试题本身,删除修改试题使用）
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/11  9:32
      */
+    @ApiOperation(value = "/getListExam",notes = "获取试题列表（仅试题本身,删除修改试题使用）",httpMethod = "GET",response = CpaResult.class)
     @RequestMapping(value = "/getListExam", produces = {"application/json;charset=utf-8"})
     @ResponseBody
     public CpaResult getListExam(@RequestBody ItemForm itemForm) {

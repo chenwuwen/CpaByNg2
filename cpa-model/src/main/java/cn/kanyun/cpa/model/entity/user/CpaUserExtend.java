@@ -12,7 +12,10 @@ public class CpaUserExtend extends BaseEntity {
     private String shareChain;
     private String shareQrUrl;
     private Integer reapSignInDay;
-    private LocalDateTime createDate; //此时间是创建分享链接的时间
+    /**
+     * 此时间是创建分享链接的时间
+     */
+    private LocalDateTime createDate;
 
     public CpaUserExtend() {
     }

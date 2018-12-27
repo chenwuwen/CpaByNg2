@@ -1,23 +1,16 @@
 package cn.kanyun.cpa.job;
 
 import cn.kanyun.cpa.util.IpMacUtil;
-import com.alibaba.druid.support.http.util.IPAddress;
-import com.alibaba.dubbo.common.URL;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
-import org.apache.curator.framework.recipes.locks.InterProcessSemaphoreMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -31,17 +24,17 @@ public class SaveUserAnswerRecordJob {
     /**
      * zookeeper地址[加端口号]，多个地址以逗号分隔
      */
-    private static String zkAddr = "115.47.155.3:2181";
+    private static final String zkAddr = "115.47.155.3:2181";
 
     /**
      * 超时时间
      */
-    private static Integer timeout = 100;
+    private static final Integer timeout = 100;
 
     /**
      * 锁路径,该类的操作都是基于该目录进行的
      */
-    private static String lockPath = "/temp";
+    private static final String lockPath = "/tmp";
 
 
     /**

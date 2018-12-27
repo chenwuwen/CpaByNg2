@@ -2,6 +2,8 @@ package cn.kanyun.cpa.controller.common;
 
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.util.ValidateCode;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -11,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-
+@Api(value = "/api", tags = "公共控制层")
 @Controller
 @RequestMapping(value = "/api")
 public class CommonController {
@@ -22,6 +24,7 @@ public class CommonController {
      * @param response
      * @throws IOException
      */
+    @ApiOperation(value = "/validateCode", notes = "请求验证码", httpMethod = "GET")
     @RequestMapping(value = "/validateCode")
     public void validateCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setHeader("Cache-Control", "no-cache");
