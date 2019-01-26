@@ -6,7 +6,7 @@
 #三种写法，其中<tag>和<digest> 是可选项，如果没有选择，那么默认值为latest
 
 #以centos为基础镜像(默认会从dockerhub下载镜像.也可以指定仓库地址Form <host>/<project>/<repo>:<tag>),[也可以使用alipine Docker镜像是只有5M的轻量级Linux系统]
-Form centos:7
+FROM centos:7
 
 #指定镜像作者
 MAINTAINER kanyun 2504954849@qq.com
@@ -23,6 +23,27 @@ MAINTAINER kanyun 2504954849@qq.com
 
 LABEL version="1.0" description="这是CPA后台项目Docker镜像" by="kanyun"
 
+#功能为设置环境变量
+#语法有两种
+#1. ENV <key> <value>
+#2. ENV <key>=<value> ...
+#两者的区别就是第一种是一次设置一个，第二种是一次设置多个
+
+#设置环境变量,通过ENV定义的环境变量，可以被后面的所有指令中使用($MAVEN_HOME),通过ENV定义的环境变量，会永久的保存到该镜像创建的任何容器中
+#可以在后续容器的操作中使用
+#定义环境变量的同时，可以引用已经定义的环境变量,在ENV指令中，可以直接引用如下环境变量：
+#HOME，用户主目录
+#HOSTNAME，默认容器的主机名
+#PATH，
+#TERM，默认xterm
+
+#这样才可以使用 mvn 命令
+ENV MAVEN_HOME "/usr/local/apache-maven-3.6.0"
+ENV JAVA_HOME "/usr/local/jdk1.8"
+ENV JAVA_DOWNLOAD_URL "https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz"
+ENV PATH $MAVEN_HOME/bin:$PATH
+ENV PATH $JAVA_HOME/bin:$PATH
+
 #功能为运行指定的命令，RUN命令有两种格式
 #1. RUN <command>
 #2. RUN ["executable", "param1", "param2"]
@@ -37,26 +58,21 @@ LABEL version="1.0" description="这是CPA后台项目Docker镜像" by="kanyun"
 #注意：多行命令不要写多个RUN，原因是Dockerfile中每一个指令都会建立一层.多少个RUN就构建了多少层镜像，会造成镜像的臃肿、多层，不仅仅增加了构件部署的时间，还容易出错,RUN书写时的换行符是 \
 
 #安装git 和 maven
-RUN　echo "Start building docker image" \
-     echo "Start downloading essential software" \
-     yum install java-1.8.0-openjdk* -y \
-     yum install git -y \
-     yum install maven -y \
-     wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/
-     echo "downloading essential software over" \
-     cd /usr/local/ && tar xzvf apache-maven-bin.tar.gz -C /opt \
-     git clone https://github.com/chenwuwen/CpaByNg2.git -b master \
-     java -version
+RUN echo  " Start building docker image " \
+    echo  " Start downloading essential software " \
+    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JAVA_DOWNLOAD_URL  -P /usr/local \
+    yum install git -y \
+    yum install maven -y \
+    wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/apache-maven.tar.gz \
+    echo  " downloading essential software over " \
+    cd /usr/local/ \
+    tar xzvf apache-maven.tar.gz  \
+    tar xzvf jdk-8u201-linux-x64.tar.gz  \
+    mv jdk1* jdk1.8 \
+    git clone https://github.com/chenwuwen/CpaByNg2.git -b master
 
 
-#功能为设置环境变量
-#语法有两种
-#1. ENV <key> <value>
-#2. ENV <key>=<value> ...
-#两者的区别就是第一种是一次设置一个，第二种是一次设置多个
 
-#设置环境变量,这样才可以使用 mvn 命令
-ENV MAVEN_HOME="/usr/local/apache-maven-3.6.0"
 
 #设置工作目录，对RUN,CMD,ENTRYPOINT,COPY,ADD生效。如果不存在则会创建，也可以设置多次( 切换目录。可以多次切换工作目录)
 #如：WORKDIR /a
@@ -73,8 +89,11 @@ ENV MAVEN_HOME="/usr/local/apache-maven-3.6.0"
 #切换到git clone 目录中去（相当于cd）
 WORKDIR /usr/local/CpaByNg2
 
-#下载maven依赖
-RUN mvm clean install
+#下载maven依赖(由于oa-remote是原来项目的jar包,不在公网上,所以先把这个包打入到本地)
+RUN java -version \
+    mvn -version \
+    mvn install:install-file -Dfile=lib/oa-remote-1.1.0.jar -DgroupId=com.ruifight -DartifactId=oa-remote -Dversion=1.1.0 -Dpackaging=jar \
+    mvm clean install
 
 #功能为暴露容器运行时的监听端口给宿主机,但是EXPOSE并不会使容器访问主机的端口,如果想使得容器与宿主机的端口有映射关系，必须在容器启动的时候加上 -p参数,也可以同时映射多个端口 EXPOSE port1 port2 port3
 EXPOSE 8899
@@ -88,7 +107,7 @@ EXPOSE 8899
 #如果把<src>写成一个url，那么ADD就类似于wget命令
 #尽量不要把<src>写成一个文件夹，如果<src>是一个文件夹了，复制整个目录的内容,包括文件系统元数据
 
-ADD
+#ADD
 
 
 #一个复制命令.语法如下：
@@ -96,7 +115,7 @@ ADD
 #2. COPY ["<src>",... "<dest>"]
 #与ADD的区别:COPY的<src>只能是本地文件，ADD多了自动解压和支持URL路径的功能,其他用法一致
 
-COPY
+#COPY
 
 
 
@@ -109,7 +128,7 @@ COPY
 #VOLUME /var/log /var/db
 #一般的使用场景为需要持久化存储数据时:容器使用的是AUFS，这种文件系统不能持久化数据，当容器关闭后，所有的更改都会丢失。所以当数据需要持久化时用这个命令。
 
-VOLUME [/tmp]
+VOLUME ["/tmp"]
 
 
 # 设置启动容器的用户，可以是用户名或UID，所以，只有下面的两种写法是正确的
@@ -130,7 +149,7 @@ USER root
 #语法：ARG <name>[=<default value>]
 #我们可以定义一个或多个参数，如果我们给了ARG定义的参数默认值，那么当build镜像时没有指定参数值，将会使用这个默认值
 
-ARG
+#ARG
 
 
 #这个命令只对当前镜像的子镜像生效，比如当前镜像为A，在Dockerfile种添加：ONBUILD RUN ls -al
@@ -185,7 +204,7 @@ HEALTHCHECK --interval=1m --timeout=3s --retries=3 CMD curl -f http://localhost:
 #不要把RUN和CMD搞混了。RUN是构件容器时就运行的命令以及提交运行结果，CMD是容器启动时执行的命令，在构件时并不运行，构件时紧紧指定了这个命令到底是个什么样子
 
 #使用maven Tomcat插件来启动项目
-CMD ["mvn" "tomcat7:run"]
+CMD ["mvn","tomcat7:run"]
 
 #功能是启动时的默认命令 语法如下：
 #1. ENTRYPOINT ["executable", "param1", "param2"]
@@ -199,4 +218,4 @@ CMD ["mvn" "tomcat7:run"]
 # 如果我们在Dockerfile种同时写了ENTRYPOINT和CMD，并且CMD指令不是一个完整的可执行命令，那么CMD指定的内容将会作为ENTRYPOINT的参数
 # 如果我们在Dockerfile种同时写了ENTRYPOINT和CMD，并且CMD是一个完整的指令，那么它们两个会互相覆盖，谁在最后谁生效
 
-ENTRYPOINT
+#ENTRYPOINT
