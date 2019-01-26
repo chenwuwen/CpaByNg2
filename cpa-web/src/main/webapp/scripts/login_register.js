@@ -1,6 +1,6 @@
 $(function () {
     //登陆
-    $('#loginform').bootstrapValidator({
+    $('#loginForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -71,7 +71,7 @@ $(function () {
         });
 
     //注册
-    $('#registerform').bootstrapValidator({
+    $('#registerForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',

@@ -10,11 +10,16 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
+/**
+ * 敏感词过滤器
+ */
 public class KeyCodeFilter implements Filter {
 
     private Properties pp = new Properties();
 
-    //非法词、敏感词、特殊字符、配置在初始化参数中
+    /**
+     * 非法词、敏感词、特殊字符、配置在初始化参数中
+     */
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
         //配置文件位置

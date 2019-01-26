@@ -152,7 +152,7 @@ public class UnifiedExceptionJsonHandler {
         if (e instanceof Exception) {
             CpaResult result = new CpaResult();
             result.setState(CpaConstants.OPERATION_ERROR);
-            result.setMsg("参数解析失败");
+            result.setMsg(e.toString());
             return result;
         }
 

@@ -52,7 +52,8 @@ public class CorsFilter implements Filter {
     }
 
     /**
-     * @description 通过CORS技术实现AJAX跨域访问,只要将CORS响应头写入response对象中即可
+     * @description
+     * 通过CORS技术实现AJAX跨域访问,只要将CORS响应头写入response对象中即可
      * @param req
      * @param res
      * @param chain

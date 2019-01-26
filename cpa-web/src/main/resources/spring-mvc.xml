@@ -78,16 +78,35 @@
 
     <!-- 定义跳转的文件的前后缀 ，视图模式配置 -->
     <!-- 配置ViewResolver视图解析器 -->
-    <bean
-            class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <!-- 这里的配置是自动给后面servlet的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
-        <property name="prefix" value="/"/>
-        <property name="suffix" value=".html"/>
-        <property name="contentType" value="text/html;charset=UTF-8"/>
-        <!--order表示优先级,O表示优先级最高,可以配置多个视图解析器(视图解析器有多种如：FreeMarkerViewResolver,当配置多个视图解析器时
-        优先级高的解析器如果解析的到，就不会再往下解析，如果解析不到,就给优先级低的解析器,但是对于解析器InternalResourceViewResolver来说，不管能不能解析它都不会返回null
-        也就是说它拦截了所有的逻辑视图，让后续的解析器得不到执行，所以InternalResourceViewResolver必须放在最后。记住一点：不能解析就返回null，这样后续解析器才能解析。)-->
-        <property name="order" value="10"/>
+    <!--ContentNegotiatingViewResolver ，“内容协商视图解析器”，其实就是根据返回什么类型的视图，就协商使用-->
+    <!--如果返回jsp就使用InternalResourceViewResolver视图解析器，如果返回JSON格式就使用MappingJackson2JsonView来处理-->
+    <!--在 <property name="viewResolvers"> 下的<list> 标签下，还可以加入其他的各种视图解析器的配置-->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="viewResolvers">
+            <list>
+                <!--JSP视图的视图解析器为 InternalResourceViewResolver，也是一个UrlBasedViewResolver解析器-->
+                <!--“基于URL” 的视图解析器就会将返回值 “index” 作为最后视图的URL的一部分,结合下面的配置得到最终的返回值-->
+                <!--当没有声明ViewResolver时，spring会注册一个默认的ViewResolver，就是JstlView的实例， 该对象继承自InternalResoureView。-->
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <!-- 这里的配置是自动给后面servlet的方法return的字符串加上前缀和后缀，变成一个 可用的url地址 -->
+                    <property name="prefix" value="/"/>
+                    <property name="suffix" value=".html"/>
+                    <property name="cache" value="true"/>
+                    <property name="cacheLimit" value="10"/>
+                    <property name="contentType" value="text/html;charset=UTF-8"/>
+
+                    <!--order表示优先级,0表示优先级最高,可以配置多个视图解析器(视图解析器有多种如：FreeMarkerViewResolver,当配置多个视图解析器时
+                    优先级高的解析器如果解析的到，就不会再往下解析，如果解析不到,就给优先级低的解析器,但是对于解析器InternalResourceViewResolver来说，不管能不能解析它都不会返回null
+                    也就是说它拦截了所有的逻辑视图，让后续的解析器得不到执行，所以InternalResourceViewResolver必须放在最后。记住一点：不能解析就返回null，这样后续解析器才能解析。)-->
+                    <property name="order" value="10"/>
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </list>
+        </property>
     </bean>
 
 

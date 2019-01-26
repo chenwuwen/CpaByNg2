@@ -6,9 +6,9 @@ import cn.kanyun.cpa.model.constants.RoleConstants;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.redis.service.RedisService;
 import cn.kanyun.cpa.service.system.UserRoleService;
 import cn.kanyun.cpa.service.user.UserService;
-import cn.kanyun.cpa.util.JwtUtil;
 import cn.kanyun.cpa.util.WebUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -44,15 +44,17 @@ public class LoginController {
 
     @Resource(name = UserService.SERVICE_NAME)
     private UserService userService;
-    @Resource
+    @Resource(name = UserRoleService.SERVICE_NAME)
     private UserRoleService userRoleService;
+    @Resource(name = RedisService.SERVICE_NAME)
+    private RedisService redisService;
 
     /**
      * 首页
      *
      * @return
      */
-    @GetMapping("/index")
+    @GetMapping(value = "/index",produces = "text/html;charset=UTF-8")
     public String index() {
         return "/dist/index";
     }
@@ -62,12 +64,15 @@ public class LoginController {
      *
      * @return {String}
      */
-    @GetMapping("/login")
+    @ApiOperation(value = "/login",notes = "用户登录",httpMethod = "GET",response = String.class)
+    @GetMapping(value = "/login",produces = "text/html;charset=UTF-8")
     public String login() {
         logger.info("GET请求登录");
         if (SecurityUtils.getSubject().isAuthenticated()) {
+            logger.info("已认证,跳转到首页");
             return "redirect:page/index";
         }
+        logger.info("未认证,跳转到登录页");
         return "index";
     }
 
@@ -120,7 +125,7 @@ public class LoginController {
                 user.setPermissions(userRoleService.findPermissionByUser(u));
                 user.setId(u.getId());
                 user.setPassword(null);
-                user.setToken(JwtUtil.createJWT(JwtUtil.generalSubject(u), u.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET));
+
                 user.setImgPath(u.getImgPath());
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setStatus(CpaConstants.USER_HAS_LOGIN);

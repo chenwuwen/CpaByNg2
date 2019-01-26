@@ -5,11 +5,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.*;
+import org.springframework.data.redis.core.BoundSetOperations;
+import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.ListOperations;
+import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -27,7 +37,7 @@ import java.util.concurrent.TimeUnit;
  * @Resource默认按照ByName自动注入，由J2EE提供，需要导入包javax.annotation.Resource。@Resource有两个重要的属性：name和type，而Spring将@Resource注解的name属性解析为bean的名字，而type属性则解析为bean的类型。所以，如果使用name属性，则使用byName的自动注入策略，而使用type属性时则使用byType自动注入策略。如果既不制定name也不制定type属性，这时将通过反射机制使用byName自动注入策略。
  */
 @SuppressWarnings("ALL")
-@Service
+@Service(RedisService.SERVICE_NAME)
 public class RedisServiceImpl<T> implements RedisService<T> {
     @Autowired
     @Qualifier("redisTemplate")
@@ -37,37 +47,21 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     @Qualifier("redisTemplate")
     protected RedisTemplate<Serializable, Serializable> redisTemplateSerializable;
 
-    /**
-     * 缓存基本的对象，Integer、String、实体类等
-     *
-     * @param key   缓存的键值
-     * @param value 缓存的值
-     * @return 缓存的对象
-     */
     @Override
     public void setCacheObject(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
-    /**
-     * 获得缓存的基本对象。
-     *
-     * @param key       缓存键值
-     * @param operation
-     * @return 缓存键值对应的数据
-     */
+    @Override
+    public void setCacheObjectForTime(String key, Object value, long time, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, time,timeUnit);
+    }
+
     @Override
     public Object getCacheObject(String key/*,ValueOperations<String,T> operation*/) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    /**
-     * 缓存List数据
-     *
-     * @param key      缓存的键值
-     * @param dataList 待缓存的List数据
-     * @return 缓存的对象
-     */
     @Override
     public Object setCacheList(String key, List<Object> dataList) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
@@ -80,12 +74,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return listOperation;
     }
 
-    /**
-     * 获得缓存的list对象
-     *
-     * @param key 缓存的键值
-     * @return 缓存键值对应的数据
-     */
     @Override
     public List<Object> getCacheList(String key) {
         List<Object> dataList = new ArrayList<Object>();
@@ -98,105 +86,77 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return dataList;
     }
 
-    /**
-     * 获得缓存的list对象
-     *
-     * @param @param  key
-     * @param @param  start
-     * @param @param  end
-     * @param @return
-     * @return List<T>    返回类型
-     * @throws
-     * @Title: range
-     * @Description: TODO(这里用一句话描述这个方法的作用)
-     */
+    @Override
+    public Object getAndSet(String key, String value) {
+        return redisTemplate.opsForValue().getAndSet(key, value);
+    }
+
     @Override
     public List<Object> range(String key, long start, long end) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
         return listOperation.range(key, start, end);
     }
 
-    /**
-     * list集合长度
-     *
-     * @param key
-     * @return
-     */
     @Override
     public Long listSize(String key) {
         return redisTemplate.opsForList().size(key);
     }
 
-    /**
-     * 覆盖操作,将覆盖List中指定位置的值
-     *
-     * @param key
-     * @param int    index 位置
-     * @param String value 值
-     * @return 状态码
-     */
     @Override
     public void listSet(String key, int index, Object obj) {
         redisTemplate.opsForList().set(key, index, obj);
     }
 
-    /**
-     * 向List尾部追加记录
-     *
-     * @param String key
-     * @param String value
-     * @return 记录总数
-     */
     @Override
     public long leftPush(String key, Object obj) {
         return redisTemplate.opsForList().leftPush(key, obj);
     }
 
-    /**
-     * 向List头部追加记录
-     *
-     * @param String key
-     * @param String value
-     * @return 记录总数
-     */
+    @Override
+    public long leftPushAll(String key, Collection<Object> values) {
+        return redisTemplate.opsForList().leftPushAll(key, values);
+    }
+
+    @Override
+    public Object leftPop(String key) {
+        return redisTemplate.opsForList().leftPop(key);
+    }
+
     @Override
     public long rightPush(String key, Object obj) {
         return redisTemplate.opsForList().rightPush(key, obj);
     }
 
-    /**
-     * 算是删除吧，只保留start与end之间的记录
-     *
-     * @param String key
-     * @param int    start 记录的开始位置(0表示第一条记录)
-     * @param int    end 记录的结束位置（如果为-1则表示最后一个，-2，-3以此类推）
-     * @return 执行状态码
-     */
+    @Override
+    public long rightPushAll(String key, Collection<Object> values) {
+        return redisTemplate.opsForList().rightPushAll(key, values);
+    }
+
+    @Override
+    public Object rightPop(String key) {
+        return redisTemplate.opsForList().rightPop(key);
+    }
+
+    @Override
+    public Object popIndex(String key, long index) {
+        return redisTemplate.opsForList().index(key, index);
+    }
+
+    @Override
+    public Long listSize(String key, long index) {
+        return redisTemplate.opsForList().size(key);
+    }
+
     @Override
     public void trim(String key, int start, int end) {
         redisTemplate.opsForList().trim(key, start, end);
     }
 
-    /**
-     * 删除List中c条记录，被删除的记录值为value
-     *
-     * @param String key
-     * @param int    c 要删除的数量，如果为负数则从List的尾部检查并删除符合的记录
-     * @param Object obj 要匹配的值
-     * @return 删除后的List中的记录数
-     */
     @Override
     public long remove(String key, long i, Object obj) {
         return redisTemplate.opsForList().remove(key, i, obj);
     }
 
-    /**
-     * 缓存Set
-     *
-     * @param key     缓存键值
-     * @param dataSet 缓存的数据
-     * @return 缓存数据的对象
-     */
     @Override
     public BoundSetOperations<String, Object> setCacheSet(String key, Set<Object> dataSet) {
         BoundSetOperations<String, Object> setOperation = redisTemplate.boundSetOps(key);
@@ -210,13 +170,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return setOperation;
     }
 
-    /**
-     * 获得缓存的set
-     *
-     * @param key
-     * @param operation
-     * @return
-     */
     @Override
     public Set<Object> getCacheSet(String key/*,BoundSetOperations<String,T> operation*/) {
         Set<Object> dataSet = new HashSet<Object>();
@@ -229,13 +182,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return dataSet;
     }
 
-    /**
-     * 缓存Map
-     *
-     * @param key
-     * @param dataMap
-     * @return
-     */
     @Override
     public int setCacheMap(String key, Map<String, Object> dataMap) {
         if (null != dataMap) {
@@ -254,13 +200,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return dataMap.size();
     }
 
-    /**
-     * 获得缓存的Map
-     *
-     * @param key
-     * @param hashOperation
-     * @return
-     */
     @Override
     public Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
@@ -268,13 +207,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return map;
     }
 
-    /**
-     * 缓存Map
-     *
-     * @param key
-     * @param dataMap
-     * @return
-     */
     @Override
     public void setCacheIntegerMap(String key, Map<Integer, Object> dataMap) {
         HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
@@ -287,13 +219,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         }
     }
 
-    /**
-     * 获得缓存的Map
-     *
-     * @param key
-     * @param hashOperation
-     * @return
-     */
     @Override
     public Map<Object, Object> getCacheIntegerMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
@@ -301,43 +226,77 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return map;
     }
 
-    /**
-     * 从hash中删除指定的存储
-     *
-     * @param String
-     * @return 状态码，1成功，0失败
-     */
     @Override
     public long deleteMap(String key) {
         redisTemplate.setEnableTransactionSupport(true);
         return redisTemplate.opsForHash().delete(key);
     }
 
-    /**
-     * 设置过期时间
-     *
-     * @param key
-     * @param time
-     * @param unit
-     * @return
-     */
     @Override
     public boolean expire(String key, long time, TimeUnit unit) {
         return redisTemplate.expire(key, time, unit);
     }
 
-    /**
-     * increment
-     *
-     * @param key
-     * @param step
-     * @return
-     */
     @Override
-    public long increment(String key, long step) {
+    public Boolean renameKey(String oldKey, String newKey) {
+        return redisTemplate.renameIfAbsent(oldKey, newKey);
+    }
+
+    @Override
+    public Long unionAndStoreSet(String key, String otherKey, String destKey) {
+        return redisTemplate.opsForSet().unionAndStore(key, otherKey, destKey);
+    }
+
+
+    @Override
+    public Long unionAndStoreZset(String key, Collection<String> otherKeys, String destKey) {
+        return redisTemplate.opsForZSet().unionAndStore(key, otherKeys, destKey);
+    }
+
+    @Override
+    public Long unionAndStoreZset(String key, String otherKey, String destKey) {
+        return redisTemplate.opsForZSet().unionAndStore(key, otherKey, destKey);
+    }
+
+    @Override
+    public Long removeRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().removeRange(key, start, end);
+    }
+
+    @Override
+    public Long removeRangeByScore(String key, double min, double max) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+    }
+
+    @Override
+    public Long intersectAndStore(String key, String otherKey, String destKey) {
+        return redisTemplate.opsForZSet().intersectAndStore(key, otherKey, destKey);
+    }
+
+    @Override
+    public Long intersectAndStore(String key, Collection<String> otherKeys, String destKey) {
+        return redisTemplate.opsForZSet().intersectAndStore(key, otherKeys, destKey);
+    }
+
+    @Override
+    public Long increment(String key, long step) {
         return redisTemplate.opsForValue().increment(key, step);
     }
 
+    @Override
+    public Double increment(String key, double step) {
+        return redisTemplate.opsForValue().increment(key, step);
+    }
+
+    @Override
+    public Long getExpire(String key){
+        return redisTemplate.boundValueOps(key).getExpire();
+    }
+
+    @Override
+    public boolean persist(String key){
+        return redisTemplate.boundValueOps(key).persist();
+    }
 
     //redisTemplateSerializable
 
@@ -374,11 +333,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         });
     }
 
-    /**
-     * @param key
-     * @param value
-     * @param liveTime
-     */
     @Override
     public void set(final byte[] key, final byte[] value, final long liveTime) {
         redisTemplateSerializable.execute(new RedisCallback<Object>() {

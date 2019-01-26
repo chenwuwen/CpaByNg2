@@ -32,12 +32,12 @@
                 /*跳到注册表单页面*/
                 window.location.href = "./index.html#toregister"
                 /*设置注册表单请求地址*/
-                $("#registerform").attr("action", "/api/user/register/" + inviteUser);
+                $("#registerForm").attr("action", "/api/user/register/" + inviteUser);
             }
         })
         /*点击更换验证码*/
         function reloadValidateCode() {
-            $(".changecode").attr("src", "/api/validateCode?data=" + new Date() + Math.floor(Math.random() * 24));
+            $(".changeCode").attr("src", "/api/validateCode?data=" + new Date() + Math.floor(Math.random() * 24));
         }
     </script>
 
@@ -60,7 +60,7 @@
             <div id="wrapper">
                 <!--登陆-->
                 <div id="login" class="animate form">
-                    <form role="form" method="post" id="loginform"
+                    <form role="form" method="post" id="loginForm"
                           action="/api/login" autocomplete="on">
                         <h2>Log in</h2>
                         <div class="form-group">
@@ -91,7 +91,7 @@
                                            placeholder="验&nbsp;证&nbsp;码">
                                 </div>
                                 <div class="col-md-4">
-                                    <img src="/api/validateCode" class="changecode" class="img-responsive"
+                                    <img src="/api/validateCode" class="changeCode" class="img-responsive"
                                          title="点击重新获取验证码"
                                          alt="验证码" onclick="javascript:reloadValidateCode()">
                                 </div>
@@ -114,8 +114,8 @@
                 </div>
                 <!--注册-->
                 <div id="register" class="animate form">
-                    <form role="form" method="post" id="registerform"
-                          action="/api/user/register/" autocomplete="on">
+                    <form role="form" method="post" id="registerForm"
+                          action="/api/user/register" autocomplete="on">
                         <h2> Sign up </h2>
                         <div class="form-group">
                             <label class="sr-only sr-only-focusable"
@@ -163,7 +163,7 @@
                                            placeholder="验&nbsp;证&nbsp;码">
                                 </div>
                                 <div class="col-md-4">
-                                    <img src="/api/validateCode" class="changecode" class="img-responsive"
+                                    <img src="/api/validateCode" class="changeCode" class="img-responsive"
                                          title="点击重新获取验证码"
                                          alt="验证码" onclick="javascript:reloadValidateCode()">
                                 </div>

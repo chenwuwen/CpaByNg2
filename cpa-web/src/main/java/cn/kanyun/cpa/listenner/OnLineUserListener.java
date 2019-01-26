@@ -29,7 +29,7 @@ import java.util.HashSet;
  * 方式需要在web.xml的头部加上  " metadata-complete="false"
  */
 @WebListener
-public class OnLineUserListenner implements HttpSessionListener {
+public class OnLineUserListener implements HttpSessionListener {
 
     /**
      * Session创建

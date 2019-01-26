@@ -3,8 +3,10 @@ package cn.kanyun.cpa.util;
 
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.redis.service.RedisService;
 import com.alibaba.fastjson.JSONObject;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,6 +25,9 @@ import java.util.regex.Pattern;
  */
 public class WebUtil {
 
+    @Resource(name = RedisService.SERVICE_NAME)
+    private static RedisService redisService;
+
     /**
      * 在session中获得user
      *
@@ -30,7 +35,16 @@ public class WebUtil {
      * @return
      */
     public synchronized static CpaUser getSessionUser(HttpServletRequest request) {
-        CpaUser user = (CpaUser) request.getSession().getAttribute(CpaConstants.USER);
+        CpaUser user = null;
+        try {
+            if (CpaConstants.SESSION_USE_REDIS) {
+                user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"));
+            } else {
+                user = (CpaUser) request.getSession().getAttribute(CpaConstants.USER);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return user;
     }
 
@@ -41,7 +55,16 @@ public class WebUtil {
      * @return
      */
     public synchronized static void setSessionUser(HttpServletRequest request, CpaUser us) {
-        request.getSession().setAttribute(CpaConstants.USER, us);
+        try {
+            if (CpaConstants.SESSION_USE_REDIS) {
+                String token = JwtUtil.createJWT(JwtUtil.generalSubject(us), us.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
+                redisService.setCacheObject(token, us);
+            } else {
+                request.getSession().setAttribute(CpaConstants.USER, us);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -50,7 +73,7 @@ public class WebUtil {
      * @param request
      * @return
      */
-    public synchronized static void removeSessionUser(HttpServletRequest request){
+    public synchronized static void removeSessionUser(HttpServletRequest request) {
         request.getSession().removeAttribute(CpaConstants.USER);
     }
 

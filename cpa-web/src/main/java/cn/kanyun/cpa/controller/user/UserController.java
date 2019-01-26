@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -46,7 +47,7 @@ import java.util.Map;
  */
 @Api(value = "/api/user",tags = "用户管理模块")
 @Controller
-@RequestMapping("/api/user")
+@RequestMapping(value = "/api/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -68,6 +69,7 @@ public class UserController {
      * @Date: 2017/8/16 17:02
      * @params:
      */
+    @ApiIgnore
     @Deprecated
     @RequestMapping(value = {"/checkname"}, method = RequestMethod.GET)
     @ResponseBody
@@ -84,7 +86,8 @@ public class UserController {
         ObjectMapper mapper = new ObjectMapper();
         String resultString = "";
         try {
-            resultString = mapper.writeValueAsString(map); //使用jackson的writeValueAsString把java对象输出成字符串实例,此处Map集合即为对象;转换为字符串后在通过@ResponseBody转换为json
+//            使用jackson的writeValueAsString把java对象输出成字符串实例,此处Map集合即为对象;转换为字符串后在通过@ResponseBody转换为json
+            resultString = mapper.writeValueAsString(map);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -314,6 +317,7 @@ public class UserController {
      * 用户注销(已被shiro接管, shiro拦截此url, 进入SysLogoutFilter过滤器)
      * @date 2017/11/25 15:57
      */
+    @ApiIgnore
     @Deprecated
     @RequestMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
