@@ -40,6 +40,7 @@ LABEL version="1.0" description="这是CPA后台项目Docker镜像" by="kanyun"
 #这样才可以使用 mvn 命令
 ENV MAVEN_HOME "/usr/local/apache-maven-3.6.0"
 ENV JAVA_HOME "/usr/local/jdk1.8"
+ENV CLASSPATH .:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 ENV JAVA_DOWNLOAD_URL "https://download.oracle.com/otn-pub/java/jdk/8u201-b09/42970487e3af4f5aa5bca3f542482c60/jdk-8u201-linux-x64.tar.gz"
 ENV PATH $MAVEN_HOME/bin:$PATH
 ENV PATH $JAVA_HOME/bin:$PATH
@@ -60,15 +61,17 @@ ENV PATH $JAVA_HOME/bin:$PATH
 #安装git 和 maven
 RUN echo  " Start building docker image " \
     echo  " Start downloading essential software " \
+    # 从oracle下载jdk到指定目录,由于oracle下载jdk需要认证,所以需要加前缀
     wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JAVA_DOWNLOAD_URL  -P /usr/local \
     yum install git -y \
-    yum install maven -y \
+    # 下载maven到指定目录并重命名
     wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/apache-maven.tar.gz \
     echo  " downloading essential software over " \
     cd /usr/local/ \
     tar xzvf apache-maven.tar.gz  \
     tar xzvf jdk-8u201-linux-x64.tar.gz  \
     mv jdk1* jdk1.8 \
+    # 下载项目 -b 选择clone分支
     git clone https://github.com/chenwuwen/CpaByNg2.git -b master
 
 
@@ -96,7 +99,8 @@ RUN java -version \
     mvm clean install
 
 #功能为暴露容器运行时的监听端口给宿主机,但是EXPOSE并不会使容器访问主机的端口,如果想使得容器与宿主机的端口有映射关系，必须在容器启动的时候加上 -p参数,也可以同时映射多个端口 EXPOSE port1 port2 port3
-EXPOSE 8899
+#8899是java项目暴露端口,22是对于centos进行ssh操作所需端口
+EXPOSE 8899 22
 
 #一个复制命令，把文件复制到镜像中。如果把虚拟机与容器想象成两台linux服务器的话，那么这个命令就类似于scp，只是scp需要加用户名和密码的权限验证，而ADD不用
 #语法如下：
@@ -120,7 +124,11 @@ EXPOSE 8899
 
 
 
-#可实现挂载功能，可以将本地文件夹或者其他容器种得文件夹挂在到这个容器中
+#可实现挂载功能，可以将本地文件夹或者其他容器种得文件夹挂在到这个容器中，需要注意的是
+#与 docker run --name test -it -v 相比,
+#通过命令行 -v 的方式可以轻松指定 宿主机目录与容器的对应关系 如 docker run --name test -it -v <宿主机目录>:<容器挂载点> <镜像> /bin/bash
+#通过dockerfile的 VOLUME 指令创建的挂载点，无法指定主机上对应的目录，但是会自动生成的一个宿主机的目录与容器的挂载点(即VOLUME的值)对应
+#通过dockerfile的 VOLUME 指令可以在镜像中创建挂载点，这样只要通过该镜像创建的容器都有了挂载点，而通过docker run命令的-v标识创建的挂载点只能对创建的容器有效
 #语法为： VOLUME ["/data"]
 #["/data"]可以是一个JsonArray ，也可以是多个值。所以如下几种写法都是正确的
 #VOLUME ["/var/log/"]
@@ -128,7 +136,8 @@ EXPOSE 8899
 #VOLUME /var/log /var/db
 #一般的使用场景为需要持久化存储数据时:容器使用的是AUFS，这种文件系统不能持久化数据，当容器关闭后，所有的更改都会丢失。所以当数据需要持久化时用这个命令。
 
-VOLUME ["/tmp"]
+#该挂载目录为程序生成的日志目录,由于是在dockerfile中定义的VOLUME,所以想要知道宿主机对应容器挂载点的目录需要使用docker inspect 查看
+VOLUME ["/usr/local/"]
 
 
 # 设置启动容器的用户，可以是用户名或UID，所以，只有下面的两种写法是正确的
@@ -158,8 +167,11 @@ USER root
 ONBUILD RUN echo "welcome to use KANYUN DOCKER base image"
 
 
-#STOPSIGNAL命令是的作用是当容器退出时给系统发送什么样的指令
-STOPSIGNAL echo "sign out docker container"
+#STOPSIGNAL命令是的作用是当容器退出时给系统发送什么样的指令,也可以通过命令行create/run 的参数 --stop-signal 设置
+#默认的stop-signal是SIGTERM，在执行docker stop的时候会给容器内PID为1的进程发送这个signal，
+#通过--stop-signal可以设置自己需要的signal，主要的目的是为了让容器内的应用程序在接收到signal之后
+#可以先做一些事情，实现容器的平滑退出，如果不做任何处理，容器将在一段时间之后强制退出，会造成业务的强制中断，这个时间默认是10s
+#STOPSIGNAL exec echo " sign out docker container "
 
 
 # 容器健康状况检查命令
@@ -195,8 +207,8 @@ HEALTHCHECK --interval=1m --timeout=3s --retries=3 CMD curl -f http://localhost:
 #1. CMD ["executable","param1","param2"]
 #2. CMD ["param1","param2"]
 #3. CMD command param1 param2
-#第三种比较好理解了，就时shell这种执行方式和写法
-#第一种和第二种其实都是可执行文件加上参数的形式
+#第三种比较好理解了，就是shell这种执行方式和写法(该方式是以shell的方式运行程序。最终程序被执行时，类似于/bin/sh -c的方式运行了我们的程序，这样会导致/bin/sh以PID为1的进程运行，而我们的程序只不过是它fork/execs出来的子进程而已。前面我们提到过docker stop的SIGTERM信号只是发送给容器中PID为1的进程，而这样，我们的程序就没法接收和处理到信号了)
+#第一种和第二种其实都是可执行文件加上参数的形式(这种方式执行和启动时，我们的程序会被直接启动执行，而不是以shell的方式，这样我们的程序就能以PID=1的方式开始执行了)
 #举例说明两种写法：
 #CMD [ "sh", "-c", "echo $HOME"]
 #CMD [ "echo", "$HOME" ]

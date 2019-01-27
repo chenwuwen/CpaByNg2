@@ -28,7 +28,7 @@
         不配置路径的话,（使用tomcat）默认是输出到tomcat的bin目录下的
         定义的目录不存在会默认创建
     -->
-    <substitutionProperty name="logBase" value="/logs/cpa/"/>
+    <substitutionProperty name="BASEDIR" value="/logs/cpa/"/>
     <!--
       <property>用来定义变量值的标签，<property> 有两个属性，name和value；
         其中name的值是变量的名称,value的值时变量定义的值。
@@ -46,6 +46,8 @@
     <property name="log.max.size" value="100MB"/>
     <!--定义生成日志路径,另一个路径变量,使用相对路径,如果是用 /logs 则路径为与当前tomcat路径一致-->
     <property name="LOG_HOME" value="/logs"/>
+    <!--项目名称-->
+    <property name="PROJECT_NAME" value="cpa"/>
 
     <!-- appender：
         name相当于一个名称
@@ -78,7 +80,7 @@
         <!-- 编码 -->
         <Encoding>UTF-8</Encoding>
         <!-- 日志名称 -->
-        <file>${logBase}INFO级别.${bySecond}.log</file>
+        <file>${BASEDIR}INFO级别.${bySecond}.log</file>
         <!-- 布局 -->
         <encoder>
             <!-- 格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
@@ -110,11 +112,11 @@
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoding>UTF-8</encoding>
         <!-- 按照时间来 -->
-        <file>${logBase}ERROR级别.${bySecond}.log</file>
+        <file>${BASEDIR}ERROR级别.${bySecond}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
             <!-- 按“天”生成日志文件，"%i"代表第几个文件（从0自增），如果后缀是zip或gzip,那么生成文件后自动压缩成.zip包 -->
-            <FileNamePattern>${LOG_HOME}ERROR级别-%d{yyyy-MM-dd}-%i.log.zip
+            <FileNamePattern>${PROJECT_NAME}-ERROR级别-%d{yyyy-MM-dd}-%i.log.zip
             </FileNamePattern>
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
@@ -149,9 +151,10 @@
     <appender name="MONITOR-FILE"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <encoding>UTF-8</encoding>
+       <file>${BASEDIR}/monitor/${PROJECT_NAME}-monitor日志-%d{yyyy-MM-dd}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!--日志文件输出的文件名 -->
-            <FileNamePattern>${LOG_HOME}monitor日志-%d{yyyy-MM-dd}-%i.log
+            <FileNamePattern>${PROJECT_NAME}-monitor日志-%d{yyyy-MM-dd}-%i.log
             </FileNamePattern>
             <!--日志文件保留天数 -->
             <MaxHistory>30</MaxHistory>
