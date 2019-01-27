@@ -61,19 +61,22 @@ ENV PATH $JAVA_HOME/bin:$PATH
 #安装git 和 maven
 RUN echo  " Start building docker image " \
     echo  " Start downloading essential software " \
-    # 从oracle下载jdk到指定目录,由于oracle下载jdk需要认证,所以需要加前缀
-    wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JAVA_DOWNLOAD_URL  -P /usr/local \
-    yum install git -y \
-    # 下载maven到指定目录并重命名
-    wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/apache-maven.tar.gz \
-    echo  " downloading essential software over " \
-    cd /usr/local/ \
-    tar xzvf apache-maven.tar.gz  \
-    tar xzvf jdk-8u201-linux-x64.tar.gz  \
-    mv jdk1* jdk1.8 \
-    # 下载项目 -b 选择clone分支
-    git clone https://github.com/chenwuwen/CpaByNg2.git -b master
+    && yum install wget -y \
+    # 更新源
 
+    && yum install git -y \
+    && yum install openssh-server.x86_64 -y \
+    # 从oracle下载jdk到指定目录,由于oracle下载jdk需要认证,所以需要加前缀
+    && wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JAVA_DOWNLOAD_URL  -P /usr/local  \
+    # 下载maven到指定目录并重命名
+    && wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/apache-maven.tar.gz \
+    && echo " downloading essential software over " \
+    && cd /usr/local/ \
+    && tar xzvf apache-maven.tar.gz  \
+    && tar xzvf jdk-8u201-linux-x64.tar.gz  \
+    && mv jdk1* jdk1.8 \
+    # 下载项目 -b 选择clone分支
+    && git clone https://github.com/chenwuwen/CpaByNg2.git -b master
 
 
 
@@ -136,7 +139,7 @@ EXPOSE 8899 22
 #VOLUME /var/log /var/db
 #一般的使用场景为需要持久化存储数据时:容器使用的是AUFS，这种文件系统不能持久化数据，当容器关闭后，所有的更改都会丢失。所以当数据需要持久化时用这个命令。
 
-#该挂载目录为程序生成的日志目录,由于是在dockerfile中定义的VOLUME,所以想要知道宿主机对应容器挂载点的目录需要使用docker inspect 查看
+#该挂载目录为程序生成的日志目录,由于是在dockerfile中定义的VOLUME,所以想要知道宿主机对应容器挂载点的目录需要使用docker inspect container_id 查看[注意是容器ID]
 VOLUME ["/usr/local/"]
 
 
@@ -151,14 +154,20 @@ USER root
 
 
 
-
+#ARG指令用以定义构建时(docker build)需要的参数,ARG是Docker1.9 版本才新加入的指令,ARG 定义的变量只在建立 image 时有效，建立完成后变量就失效消失
 #设置变量命令，ARG命令定义了一个变量，在docker build创建镜像的时候，使用 --build-arg <varname>=<value>来指定参数
 #如果用户在build镜像时指定了一个参数没有定义在Dockerfile中，那么将有一个Warning
 #提示：[Warning] One or more build-args [foo] were not consumed.
 #语法：ARG <name>[=<default value>]
 #我们可以定义一个或多个参数，如果我们给了ARG定义的参数默认值，那么当build镜像时没有指定参数值，将会使用这个默认值
+#Docker自带的如下ARG参数，可以在其他指令中直接引用:
+#HTTP_PROXY   http_proxy
+#HTTPS_PROXY   https_proxy
+#FTP_PROXY   ftp_proxy
+#NO_PROXY   no_proxy
+#ARG是唯一一个可用于FROM前的指令
 
-#ARG
+#ARG tag=1.0
 
 
 #这个命令只对当前镜像的子镜像生效，比如当前镜像为A，在Dockerfile种添加：ONBUILD RUN ls -al
@@ -231,3 +240,13 @@ CMD ["mvn","tomcat7:run"]
 # 如果我们在Dockerfile种同时写了ENTRYPOINT和CMD，并且CMD是一个完整的指令，那么它们两个会互相覆盖，谁在最后谁生效
 
 #ENTRYPOINT
+
+
+#DockerFile build完成之后，可以通过docker images来查看自己构建的镜像,我们制作好镜像后，有时需要将镜像复制到另一台服务器使用
+#能达到以上目的有两种方式
+#一种是上传镜像到仓库中（本地或公共仓库），但是另一台服务器很肯能只是与当前服务器局域网想通而没有公网的，所以如果使用仓库的方式，只能自己搭建私有仓库
+#第二种方式是将镜像保存为文件,上传到其他服务器再从文件中载入镜像
+#要将镜像保存为本地文件，可以使用Docker save命令。
+#将镜像保存为文件： docker save -o 要保存的文件名  要保存的镜像
+#从文件载入镜像可以使用Docker load命令。
+#从文件载入镜像:docker load --input 文件 或者 docker load < 文件名 , 此时会导入镜像以及相关的元数据信息等
