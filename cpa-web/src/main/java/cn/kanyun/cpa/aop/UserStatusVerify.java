@@ -3,10 +3,17 @@ package cn.kanyun.cpa.aop;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.util.WebUtil;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
+import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
+import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -14,8 +21,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
 /**
  * @author Administrator
@@ -24,8 +31,11 @@ import javax.servlet.http.HttpSession;
 @Component
 @Aspect
 public class UserStatusVerify {
+
     private static final Logger logger = LoggerFactory.getLogger(UserStatusVerify.class);
 
+    @Resource(name = RedisService.SERVICE_NAME)
+    private RedisService redisService;
 
     /**
      * Spring AOP支持的AspectJ切入点指示符
@@ -117,7 +127,12 @@ public class UserStatusVerify {
         ServletRequestAttributes sra = (ServletRequestAttributes) ra;
         HttpServletRequest request = sra.getRequest();
         // 从session中获取用户信息
-        CpaUser user = WebUtil.getSessionUser(request);
+        CpaUser user = null;
+        if (CpaConstants.SESSION_USE_REDIS) {
+            user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"));
+        } else {
+            user = WebUtil.getSessionUser(request);
+        }
         if (null == user) {
             CpaResult result = new CpaResult();
             result.setStatus(CpaConstants.USER_NOT_LOGIN);

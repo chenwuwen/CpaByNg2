@@ -1,8 +1,13 @@
 package cn.kanyun.cpa.controller.test;
 
+
 import org.junit.Test;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 
 public class TestStream {
 
@@ -33,5 +38,13 @@ public class TestStream {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testString() {
+        String a = "Hello";
+        String b = new String("Hello");
+        System.out.println(a == b);
+
     }
 }

@@ -1,3 +1,4 @@
+#使用方法：在当前文件位置处使用命令：docker build -t kanyun/cpa:v1 .
 #指定基础镜像，并且必须是第一条指令，如果不以任何镜像为基础，那么写法为：FROM scratch,同时意味着接下来所写的指令将作为镜像的第一层开始
 #语法：
 #FROM <image>
@@ -59,18 +60,17 @@ ENV PATH $JAVA_HOME/bin:$PATH
 #注意：多行命令不要写多个RUN，原因是Dockerfile中每一个指令都会建立一层.多少个RUN就构建了多少层镜像，会造成镜像的臃肿、多层，不仅仅增加了构件部署的时间，还容易出错,RUN书写时的换行符是 \
 
 #安装git 和 maven
-RUN echo  " Start building docker image " \
-    echo  " Start downloading essential software " \
+RUN echo -e "\033[33m Start building docker image \033[0m \n" \
+    && echo -e "\033[33m Start downloading essential software \033[0m \n" \
     && yum install wget -y \
     # 更新源
-
     && yum install git -y \
     && yum install openssh-server.x86_64 -y \
     # 从oracle下载jdk到指定目录,由于oracle下载jdk需要认证,所以需要加前缀
     && wget --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" $JAVA_DOWNLOAD_URL  -P /usr/local  \
     # 下载maven到指定目录并重命名
     && wget http://mirrors.hust.edu.cn/apache/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz -O /usr/local/apache-maven.tar.gz \
-    && echo " downloading essential software over " \
+    && echo -e "\033[32m downloading essential software complete \033[0m \n" \
     && cd /usr/local/ \
     && tar xzvf apache-maven.tar.gz  \
     && tar xzvf jdk-8u201-linux-x64.tar.gz  \
@@ -97,9 +97,11 @@ WORKDIR /usr/local/CpaByNg2
 
 #下载maven依赖(由于oa-remote是原来项目的jar包,不在公网上,所以先把这个包打入到本地)
 RUN java -version \
-    mvn -version \
-    mvn install:install-file -Dfile=lib/oa-remote-1.1.0.jar -DgroupId=com.ruifight -DartifactId=oa-remote -Dversion=1.1.0 -Dpackaging=jar \
-    mvm clean install
+    && mvn -version \
+    && echo -e "\033[35m  start downloading project dependent jar \033[0m " \
+    && mvn install:install-file -Dfile=lib/oa-remote-1.1.0.jar -DgroupId=com.ruifight -DartifactId=oa-remote -Dversion=1.1.0 -Dpackaging=jar \
+    && mvn clean install \
+    && echo -e "\033[35m downloading project dependent jar complete \033[0m "
 
 #功能为暴露容器运行时的监听端口给宿主机,但是EXPOSE并不会使容器访问主机的端口,如果想使得容器与宿主机的端口有映射关系，必须在容器启动的时候加上 -p参数,也可以同时映射多个端口 EXPOSE port1 port2 port3
 #8899是java项目暴露端口,22是对于centos进行ssh操作所需端口

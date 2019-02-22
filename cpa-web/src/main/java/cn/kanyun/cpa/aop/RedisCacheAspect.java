@@ -1,9 +1,7 @@
 package cn.kanyun.cpa.aop;
 
 import cn.kanyun.cpa.dao.common.annotation.RedisCacheProfiler;
-import cn.kanyun.cpa.redis.JedisClusterFactory;
 import com.alibaba.fastjson.JSONObject;
-import javassist.bytecode.SignatureAttribute;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -13,7 +11,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
 import java.lang.reflect.Method;

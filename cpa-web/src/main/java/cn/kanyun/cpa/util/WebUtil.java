@@ -3,10 +3,9 @@ package cn.kanyun.cpa.util;
 
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.redis.service.RedisService;
+import cn.kanyun.cpa.redis.RedisService;
 import com.alibaba.fastjson.JSONObject;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.util.regex.Pattern;
  */
 public class WebUtil {
 
-    @Resource(name = RedisService.SERVICE_NAME)
     private static RedisService redisService;
 
     /**
@@ -38,6 +36,7 @@ public class WebUtil {
         CpaUser user = null;
         try {
             if (CpaConstants.SESSION_USE_REDIS) {
+                redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
                 user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"));
             } else {
                 user = (CpaUser) request.getSession().getAttribute(CpaConstants.USER);
@@ -57,6 +56,7 @@ public class WebUtil {
     public synchronized static void setSessionUser(HttpServletRequest request, CpaUser us) {
         try {
             if (CpaConstants.SESSION_USE_REDIS) {
+                redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
                 String token = JwtUtil.createJWT(JwtUtil.generalSubject(us), us.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
                 redisService.setCacheObject(token, us);
             } else {

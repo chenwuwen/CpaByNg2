@@ -25,10 +25,12 @@
         $(function () {
             /*获取当前浏览器地址栏地址*/
             var url = window.location.href;
+            console.log("当前页面URL: " + url);
             var inviteUser;
-            if (url.indexOf("/") > -1) {
+            if (url.indexOf("register") > -1) {
                 /*获取邀请人ID*/
                 inviteUser = url.substr(url.lastIndexOf("/") + 1);
+                console.log("邀请人ID：" + inviteUser);
                 /*跳到注册表单页面*/
                 window.location.href = "./index.html#toregister"
                 /*设置注册表单请求地址*/

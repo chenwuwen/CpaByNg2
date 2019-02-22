@@ -17,8 +17,8 @@ import java.io.*;
 /**系统启动成功后控制台打印图案,类似SpringBoot启动图案,当然也可以在启动成功之后做其他事情*/
 
 /**ContextRefreshedEvent为初始化完毕事件，spring还有很多事件可以利用*/
-@Component("StartApplicationListenner")
-public class StartApplicationListenner implements ApplicationListener<ContextRefreshedEvent> {
+@Component("StartApplicationListener")
+public class StartApplicationListener implements ApplicationListener<ContextRefreshedEvent> {
 
     /**
      *  ContextRefreshedEvent：ApplicationContext容器初始化或者刷新时触发该事件。
@@ -28,10 +28,10 @@ public class StartApplicationListenner implements ApplicationListener<ContextRef
      */
 
     /**
-     * applicationontext和使用MVC之后的webApplicationontext会两次调用上面的方法，如何区分这个两种容器呢？
-     *但是这个时候，会存在一个问题，在web 项目中（spring mvc），系统会存在两个容器，一个是root application context ,
+     * applicationContext和使用MVC之后的webApplicationContext会两次调用上面的方法，如何区分这个两种容器呢？
+     * 但是这个时候，会存在一个问题，在web 项目中（spring mvc），系统会存在两个容器，一个是root application context ,
      * 另一个就是我们自己的 projectName-servlet context（作为root application context的子容器）。
-     *这种情况下，就会造成onApplicationEvent方法被执行两次。为了避免上面提到的问题，
+     * 这种情况下，就会造成onApplicationEvent方法被执行两次。为了避免上面提到的问题，
      * 我们可以只在root application context初始化完成后调用逻辑代码，其他的容器的初始化完成，则不做任何处理，修改后代码
      * @param contextRefreshedEvent
      */

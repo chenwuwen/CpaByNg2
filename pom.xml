@@ -14,7 +14,6 @@
         <module>cpa-service</module>
         <module>cpa-model</module>
         <module>cpa-web</module>
-        <module>cpa-redis</module>
         <module>cpa-util</module>
         <module>cpa-lucene</module>
         <module>cpa-provide</module>
@@ -150,7 +149,7 @@
                 <!--maven-source-plugin插件,主要是生成jar，运行mvn clean package生成jar包，再执行一条命令：mvn deploy就可以发布到你自己的私服上了-->
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.0.1</version>
                     <configuration>
                         <attach>true</attach>
                     </configuration>
@@ -215,7 +214,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.9</version>
+                <version>4.12</version>
                 <scope>test</scope>
             </dependency>
             <dependency>

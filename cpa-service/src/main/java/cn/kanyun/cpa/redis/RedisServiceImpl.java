@@ -1,6 +1,5 @@
-package cn.kanyun.cpa.redis.service.impl;
+package cn.kanyun.cpa.redis;
 
-import cn.kanyun.cpa.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;

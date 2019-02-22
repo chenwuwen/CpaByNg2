@@ -6,7 +6,7 @@ import cn.kanyun.cpa.model.constants.RoleConstants;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.redis.service.RedisService;
+import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.system.UserRoleService;
 import cn.kanyun.cpa.service.user.UserService;
 import cn.kanyun.cpa.util.WebUtil;

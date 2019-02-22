@@ -3,7 +3,7 @@ package cn.kanyun.cpa.service.itempool.impl;
 import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.redis.service.RedisService;
+import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import org.apache.commons.lang3.StringUtils;
@@ -11,7 +11,12 @@ import org.slf4j.Logger;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  *

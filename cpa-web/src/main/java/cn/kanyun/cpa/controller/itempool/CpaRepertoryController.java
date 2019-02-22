@@ -10,7 +10,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.enums.ExamEnum;
-import cn.kanyun.cpa.redis.service.RedisService;
+import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
 import io.swagger.annotations.Api;

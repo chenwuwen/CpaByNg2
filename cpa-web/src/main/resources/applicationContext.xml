@@ -242,6 +242,9 @@
         <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
     </bean>
 
+    <!--自定义的在普通类获取bean的类-->
+    <bean class="cn.kanyun.cpa.util.SpringTools"/>
+
     <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <!--配置事务的传播特性-->
