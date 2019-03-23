@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--ignore-resource-not-found：如果属性文件找不到，是否忽略，默认false，即不忽略，找不到文件并不会抛出异常。-->
+    <!--ignore-unresolvable：是否忽略解析不到的属性，如果不忽略，找不到将抛出异常。但它设置为true的主要原因是ignore-unresolvable为true时，配置文件${}找不到对应占位符的值 不会报错，会直接赋值'${}'；如果设为false，会直接报错。 设置它为true的主要原因，是一个xml中有多个配置文件时的情况-->
+    <context:property-placeholder location="classpath:netty-config.properties" file-encoding="UTF-8" ignore-unresolvable="true"/>
+    <context:component-scan base-package="cn.kanyun.cpa.chat" />
+</beans>

@@ -142,6 +142,11 @@ EXPOSE 8899 22
 #一般的使用场景为需要持久化存储数据时:容器使用的是AUFS，这种文件系统不能持久化数据，当容器关闭后，所有的更改都会丢失。所以当数据需要持久化时用这个命令。
 
 #该挂载目录为程序生成的日志目录,由于是在dockerfile中定义的VOLUME,所以想要知道宿主机对应容器挂载点的目录需要使用docker inspect container_id 查看[注意是容器ID]
+#需要注意的是,该指令会在宿主机上创建一个卷[相当于一个随机目录,也称之为匿名卷],如果想指定某个宿主机的目录共享给Docker容器,则需要在启动容器
+#也就是docker run 时进行指定, docker run -d --name container_name --mount  type=bind , src="宿主机目录",dst = "容器路径"  image_name
+#上面的命令需要注意的是宿主机的要共享的目录需要提前创建,否则会报错,
+#还有一种方式就是先使用docker命令创建一个卷：docker volume create volume_name  查看该卷是在宿主机哪个目录:docker inspect volume_name
+#然后docker run 时进行指定 docker run -d --name container_name --mount src=volume_name,dst = "容器路径"  image_name 当然我更推荐上面的方式
 VOLUME ["/usr/local/"]
 
 
@@ -211,6 +216,13 @@ ONBUILD RUN echo "welcome to use KANYUN DOCKER base image"
 HEALTHCHECK --interval=1m --timeout=3s --retries=3 CMD curl -f http://localhost:8899/ || exit 1
 
 
+#Docker容器运行的时候有 host,bridge,none 三种网络可供配置
+#默认是 bridge ,即桥接网络,以桥接模式连接到宿主机, host 是宿主网络，即与宿主机共用网络 none 则表示无网络，容器将无法联网。
+#当容器使用 host 网络时，容器与宿主共用网络，这样就能在容器中访问宿主机网络，那么容器的 localhost 就是宿主机的 localhost
+#在docker中使用 --network host 来为容器配置 host 网络：docker run -d --name nginx --network host nginx
+#上面的命令中，没有必要像前面一样使用 -p 80:80 -p 443:443 来映射端口，是因为本身与宿主机共用了网络，容器中暴露端口等同于宿主机暴露端口
+#使用host网络不需要修改 nginx.conf ，仍然可以使用 localhost ，因而通用性比上一种方法好。但是，由于 host 网络没有 bridge 网络的隔离性好，使用 host 网络安全性不如 bridge 高。
+#使用bridge配置：宿主机IP隔离性更好，但通用性不好[需要配置IP]；使用host网络，通用性好，但带来了暴露宿主网络的风险。
 
 
 #功能为容器启动时要运行的命令
@@ -224,7 +236,7 @@ HEALTHCHECK --interval=1m --timeout=3s --retries=3 CMD curl -f http://localhost:
 #CMD [ "sh", "-c", "echo $HOME"]
 #CMD [ "echo", "$HOME" ]
 #补充细节：这里边包括参数的一定要用双引号，就是",不能是单引号。千万不能写成单引号。原因是参数传递后，docker解析的是一个JSON array
-#不要把RUN和CMD搞混了。RUN是构件容器时就运行的命令以及提交运行结果，CMD是容器启动时执行的命令，在构件时并不运行，构件时紧紧指定了这个命令到底是个什么样子
+#不要把RUN和CMD搞混了。RUN是构件容器时就运行的命令以及提交运行结果，CMD是容器启动时执行的命令，在构件时并不运行，构件时仅仅指定了这个命令到底是个什么样子
 
 #使用maven Tomcat插件来启动项目
 CMD ["mvn","tomcat7:run"]
@@ -249,6 +261,6 @@ CMD ["mvn","tomcat7:run"]
 #一种是上传镜像到仓库中（本地或公共仓库），但是另一台服务器很肯能只是与当前服务器局域网想通而没有公网的，所以如果使用仓库的方式，只能自己搭建私有仓库
 #第二种方式是将镜像保存为文件,上传到其他服务器再从文件中载入镜像
 #要将镜像保存为本地文件，可以使用Docker save命令。
-#将镜像保存为文件： docker save -o 要保存的文件名  要保存的镜像
+#将镜像保存为文件： docker save 要保存的镜像 -o 要保存的文件名[加上保存路径]
 #从文件载入镜像可以使用Docker load命令。
-#从文件载入镜像:docker load --input 文件 或者 docker load < 文件名 , 此时会导入镜像以及相关的元数据信息等
+#从文件载入镜像:docker load --input 文件 或者 docker load <文件名> , 此时会导入镜像以及相关的元数据信息等

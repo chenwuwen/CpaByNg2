@@ -103,7 +103,7 @@ public class CpaSolutionController {
         answerRecord.setScore((Integer) ((Map)result.getData()).get("score"));
         answerRecord.setUsername(user.getUserName());
         answerRecord.setUserId(user.getId());
-        answerRecord.setPetname(user.getPetName());
+        answerRecord.setNickName(user.getNickName());
         answerRecord.setTotalcount((Integer) ((Map)result.getData()).get("totalCount"));
         return answerRecord;
     }

@@ -19,7 +19,7 @@ public class CpaUser implements java.io.Serializable {
     private String password;
     private Byte gender;  //性别 0：女，1：男
     private String email;
-    private String petName;
+    private String nickName;
     private LocalDateTime regDate;
     private LocalDateTime lastLoginDate;
     private Integer status;  //0:已删除，1:正常，2:锁定
@@ -74,12 +74,12 @@ public class CpaUser implements java.io.Serializable {
     }
 
 
-    public String getPetName() {
-        return petName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setPetName(String petName) {
-        this.petName = petName;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     public LocalDateTime getRegDate() {

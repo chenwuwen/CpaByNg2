@@ -56,11 +56,11 @@ public class TestHibernet {
         Transaction tx = null;
         tx=session.beginTransaction();
         CpaUser u = new CpaUser();
-        u.setPetName("kanyun");
+        u.setNickName("kanyun");
         u.setPassword("kanyun");
-        u.setPetName("自傲名");
+        u.setNickName("自傲名");
         session.save(u);
-        u.setPetName("1234");
+        u.setNickName("1234");
         tx.commit();
 
     }

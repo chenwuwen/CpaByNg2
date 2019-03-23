@@ -10,6 +10,7 @@ import cn.kanyun.cpa.service.file.UploadFileService;
 import cn.kanyun.cpa.service.system.UserRoleService;
 import cn.kanyun.cpa.service.user.CpaUserExtendService;
 import cn.kanyun.cpa.service.user.UserService;
+import cn.kanyun.cpa.util.DateUtils;
 import cn.kanyun.cpa.util.WebUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,6 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -322,7 +323,7 @@ public class UserController {
     @RequestMapping("/logout")
     public void logout(HttpServletRequest request, HttpServletResponse response) {
         CpaUser user = WebUtil.getSessionUser(request);
-        logger.info(user.getUserName() + "于时间" + new DateTime(System.currentTimeMillis()) + "退出系统");
+        logger.info(user.getUserName() + "于时间" + DateUtils.formatDate(Instant.now(),DateUtils.pattern_time_horizontal_line) + "退出系统");
         try {
             /*清除session*/
             WebUtil.removeSessionUser(request);

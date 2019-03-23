@@ -251,4 +251,5 @@
 
     <!--引入其他模块配置文件，这样被引入的配置文件就不用写在web.xml中了，但需要注意的是resource中引入的文件的地址要用相对路径，不然会出错。-->
     <import resource="spring-dubbo-provider.xml"/>
-</beans>  
+    <import resource="spring-rocketmq.xml"/>
+</beans>

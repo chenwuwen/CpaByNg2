@@ -175,6 +175,23 @@
         </filter>
     </appender>
 
+    <!--LogBack ELK配置(Elasticsearch , Logstash , Kibana ) 一个日志展示化平台,需要在服务器安装相应软件,软件下载地址https://www.elastic.co/downloads/-->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <!--logstash 收集日志路径-->
+        <destination>localhost:4560</destination>
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+
+        <filter class = "ch.qos.logback.classic.filter.ThresholdFilter">
+        <!--写入logstash的日志级别-->
+        <level>info</level>
+        </filter>
+
+        <!--"appname":"springboot21-log-elk" 的作用是指定创建索引的名字时用，并且在生成的文档中会多了这个字段
+         在logstashindex中引入    index => "%{[appname]}-%{+YYYY.MM.dd}"-->
+        <customFields>{"appname":"cpa"}</customFields>
+        </appender>
+
+
     <!-- 配置monitor日志输出 -->
     <logger name="MONITOR">
         <appender-ref ref="MONITOR-FILE"/>

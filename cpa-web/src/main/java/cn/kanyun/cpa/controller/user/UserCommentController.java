@@ -57,7 +57,7 @@ public class UserCommentController {
                 userComment.setCommentDate(LocalDateTime.now());
                 userComment.setUserId(user.getId());
                 userComment.setUsername(user.getUserName());
-                userComment.setPetname(user.getPetName());
+                userComment.setNickName(user.getNickName());
                 result.setData(userCommentService.save(userComment));
             }
         } catch (Exception e) {

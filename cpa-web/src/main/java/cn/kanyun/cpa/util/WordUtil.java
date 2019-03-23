@@ -3,17 +3,35 @@ package cn.kanyun.cpa.util;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import org.apache.poi.xwpf.model.XWPFHeaderFooterPolicy;
-import org.apache.poi.xwpf.usermodel.*;
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
+import org.apache.poi.xwpf.usermodel.ParagraphAlignment;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTP;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTR;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTShd;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTblWidth;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTText;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STShd;
+import org.openxmlformats.schemas.wordprocessingml.x2006.main.STTblWidth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.math.BigInteger;
 import java.net.URLEncoder;
-import java.util.Date;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 /**
@@ -184,6 +202,29 @@ import java.util.Map;
  * <option   value="application/vnd.visio">VISIO</option>
  * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
  * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
+ * <p>
+ * response.setContentType()的String参数及对应类型
+ *
+ * <option   value="image/bmp">BMP</option>
+ * <option   value="image/gif">GIF</option>
+ * <option   value="image/jpeg">JPEG</option>
+ * <option   value="image/tiff">TIFF</option>
+ * <option   value="image/x-dcx">DCX</option>
+ * <option   value="image/x-pcx">PCX</option>
+ * <option   value="text/html">HTML</option>
+ * <option   value="text/plain">TXT</option>
+ * <option   value="text/xml">XML</option>
+ * <option   value="application/afp">AFP</option>
+ * <option   value="application/pdf">PDF</option>
+ * <option   value="application/rtf">RTF</option>
+ * <option   value="application/msword">MSWORD</option>
+ * <option   value="application/vnd.ms-excel">MSEXCEL</option>
+ * <option   value="application/vnd.ms-powerpoint">MSPOWERPOINT</option>
+ * <option   value="application/wordperfect5.1">WORDPERFECT</option>
+ * <option   value="application/vnd.lotus-wordpro">WORDPRO</option>
+ * <option   value="application/vnd.visio">VISIO</option>
+ * <option   value="application/vnd.framemaker">FRAMEMAKER</option>
+ * <option   value="application/vnd.lotus-1-2-3">LOTUS123</option>
  */
 
 /**
@@ -222,8 +263,8 @@ import java.util.Map;
  *如果不相匹配如何解决回答这通常是由网页编写人来更改。比如：你在源文件里面找到你要
  *打开的文件的HTML标签，在里面加上应用程序即可。比如，你要在网页上打开一个PDF文档?
  *业絇DF文档那一行，在HTML标签里加上 type=“application/pdf “
- *就可以了。比如以下HTML文件：<!----------测试MIME-----------
- *><html><head><title>测试MIME</title></head><body><a
+ *就可以了。比如以下HTML文件：
+ *<html><head><title>测试MIME</title></head><body><a
  *type="application/pdf"href="test.pdf">测试MIME</a></body>
  *</html将上面的代码保存为test.html，再在相同的位置存储一个pdf文档，双击它就会在网
  *页中打开该文
@@ -233,7 +274,7 @@ public class WordUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(WordUtil.class);
 
-    private static String fileName = DateUtils.toYmd(new Date()) + "_" + System.currentTimeMillis() + "_cpa.doc";
+    private static String fileName = DateUtils.formatDate(Instant.now(), DateUtils.pattern_date_oblique_line) + "_" + System.currentTimeMillis() + "_cpa.doc";
 
     private static Configuration configuration = null;
 
@@ -476,7 +517,7 @@ public class WordUtil {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (file != null){
+            if (file != null) {
                 file.delete(); // 删除临时文件
             }
         }

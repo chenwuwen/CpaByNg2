@@ -16,8 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -49,7 +49,7 @@ public class UploadFileServiceImpl implements UploadFileService {
         for (MultipartFile file : files) {
             String newFileName = FileUtil.generateFileName(file.getOriginalFilename(), "", true);
             String rootPath = UploadFileServiceImpl.class.getResource("/").getPath() + "images/";
-            String filePath = rootPath + DateUtils.toYmdX(new Date()) + "/" + newFileName;
+            String filePath = rootPath + DateUtils.formatDate(Instant.now(),DateUtils.pattern_date_oblique_line) + "/" + newFileName;
 
             try {
                 //先创建文件夹
@@ -60,7 +60,7 @@ public class UploadFileServiceImpl implements UploadFileService {
 //                BufferedImage image = ImageIO.read(new FileInputStream(filePath));
                 for (String size : imgSizes) {
 //                   压缩图片保存路径
-                    String descPath = rootPath + DateUtils.toYmdX(new Date()) + "/" + FileUtil.generateFileName(newFileName, size, false);
+                    String descPath = rootPath + DateUtils.formatDate(Instant.now(),DateUtils.pattern_date_oblique_line) + "/" + FileUtil.generateFileName(newFileName, size, false);
 //                创建文件
                     File handlerFile = new File(descPath);
                     if (!handlerFile.exists()) {
@@ -70,7 +70,7 @@ public class UploadFileServiceImpl implements UploadFileService {
                     Thumbnails.of(filePath).size(Integer.parseInt(size.split("-")[0]), Integer.parseInt(size.split("-")[1])).toFile(descPath);
                 }
                 //上传文件到FTP
-                ftpService.uploadFTP(filePath, "/image/" + DateUtils.toYmdX(new Date()) + "/" + newFileName);
+                ftpService.uploadFTP(filePath, "/image/" + DateUtils.formatDate(Instant.now(),DateUtils.pattern_date_oblique_line) + "/" + newFileName);
                 result.setState(CpaConstants.OPERATION_SUCCESS);
                 result.setData(filePath.replace(rootPath, ""));
             } catch (IOException e) {

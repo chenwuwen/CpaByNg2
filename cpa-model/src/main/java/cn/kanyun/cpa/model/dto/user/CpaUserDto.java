@@ -30,7 +30,10 @@ public class CpaUserDto extends BaseEntity {
     private String email;
     private String validateCode; //验证码
     private String isRememberMe;
-    private String salt; //盐
+    /**
+     * 盐 [加密盐值]
+     */
+    private String salt;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime startRegisterDate; //注册开始时间
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -44,14 +47,34 @@ public class CpaUserDto extends BaseEntity {
     private LocalDateTime endLastLoginDate;  //上次登录结束时间
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime lastLoginDate;  //上次登录时间
-    private Set<String> roles; //角色集合
-    private Set<String> permissions; //权限集合
+    /**
+     * 上次登录时间
+     */
+    private LocalDateTime lastLoginDate;
+    /**
+     * 角色集合
+     */
+    private Set<String> roles;
+    /**
+     * 权限集合
+     */
+    private Set<String> permissions;
     private String imgPath;
     private String token;
     private Integer status;
-    private Byte gender;  //性别 0：女，1：男
+    /**
+     * 性别 0：女，1：男
+     */
+    private Byte gender;
+    private String nickName;
 
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public String getToken() {
         return token;

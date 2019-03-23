@@ -87,4 +87,10 @@ public class test {
 		System.out.println(ss.length());
 	}
 
+	@Test
+	public void exec6() {
+		String s = "  aa23b4bc6c7dd8 ";
+		System.out.println(StringUtils.getDigits(s));
+	}
+
 }

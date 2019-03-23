@@ -51,4 +51,46 @@ public class ReflectHelper {
 		}
 		return null;
 	}
+
+	/**
+	 * 获取调用者的类名
+	 * @return String
+	 */
+	public static String getClassName() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		StackTraceElement e = stacktrace[2];
+		String className = e.getClassName();
+		return className;
+	}
+
+	/**
+	 * 获取调用者的方法名
+	 */
+	public static String getMethodName() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		StackTraceElement e = stacktrace[2];
+		String methodName = e.getMethodName();
+		return methodName;
+	}
+
+	/**
+	 * 获取调用者的文件名
+	 */
+	public static String getFileName() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		StackTraceElement e = stacktrace[2];
+		String methodName = e.getFileName();
+		return methodName;
+	}
+
+	/**
+	 * 获取调用者的调用的行数
+	 */
+	public static int getLineNumber() {
+		StackTraceElement[] stacktrace = Thread.currentThread().getStackTrace();
+		StackTraceElement e = stacktrace[2];
+		int line = e.getLineNumber();
+		return line;
+	}
+
 }

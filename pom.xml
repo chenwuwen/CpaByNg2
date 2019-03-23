@@ -17,6 +17,7 @@
         <module>cpa-util</module>
         <module>cpa-lucene</module>
         <module>cpa-provide</module>
+        <module>cpa-chat</module>
     </modules>
     <!--上传私服 pom.xml 配置,发布自己的jar包,本文件仅为pom文件故不参与部署-->
     <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
@@ -37,17 +38,17 @@
         <!--如有Nexus私服, 取消注释并指向正确的服务器地址,需要注意的是配置私服后,所有的jar包将在从私服中下载,如果私服中没有,则私服从其他仓库下载到私服内,再下载到本地的开发环境,所以如果私服从其他仓库下载的jar包不完整,那么本地的jar包也是不完整的,这个时候需要注释掉私服的配置,使开发环境从其他仓库下载,或者操作私服重新下载jar包-->
         <!--https://blog.csdn.net/kimylrong/article/details/23280155-->
         <!--其主要下载的还是我们自己打的项目中需要依赖的jar包-->
-        <repository>
-            <id>nexus-repos</id>
-            <name>Team Nexus Repository</name>
-            <url>http://115.47.155.3:8086/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
+        <!--<repository>-->
+            <!--<id>nexus-repos</id>-->
+            <!--<name>Team Nexus Repository</name>-->
+            <!--<url>http://115.47.155.3:8086/nexus/content/groups/public</url>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+            <!--</releases>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+            <!--</snapshots>-->
+        <!--</repository>-->
         <!--一些公共meven库-->
         <repository>
             <id>spring-snapshots</id>
@@ -162,10 +163,11 @@
                         </execution>
                     </executions>
                 </plugin>
-                <!--maven assembly插件,用来打jar包-->
-                <plugin>
+
+                <!--maven assembly插件,用来打jar包[其可以实现，自定义打可运行的jar包]-->
+              <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
-                    <version>2.4.1</version>
+                    <version>3.1.1</version>
                 </plugin>
 
                 <!--mybatis代码生成插件-->
@@ -344,6 +346,33 @@
                 <version>1.0.2</version>
             </dependency>
 
+            <!--消息队列-->
+            <dependency>
+                <groupId>com.alibaba.rocketmq</groupId>
+                <artifactId>rocketmq-client</artifactId>
+                <version>3.2.6</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.rocketmq</groupId>
+                <artifactId>rocketmq-all</artifactId>
+                <version>3.2.6</version>
+                <type>pom</type>
+            </dependency>
+
+            <!--Netty网络通讯-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>5.0.0.Alpha2</version>
+            </dependency>
+
+            <!--JBoss Marshalling 是一个Java对象的序列化API包，修正了JDK自带的序列化包的很多问题，但又保持跟 java.io.Serializable 接口的兼容，通常用于Netty编解码应用-->
+            <dependency>
+                <groupId>org.jboss.marshalling</groupId>
+                <artifactId>jboss-marshalling</artifactId>
+                <version>2.0.6.Final</version>
+            </dependency>
+
             <!--使用redis-->
             <dependency>
                 <groupId>com.github.debop</groupId>
@@ -378,18 +407,15 @@
                 <artifactId>druid</artifactId>
                 <version>1.1.6</version>
             </dependency>
+
             <!--Quartz定时任务-->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
                 <version>2.3.0</version>
             </dependency>
+
             <!--日志记录-->
-            <!--<dependency>-->
-            <!--<groupId>commons-logging</groupId>-->
-            <!--<artifactId>commons-logging</artifactId>-->
-            <!--<version>1.2</version>-->
-            <!--</dependency>-->
             <!--slf4j的核心包,只有日志的接口，并没有实现-->
             <dependency>
                 <groupId>org.slf4j</groupId>
@@ -422,6 +448,12 @@
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-core</artifactId>
                 <version>1.2.3</version>
+            </dependency>
+            <!--logback 配置ELK依赖-->
+            <dependency>
+                <groupId>net.logstash.logback</groupId>
+                <artifactId>logstash-logback-encoder</artifactId>
+                <version>5.3</version>
             </dependency>
             <!--logback-access.jar包是通过互联网访问日志时需要的JAR包-->
             <dependency>
@@ -504,6 +536,13 @@
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>2.9.2</version>
+            </dependency>
+
+            <!--Java系统监控(淘汰sigar)-->
+            <dependency>
+                <groupId>com.github.oshi</groupId>
+                <artifactId>oshi-core</artifactId>
+                <version>3.13.0</version>
             </dependency>
 
             <!--swagger2 引用生成 RestAPI文档-->
@@ -639,12 +678,6 @@
                 <version>1.8.10</version>
             </dependency>
 
-            <!--计算日期组件-->
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>2.9.9</version>
-            </dependency>
 
             <!--图片处理,但需要操作系统安装ImageMagick或者GraphicsMagick再配好环境变量。-->
             <dependency>

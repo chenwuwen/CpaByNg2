@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 父项目的坐标。如果项目中没有规定某个元素的值，那么父项目中的对应值即为项目的默认值。
+    坐标包括group ID，artifact ID和 version。 -->
+    <parent>
+        <!-- 被继承的父项目的构件标识符 -->
+        <artifactId>cpa</artifactId>
+        <!-- 被继承的父项目的全球唯一标识符 -->
+        <groupId>cn.kanyun</groupId>
+        <!-- 被继承的父项目的版本 -->
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <!-- 项目产生的构件类型，例如jar、war、ear、pom。插件可以创建他们自己的构件类型，所以前面列的不是全部构件类型 -->
+    <packaging>jar</packaging>
+    <artifactId>cpa-chat</artifactId>
+
+    <dependencies>
+        <!--项目模块依赖-->
+        <dependency>
+            <groupId>cn.kanyun</groupId>
+            <artifactId>cpa-model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.kanyun</groupId>
+            <artifactId>cpa-util</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!--Junit单元测试-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--Spring相关-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+
+        <!--注解相关-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+
+        <!--日志记录-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.logback-extensions</groupId>
+            <artifactId>logback-ext-spring</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+
+
+        <!--工具类-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+
+        <!--Netty网络通讯-->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+
+        <!--JBoss Marshalling 是一个Java对象的序列化API包，修正了JDK自带的序列化包的很多问题，但又保持跟 java.io.Serializable 接口的兼容，通常用于Netty编解码应用-->
+        <dependency>
+            <groupId>org.jboss.marshalling</groupId>
+            <artifactId>jboss-marshalling</artifactId>
+        </dependency>
+
+        <!-- project lombok 项目中使用Lombok可以减少很多重复代码的书写。比如说getter/setter/toString等方法的编写-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+            <classifier>jdk15</classifier>
+        </dependency>
+
+    </dependencies>
+
+
+    <build>
+        <!--该配置修改打包后的文件名-->
+        <finalName>cpa-chat</finalName>
+
+        <resources>
+            <resource>
+                <targetPath>${project.build.directory}/classes</targetPath>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+
+            <!--带主类[且带自定义类的依赖]的打包方式,需要注意的是,打完包会后成两个jar包,需要注意的是带 "-with-dependencies" 后缀的才是带了依赖的 jar包-->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!--设置主类,自定义的主类-->
+                            <mainClass>cn.kanyun.cpa.chat.ChatServerMain</mainClass>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
+                    <descriptorRefs>
+                        <!--会将所有依赖[包括自定义类的依赖]都打包-->
+                        <!--还有一些其他参数-->
+                        <!--bin ： 类似于默认打包，会将bin目录下的文件打到包中-->
+                        <!--jar-with-dependencies ： 会将所有依赖都解压打包到生成物中-->
+                        <!--src ：只将源码目录下的文件打包-->
+                        <!--project ： 将整个project资源打包-->
+                        <!--除了上面的几种方式外,还可以自定义打包方式：使用 <descriptor>打包,详见：https://blog.csdn.net/qq_36781718/article/details/80111971-->
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!--这个ID可以随便起,但是-->
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <!--这个配置在IDEA中有可能飘红,但是不能注释,注释掉将无法打包-->
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
+</project>

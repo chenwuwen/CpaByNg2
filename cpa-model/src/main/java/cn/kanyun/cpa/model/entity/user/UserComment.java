@@ -12,7 +12,7 @@ public class UserComment implements java.io.Serializable {
     private Long id;
     private Long userId;
     private String username;
-    private String petname;
+    private String nickName;
     private Long reId;
     private LocalDateTime commentDate;
     private String comment;
@@ -48,13 +48,13 @@ public class UserComment implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "petname", nullable = true, length = 255)
-    public String getPetname() {
-        return petname;
+    @Column(name = "nick_name", nullable = true, length = 255)
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setPetname(String petname) {
-        this.petname = petname;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
     @Basic

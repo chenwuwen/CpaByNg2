@@ -15,7 +15,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 1.服务容器是一个standalone的启动程序，因为后台服务不需要Tomcat或JBoss等Web容器的功能，如果硬要用Web容器去加载服务提供方，增加复杂性，也浪费资源。
  * 2.服务容器只是一个简单的Main方法，并加载一个简单的Spring容器，用于暴露服务。
  * 3.服务容器的加载内容可以扩展，内置了spring，jetty，logj等加载，可通过Container扩展点进行扩展
- * <p>
  * 提供者以jar包方式运行,在本地调试可以用main方法运行,部署的时候就只能是打成jar包了.
  * 使用maven来配置,使用默认的Spring Container (自动加载META-INF/spring目录下的所有Spring配置。)
  *

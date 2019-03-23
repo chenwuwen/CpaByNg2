@@ -11,7 +11,6 @@ import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import cn.kanyun.cpa.service.user.AnswerRecordService;
 import cn.kanyun.cpa.service.user.UserService;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,11 +19,13 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import org.testng.annotations.Test;
 
 import javax.annotation.Resource;
-
 import java.time.LocalDateTime;
-import java.util.*;
-
-import static org.testng.Assert.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/7/17.
@@ -108,7 +109,7 @@ public class CpaSolutionControllerTest {
         answerRecord.setScore((Integer) ((Map) result.getData()).get("score"));
         answerRecord.setUsername(user.getUserName());
         answerRecord.setUserId(user.getId());
-        answerRecord.setPetname(user.getPetName());
+        answerRecord.setNickName(user.getNickName());
         answerRecord.setTotalcount((Integer) ((Map) result.getData()).get("totalCount"));
         return answerRecord;
     }

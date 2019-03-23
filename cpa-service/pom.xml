@@ -62,13 +62,16 @@
                     <classesDirectory>target/classes/</classesDirectory>
                     <archive>
                         <manifest>
-                            <!--jar包单独运行时的启动类,该方式是自写Main类的方式,不推荐-->
+                            <!--jar包单独运行时的启动类,该方式自写Main类的方式,不推荐-->
                             <!--<mainClass>cn.kanyun.cpa.service.Main</mainClass>-->
-                            <!--dubbo官方启动类-->
+                            <!--推荐使用Dubbo官方定义的启动类-->
                             <mainClass>com.alibaba.dubbo.container.Main</mainClass>
                             <!-- 打包时 MANIFEST.MF文件不记录的时间戳版本 -->
                             <useUniqueVersions>false</useUniqueVersions>
                             <addClasspath>true</addClasspath>
+                            <!--需要注意的是,打好的jar包,里面的类是自己写的类,因此如果自定义的类,依赖了其他jar包,那么直接运行生成的jar包是不行的,所以需要把自定义依赖的jar包,也加进来-->
+                            <!--这里采用的方式是：自定义类所依赖的jar包打到,当前目录的 lib/ 下,该配置表示前缀.真正的打包依赖,是下面的plugin-->
+                            <!--这种方式的好处是,打完后的包比较小,如果后期修改代码不涉及增加第三方依赖的话,那么只需要将生成的jar文件放置到服务器即可,而不需要再放置lib/ 下的依赖了-->
                             <classpathPrefix>lib/</classpathPrefix>
                         </manifest>
                         <manifestEntries>
@@ -78,7 +81,8 @@
                 </configuration>
             </plugin>
 
-            <!-- 把依赖的jar包,打成一个lib文件夹 -->
+            <!--该plugin 提供了上面plugin生成的jar包,的依赖-->
+            <!-- 把依赖的jar包,打到jar包同级目录的lib文件夹 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -207,10 +211,6 @@
             <artifactId>thumbnailator</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>joda-time</groupId>
-            <artifactId>joda-time</artifactId>
-        </dependency>
 
         <!--Quartz定时任务-->
         <dependency>
@@ -262,6 +262,30 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+
+        <!--消息队列-->
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.rocketmq</groupId>
+            <artifactId>rocketmq-all</artifactId>
+            <type>pom</type>
+        </dependency>
+
+        <!--Netty网络通讯-->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
+
+        <!--HTML解析-->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.3</version>
         </dependency>
 
         <!--文件上传-->

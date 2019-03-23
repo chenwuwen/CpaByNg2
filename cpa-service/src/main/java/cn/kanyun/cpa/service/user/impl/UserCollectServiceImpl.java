@@ -30,7 +30,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect>
         userCollect.setCollectDate( LocalDateTime.now() );
         userCollect.setStatus(1);
         userCollect.setUsername(user.getUserName());
-        userCollect.setPetname(user.getPetName());
+        userCollect.setNickName(user.getNickName());
         Object[] params = {reId, user.getId()};
         String where = "o.reId = ? and o.userId =?";
 /*
