@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.chat.entity;
 
+import cn.kanyun.cpa.chat.definition.ChatCodeEnum;
 import lombok.Builder;
 
 import java.io.Serializable;
@@ -7,6 +8,8 @@ import java.time.LocalDateTime;
 
 @Builder
 public class Message implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 发送人ID
@@ -27,4 +30,9 @@ public class Message implements Serializable {
      * 消息内容
      */
     private String content;
+
+    /**
+     * 消息类型
+     */
+    private ChatCodeEnum chatCode;
 }

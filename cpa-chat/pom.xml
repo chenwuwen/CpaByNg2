@@ -21,11 +21,6 @@
         <!--项目模块依赖-->
         <dependency>
             <groupId>cn.kanyun</groupId>
-            <artifactId>cpa-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.kanyun</groupId>
             <artifactId>cpa-util</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
@@ -140,7 +135,10 @@
                         <manifest>
                             <!--设置主类,自定义的主类-->
                             <mainClass>cn.kanyun.cpa.chat.ChatServerMain</mainClass>
+                            <!-- 是否指定项目classpath下的依赖 -->
                             <addClasspath>true</addClasspath>
+                            <!--指定依赖的时候声明前缀-->
+                            <classpathPrefix>./</classpathPrefix>
                         </manifest>
                     </archive>
                     <descriptorRefs>
@@ -156,11 +154,12 @@
                 </configuration>
                 <executions>
                     <execution>
-                        <!--这个ID可以随便起,但是-->
-                        <id>make-assembly</id>
+                        <!--这个ID可以随便起,但是需要与assembly配置文件中的id一致-->
+                        <id>chat-assembly</id>
+                        <!-- 绑定到package生命周期阶段上 -->
                         <phase>package</phase>
                         <goals>
-                            <!--这个配置在IDEA中有可能飘红,但是不能注释,注释掉将无法打包-->
+                            <!-- 只运行一次 这个配置在IDEA中有可能飘红,但是不能注释,注释掉将无法打包-->
                             <goal>single</goal>
                         </goals>
                     </execution>

@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.chat;
 
+import cn.kanyun.cpa.chat.definition.ChatCodeEnum;
+import cn.kanyun.cpa.chat.definition.ChatProto;
 import cn.kanyun.cpa.chat.entity.ChatUser;
 import cn.kanyun.cpa.chat.util.NettyUtil;
 import io.netty.channel.Channel;
@@ -22,6 +24,11 @@ public class ChatUserManager {
     private static ConcurrentMap<Channel, ChatUser> userInfos = new ConcurrentHashMap<>();
     private static AtomicInteger userCount = new AtomicInteger(0);
 
+    /**
+     * 保存channel到缓存,key是channel value是用户(此时信息是不完整的)
+     *
+     * @param channel
+     */
     public static void addChannel(Channel channel) {
         String remoteAddr = NettyUtil.parseChannelRemoteAddr(channel);
         if (!channel.isActive()) {
@@ -33,6 +40,14 @@ public class ChatUserManager {
         userInfos.put(channel, userInfo);
     }
 
+    /**
+     * 完善聊天用户信息
+     * 从Map中根据Channel取到ChatUser完善ChatUser 这时候Map中就保存的是完整的ChatUser了
+     *
+     * @param channel
+     * @param nick
+     * @return
+     */
     public static boolean saveUser(Channel channel, String nick) {
         ChatUser userInfo = userInfos.get(channel);
         if (userInfo == null) {
@@ -44,6 +59,9 @@ public class ChatUserManager {
         }
         // 增加一个认证用户
         userCount.incrementAndGet();
+        userInfo.setNickName(nick);
+        userInfo.setAuth(true);
+//        userInfo.setUserId();
         userInfo.setTime(System.currentTimeMillis());
         return true;
     }
@@ -73,7 +91,7 @@ public class ChatUserManager {
     }
 
     /**
-     * 广播普通消息
+     * 广播普通消息(即用户发送的聊天消息)
      *
      * @param message
      */
@@ -84,7 +102,7 @@ public class ChatUserManager {
                 Set<Channel> keySet = userInfos.keySet();
                 for (Channel ch : keySet) {
                     ChatUser userInfo = userInfos.get(ch);
-                    if (userInfo == null || userInfo.isAuth()) {
+                    if (userInfo == null || !userInfo.isAuth()) {
                         continue;
                     }
                     ch.writeAndFlush(new TextWebSocketFrame(ChatProto.buildMessProto(uid, nick, message)));
@@ -96,24 +114,27 @@ public class ChatUserManager {
     }
 
     /**
-     * 广播系统消息
+     * 广播系统消息(谁加入了聊天的系统消息)
      */
-    public static void broadCastInfo(int code, Object mess) {
+    public static void broadCastInfo(ChatCodeEnum code, Object mess) {
         try {
             rwLock.readLock().lock();
             Set<Channel> keySet = userInfos.keySet();
             for (Channel ch : keySet) {
                 ChatUser userInfo = userInfos.get(ch);
-                if (userInfo == null || userInfo.isAuth()) {
+                if (userInfo == null || !userInfo.isAuth()) {
                     continue;
                 }
-                ch.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSystProto(code, mess)));
+                ch.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSysProto(code, mess)));
             }
         } finally {
             rwLock.readLock().unlock();
         }
     }
 
+    /**
+     * 广播Ping消息,只有认证过的才会发送Ping消息
+     */
     public static void broadCastPing() {
         try {
             rwLock.readLock().lock();
@@ -121,7 +142,7 @@ public class ChatUserManager {
             Set<Channel> keySet = userInfos.keySet();
             for (Channel ch : keySet) {
                 ChatUser userInfo = userInfos.get(ch);
-                if (userInfo == null || userInfo.isAuth()) {
+                if (userInfo == null || !userInfo.isAuth()) {
                     continue;
                 }
                 ch.writeAndFlush(new TextWebSocketFrame(ChatProto.buildPingProto()));
@@ -132,13 +153,13 @@ public class ChatUserManager {
     }
 
     /**
-     * 发送系统消息
+     * 发送认证结果的系统消息
      *
      * @param code
      * @param mess
      */
-    public static void sendInfo(Channel channel, int code, Object mess) {
-        channel.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSystProto(code, mess)));
+    public static void sendInfo(Channel channel, ChatCodeEnum code, Object mess) {
+        channel.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSysProto(code, mess)));
     }
 
     public static void sendPong(Channel channel) {
@@ -147,6 +168,7 @@ public class ChatUserManager {
 
     /**
      * 扫描并关闭失效的Channel
+     * 其中包括 通道关闭的,通道不活跃的,未认证的,与服务端Ping Pong超过1分钟未交互的客户端
      */
     public static void scanNotActiveChannel() {
         Set<Channel> keySet = userInfos.keySet();
@@ -155,8 +177,8 @@ public class ChatUserManager {
             if (userInfo == null) {
                 continue;
             }
-            if (!ch.isOpen() || !ch.isActive() || (userInfo.isAuth() &&
-                    (System.currentTimeMillis() - userInfo.getTime()) > 10000)) {
+            if (!ch.isOpen() || !ch.isActive() || (!userInfo.isAuth() &&
+                    (System.currentTimeMillis() - userInfo.getTime()) > 60 * 1000)) {
                 removeChannel(ch);
             }
         }

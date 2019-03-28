@@ -8,7 +8,7 @@ public class ChatUser {
     /**
      * 是否认证
      */
-    private boolean isAuth = false;
+    private boolean auth = false;
 
     private String nickName;
 

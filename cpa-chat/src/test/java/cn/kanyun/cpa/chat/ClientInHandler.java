@@ -1,14 +1,13 @@
 package cn.kanyun.cpa.chat;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class ClientInHandler extends SimpleChannelInboundHandler<ByteBuf> {
+public class ClientInHandler extends SimpleChannelInboundHandler<Object> {
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, ByteBuf o) throws Exception {
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
         log.info(">>>>>>>客户端收到服务端的消息<<<<<<");
         log.info(o.toString());
     }

@@ -62,6 +62,8 @@
 
     <!-- 服务者与消费者的默认配置 -->
     <!-- 延迟到Spring初始化完成后，再暴露服务,服务调用超时设置为6秒,超时不重试  统一的超时和重连配置 -->
+    <!--在 spring 解析到 dubbo:service 时，就已经向外暴露了服务，而 spring 还在接着初始化其他 bean，如果这时有请求进来，并且服务的实现类里有调用 applicationContext.getBean() 的用法。getBean 线程和 spring 初始化线程的锁的顺序不一样，导致了线程死锁，不能提供服务，启动不了-->
+    <!--解决：不要在服务的实现类中使用 applicationContext.getBean(); 如果不想依赖配置顺序，可以将 dubbo:provider 的 deplay 属性设置为 - 1，使 dubbo 在容器初始化完成后再暴露服务-->
     <dubbo:provider delay="-1" timeout="6000" retries="0"/>
     <!--<dubbo:consumer timeout="6000" retries="0"/>-->
 </beans>

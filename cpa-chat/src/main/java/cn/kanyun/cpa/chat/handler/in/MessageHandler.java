@@ -1,7 +1,7 @@
 package cn.kanyun.cpa.chat.handler.in;
 
-import cn.kanyun.cpa.chat.ChatCode;
 import cn.kanyun.cpa.chat.ChatUserManager;
+import cn.kanyun.cpa.chat.definition.ChatCodeEnum;
 import cn.kanyun.cpa.chat.entity.ChatUser;
 import com.alibaba.fastjson.JSONObject;
 import io.netty.channel.ChannelHandlerContext;
@@ -28,14 +28,19 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
             log.info("=======发送消息的用户通过了认证,服务端可以广播了=====");
             JSONObject json = JSONObject.parseObject(textWebSocketFrame.text());
             // 广播返回用户发送的消息文本
-            ChatUserManager.broadcastMess(userInfo.getUserId(), userInfo.getNickName(), json.getString("mess"));
+            ChatUserManager.broadcastMess(userInfo.getUserId(), userInfo.getNickName(), json.getString("message"));
         }
     }
 
+    /**
+     * 定时处理
+     * @param ctx
+     * @throws Exception
+     */
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
         ChatUserManager.removeChannel(ctx.channel());
-        ChatUserManager.broadCastInfo(ChatCode.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
+        ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
         super.channelUnregistered(ctx);
     }
 
@@ -43,7 +48,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error(">>>>>>>> 连接错误关闭 channel :{}", cause);
         ChatUserManager.removeChannel(ctx.channel());
-        ChatUserManager.broadCastInfo(ChatCode.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
+        ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
     }
 
 

@@ -1,6 +1,8 @@
 package cn.kanyun.cpa.model.dto.itempool;
 
 import cn.kanyun.cpa.model.entity.BaseEntity;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -21,16 +23,22 @@ public class CpaRepertoryDto extends BaseEntity {
 
     private Long id;
     private String testStem;
-    private String testType;
-    private String choice; //是否是多选题
+    private QuestionTypeEnum questionType;
+    private ExamClassificationEnum testType;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 //    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
 //    下面这两个注解保证该字段返回Json是 yyyy-MM-dd HH:mm:ss 格式的字符串
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;
-    private String presult; //用户回答的答案
-    private String bresult; //标准答案
+    /**
+     * 用户回答的答案
+     */
+    private String presult;
+    /**
+     * 标准答案
+     */
+    private String bresult;
     private List<CpaOptionDto> cpaOptionDtos;
     private List<String> pAnswer;
     private Long commentCount;
@@ -38,11 +46,11 @@ public class CpaRepertoryDto extends BaseEntity {
     public CpaRepertoryDto() {
     }
 
-    public CpaRepertoryDto(Long id, String testStem, String testType, String choice, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, Long commentCount) {
+    public CpaRepertoryDto(Long id, String testStem, QuestionTypeEnum questionType, ExamClassificationEnum testType, LocalDateTime insertDate, String presult, String bresult, List<CpaOptionDto> cpaOptionDtos, List<String> pAnswer, Long commentCount) {
         this.id = id;
         this.testStem = testStem;
+        this.questionType = questionType;
         this.testType = testType;
-        this.choice = choice;
         this.insertDate = insertDate;
         this.presult = presult;
         this.bresult = bresult;
@@ -69,19 +77,19 @@ public class CpaRepertoryDto extends BaseEntity {
         this.testStem = testStem;
     }
 
+    public String getQuestionType() {
+        return questionType.name();
+    }
+
+    public void setQuestionType(QuestionTypeEnum questionType) {
+        this.questionType = questionType;
+    }
+
     public String getTestType() {
-        return testType;
+        return testType.name();
     }
 
-    public String getChoice() {
-        return choice;
-    }
-
-    public void setChoice(String choice) {
-        this.choice = choice;
-    }
-
-    public void setTestType(String testType) {
+    public void setTestType(ExamClassificationEnum testType) {
         this.testType = testType;
     }
 
@@ -124,7 +132,6 @@ public class CpaRepertoryDto extends BaseEntity {
     public void setpAnswer(List<String> pAnswer) {
         this.pAnswer = pAnswer;
     }
-
 
     public Long getCommentCount() {
         return commentCount;

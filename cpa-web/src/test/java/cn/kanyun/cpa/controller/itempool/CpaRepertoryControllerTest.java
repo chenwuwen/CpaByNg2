@@ -3,6 +3,8 @@ package cn.kanyun.cpa.controller.itempool;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import org.junit.After;
 import org.junit.Before;
@@ -46,8 +48,8 @@ public class CpaRepertoryControllerTest {
     public void addUnitExam() throws Exception {
         CpaRepertory cpaRepertory = new CpaRepertory();
         cpaRepertory.setTestStem("下列软件中，计算机系统所必备的是( )");
-        cpaRepertory.setTestType("cpuAccount");
-        cpaRepertory.setChoice("exclusive");
+        cpaRepertory.setTestType(ExamClassificationEnum.CPU_ACCOUNT);
+        cpaRepertory.setQuestionType(QuestionTypeEnum.SINGLE);
         cpaRepertory.setInsertDate(LocalDateTime.now());
         List<CpaOption> cpaOptions = new ArrayList<>();
         CpaOption cpaOption1 = new CpaOption();

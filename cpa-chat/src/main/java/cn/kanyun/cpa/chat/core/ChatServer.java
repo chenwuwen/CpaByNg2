@@ -1,18 +1,9 @@
 package cn.kanyun.cpa.chat.core;
 
 import cn.kanyun.cpa.chat.ChatUserManager;
-import cn.kanyun.cpa.chat.handler.DiscardServerHandler;
-import cn.kanyun.cpa.chat.handler.TestNetty5Handler;
-import cn.kanyun.cpa.chat.handler.in.MessageHandler;
-import cn.kanyun.cpa.chat.handler.in.StateHandler;
-import cn.kanyun.cpa.chat.handler.in.UserAuthHandler;
-import io.netty.channel.ChannelInitializer;
+import cn.kanyun.cpa.chat.handler.ChatServerChannelInitializer;
 import io.netty.channel.ChannelOption;
-import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.HttpObjectAggregator;
-import io.netty.handler.stream.ChunkedWriteHandler;
-import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -82,33 +73,7 @@ public class ChatServer extends BaseServer {
 //               进行Netty数据处理的过滤器配置（责任链设计模式）添加handler，用来监听已经连接的客户端的Channel的动作和状态,handler在初始化时就会执行，而childHandler会在客户端成功connect后才执行，这是两者的区别。
 //               Netty中的所有handler都实现自ChannelHandler接口。按照输出输出来分，分为ChannelInboundHandler、ChannelOutboundHandler两大类。ChannelInboundHandler对从客户端发往服务器的报文进行处理，一般用来执行解码、读取客户端数据、进行业务处理等；ChannelOutboundHandler对从服务器发往客户端的报文进行处理，一般用来进行编码、发送报文到客户端。
 //               Netty中，可以注册多个handler。ChannelInboundHandler按照注册的先后顺序(即书写的顺序呢)执行；ChannelOutboundHandler按照注册的先后顺序逆序执行
-                .childHandler(new ChannelInitializer<SocketChannel>() {
-                    /**
-                     * 当新连接accept的时候，这个方法会调用
-                     * @param ch
-                     * @throws Exception
-                     */
-                    @Override
-                    protected void initChannel(SocketChannel ch) {
-                        ch.pipeline().addLast(defLoopGroup,
-//                                new HttpServerCodec(),
-//                                new SslHandler(),
-                                new HttpObjectAggregator(65536),//将多个消息转换成单一的消息对象
-                                new ChunkedWriteHandler(),  //支持异步发送大的码流，一般用于发送文件流
-//                                编解码器配置(调用了JBoss的marshalling库) 必须放在pipline的最前头，否则会让信息发不出去
-//                                MarshallingCodeCFactory.buildMarshallingDecoder(),
-//                                MarshallingCodeCFactory.buildMarshallingEncoder(),
-                                new IdleStateHandler(60, 0, 0), //检测链路是否读空闲，也是Netty的心跳机制
-                                new TestNetty5Handler(),
-////                                ChannelInboundHandler 进方向的Handler,按注册先后顺序执行
-                                new StateHandler(),
-                                new UserAuthHandler(), //处理握手和认证
-                                new MessageHandler(),    //处理消息的发送
-                                new DiscardServerHandler()    //丢弃消息
-                        );
-
-                    }
-                });
+                .childHandler(new ChatServerChannelInitializer(defLoopGroup));
 
         try {
 //            bind方法会创建一个serverChannel,并且会将当前的channel注册到bossGroup上面,会为其绑定本地端口，并对其进行初始化，sync() 异步线程处理
@@ -127,8 +92,8 @@ public class ChatServer extends BaseServer {
                 }
             }, 3, 60, TimeUnit.SECONDS);
 
-            // 定时向所有客户端发送Ping消息
-            executorService.scheduleAtFixedRate(new Runnable() {
+            // 定时向所有客户端发送Ping消息,初始化延时3秒,前一次执行完成后的第50秒 再执行
+            executorService.scheduleWithFixedDelay(new Runnable() {
                 @Override
                 public void run() {
                     log.info(">>>>>>> 定时ping客户端 <<<<<<<<<<");

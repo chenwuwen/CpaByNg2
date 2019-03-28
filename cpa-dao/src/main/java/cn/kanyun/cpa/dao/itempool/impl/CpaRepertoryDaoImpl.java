@@ -51,14 +51,15 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Long, CpaRepertory> imple
             where.append(" and o.testStem like ? ");
             queue.add("%" + cpaRepertoryDto.getTestStem() + "%");
         }
-        if (StringUtils.isNotBlank(cpaRepertoryDto.getTestType())) {
+        if (cpaRepertoryDto.getTestType() != null) {
             where.append(" and o.testType=? ");
             queue.add(cpaRepertoryDto.getTestType());
         }
-        if (StringUtils.isNotBlank(cpaRepertoryDto.getChoice())) {
-            where.append(" and o.choice=? ");
-            queue.add(cpaRepertoryDto.getChoice());
+        if (cpaRepertoryDto.getQuestionType() != null) {
+            where.append(" and o.questionType=? ");
+            queue.add(cpaRepertoryDto.getQuestionType());
         }
+
         if (queue.size() > 0) {
             params = queue.toArray();
             result = getScrollData(firstResult, pageSize, where.toString(), params, orderby);

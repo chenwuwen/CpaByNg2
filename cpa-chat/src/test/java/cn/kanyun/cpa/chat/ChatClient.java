@@ -1,6 +1,5 @@
 package cn.kanyun.cpa.chat;
 
-import cn.kanyun.cpa.chat.entity.Message;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -16,10 +15,7 @@ import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.time.LocalDateTime;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -71,24 +67,27 @@ public class ChatClient {
 //                            channel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 //                            channel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
                             channel.pipeline().addLast(new HeartBeatClientHandler());
-                            channel.pipeline().addLast(new ClientInHandler());
                             channel.pipeline().addLast(new ClientOutHandler());
+                            channel.pipeline().addLast(new ClientInHandler());
 
                         }
                     });
 
             ChannelFuture future = bootstrap.connect("127.0.0.1", port).sync();
 
-//            ChannelHandlerContext的writeAndFlush是从当前handler直接发出这个消息，而channel的writeAndFlush是从整个pipline最后一个outhandler发出
-//            future.channel().writeAndFlush("XXXXXXXXXX");
-//            future.channel().closeFuture().sync();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            for (; ; ) {
-                log.info("请输入聊天内容：");
-                String msg = reader.readLine();
-                Message message = Message.builder().nickName("看云").sendTime(LocalDateTime.now()).content(msg).build();
-                future.channel().writeAndFlush(msg);
-            }
+//            ChannelHandlerContext的writeAndFlush是从当前handler直接发出这个消息,而channel的writeAndFlush是从整个pipline最后一个outhandler发出
+            String msg = "这是一个普通字符串消息";
+//            TextWebSocketFrame msg = new TextWebSocketFrame("发送一个TextWebSocketFrame类型的消息");
+            future.channel().writeAndFlush(msg);
+
+            future.channel().closeFuture().sync();
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//            for (; ; ) {
+//                log.info("请输入聊天内容：");
+//                String msg = reader.readLine();
+//                Message message = Message.builder().nickName("看云").sendTime(LocalDateTime.now()).content(msg).build();
+//                future.channel().writeAndFlush(message);
+//            }
 
         } catch (Exception e) {
             e.printStackTrace();

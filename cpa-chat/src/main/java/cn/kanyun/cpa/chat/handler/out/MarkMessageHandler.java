@@ -3,17 +3,15 @@ package cn.kanyun.cpa.chat.handler.out;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
+import lombok.extern.slf4j.Slf4j;
 
 import java.net.SocketAddress;
 
 /**
  * 广播的消息,添加标注
  */
+@Slf4j
 public class MarkMessageHandler extends ChannelOutboundHandlerAdapter {
-
-    public MarkMessageHandler() {
-        super();
-    }
 
     /**
      * 服务端执行bind时，会进入到这里，我们可以在bind前及bind后做一些操作
@@ -62,11 +60,13 @@ public class MarkMessageHandler extends ChannelOutboundHandlerAdapter {
 
     @Override
     public void write(ChannelHandlerContext ctx, Object msg, ChannelPromise promise) throws Exception {
+        log.info(">>>>>>>>>>>>>>>MarkMessageHandler write()<<<<<<<<<<<<<<<");
         super.write(ctx, msg, promise);
     }
 
     @Override
     public void flush(ChannelHandlerContext ctx) throws Exception {
+        log.info(">>>>>>>>>>>>>>>MarkMessageHandler flush()<<<<<<<<<<<<<<<");
         super.flush(ctx);
     }
 }

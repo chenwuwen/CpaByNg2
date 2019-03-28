@@ -5,7 +5,7 @@ import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
-import cn.kanyun.cpa.model.enums.ExamEnum;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.queue.UserAnswerLogTask;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import cn.kanyun.cpa.service.user.AnswerRecordService;
@@ -57,7 +57,7 @@ public class CpaSolutionControllerTest {
         try {
             CpaUser user = userService.findById(2L);
             CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
-            cpaRepertoryDto.setTestType(String.valueOf(ExamEnum.CPUACCOUNT));
+            cpaRepertoryDto.setTestType(ExamClassificationEnum.CPU_ACCOUNT);
             List<String> pAnswer = new ArrayList<>();
             pAnswer.add("20-C");
             pAnswer.add("19-C");

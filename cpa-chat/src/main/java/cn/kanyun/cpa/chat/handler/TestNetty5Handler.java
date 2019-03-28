@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerAdapter;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelPromise;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -33,12 +34,14 @@ public class TestNetty5Handler extends ChannelHandlerAdapter {
         log.info("TestNetty5Handler channelRead() 接收到消息：{}", msg.toString());
 //        ByteBuf转字符串
         ByteBuf buf = (ByteBuf) msg;
-        byte[] byteArray  = new byte[buf.readableBytes()];
+        byte[] byteArray = new byte[buf.readableBytes()];
         buf.readBytes(byteArray);
         String body = new String(byteArray, "UTF-8");
         log.info("收到消息：{}", body);
-        ctx.channel().writeAndFlush("我收到了");
-        super.channelRead(ctx, msg);
+        log.info("Channel Id is：{}", ctx.channel().id().asLongText());
+        log.info("》》》》》尝试回复《《《《");
+        ctx.writeAndFlush(new TextWebSocketFrame("AAAA"));
+//        super.channelRead(ctx, msg);
     }
 
     @Override

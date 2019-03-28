@@ -66,6 +66,51 @@ public class IpMacUtil {
     }
 
     /**
+     * ip转数字存储
+     * 在数据库中如果要存储ip地址建议将IP地址存储为数字
+     * 用以节省数据库空间,
+     * 同时MySQL可以使用函数,INET_ATON [ip转数字]，INET_NTOA [数字转IP] 函数进行转换。
+     *
+     * @param ip
+     * @return
+     */
+    public static long ip2Long(String ipAddress) {
+        String[] ipAddressInArray = ipAddress.split("\\.");
+
+        long result = 0;
+        for (int i = 0; i < ipAddressInArray.length; i++) {
+
+            int power = 3 - i;
+            int ip = Integer.parseInt(ipAddressInArray[i]);
+
+            // 1. 192 * 256^3
+            // 2. 168 * 256^2
+            // 3. 1 * 256^1
+            // 4. 2 * 256^0
+            result += ip * Math.pow(256, power);
+
+        }
+
+        return result;
+
+    }
+
+    /**
+     * 将数字转换为IP
+     *
+     * @param ip
+     * @return
+     */
+    public static String long2Ip(long ip) {
+        return ((ip >> 24) & 0xFF) +
+                "." + ((ip >> 16) & 0xFF) +
+                "." + ((ip >> 8) & 0xFF) +
+                "." + (ip & 0xFF);
+
+    }
+
+
+    /**
      * 判断该字串是否为IP
      *
      * @param ipStr IP字串
@@ -110,6 +155,7 @@ public class IpMacUtil {
     /**
      * 获得内网IP
      * 需要注意的是，如果本机存在多块网卡(包括虚拟网卡),返回的结果可能存在问题，所以尽量禁用不用的网卡
+     *
      * @return 内网IP
      */
     public static String getIntranetIp() {
@@ -154,24 +200,22 @@ public class IpMacUtil {
 
     /**
      * 获得外网IP
+     *
      * @return 外网IP
      */
-    public static String getInternetIp(){
-        try{
+    public static String getInternetIp() {
+        try {
             Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
             InetAddress ip = null;
             Enumeration<InetAddress> addrs;
-            while (networks.hasMoreElements())
-            {
+            while (networks.hasMoreElements()) {
                 addrs = networks.nextElement().getInetAddresses();
-                while (addrs.hasMoreElements())
-                {
+                while (addrs.hasMoreElements()) {
                     ip = addrs.nextElement();
                     if (ip != null
                             && ip instanceof Inet4Address
                             && ip.isSiteLocalAddress()
-                            && !ip.getHostAddress().equals(getIntranetIp()))
-                    {
+                            && !ip.getHostAddress().equals(getIntranetIp())) {
                         return ip.getHostAddress();
                     }
                 }
@@ -179,8 +223,21 @@ public class IpMacUtil {
 
             // 如果没有外网IP，就返回内网IP
             return getIntranetIp();
-        } catch(Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static void main(String[] args) {
+        String addr = "192.168.0.1";
+        long number = ip2Long(addr);
+
+        System.out.println(number);
+        System.out.println(long2Ip(number));
+        if (number > Integer.MAX_VALUE) {
+            System.out.println("IP转换生成的数字大于int类型的最大值");
+        }else {
+            System.out.println("IP转换生成的数字小于int类型的最大值");
         }
     }
 

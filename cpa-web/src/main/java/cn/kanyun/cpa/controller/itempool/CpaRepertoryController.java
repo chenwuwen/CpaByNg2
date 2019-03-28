@@ -9,7 +9,7 @@ import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.model.enums.ExamEnum;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
@@ -172,7 +172,7 @@ public class CpaRepertoryController {
             Map map = new HashMap<>();
             map.put("cpaRepertoryDtos", list);
             map.put("total", result.getTotalCount());
-            map.put("type", ExamEnum.valueOf(typeCode.toUpperCase()));
+            map.put("type", ExamClassificationEnum.valueOf(typeCode.toUpperCase()));
             WordUtil.exportWord(map, response);
         } catch (Exception e) {
             logger.error("ERROR：/api/unitExam/exportWord  导出word试题异常：  {}" + e);
@@ -201,7 +201,7 @@ public class CpaRepertoryController {
             cpaRepertoryDto.setId(id);
             cpaRepertoryDto.setTestStem(cpaRepertory.getTestStem());
             cpaRepertoryDto.setTestType(cpaRepertory.getTestType());
-            cpaRepertoryDto.setChoice(cpaRepertory.getChoice());
+            cpaRepertoryDto.setQuestionType(cpaRepertory.getQuestionType());
             cpaRepertoryDto.setBresult(cpaRepertory.getCpaSolution().getResult());
             List<CpaOptionDto> cpaOptionDtoList = new ArrayList<>();
             Set<CpaOption> cpaOptions = cpaRepertory.getCpaOptions();

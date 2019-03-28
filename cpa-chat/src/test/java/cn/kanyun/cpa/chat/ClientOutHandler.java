@@ -52,4 +52,16 @@ public class ClientOutHandler extends ChannelOutboundHandlerAdapter {
         log.info("ClientOutHandler flush() running");
         super.flush(ctx);
     }
+
+    /**
+     * ChannelOutboundHandler上的read方法
+     * 是为了拦截ChannelHandlerContext.read()操作。也就是说，ChannelOutboundHandler可以通过read()方法
+     * 在必要的时候阻止向inbound读取更多数据的操作。这个设计在处理协议的握手时非常有用
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void read(ChannelHandlerContext ctx) throws Exception {
+        super.read(ctx);
+    }
 }

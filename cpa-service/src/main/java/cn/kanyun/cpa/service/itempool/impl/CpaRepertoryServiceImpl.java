@@ -4,15 +4,13 @@ package cn.kanyun.cpa.service.itempool.impl;
 import cn.kanyun.cpa.dao.itempool.CpaOptionDao;
 import cn.kanyun.cpa.dao.itempool.CpaRepertoryDao;
 import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
+import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
-import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
-import cn.kanyun.cpa.model.enums.ExamEnum;
-import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.service.user.UserCommentService;
@@ -24,7 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -56,7 +63,6 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
             for (CpaRepertory cr : listcr) {
                 CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
                 cpaRepertoryDto.setTestStem(cr.getTestStem());
-                cpaRepertoryDto.setChoice(cr.getChoice());
                 cpaRepertoryDto.setId(cr.getId());
                 cpaRepertoryDto.setBresult(cr.getCpaSolution().getResult());
                 reids.add(cr.getId());
@@ -157,8 +163,8 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
                 cpaRepertoryDto1.setTestStem(cpaRepertory1.getTestStem());
                 cpaRepertoryDto1.setId(cpaRepertory1.getId());
                 cpaRepertoryDto1.setInsertDate(cpaRepertory1.getInsertDate());
-                cpaRepertoryDto1.setTestType(ExamEnum.valueOf(cpaRepertory1.getTestType().toUpperCase()).toString());
-                cpaRepertoryDto1.setChoice(QuestionTypeEnum.valueOf(cpaRepertory1.getChoice().toUpperCase()).toString());
+                cpaRepertoryDto1.setTestType(cpaRepertory1.getTestType());
+                cpaRepertoryDto1.setQuestionType(cpaRepertory1.getQuestionType());
                 cpaRepertoryDtos.add(cpaRepertoryDto1);
             });
         }

@@ -18,20 +18,26 @@ import java.time.ZoneId;
  * 当客户端连接到服务端时，会先执行channelActive方法，当有数据传递过来时，再执行channelRead
  */
 @Slf4j
-public class StateHandler extends SimpleChannelInboundHandler<String> {
+public class StateHandler extends SimpleChannelInboundHandler<Object> {
 
     /**
      * 需要编解码的才会去用messageReceived，一般都是使用ChannelRead来读取的
      * 泛型不匹配，不会调用messageReceived的
      * 没有做过任何的编码解码的泛型是 ByteBuf
-     *
+     * 如果一个Handler中同时存在messageReceived()方法和channelRead()方法,则只会调用channelRead()方法
      * @param channelHandlerContext
      * @param o
      * @throws Exception
      */
     @Override
-    protected void messageReceived(ChannelHandlerContext channelHandlerContext, String o) throws Exception {
+    protected void messageReceived(ChannelHandlerContext channelHandlerContext, Object o) throws Exception {
         log.info(">>>>>>> StateHandler messageReceived() 接受了消息：{}<<<<<<", o);
+//        对于Netty报错:io.netty.util.IllegalReferenceCountException: refCnt: 0, decrement: 1 的解决方法：在合适的地方,补上 ByteBuf.retain(); 这个意思是 让netty的引用计数+1..报错的地方是因为想减1,但是没得减,也可以使用ReferenceCountUtil.retain(o)解决;
+//        ByteBuf byteBuf = (ByteBuf) o;
+//        byteBuf.retain();
+//        调用ChannelHandlerContext的fireChannelRead方法,通知后续的ChannelHandler继续进行处理
+//        在messageReceived()方法中,如果不显示的调用该方法,则Handler无法向下继续调用(会直接调用本Handler的channelReadComplete()方法)
+        channelHandlerContext.fireChannelRead(o);
     }
 
 
@@ -51,6 +57,7 @@ public class StateHandler extends SimpleChannelInboundHandler<String> {
     /**
      * 从通道中读取数据，也就是服务端接收客户端发来的数据，参数msg就是发来的信息，可以是基础类型，也可以是序列化的复杂对象
      *  但是这个数据在不进行解码时它是ByteBuf类型
+     *  如果一个Handler中同时存在messageReceived()方法和channelRead()方法,则只会调用channelRead()方法
      * @param ctx
      * @param msg
      * @throws Exception

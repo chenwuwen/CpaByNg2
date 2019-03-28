@@ -1,5 +1,8 @@
 package cn.kanyun.cpa.model.entity.itempool;
 
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
+
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,8 +19,19 @@ public class CpaRepertory implements java.io.Serializable {
 
     private Long id;
     private String testStem;
-    private String testType;
-    private String choice ; //题型：unique:单选题,multi:多选题,judge判断题
+
+    /**
+     * 使用枚举
+     * 题型：unique:单选题,multi:多选题,judge判断题
+     */
+    private QuestionTypeEnum questionType ;
+
+    /**
+     * 试题分类
+     * BASIC_ACCOUNT：会计基础, CPU_ACCOUNT：会计电算化, STATUTE_ETHICS：财经法规与职业道德;
+     */
+    private ExamClassificationEnum testType ;
+
     private LocalDateTime insertDate;
     private Set cpaOptions = new HashSet(0);
     private CpaSolution cpaSolution;
@@ -31,24 +45,18 @@ public class CpaRepertory implements java.io.Serializable {
     public CpaRepertory() {
     }
 
-
-    /**
-     * full constructor
-     */
-    public CpaRepertory(String testStem, String testType, String choice, LocalDateTime insertDate, Set cpaOptions, CpaSolution cpaSolution) {
+    public CpaRepertory(Long id, String testStem, QuestionTypeEnum questionType, ExamClassificationEnum testType, LocalDateTime insertDate, Set cpaOptions, CpaSolution cpaSolution) {
+        this.id = id;
         this.testStem = testStem;
+        this.questionType = questionType;
         this.testType = testType;
-        this.choice = choice;
         this.insertDate = insertDate;
         this.cpaOptions = cpaOptions;
         this.cpaSolution = cpaSolution;
     }
 
-
-    // Property accessors
-
     public Long getId() {
-        return this.id;
+        return id;
     }
 
     public void setId(Long id) {
@@ -56,31 +64,31 @@ public class CpaRepertory implements java.io.Serializable {
     }
 
     public String getTestStem() {
-        return this.testStem;
+        return testStem;
     }
 
     public void setTestStem(String testStem) {
         this.testStem = testStem;
     }
 
-    public String getTestType() {
-        return this.testType;
+    public QuestionTypeEnum getQuestionType() {
+        return questionType;
     }
 
-    public void setTestType(String testType) {
+    public void setQuestionType(QuestionTypeEnum questionType) {
+        this.questionType = questionType;
+    }
+
+    public ExamClassificationEnum getTestType() {
+        return testType;
+    }
+
+    public void setTestType(ExamClassificationEnum testType) {
         this.testType = testType;
     }
 
-    public String getChoice() {
-        return choice;
-    }
-
-    public void setChoice(String choice) {
-        this.choice = choice;
-    }
-
     public LocalDateTime getInsertDate() {
-        return this.insertDate;
+        return insertDate;
     }
 
     public void setInsertDate(LocalDateTime insertDate) {
@@ -88,7 +96,7 @@ public class CpaRepertory implements java.io.Serializable {
     }
 
     public Set getCpaOptions() {
-        return this.cpaOptions;
+        return cpaOptions;
     }
 
     public void setCpaOptions(Set cpaOptions) {
