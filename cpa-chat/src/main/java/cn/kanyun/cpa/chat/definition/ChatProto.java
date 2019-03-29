@@ -36,8 +36,13 @@ public class ChatProto {
         return buildProto(PING_PROTO, null, ChatCodeEnum.PING_CODE);
     }
 
+    /**
+     * 组装Pong消息
+     *
+     * @return
+     */
     public static String buildPongProto() {
-        return buildProto(PONG_PROTO, null, ChatCodeEnum.PING_CODE);
+        return buildProto(PONG_PROTO, null, ChatCodeEnum.PONG_CODE);
     }
 
     /**

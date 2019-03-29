@@ -22,18 +22,24 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
 
     @Override
     protected void messageReceived(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) throws Exception {
-        log.info("====服务端接收到消息：{}=========",textWebSocketFrame.text());
+        log.info("====服务端接收到消息：{}=========", textWebSocketFrame.text());
         ChatUser userInfo = ChatUserManager.getUserInfo(channelHandlerContext.channel());
-        if (userInfo != null && userInfo.isAuth()) {
-            log.info("=======发送消息的用户通过了认证,服务端可以广播了=====");
-            JSONObject json = JSONObject.parseObject(textWebSocketFrame.text());
-            // 广播返回用户发送的消息文本
-            ChatUserManager.broadcastMess(userInfo.getUserId(), userInfo.getNickName(), json.getString("message"));
+        if (userInfo != null) {
+            if (userInfo.isAuth()) {
+                log.info("=======发送消息的用户通过了认证,服务端可以广播了=====");
+                JSONObject json = JSONObject.parseObject(textWebSocketFrame.text());
+                // 广播返回用户发送的消息文本
+                ChatUserManager.broadcastMess(userInfo.getUserId(), userInfo.getNickName(), json.getString("message"));
+            } else {
+//                如果该用户未认证.则返回信息需要验证
+                ChatUserManager.sendSysMess(channelHandlerContext.channel(), ChatCodeEnum.SYS_AUTH_STATE, false);
+            }
         }
     }
 
     /**
-     * 定时处理
+     * 管道非注册时触发
+     *
      * @param ctx
      * @throws Exception
      */
@@ -42,6 +48,18 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
         ChatUserManager.removeChannel(ctx.channel());
         ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
         super.channelUnregistered(ctx);
+    }
+
+    /**
+     * 当有Channel注册时广播当前聊天人数
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        ChatUserManager.removeChannel(ctx.channel());
+        ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
+        super.channelRegistered(ctx);
     }
 
     @Override

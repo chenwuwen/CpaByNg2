@@ -538,6 +538,13 @@
                 <version>2.9.2</version>
             </dependency>
 
+            <!--Guava是谷歌开源的java库.这个库提供用于集合，缓存，支持原语，并发性，常见注解，字符串处理，I/O和验证的实用方法-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.1-jre</version>
+            </dependency>
+
             <!--Java系统监控(淘汰sigar)-->
             <dependency>
                 <groupId>com.github.oshi</groupId>

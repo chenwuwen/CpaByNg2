@@ -87,7 +87,7 @@ public class ChatServer extends BaseServer {
             executorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
-                    log.info(">>>>>>> 扫描不活跃的Channel <<<<<<<<<<");
+                    log.info(">>>>>>> 定时关闭不活跃的Channel <<<<<<<<<<");
                     ChatUserManager.scanNotActiveChannel();
                 }
             }, 3, 60, TimeUnit.SECONDS);

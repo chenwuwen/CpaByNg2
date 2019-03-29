@@ -75,7 +75,7 @@ public class ChatServerChannelInitializer extends ChannelInitializer<SocketChann
 //        编解码器配置(调用了JBoss的marshalling库) 必须放在pipline的最前头，否则会让信息发不出去
 //        socketChannel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingDecoder());
 //        socketChannel.pipeline().addLast(MarshallingCodeCFactory.buildMarshallingEncoder());
-//        检测链路是否读空闲，也是Netty的心跳机制
+//        检测链路是否读空闲，也是Netty的心跳机制 [读事件空闲时间，0 则禁用事件,写事件空闲时间，0 则禁用事件,读或写空闲时间，0 则禁用事件]
         socketChannel.pipeline().addLast(new IdleStateHandler(60, 0, 0));
 
 //        socketChannel.pipeline().addLast(new TestNetty5Handler());

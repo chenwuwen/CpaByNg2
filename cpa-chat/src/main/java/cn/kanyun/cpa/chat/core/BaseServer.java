@@ -4,7 +4,6 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -40,18 +39,24 @@ public abstract class BaseServer implements Server {
      * 创建两个EventLoop的组，EventLoop 这个相当于一个处理线程，
      * 是Netty接收请求和处理IO请求的线程。不理解的话可以百度NIO图解
      * NioEventLoopGroup是一个处理I/O操作的多线程事件循环
+     *
+     * 使用NioEventLoopGroup 和NioEventLoop 都可以.但是前者使用的是线程池. 其实bossgroup如果服务端开启的是一个端口(大部分都是一个),单线程即可.
+     * worker大部分情况需要多线程处理了 .因为 一个eventloop绑定了一个selector,事件都是通过selector轮询处理的. 一万个情况让一个select处理和让100个selector处理
+     * 肯定是多线程效率要高一些(因为有io).
      */
 
     /**
      * 第一个，通常称为“boss”，接受传入的连接
+     * 监控tcp链接
      */
     protected NioEventLoopGroup bossGroup;
     /**
      * 第二个，通常称为“worker”，当boss接受连接并注册被接受的连接到worker时，处理被接受连接的流量。
      * 使用了多少线程以及如何将它们映射到创建的通道取决于EventLoopGroup实现，甚至可以通过构造函数进行配置
+     * 用来处理io事件
      */
     protected NioEventLoopGroup workGroup;
-    protected NioServerSocketChannel ssch;
+
     /**
      * 异步通知
      * Netty所有的I/O操作都是异步的。因为一个操作可能不会立即返回，
@@ -96,8 +101,9 @@ public abstract class BaseServer implements Server {
                 return new Thread(r, "DEFAULT_EVENT_LOOP_GROUP_" + index.incrementAndGet());
             }
         }));
-//        初始化线程组,构建线程组的时候,如果不传入参数,则默认线程数量为CPU数量
-        bossGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors(), Executors.newSingleThreadExecutor(new ThreadFactory() {
+//        初始化线程组,构建线程组的时候,如果不传入参数,则默认线程数量为CPU数量*2 [Runtime.getRuntime().availableProcessors() 获取CPU数] 关于线程数的设置也可以通过-Dio.netty.eventLoopThreads  参数在服务端启动的时候指定
+//        这个NioEventLoopGroup的构造方法,第一个参数是线程数,第二个参数是Executor对象,如果没有第二个参数,会自动创一个线程对象,其线程数与第一个参数一致
+        bossGroup = new NioEventLoopGroup(1, Executors.newSingleThreadExecutor(new ThreadFactory() {
             private AtomicInteger index = new AtomicInteger(0);
 
             @Override
@@ -106,7 +112,7 @@ public abstract class BaseServer implements Server {
             }
         }));
 //          初始化线程组,构建线程组的时候,如果不传入参数,则默认线程数量为CPU数量
-        workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 10, Executors.newSingleThreadExecutor(new ThreadFactory() {
+        workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 10, Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10,new ThreadFactory() {
             private AtomicInteger index = new AtomicInteger(0);
 
             @Override

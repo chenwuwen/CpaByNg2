@@ -79,7 +79,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
     }
 
     /**
-     * 该方法,是IdleStateHandler实现心跳的关键,当在 server的pipline中添加了
+     * 该方法,是IdleStateHandler实现心跳的关键,当在 server的PIPLINE中添加了
      * new IdleStateHandler() 那么将会定期执行该方法
      * 根据不同的 IO idle 类型来产生不同的 IdleStateEvent 事件,
      * 在 userEventTriggered 中, 根据 IdleStateEvent 的 state() 的不同, 而进行不同的处理.
@@ -90,6 +90,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
      */
     @Override
     public void userEventTriggered(ChannelHandlerContext ctx, Object evt) {
+        log.info("UserAuthHandler userEventTriggered()方法执行 其与Netty的心跳机制有关");
         if (evt instanceof IdleStateEvent) {
             IdleStateEvent event = (IdleStateEvent) evt;
             // 判断Channel是否读空闲, 读空闲时移除Channel
@@ -106,6 +107,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
     /**
      * 处理客户端向服务端发起http握手请求的业务
      * 当用户打开网页客户端时,触发此方法
+     *
      * @param ctx
      * @param request
      */
@@ -205,7 +207,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
                 ChatUserManager.sendInfo(channel, ChatCodeEnum.SYS_AUTH_STATE, isSuccess);
                 if (isSuccess) {
 //                    如果认证成功：广播消息(谁加入了聊天,可以再前端补全,服务端只发送名字)
-                    ChatUserManager.broadCastInfo(SYS_USER_COUNT,  ChatUserManager.getUserInfo(channel).getNickName() );
+                    ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_WHO, ChatUserManager.getUserInfo(channel).getNickName());
                 }
                 return;
             case MESS_CODE: //普通的消息留给MessageHandler处理

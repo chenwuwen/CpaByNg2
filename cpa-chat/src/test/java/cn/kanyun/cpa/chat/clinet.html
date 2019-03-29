@@ -30,7 +30,9 @@
                     case 20001:
                         ta.value = ta.value + "\n" + "欢迎:" + reply + "加入聊天！";
                         break
-
+                    case 2004:
+                        document.getElementById("user_count").value = reply;
+                        break
                     case 10015:
                         console.log("服务端的ping消息")
                         var pong = {
@@ -68,9 +70,11 @@
 
         socket.onerror = function () {
             alert("服务端出错！")
+            socket = new WebSocket("ws://127.0.0.1:9688/ws")
         }
 
         socket.onclose = function () {
+            socket = new WebSocket("ws://127.0.0.1:9688/ws")
         }
 
         function senMessage(message) {
@@ -82,6 +86,7 @@
                     }
                     // 注意：需要将msg对象先转成字符串,再发送
                     socket.send(JSON.stringify(msg));
+                    document.getElementById("input_msg").value = ''
                 } else {
                     alert("连接尚未开启！")
                 }
@@ -101,6 +106,7 @@
                     }
                     // 注意：需要将msg对象先转成字符串,再发送
                     socket.send(JSON.stringify(authMsg));
+
                 } else {
                     alert("连接尚未开启！")
                 }
@@ -110,12 +116,16 @@
 </head>
 <body>
 <form action="" onsubmit="return false">
+    <div>
+        <span style="color: green;font-style: italic">当前聊天人数：</span>
+        <b id="user_count">0</b>人
+    </div>
     <div style="margin-bottom: 20px">
         <input placeholder="开启聊天之前,请先认证,输入昵称后,即可开启聊天" style="width: auto" name="nick">
         <button onclick="auth(this.form.nick.value)">点我认证</button>
     </div>
 
-    <textarea name="message" style="width: 400px;height: 200px">
+    <textarea name="message" id="input_msg" style="width: 400px;height: 200px">
     </textarea>
 
     <input type="button" value="发送数据" onclick="senMessage(this.form.message.value)">

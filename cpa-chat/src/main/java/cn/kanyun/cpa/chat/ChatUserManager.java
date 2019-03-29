@@ -153,7 +153,14 @@ public class ChatUserManager {
     }
 
     /**
-     * 发送认证结果的系统消息
+     * 发送系统消息(单人)
+     */
+    public static void sendSysMess(Channel channel, ChatCodeEnum code, boolean b) {
+        channel.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSysProto(code, b)));
+    }
+
+    /**
+     * 发送认证结果的系统消息(单人)
      *
      * @param code
      * @param mess
@@ -203,4 +210,7 @@ public class ChatUserManager {
             userInfo.setTime(System.currentTimeMillis());
         }
     }
+
+
+
 }
