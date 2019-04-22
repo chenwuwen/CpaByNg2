@@ -2,11 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:redisson="http://redisson.org/schema/redisson"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 	http://www.springframework.org/schema/beans/spring-beans.xsd
     http://www.springframework.org/schema/context
-	http://www.springframework.org/schema/context/spring-context-4.1.xsd"
+	http://www.springframework.org/schema/context/spring-context-4.1.xsd http://redisson.org/schema/redisson http://redisson.org/schema/redisson/redisson.xsd"
        default-lazy-init="true">
     <!-- 引入redis.properties配置文件-->
     <context:property-placeholder location="classpath:redis.properties" ignore-unresolvable="true"/>
@@ -91,4 +91,30 @@
                     class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
         </property>
     </bean>
+
+    <!-- ================== redisson 集群配置 =================== -->
+    <bean id="stringCodec" class="org.redisson.client.codec.StringCodec"></bean>
+    <redisson:client id="redissonClient" codec-ref="stringCodec" >
+        <!--scan-interval:集群状态扫描间隔时间，单位是毫秒-->
+        <!--idle-connection-timeout:当前连接数量大于最小空闲连接池大小，然后它将关闭并从池中移除，缺省:10000 -->
+        <!--client-name：客户端连接名称,可以使用应用名-->
+        <!--connect-timeout:连接超时时长，默认10000毫秒-->
+        <!--read-mode：读模式(从哪个节点读)，只有三个可选项 MASTER_SLAVE ，MASTER ，SLAVE-->
+        <redisson:cluster-servers client-name="cpa"
+                                  connect-timeout="5000"
+                                  master-connection-minimum-idle-size="10"
+                                  password=""
+                                  scan-interval="1000"
+                                  read-mode="MASTER_SLAVE"
+                                  idle-connection-timeout="10000"
+                                  master-connection-pool-size="64">
+
+            <redisson:node-address value="redis://127.0.0.1:6379" />
+            <redisson:node-address value="redis://127.0.0.1:6380" />
+            <redisson:node-address value="redis://127.0.0.1:6381" />
+
+        </redisson:cluster-servers>
+</redisson:client>
+
+
 </beans>

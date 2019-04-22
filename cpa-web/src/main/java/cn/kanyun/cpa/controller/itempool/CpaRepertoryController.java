@@ -10,14 +10,18 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+import cn.kanyun.cpa.redis.CacheLoad;
+import cn.kanyun.cpa.redis.CacheServiceTemplate;
 import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
+import com.alibaba.fastjson.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -38,6 +42,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by KANYUN on 2017/6/17.
@@ -48,7 +53,7 @@ import java.util.Set;
  * 方法，其实根据HTTP协议，HTTP支持一系列提交方法（GET，POST，PUT，DELETE），同一个URL都可以使用这几种提交方式
  * 事实上SpringMVC正是通过将同一个URL的不同提交方法对应到不同的方法上达到RESTful
  */
-@Api(value = "/api/unitExam",tags = "试题管理模块")
+@Api(value = "/api/unitExam", tags = "试题管理模块")
 @Controller
 @RequestMapping("/api/unitExam")
 public class CpaRepertoryController {
@@ -59,20 +64,21 @@ public class CpaRepertoryController {
     private CpaRepertoryService cpaRepertoryService;
     @Resource
     private RedisService redisService;
+    @Resource
+    private CacheServiceTemplate cacheServiceTemplate;
 
     /**
      * @Author: kanyun
-     * @Description:
-     * 获取试题列表（单元测试）required = false表示参数为可选,
+     * @Description: 获取试题列表（单元测试）required = false表示参数为可选,
      * 如果不加此配置,当请求的uri不带此参数时会报400错误码
      * @Date: 2017/8/16 14:58
      * @params:
      */
     @ApiOperation(value = "/getUnitExam/{testType}/{pageNo}/{pageSize}", notes = "请求试题列表【单元测试】", httpMethod = "POST", response = CpaResult.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "testType",value = "试题类型",dataType = "String",paramType = "path",required = true),
-            @ApiImplicitParam(name = "pageNo",value = "页码",dataType = "Integer",paramType = "path",required = false),
-            @ApiImplicitParam(name = "pageSize",value = "每页显示数量",dataType = "Integer",paramType = "path",required = false)
+            @ApiImplicitParam(name = "testType", value = "试题类型", dataType = "String", paramType = "path", required = true),
+            @ApiImplicitParam(name = "pageNo", value = "页码", dataType = "Integer", paramType = "path", required = false),
+            @ApiImplicitParam(name = "pageSize", value = "每页显示数量", dataType = "Integer", paramType = "path", required = false)
     })
     @RequestMapping("/getUnitExam/{testType}/{pageNo}/{pageSize}")
     @ResponseBody
@@ -88,42 +94,56 @@ public class CpaRepertoryController {
 //            key由当前类名+方法名+查询条件+参数+分页组成,尽可能保证key的唯一性
             String key = this.getClass().getName() + Thread.currentThread().getStackTrace()[1].getMethodName() + where + StringUtils.join(params) + pageNo + pageSize;
             logger.info("Redis缓存的Key：" + key);
-            try {
-                result = (CpaResult) redisService.getCacheObject(key);
-            } catch (Exception e) {
-                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}", e);
-            }
-            if (null == result) {
-                Integer firstResult = page.countOffset(pageNo, pageSize);
-                result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+            result = cacheServiceTemplate.getObjectFromCache(key, 12, TimeUnit.HOURS, CpaResult.class, new CacheLoad<T>() {
+                @Override
+                public T load() {
+                    Integer firstResult = page.countOffset(pageNo, pageSize);
+                    result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
 
-                //总记录数
-                page.setTotalRecords(result.getTotalCount().intValue());
-                //总页数(返回的记录中已包含总记录数,无需再次查询)
-                page.setPageSize(pageSize);
-                page.setPageNo(pageNo);
-                result.setTotalPage(page.getTotalPages());
-                try {
-                    redisService.setCacheObject(key, result);
-                } catch (Exception e) {
-                    logger.error("ERROR： /api/unitExam/getUnitExam Redis Error: {}" + e);
+                    //总记录数
+                    page.setTotalRecords(result.getTotalCount().intValue());
+                    //总页数(返回的记录中已包含总记录数,无需再次查询)
+                    page.setPageSize(pageSize);
+                    page.setPageNo(pageNo);
+                    result.setTotalPage(page.getTotalPages());
+                    return result;
                 }
-            }
+            });
+//            try {
+//                result = (CpaResult) redisService.getCacheObject(key,CpaResult.class);
+//            } catch (Exception e) {
+//                logger.error("ERROR： /api/unitExam/getUnitExam Redis {}", e);
+//            }
+//            if (null == result) {
+//                Integer firstResult = page.countOffset(pageNo, pageSize);
+//                result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+//
+//                //总记录数
+//                page.setTotalRecords(result.getTotalCount().intValue());
+//                //总页数(返回的记录中已包含总记录数,无需再次查询)
+//                page.setPageSize(pageSize);
+//                page.setPageNo(pageNo);
+//                result.setTotalPage(page.getTotalPages());
+//                try {
+//                    redisService.setCacheObject(key, result);
+//                } catch (Exception e) {
+//                    logger.error("ERROR： /api/unitExam/getUnitExam Redis Error: {}" + e);
+//                }
+//            }
         } catch (Exception e) {
             logger.error("ERROR： /api/unitExam/getUnitExam Error: {}" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
-        return result;
+            return result;
     }
 
     /**
      * @Author: kanyun
-     * @Description:
-     * 新增试题【保存单元测试】
+     * @Description: 新增试题【保存单元测试】
      * @Date: 2017/9/18 17:21
      * @params: , List<CpaOption> cpaOptions,CpaSolution cpaSolution
      */
-    @ApiOperation(value = "/addUnitExam",notes = "新增试题【保存单元测试】",httpMethod = "POST",response = CpaResult.class)
+    @ApiOperation(value = "/addUnitExam", notes = "新增试题【保存单元测试】", httpMethod = "POST", response = CpaResult.class)
     @RequestMapping("/addUnitExam")
     @ResponseBody
     public CpaResult addUnitExam(@RequestBody ItemForm itemForm) {
@@ -154,13 +174,12 @@ public class CpaRepertoryController {
      * void方法不定义HttpServletResponse类型的入参，HttpServletResponse对象通过RequestContextHolder上下文获取
      * 注意：这种方式是不可行的，void方法不定义HttpServletResponse类型的入参，Spring MVC会认为@RequestMapping注解中指定的路径就是要返回的视图name，(如果没有该name的页面后台报错,返回404)
      * @author Kanyun
-     * @Description:
-     * 试题导出到word
+     * @Description: 试题导出到word
      * @date 2017/11/16 11:39
      */
-    @ApiOperation(value = "/exportWord/{typeCode}",notes = "试题导出到word",httpMethod = "GET")
+    @ApiOperation(value = "/exportWord/{typeCode}", notes = "试题导出到word", httpMethod = "GET")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "typeCode",value = "试题类型编码",dataType ="String",paramType = "path")
+            @ApiImplicitParam(name = "typeCode", value = "试题类型编码", dataType = "String", paramType = "path")
     })
     @RequestMapping(value = "/exportWord/{typeCode}", method = RequestMethod.GET, produces = {"application/msword;charset=UTF-8"})
     public void exportWord(@PathVariable("typeCode") String typeCode, HttpServletResponse response) {
@@ -181,15 +200,14 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe:
-     * 获取单个试题详情
+     * @describe: 获取单个试题详情
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/12  13:38
      */
-    @ApiOperation(value = "/getExamDetail/{id}",notes = "获取单个试题详情",httpMethod = "GET",response = CpaResult.class)
+    @ApiOperation(value = "/getExamDetail/{id}", notes = "获取单个试题详情", httpMethod = "GET", response = CpaResult.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "id",value = "试题ID",dataType = "Long",paramType = "path")
+            @ApiImplicitParam(name = "id", value = "试题ID", dataType = "Long", paramType = "path")
     })
     @RequestMapping("/getExamDetail/{id}")
     @ResponseBody
@@ -227,15 +245,14 @@ public class CpaRepertoryController {
 
 
     /**
-     * @describe:
-     * 删除试题【单元测试】
+     * @describe: 删除试题【单元测试】
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/9  17:40
      */
-    @ApiOperation(value = "/delUnitExam/{reId}",notes = "删除试题【单元测试】",httpMethod = "GET",response = CpaResult.class)
+    @ApiOperation(value = "/delUnitExam/{reId}", notes = "删除试题【单元测试】", httpMethod = "GET", response = CpaResult.class)
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "reId",value = "试题ID",dataType = "Long",paramType = "path")
+            @ApiImplicitParam(name = "reId", value = "试题ID", dataType = "Long", paramType = "path")
     })
     @RequestMapping("/delUnitExam/{reId}")
     @ResponseBody
@@ -252,13 +269,12 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe:
-     * 修改试题
+     * @describe: 修改试题
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/11 0011 11:39
      */
-    @ApiOperation(value = "/updUnitExam",notes = "修改试题",httpMethod = "POST",response = CpaResult.class)
+    @ApiOperation(value = "/updUnitExam", notes = "修改试题", httpMethod = "POST", response = CpaResult.class)
     @RequestMapping("/updUnitExam")
     @ResponseBody
     public CpaResult updUnitExam(@RequestBody ItemForm itemForm) {
@@ -282,13 +298,12 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe:
-     * 获取试题列表（仅试题本身,删除修改试题使用）
+     * @describe: 获取试题列表（仅试题本身,删除修改试题使用）
      * @params:
      * @Author: Kanyun
      * @Date: 2018/1/11  9:32
      */
-    @ApiOperation(value = "/getListExam",notes = "获取试题列表（仅试题本身,删除修改试题使用）",httpMethod = "GET",response = CpaResult.class)
+    @ApiOperation(value = "/getListExam", notes = "获取试题列表（仅试题本身,删除修改试题使用）", httpMethod = "GET", response = CpaResult.class)
     @RequestMapping(value = "/getListExam", produces = {"application/json;charset=utf-8"})
     @ResponseBody
     public CpaResult getListExam(@RequestBody ItemForm itemForm) {
@@ -308,3 +323,4 @@ public class CpaRepertoryController {
     }
 
 }
+

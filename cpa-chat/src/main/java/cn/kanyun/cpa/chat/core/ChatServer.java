@@ -83,23 +83,23 @@ public class ChatServer extends BaseServer {
             InetSocketAddress address = (InetSocketAddress) cf.channel().localAddress();
             log.info("WebSocketServer start success, port is:{}", address.getPort());
 
-            // 定时扫描所有的Channel，关闭失效的Channel [从现在开始3秒钟之后，每隔60秒钟执行一次run方法(这里指关闭Channel)]
+            // 定时扫描所有的Channel，关闭失效的Channel [从现在开始60秒钟之后，每隔60秒钟执行一次run方法(这里指关闭Channel)]
             executorService.scheduleAtFixedRate(new Runnable() {
                 @Override
                 public void run() {
                     log.info(">>>>>>> 定时关闭不活跃的Channel <<<<<<<<<<");
                     ChatUserManager.scanNotActiveChannel();
                 }
-            }, 3, 60, TimeUnit.SECONDS);
+            }, 60, 60, TimeUnit.SECONDS);
 
-            // 定时向所有客户端发送Ping消息,初始化延时3秒,前一次执行完成后的第50秒 再执行
+            // 定时向所有客户端发送Ping消息,初始化延时60秒,前一次执行完成后的第50秒 再执行
             executorService.scheduleWithFixedDelay(new Runnable() {
                 @Override
                 public void run() {
                     log.info(">>>>>>> 定时ping客户端 <<<<<<<<<<");
                     ChatUserManager.broadCastPing();
                 }
-            }, 3, 50, TimeUnit.SECONDS);
+            }, 60, 50, TimeUnit.SECONDS);
 
 //          等待服务端监听端口关闭 [阻塞]
             cf.channel().closeFuture().sync();

@@ -44,13 +44,22 @@
 
     <!-- 是否纳入调用统计报表（可选）计数 -->
     <!--监控中心配置，用于配置连接监控中心相关信息，可选。-->
+    <!--protocol:监控中心协议，如果为protocol=”registry”，表示从注册中心发现监控中心地址，否则直连监控中心-->
+    <!--address:直连监控中心服务器地址-->
     <dubbo:monitor protocol="registry"/>
 
     <!--使用 dubbo 通讯协议实现定义好的 api.PermissionService 接口 , protocol：单个接口使用的通信协议-->
+    <!--executes 表示服务提供者并行执行请求上限(也可以再消费端配置actives)，新调用会wait（消费端可能到超时）loadbalance 表示负载均衡策略 包括几种：random roundrobin(polling)轮询 leastactive(invoking least active service) 最小连接-->
+    <!--cluster: 集群方式，可选(也可以在消费端配置)：-->
+    <!--failover 失败自动切换，当出现失败，重试其他服务器（缺省），通常用于读操作，但重试会带来更长的延时-->
+    <!--failfast 快速失效，只发起一次调用，失败立即报错。通常用于非幂等性写操作，比如说新增记录-->
+    <!--failsafe 失败安全，出现异常时，直接忽略，通常用于写入审计日志等操作-->
+    <!--forking 并行调用多个服务器，只要一个成功即返回。通常用于实时性要求较高的读操作，但需要浪费更多的服务器资源。可通过forks=“2”来设置最大并行数-->
+    <!--filter (也可以配置在消费端)服务提供方远程调用过程拦截器名称，多个名称用逗号分隔，Spring拦截器可以拦截Web接口，无法拦截dubbo接口，但是dubbo提供了Filter扩展-->
     <!-- 声明需要暴露的服务接口 -->
     <!--这里我讲试题库的接口提供出去-->
     <dubbo:service interface="cn.kanyun.cpa.service.itempool.CpaRepertoryService" ref="cpaRepertoryService"
-                   protocol="dubbo"/>
+                   protocol="dubbo"  executes="1000" loadbalance="random" cluster="failfast" filter=""/>
 
     <!--具体实现该接口的 bean-->
     <!--试题库的接口的实现类-->

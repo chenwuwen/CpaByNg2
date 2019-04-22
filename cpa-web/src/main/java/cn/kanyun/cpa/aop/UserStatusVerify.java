@@ -35,7 +35,7 @@ public class UserStatusVerify {
     private static final Logger logger = LoggerFactory.getLogger(UserStatusVerify.class);
 
     @Resource(name = RedisService.SERVICE_NAME)
-    private RedisService redisService;
+    private RedisService<CpaResult> redisService;
 
     /**
      * Spring AOP支持的AspectJ切入点指示符
@@ -129,7 +129,7 @@ public class UserStatusVerify {
         // 从session中获取用户信息
         CpaUser user = null;
         if (CpaConstants.SESSION_USE_REDIS) {
-            user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"));
+            user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"),CpaUser.class);
         } else {
             user = WebUtil.getSessionUser(request);
         }

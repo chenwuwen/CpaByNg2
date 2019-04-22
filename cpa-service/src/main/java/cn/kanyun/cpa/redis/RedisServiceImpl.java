@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.redis;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
@@ -26,8 +27,7 @@ import java.util.concurrent.TimeUnit;
  */
 
 /**
- * @Resource和@Autowired都是做bean的注入时使用，其实@Resource并不是Spring的注解，它的包是javax.annotation.Resource，需要导入，但是Spring支持该注解的注入
- * 1、共同点
+ * @Resource和@Autowired都是做bean的注入时使用，其实@Resource并不是Spring的注解，它的包是javax.annotation.Resource，需要导入，但是Spring支持该注解的注入 1、共同点
  * 两者都可以写在字段和setter方法上。两者如果都写在字段上，那么就不需要再写setter方法。
  * 2、不同点
  * @Autowired为Spring提供的注解，需要导入包org.springframework.beans.factory.annotation.Autowired;只按照byType注入。
@@ -53,16 +53,18 @@ public class RedisServiceImpl<T> implements RedisService<T> {
 
     @Override
     public void setCacheObjectForTime(String key, Object value, long time, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, value, time,timeUnit);
+        redisTemplate.opsForValue().set(key, value, time, timeUnit);
     }
 
     @Override
-    public Object getCacheObject(String key/*,ValueOperations<String,T> operation*/) {
-        return redisTemplate.opsForValue().get(key);
+    public  <T>T getCacheObject(String key, Class<T> clazz) {
+        String ret = redisTemplate.opsForValue().get(key).toString();
+        T t = (T) JSONObject.parseObject(ret,clazz.getClass());
+        return t;
     }
 
     @Override
-    public Object setCacheList(String key, List<Object> dataList) {
+    public void setCacheList(String key, List<Object> dataList) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
         if (null != dataList) {
             int size = dataList.size();
@@ -70,13 +72,12 @@ public class RedisServiceImpl<T> implements RedisService<T> {
                 listOperation.rightPush(key, dataList.get(i));
             }
         }
-        return listOperation;
     }
 
     @Override
-    public List<Object> getCacheList(String key) {
-        List<Object> dataList = new ArrayList<Object>();
-        ListOperations<String, Object> listOperation = redisTemplate.opsForList();
+    public List<T> getCacheList(String key) {
+        List<T> dataList = new ArrayList<T>();
+        ListOperations<String, T> listOperation = (ListOperations<String, T>) redisTemplate.opsForList();
         Long size = listOperation.size(key);
 
         for (int i = 0; i < size; i++) {
@@ -206,24 +207,6 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return map;
     }
 
-    @Override
-    public void setCacheIntegerMap(String key, Map<Integer, Object> dataMap) {
-        HashOperations<String, Object, Object> hashOperations = redisTemplate.opsForHash();
-        if (null != dataMap) {
-            for (Map.Entry<Integer, Object> entry : dataMap.entrySet()) {
-                /*System.out.println("Key = " + entry.getKey() + ", Value = " + entry.getValue());  */
-                hashOperations.put(key, entry.getKey(), entry.getValue());
-            }
-
-        }
-    }
-
-    @Override
-    public Map<Object, Object> getCacheIntegerMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
-        Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
-        /*Map<String, T> map = hashOperation.entries(key);*/
-        return map;
-    }
 
     @Override
     public long deleteMap(String key) {
@@ -288,12 +271,12 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     }
 
     @Override
-    public Long getExpire(String key){
+    public Long getExpire(String key) {
         return redisTemplate.boundValueOps(key).getExpire();
     }
 
     @Override
-    public boolean persist(String key){
+    public boolean persist(String key) {
         return redisTemplate.boundValueOps(key).persist();
     }
 

@@ -39,15 +39,15 @@
         <!--https://blog.csdn.net/kimylrong/article/details/23280155-->
         <!--其主要下载的还是我们自己打的项目中需要依赖的jar包-->
         <!--<repository>-->
-            <!--<id>nexus-repos</id>-->
-            <!--<name>Team Nexus Repository</name>-->
-            <!--<url>http://115.47.155.3:8086/nexus/content/groups/public</url>-->
-            <!--<releases>-->
-                <!--<enabled>true</enabled>-->
-            <!--</releases>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-            <!--</snapshots>-->
+        <!--<id>nexus-repos</id>-->
+        <!--<name>Team Nexus Repository</name>-->
+        <!--<url>http://115.47.155.3:8086/nexus/content/groups/public</url>-->
+        <!--<releases>-->
+        <!--<enabled>true</enabled>-->
+        <!--</releases>-->
+        <!--<snapshots>-->
+        <!--<enabled>true</enabled>-->
+        <!--</snapshots>-->
         <!--</repository>-->
         <!--一些公共meven库-->
         <repository>
@@ -165,9 +165,22 @@
                 </plugin>
 
                 <!--maven assembly插件,用来打jar包[其可以实现，自定义打可运行的jar包]-->
-              <plugin>
+                <plugin>
                     <artifactId>maven-assembly-plugin</artifactId>
                     <version>3.1.1</version>
+                </plugin>
+
+                <!--使用docker-maven-plugin 进行完全免 Dockerfile 文件,注意 EXPOSE 在spring boot 中不起作用-->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                </plugin>
+
+                <!--resource插件的功能就是把项目需要的配置文件拷贝到指定的目当，默认是拷贝src\main\resources目录下的件到classes目录下，当然可以自己来配置源目录和输出目录。resources插件一般不单独执行，complie插件执行时会先调用resources插件-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>3.1.0</version>
                 </plugin>
 
                 <!--mybatis代码生成插件-->
@@ -384,6 +397,7 @@
                 <artifactId>jedis</artifactId>
                 <version>2.9.0</version>
             </dependency>
+            <!--Redisson是一个基于java编程框架netty进行扩展了的redis,分开源版本和商业版(Redisson PRO),所以选择的时候请谨慎。（Map）和集（Set）数据分片功能仅限于Redisson PRO版本才有，另外Redis部署工具和集群管理工具功能仅限于Redisson PRO版本才有-->
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
@@ -529,7 +543,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.32</version>
+                <version>1.2.57</version>
             </dependency>
             <!-- 支持java8 localDate等新时间类型的序列化 -->
             <dependency>
@@ -792,9 +806,9 @@
             </dependency>
             <!--搜索结果分组,类似搜索框,输入一段文件后，出现一下预想值-->
             <!--<dependency>-->
-                <!--<groupId>org.apache.lucene</groupId>-->
-                <!--<artifactId>lucene-facet</artifactId>-->
-                <!--<version>5.2.0-SNAPSHOT</version>-->
+            <!--<groupId>org.apache.lucene</groupId>-->
+            <!--<artifactId>lucene-facet</artifactId>-->
+            <!--<version>5.2.0-SNAPSHOT</version>-->
             <!--</dependency>-->
 
             <!--其他-->

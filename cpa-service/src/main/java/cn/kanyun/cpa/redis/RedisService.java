@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Administrator on 2017/6/5.
  */
- public interface RedisService<T> {
+public interface RedisService<T> {
 
     String SERVICE_NAME = "cn.kanyun.cpa.redis.RedisServiceImpl";
 
@@ -27,13 +27,13 @@ import java.util.concurrent.TimeUnit;
     /**
      * 缓存基本的对象，Integer、String、实体类等
      *
-     * @param key   缓存的键值
-     * @param value 缓存的值
-     * @param time 缓存时间
+     * @param key      缓存的键值
+     * @param value    缓存的值
+     * @param time     缓存时间
      * @param timeUnit 缓存时间单位
      * @return 缓存的对象
      */
-    void setCacheObjectForTime(String key, Object value,long time,TimeUnit timeUnit);
+    void setCacheObjectForTime(String key, Object value, long time, TimeUnit timeUnit);
 
     /**
      * 获得缓存的基本对象。
@@ -42,7 +42,7 @@ import java.util.concurrent.TimeUnit;
      * @param operation
      * @return 缓存键值对应的数据
      */
-     Object getCacheObject(String key/*,ValueOperations<String,T> operation*/);
+    <T> T getCacheObject(String key, Class<T> clazz);
 
     /**
      * 缓存List数据
@@ -51,7 +51,7 @@ import java.util.concurrent.TimeUnit;
      * @param dataList 待缓存的List数据
      * @return 缓存的对象
      */
-     Object setCacheList(String key, List<Object> dataList);
+    void setCacheList(String key, List<Object> dataList);
 
     /**
      * 获得缓存的list对象
@@ -59,51 +59,43 @@ import java.util.concurrent.TimeUnit;
      * @param key 缓存的键值
      * @return 缓存键值对应的数据
      */
-     List<Object> getCacheList(String key);
+    List<T> getCacheList(String key);
 
-     /**
-      *
-      * @Description:
-      * 如果 key 存在则覆盖,并返回旧值.
-      * 如果不存在,返回null 并添加
-      * @auther: kanyun
-      * @date: 2018/12/28 8:54
-      * @param
-      * @return
-      *
-      */
+    /**
+     * @param
+     * @return
+     * @Description: 如果 key 存在则覆盖,并返回旧值.
+     * 如果不存在,返回null 并添加
+     * @auther: kanyun
+     * @date: 2018/12/28 8:54
+     */
     Object getAndSet(String key, String value);
 
     /**
-     *
-     * @Description:
-     * 对一个 key-value 的值进行加减操作,
+     * @param step 步进数 ，即 每次加几
+     * @return
+     * @Description: 对一个 key-value 的值进行加减操作,
      * 如果该 key 不存在 将创建一个key 并赋值该 number
      * 如果 key 存在,但 value 不是长整型 ,将报错
      * @auther: zhaoyingxu
      * @date: 2018/12/28 8:56
-     * @param step 步进数 ，即 每次加几
-     * @return
-     *
      */
     Long increment(String key, long step);
 
     /**
-     *
-     * @Description:
-     * 对一个 key-value 的值进行加减操作,
+     * @param step 步进数 ，即 每次加几
+     * @return
+     * @Description: 对一个 key-value 的值进行加减操作,
      * 如果该 key 不存在 将创建一个key 并赋值该 number
      * 如果 key 存在,但 value 不是 纯数字 ,将报错
      * @auther: zhaoyingxu
      * @date: 2018/12/28 8:56
-     * @param step 步进数 ，即 每次加几
-     * @return
-     *
      */
     Double increment(String key, double step);
 
     /**
      * 获取指定key 的过期时间
+     *
      * @param key
      * @return
      */
@@ -111,6 +103,7 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 移除指定key 的过期时间
+     *
      * @param key
      * @return
      */
@@ -128,7 +121,7 @@ import java.util.concurrent.TimeUnit;
      * @Title: range
      * @Description: TODO(这里用一句话描述这个方法的作用)
      */
-     List<Object> range(String key, long start, long end);
+    List<Object> range(String key, long start, long end);
 
     /**
      * list集合长度
@@ -136,7 +129,7 @@ import java.util.concurrent.TimeUnit;
      * @param key
      * @return
      */
-     Long listSize(String key);
+    Long listSize(String key);
 
     /**
      * 覆盖操作,将覆盖List中指定位置的值
@@ -146,7 +139,7 @@ import java.util.concurrent.TimeUnit;
      * @param String value 值
      * @return 状态码
      */
-     void listSet(String key, int index, Object obj);
+    void listSet(String key, int index, Object obj);
 
     /**
      * 向List尾部追加记录
@@ -155,13 +148,14 @@ import java.util.concurrent.TimeUnit;
      * @param String value
      * @return 记录总数
      */
-     long leftPush(String key, Object obj);
+    long leftPush(String key, Object obj);
 
     /**
      * 从左边依次入栈
-     *导入顺序按照 Collection 顺序
+     * 导入顺序按照 Collection 顺序
      * 如: a b c => c b a
-     * @param String key
+     *
+     * @param String     key
      * @param Collection value
      * @return 记录总数
      */
@@ -170,6 +164,7 @@ import java.util.concurrent.TimeUnit;
     /**
      * 指定 list 从左出栈
      * 如果列表没有元素,会堵塞到列表一直有元素或者超时为止
+     *
      * @param key
      * @return 出栈的值
      */
@@ -178,16 +173,18 @@ import java.util.concurrent.TimeUnit;
     /**
      * 向List头部追加记录
      * 指定 list 从右入栈
+     *
      * @param String key
      * @param String value
      * @return 记录总数
      */
-     long rightPush(String key, Object obj);
+    long rightPush(String key, Object obj);
 
     /**
      * 从右边依次入栈
      * 导入顺序按照 Collection 顺序
      * 如: a b c => a b c
+     *
      * @param key
      * @param values
      * @return
@@ -205,6 +202,7 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 根据下标获取值
+     *
      * @param key
      * @param index
      * @return
@@ -213,12 +211,12 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 获取列表指定长度
+     *
      * @param key
      * @param index
      * @return
      */
     Long listSize(String key, long index);
-
 
 
     /**
@@ -229,7 +227,7 @@ import java.util.concurrent.TimeUnit;
      * @param int    end 记录的结束位置（如果为-1则表示最后一个，-2，-3以此类推）
      * @return 执行状态码
      */
-     void trim(String key, int start, int end);
+    void trim(String key, int start, int end);
 
     /**
      * 删除List中c条记录，被删除的记录值为value
@@ -239,7 +237,7 @@ import java.util.concurrent.TimeUnit;
      * @param Object obj 要匹配的值
      * @return 删除后的List中的记录数
      */
-     long remove(String key, long i, Object obj);
+    long remove(String key, long i, Object obj);
 
     /**
      * 缓存Set
@@ -248,7 +246,7 @@ import java.util.concurrent.TimeUnit;
      * @param dataSet 缓存的数据
      * @return 缓存数据的对象
      */
-     BoundSetOperations<String, Object> setCacheSet(String key, Set<Object> dataSet);
+    BoundSetOperations<String, Object> setCacheSet(String key, Set<Object> dataSet);
 
     /**
      * 获得缓存的set
@@ -257,7 +255,7 @@ import java.util.concurrent.TimeUnit;
      * @param operation
      * @return
      */
-     Set<Object> getCacheSet(String key/*,BoundSetOperations<String,T> operation*/);
+    Set<Object> getCacheSet(String key/*,BoundSetOperations<String,T> operation*/);
 
     /**
      * 缓存Map
@@ -266,7 +264,7 @@ import java.util.concurrent.TimeUnit;
      * @param dataMap
      * @return
      */
-     int setCacheMap(String key, Map<String, Object> dataMap);
+    int setCacheMap(String key, Map<String, Object> dataMap);
 
     /**
      * 获得缓存的Map
@@ -275,25 +273,8 @@ import java.util.concurrent.TimeUnit;
      * @param hashOperation
      * @return
      */
-     Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/);
+    Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/);
 
-    /**
-     * 缓存Map
-     *
-     * @param key
-     * @param dataMap
-     * @return
-     */
-     void setCacheIntegerMap(String key, Map<Integer, Object> dataMap);
-
-    /**
-     * 获得缓存的Map
-     *
-     * @param key
-     * @param hashOperation
-     * @return
-     */
-     Map<Object, Object> getCacheIntegerMap(String key/*,HashOperations<String,String,T> hashOperation*/);
 
     /**
      * 从hash中删除指定的存储
@@ -301,7 +282,7 @@ import java.util.concurrent.TimeUnit;
      * @param String
      * @return 状态码，1成功，0失败
      */
-     long deleteMap(String key);
+    long deleteMap(String key);
 
     /**
      * 设置过期时间
@@ -311,10 +292,11 @@ import java.util.concurrent.TimeUnit;
      * @param unit
      * @return
      */
-     boolean expire(String key, long time, TimeUnit unit);
+    boolean expire(String key, long time, TimeUnit unit);
 
     /**
      * 重命名Key
+     *
      * @param oldKey
      * @param newKey
      * @return Boolean
@@ -323,6 +305,7 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 将 key 与 otherKey 的并集,保存到 destKey 中
+     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -332,7 +315,8 @@ import java.util.concurrent.TimeUnit;
 
 
     /**
-     *  key 和 other 两个集合的并集,保存在 destKey 集合中, 列名相同的 score 相加
+     * key 和 other 两个集合的并集,保存在 destKey 集合中, 列名相同的 score 相加
+     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -341,7 +325,8 @@ import java.util.concurrent.TimeUnit;
     Long unionAndStoreZset(String key, Collection<String> otherKeys, String destKey);
 
     /**
-     *  key 和 other 两个集合的并集,保存在 destKey 集合中, 列名相同的 score 相加
+     * key 和 other 两个集合的并集,保存在 destKey 集合中, 列名相同的 score 相加
+     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -351,6 +336,7 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 删除指定索引位置的成员,其中成员分数按( 从小到大 )
+     *
      * @param key
      * @param start
      * @param end
@@ -361,6 +347,7 @@ import java.util.concurrent.TimeUnit;
 
     /**
      * 删除指定 分数范围 内的成员 [main,max],其中成员分数按( 从小到大 )
+     *
      * @param key
      * @param min
      * @param max
@@ -370,7 +357,8 @@ import java.util.concurrent.TimeUnit;
 
 
     /**
-     *  key 和 otherKey 两个集合的交集,保存在 destKey 集合中
+     * key 和 otherKey 两个集合的交集,保存在 destKey 集合中
+     *
      * @param key
      * @param otherKey
      * @param destKey
@@ -380,14 +368,14 @@ import java.util.concurrent.TimeUnit;
 
 
     /**
-     *  key 和 otherKeys 多个集合的交集,保存在 destKey 集合中
+     * key 和 otherKeys 多个集合的交集,保存在 destKey 集合中
+     *
      * @param key
      * @param otherKeys
      * @param destKey
      * @return
      */
     Long intersectAndStore(String key, Collection<String> otherKeys, String destKey);
-
 
 
     //redisTemplateSerializable
@@ -404,15 +392,15 @@ import java.util.concurrent.TimeUnit;
             }
         });
     }*/
-     long del(final byte[] key);
+    long del(final byte[] key);
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-     byte[] get(final byte[] key);
+    byte[] get(final byte[] key);
 
     /**
      * @param key
      * @param value
      * @param liveTime
      */
-     void set(final byte[] key, final byte[] value, final long liveTime);
+    void set(final byte[] key, final byte[] value, final long liveTime);
 }

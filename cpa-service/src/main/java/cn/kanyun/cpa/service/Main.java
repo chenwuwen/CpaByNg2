@@ -18,6 +18,14 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  * 提供者以jar包方式运行,在本地调试可以用main方法运行,部署的时候就只能是打成jar包了.
  * 使用maven来配置,使用默认的Spring Container (自动加载META-INF/spring目录下的所有Spring配置。)
  *
+ * 根据Dubbo官方文档,配置Dubbo有4种方式,分别是：
+ * XML 配置文件方式
+ * properties 配置文件方式 [需要注意的是,当配置了XML时properties配置不生效,也就是说只有不配置XML时,该配置才有效]
+ * annotation 配置方式
+ * API 配置方式
+ *
+ * 需要注意的是,在使用Dubbo时,业务代码谨慎使用ApplicationContext 的getBean() 方法,因为有可能与Spring启动发生死锁
+ * 如果需要这么做,那么在相应的服务上配置 delay="-1" 表示在Spring启动后再暴露服务
  * @author Administrator
  * @date 2018/8/2
  */

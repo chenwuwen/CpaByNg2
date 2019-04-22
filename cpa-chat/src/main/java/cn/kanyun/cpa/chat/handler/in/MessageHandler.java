@@ -37,6 +37,29 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
         }
     }
 
+
+
+    /**
+     * 当有Channel注册时广播当前聊天人数,由于Channel是先注册上的
+     * 用户认证是后来认证的，在用户认证前是否可以查看当前聊天人数？
+     * 但是聊天人数一定是认证后的人数！
+     * 该方法先于channelActive()方法执行
+     * @param ctx
+     * @throws Exception
+     */
+    @Override
+    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        log.info("MessageHandler channelRegistered() 方法");
+//        并不执行发送消息(可能是连接未建立完全,可在messageReceived()方法中发送消息)
+//        ChatUserManager.sendSysMess(ctx.channel(), ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
+        super.channelRegistered(ctx);
+    }
+
+    @Override
+    public void channelWritabilityChanged(ChannelHandlerContext ctx) throws Exception {
+        super.channelWritabilityChanged(ctx);
+    }
+
     /**
      * 管道非注册时触发
      *
@@ -50,18 +73,6 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
         super.channelUnregistered(ctx);
     }
 
-    /**
-     * 当有Channel注册时广播当前聊天人数
-     * @param ctx
-     * @throws Exception
-     */
-    @Override
-    public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
-        ChatUserManager.removeChannel(ctx.channel());
-        ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
-        super.channelRegistered(ctx);
-    }
-
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.error(">>>>>>>> 连接错误关闭 channel :{}", cause);
@@ -72,7 +83,7 @@ public class MessageHandler extends SimpleChannelInboundHandler<TextWebSocketFra
 
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        log.info("MessageHandler channelActive()");
+        log.info("MessageHandler channelActive()方法");
         super.channelActive(ctx);
     }
 }

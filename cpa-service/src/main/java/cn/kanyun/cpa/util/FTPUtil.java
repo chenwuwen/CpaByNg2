@@ -7,6 +7,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -25,17 +26,20 @@ import java.io.RandomAccessFile;
  * @version 0.3 实现中文目录创建及中文文件创建，添加对于中文的支持
  */
 @Component
+@PropertySource("classpath:ftp.properties")
 public class FTPUtil {
     private static final Logger logger = LoggerFactory.getLogger(FTPUtil.class);
     /**
      * 在spring中配置<context:property-placeholder/>，可以在java类中以这种方式获取配置的属性值
      * 但是需要注意的是,需在此类添加@Commont注解，同时在spring配置文件中配置自动扫描，在调用该类时使用注入方式，而不是new
+     * @PropertySource 注解表示加载哪个配置文件
+     * @Value 将配置文件中的值赋值给变量,冒号表示如果获取不到,冒号后面值表示默认值,如果是数组,以逗号分隔
      */
-    //获取ip地址/主机名
-    @Value("${FTP_ADDRESS}")
+    //获取ip地址/主机名 如果获取不到默认为本地地址
+    @Value("${FTP_ADDRESS:127.0.0.1}")
     private String hostname;
-    //端口号
-    @Value("${FTP_PORT}")
+    //端口号 如果获取不到默认为21
+    @Value("${FTP_PORT:21}")
     private int port;
     //用户名
     @Value("${FTP_USERNAME}")

@@ -6,11 +6,11 @@ import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 
 /**
@@ -47,18 +47,34 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Long, CpaRepertory> imple
         Object[] params;
         Queue queue = new LinkedList();
         StringBuilder where = new StringBuilder();
-        if (StringUtils.isNotBlank(cpaRepertoryDto.getTestStem())) {
+
+//        if (StringUtils.isNotBlank(cpaRepertoryDto.getTestStem())) {
+//            where.append(" and o.testStem like ? ");
+//            queue.add("%" + cpaRepertoryDto.getTestStem() + "%");
+//        }
+//        if (cpaRepertoryDto.getTestType() != null) {
+//            where.append(" and o.testType=? ");
+//            queue.add(cpaRepertoryDto.getTestType());
+//        }
+//        if (cpaRepertoryDto.getQuestionType() != null) {
+//            where.append(" and o.questionType=? ");
+//            queue.add(cpaRepertoryDto.getQuestionType());
+//        }
+
+        Optional<CpaRepertoryDto> optional = Optional.ofNullable(cpaRepertoryDto);
+        optional.map(CpaRepertoryDto::getTestStem).ifPresent(o -> {
             where.append(" and o.testStem like ? ");
-            queue.add("%" + cpaRepertoryDto.getTestStem() + "%");
-        }
-        if (cpaRepertoryDto.getTestType() != null) {
+            queue.add("%" + o + "%");
+        });
+        optional.map(CpaRepertoryDto::getTestType).ifPresent(o->{
             where.append(" and o.testType=? ");
-            queue.add(cpaRepertoryDto.getTestType());
-        }
-        if (cpaRepertoryDto.getQuestionType() != null) {
+            queue.add(o);
+        });
+        optional.map(CpaRepertoryDto::getQuestionType).ifPresent(o->{
             where.append(" and o.questionType=? ");
-            queue.add(cpaRepertoryDto.getQuestionType());
-        }
+            queue.add(o);
+        });
+
 
         if (queue.size() > 0) {
             params = queue.toArray();

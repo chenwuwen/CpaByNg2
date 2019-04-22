@@ -5,6 +5,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  * 聊天服务启动类(主类)
+ * 该类只用来启动Spring，并且该Module定义了一个Spring 监听器,由Spring监听器启动Netty
  */
 @Slf4j
 public class ChatServerMain {
@@ -14,7 +15,7 @@ public class ChatServerMain {
             ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("classpath:spring-netty.xml");
 //            StartChatServer类实现了Spring的InitializingBean监听器,可以在Spring启动时自动启动ChatServer,之所以使用监听器这种方式,是因为这种方式可以在集成Web环境下运行也可以单独模块化运行,而下面的start()方法,可以不执行,当执行上面的ClassPathXmlApplicationContext构造方法时Spring就已经启动了
             context.start();
-            log.info("====== Spring start success =====");
+
 //            ChatServer chatServer = new ChatServer();
 //            ChatServer chatServer = (ChatServer) context.getBean("chatServer");
 //            chatServer.start();

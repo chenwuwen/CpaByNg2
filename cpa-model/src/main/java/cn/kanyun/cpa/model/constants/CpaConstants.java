@@ -83,6 +83,11 @@ public class CpaConstants {
     public static final long JWT_REFRESH_INTERVAL = 60 * 60 * 1000;
 
     /**
+     * Redis 保存用户SESSION 有效时间 [因此当jwt快过期时,redis的缓存也快过期了,所以更换新的jwt的同时也要同时续期redis]
+     */
+    public static final int REDIS_SESSION_USE_EXPIRE = 60 * 60 * 1000;
+
+    /**
      * JWT生成Token设置ISSUSER
      */
     public static final String JWT_ISSUSER = "cpa.kanyun.com";
@@ -106,4 +111,5 @@ public class CpaConstants {
      * 是否使用Redis代替SESSION
      */
     public static final Boolean SESSION_USE_REDIS = true;
+
 }

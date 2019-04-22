@@ -3,122 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>WebSocket Test</title>
-    <script type="text/javascript">
-        var socket
-        if (window.WebSocket) {
-            socket = new WebSocket("ws://127.0.0.1:9688/ws")
 
-            // 接收服务端返回的数据
-            socket.onmessage = function (ev) {
-                console.log("服务端返回结果：", ev);
-                var ta = document.getElementById("responseText");
-                var ret = ev.data;
-                console.log(ret)
-                ret = JSON.parse(ret)
-                var head = ret["head"]
-                var code = ret["extend"]["code"]
-                var reply = ret["extend"]["reply"]
-                console.log("reply:", reply)
-                switch (code) {
-                    case 20002:
-                        if (reply) {
-                            ta.value = ta.value + "\n" + "认证成功！";
-                        } else {
-                            ta.value = ta.value + "\n" + "认证失败！";
-                        }
-                        break;
-                    case 20001:
-                        ta.value = ta.value + "\n" + "欢迎:" + reply + "加入聊天！";
-                        break
-                    case 2004:
-                        document.getElementById("user_count").value = reply;
-                        break
-                    case 10015:
-                        console.log("服务端的ping消息")
-                        var pong = {
-                            'code': 10016
-                        }
-                        socket.send(JSON.stringify(pong));
-                        break
-                    case 10016:
-                        console.log("服务端的pong消息")
-                        console.log("服务端有一个定时任务,给我发了一个ping消息,我回复了一个pong消息,然后服务端又给我回复我发pong消息的响应,类似于三次握手,我接收到这个响应后,打印这句话就行了！")
-                        break
-                    default:
-                        var msg = ret["body"];
-                        var time = ret["extend"]["time"]
-                        var nick = ret["extend"]["nick"]
-                        var value = time + "#" + nick + "#" + msg
-                        ta.value = ta.value + "\n" + value;
-                }
-            }
-
-            // 建立连接
-            socket.onopen = function (ev) {
-                var ta = document.getElementById("responseText");
-                ta.value = "连接开启！";
-            }
-
-            // 关闭连接
-            socket.onclose = function (ev) {
-                var ta = document.getElementById("responseText");
-                ta.value = ta.value + "\n" + "连接关闭";
-            }
-        } else {
-            alert("您的浏览器不支持WebSocket!")
-        }
-
-        socket.onerror = function () {
-            alert("服务端出错！")
-            socket = new WebSocket("ws://127.0.0.1:9688/ws")
-        }
-
-        socket.onclose = function () {
-            socket = new WebSocket("ws://127.0.0.1:9688/ws")
-        }
-
-        function senMessage(message) {
-            if (window.WebSocket) {
-                if (socket.readyState == WebSocket.OPEN) {
-                    var msg = {
-                        'code': 10086,
-                        "message": message
-                    }
-                    // 注意：需要将msg对象先转成字符串,再发送
-                    socket.send(JSON.stringify(msg));
-                    document.getElementById("input_msg").value = ''
-                } else {
-                    alert("连接尚未开启！")
-                }
-            }
-        }
-
-        /**
-         * 认证
-         * @param nick
-         */
-        function auth(nick) {
-            if (window.WebSocket) {
-                if (socket.readyState == WebSocket.OPEN) {
-                    var authMsg = {
-                        'nick': nick,
-                        'code': 10000
-                    }
-                    // 注意：需要将msg对象先转成字符串,再发送
-                    socket.send(JSON.stringify(authMsg));
-
-                } else {
-                    alert("连接尚未开启！")
-                }
-            }
-        }
-    </script>
 </head>
 <body>
 <form action="" onsubmit="return false">
     <div>
         <span style="color: green;font-style: italic">当前聊天人数：</span>
-        <b id="user_count">0</b>人
+        <b id="user_count">-1</b>人
     </div>
     <div style="margin-bottom: 20px">
         <input placeholder="开启聊天之前,请先认证,输入昵称后,即可开启聊天" style="width: auto" name="nick">
@@ -137,5 +28,118 @@
 
     <input type="button" value="清空内容" onclick="javascript:document.getElementById('responseText').value=''">
 </form>
+
+<script type="text/javascript">
+    var socket
+    if (window.WebSocket) {
+        socket = new WebSocket("ws://127.0.0.1:9688/ws")
+
+        // 接收服务端返回的数据
+        socket.onmessage = function (ev) {
+            console.log("服务端返回结果：", ev);
+            var ta = document.getElementById("responseText");
+            var ret = ev.data;
+            console.log(ret)
+            ret = JSON.parse(ret)
+            var head = ret["head"]
+            var code = ret["extend"]["code"]
+            var reply = ret["extend"]["reply"]
+            console.log("reply:", reply)
+            switch (code) {
+                case 20002:
+                    if (reply) {
+                        ta.value = ta.value + "\n" + "认证成功！";
+                    } else {
+                        ta.value = ta.value + "\n" + "认证失败！";
+                    }
+                    break;
+                case 20001:
+                    ta.value = ta.value + "\n" + "欢迎:" + reply + "加入聊天！";
+                    break
+                case 20004:
+                    console.log("当前聊天人数：" + reply);
+                    document.getElementById("user_count").innerText = reply;
+                    break
+                case 10015:
+                    console.log("服务端的ping消息")
+                    var pong = {
+                        'code': 10016
+                    }
+                    socket.send(JSON.stringify(pong));
+                    break
+                case 10016:
+                    console.log("服务端的pong消息")
+                    console.log("服务端有一个定时任务,给我发了一个ping消息,我回复了一个pong消息,然后服务端又给我回复我发pong消息的响应,类似于三次握手,我接收到这个响应后,打印这句话就行了！")
+                    break
+                default:
+                    var msg = ret["body"];
+                    var time = ret["extend"]["time"]
+                    var nick = ret["extend"]["nick"]
+                    var value = time + "#" + nick + "#" + msg
+                    ta.value = ta.value + "\n" + value;
+            }
+        }
+
+        // 建立连接
+        socket.onopen = function (ev) {
+            var ta = document.getElementById("responseText");
+            ta.value = "连接开启！";
+        }
+
+        // 关闭连接
+        socket.onclose = function (ev) {
+            var ta = document.getElementById("responseText");
+            ta.value = ta.value + "\n" + "连接关闭";
+        }
+    } else {
+        alert("您的浏览器不支持WebSocket!")
+    }
+
+    socket.onerror = function (ev) {
+        console.log(ev)
+        alert("服务端出错！")
+        socket = new WebSocket("ws://127.0.0.1:9688/ws")
+    }
+
+    socket.onclose = function () {
+        socket = new WebSocket("ws://127.0.0.1:9688/ws")
+    }
+
+    function senMessage(message) {
+        if (window.WebSocket) {
+            if (socket.readyState == WebSocket.OPEN) {
+                var msg = {
+                    'code': 10086,
+                    "message": message
+                }
+                // 注意：需要将msg对象先转成字符串,再发送
+                socket.send(JSON.stringify(msg));
+                document.getElementById("input_msg").value = ''
+            } else {
+                alert("连接尚未开启！")
+            }
+        }
+    }
+
+    /**
+     * 认证
+     * @param nick
+     */
+    function auth(nick) {
+        if (window.WebSocket) {
+            if (socket.readyState == WebSocket.OPEN) {
+                var authMsg = {
+                    'nick': nick,
+                    'code': 10000
+                }
+                // 注意：需要将msg对象先转成字符串,再发送
+                socket.send(JSON.stringify(authMsg));
+
+            } else {
+                alert("连接尚未开启！")
+            }
+        }
+    }
+</script>
 </body>
 </html>

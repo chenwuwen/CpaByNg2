@@ -5,52 +5,82 @@
 <!--project ： 将整个project资源打包-->
 <!--一般来说，内置的assembly descriptor都不满足需求，这个时候就需要写自己的assembly descriptor的实现了-->
 
-<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+
     <!--这个id必须跟pom.xml中maven-assembly-plugin的id一致同时这个id会跟在打包文件后面-->
     <id>chat-assembly</id>
+
+
+
     <formats>
         <!--打包的文件的格式,目前支持的打包类型：zip tar tar.gz  tar.bz2 jar  dir war,默认情况下，打jar包时，只有在类路径上的文件资源会被打包到jar中，并且文件名是${artifactId}-${version}.jar-->
-        <format>tar.gz</format>
+        <!--可同时指定多个,每一个是一个<format/>标签对-->
+        <format>jar</format>
     </formats>
-    <!--tar.gz压缩包下是否生成和项目名相同的根目录-->
-    <includeBaseDirectory>true</includeBaseDirectory>
-    <!--指定要包含的文件集，可以定义多个fileSet-->
+
+    <!--是否生成和项目名相同的根目录,默认是true，该选项为true将导致多一层文件夹 需要注意的是如果打成的是jar包,将会导致无法加载主类,如果打成的是war包或者tar.gz等压缩包,可以设置该选项为true-->
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+
+    <!--指定要包含的文件集，可以定义多个fileSet,管理一组文件的存放位置-->
     <fileSets>
         <fileSet>
-            <!--打包时把/resources/config 目录内的文件放在jar包外的/目录下-->
-            <directory>${project.build.directory}/classes/config</directory>
-            <outputDirectory>/</outputDirectory>
+            <!--打包时把/resources/ 目录内的文件放在jar包外的/目录下-->
+            <directory>${project.build.directory}/classes/</directory>
+            <!--指定文件集合的输出目录，该目录是相对于根目录-->
+            <outputDirectory>.</outputDirectory>
+            <!--指定文件属性，使用八进制表达，分别为(User)(Group)(Other)所属属性，默认为 0644-->
             <fileMode>0755</fileMode>
             <!--在fileSet里可以使用includes 和 excludes来更精确的控制哪些文件要添加，哪些文件要排除-->
             <excludes>
-                <exclude>**/*.txt</exclude>
+                <exclude>**/*.md</exclude>
             </excludes>
+            <!--包含文件-->
             <includes>
                 <include>**/*.class</include>
+                <include>**/*.properties</include>
+                <include>**/*.xml</include>
             </includes>
         </fileSet>
     </fileSets>
+
+    <!--可以指定目的文件名到指定目录，其他和 fileSets 相同-->
     <files>
-        <!--打包时把README.md文件放在jar包外-->
+        <!--打包时把netty-config.properties文件放在jar包外-->
         <file>
-            <source>README.md</source>
-            <outputDirectory></outputDirectory>
+            <!--源文件，相对路径或绝对路径-->
+            <!--${project.build.directory} 对应编译后的target/ 路径 也可以将路径写成 src/main/resources-->
+            <!--${project.build.finalName} 表示maven默认打包后的文件名-->
+            <source>${project.build.directory}/classes/netty-config.properties</source>
+            <!--输出目录-->
+            <outputDirectory>c:\\</outputDirectory>
+            <!--目标文件名-->
+            <destName>netty-config1.properties</destName>
+            <!--设置文件 UNIX 属性，默认是0644-->
+            <fileMode>0755</fileMode>
         </file>
-        <file>
-            <!--打好的jar包名称和放置目录-->
-            <source>${project.build.directory}/${project.build.finalName}.jar</source>
-            <outputDirectory>/</outputDirectory>
-        </file>
+
+        <!--<file>-->
+            <!--<source>${project.build.directory}/${project.build.finalName}.jar</source>-->
+            <!--<outputDirectory>.</outputDirectory>-->
+            <!--<destName>cpa-chat-miss-dependencies.jar</destName>-->
+        <!--</file>-->
+
     </files>
 
-    <!--如果想把一些依赖库打到包里，可以用 dependencySets 元素，例如最简单的，把当前工程的所有依赖都添加到包里：-->
+    <!--用来定制工程依赖 jar 包的打包方式,如果想把一些依赖库打到包里，可以用 dependencySets 元素，例如最简单的，把当前工程的所有依赖都添加到包里：-->
     <dependencySets>
         <dependencySet>
-            <!--是否把本项目添加到依赖文件夹下-->
-            <useProjectArtifact>true</useProjectArtifact>
+            <!--是否把本项目添加到依赖文件夹下,如果要排除工程自身生成的jar 则设置为false 所谓自身生成的jar 就是自己写的代码打成的jar包,这个包不是依赖包,可以排除掉,以减小jar包体积-->
+            <useProjectArtifact>false</useProjectArtifact>
+            <!--指定包依赖目录，该目录是相对于根目录,该值应该跟plugin中<classpathPrefix>./</classpathPrefix>值一致-->
             <outputDirectory>/</outputDirectory>
+            <!--是否解压依赖：目前支持 jar, zip, tar.gz,tar.bz 默认值false 当为false时 依赖是以jar文件存在的-->
+            <!--需要注意的是,如果要打的包是jar包,则必须设置为true，因为依赖的jar包在打成的jar内,会导致依赖无效(因为jar内套jar是不行的),除非依赖的jar包在打成的jar包的外部,或者打的包是一个war包-->
+            <unpack>true</unpack>
+            <!--设置此dependencySet的依赖范围,默认是runtime-->
+            <scope>compile</scope>
         </dependencySet>
     </dependencySets>
 </assembly>

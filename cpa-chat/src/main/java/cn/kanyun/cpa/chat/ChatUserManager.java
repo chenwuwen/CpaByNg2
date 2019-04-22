@@ -133,6 +133,26 @@ public class ChatUserManager {
     }
 
     /**
+     * 广播系统消息：包括未认证的
+     */
+    public static void broadCastInfoAllChannel(ChatCodeEnum code, Object mess) {
+        try {
+            rwLock.readLock().lock();
+            Set<Channel> keySet = userInfos.keySet();
+            for (Channel ch : keySet) {
+                ChatUser userInfo = userInfos.get(ch);
+                if (userInfo == null) {
+                    continue;
+                }
+                ch.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSysProto(code, mess)));
+            }
+        } finally {
+            rwLock.readLock().unlock();
+        }
+    }
+
+
+    /**
      * 广播Ping消息,只有认证过的才会发送Ping消息
      */
     public static void broadCastPing() {
@@ -155,7 +175,7 @@ public class ChatUserManager {
     /**
      * 发送系统消息(单人)
      */
-    public static void sendSysMess(Channel channel, ChatCodeEnum code, boolean b) {
+    public static void sendSysMess(Channel channel, ChatCodeEnum code, Object b) {
         channel.writeAndFlush(new TextWebSocketFrame(ChatProto.buildSysProto(code, b)));
     }
 
@@ -175,7 +195,7 @@ public class ChatUserManager {
 
     /**
      * 扫描并关闭失效的Channel
-     * 其中包括 通道关闭的,通道不活跃的,未认证的,与服务端Ping Pong超过1分钟未交互的客户端
+     * 其中包括 通道关闭的,通道不活跃的,未认证的,与服务端Ping Pong超过2分钟未交互的客户端
      */
     public static void scanNotActiveChannel() {
         Set<Channel> keySet = userInfos.keySet();
@@ -185,7 +205,7 @@ public class ChatUserManager {
                 continue;
             }
             if (!ch.isOpen() || !ch.isActive() || (!userInfo.isAuth() &&
-                    (System.currentTimeMillis() - userInfo.getTime()) > 60 * 1000)) {
+                    (System.currentTimeMillis() - userInfo.getTime()) > 2 * 60 * 1000)) {
                 removeChannel(ch);
             }
         }

@@ -1,10 +1,11 @@
 package cn.kanyun.cpa.util;
 
-import java.util.Random;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.Graphics;
-import java.awt.Font;
-import java.awt.Color;
+import java.util.Random;
 
 /**
  * Created by Administrator on 2017/7/10.
@@ -48,6 +49,16 @@ public class ValidateCode {
      * 验证码类型为仅小写字母
      */
     public static final int TYPE_LOWER_ONLY = 6;
+
+    /**
+     * 验证码类型数学表达式
+     */
+    public static final int TYPE_CLAC_ONLY = 7;
+
+    /**
+     * 运算符数组
+     */
+    public static final char[] OPERATION_SYMBOL = {'+', '-', '*'};
 
     private ValidateCode() {
 
@@ -150,7 +161,26 @@ public class ValidateCode {
                     }
                 }
                 break;
-
+            // 含有运算符的 计算机中 0是偶数
+            default:
+                //如果是偶数，注意以位运算来判断奇偶,避免负值的情况
+                if ((length & 1) != 1) {
+                    System.out.println("输入的长度为偶数：" + length);
+                    //需要注意的是,如果是偶数的话则没有办法生成运算表达式,因为运算符总是比数字少一个
+                    length -= 1;
+                    System.out.println("修改后的长度为：" + length);
+                }
+                while (i < length) {
+                    i++;
+                    if ((i & 1) == 1) { //如果奇数,放数字
+                        int t = r.nextInt(10);
+                        code.append(t);
+                    } else {
+                        int num = r.nextInt(2);
+                        char symbol = OPERATION_SYMBOL[num];
+                        code.append(symbol);
+                    }
+                }
         }
 
         return code.toString();
@@ -252,6 +282,20 @@ public class ValidateCode {
         Random r = new Random();
         Color c = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
         return c;
+    }
+
+    /**
+     * 传入数学表达式字符串,返回结果
+     * Java和Js之间的调用时基于ScriptEngineManager类，这个类是jdk8新增的
+     * 所以利用js的eval()函数来计算表达式
+     * @param exp
+     * @return
+     * @throws ScriptException
+     */
+    private static int calc(String exp) throws ScriptException {
+        ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+        ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
+        return (Integer) scriptEngine.eval(exp);
     }
 
 }

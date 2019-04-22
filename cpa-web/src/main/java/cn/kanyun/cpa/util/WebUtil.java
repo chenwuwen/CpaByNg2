@@ -16,6 +16,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.UnknownHostException;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,7 +25,8 @@ import java.util.regex.Pattern;
  */
 public class WebUtil {
 
-    private static RedisService redisService;
+
+    private static RedisService<CpaUser> redisService;
 
     /**
      * 在session中获得user
@@ -37,7 +39,7 @@ public class WebUtil {
         try {
             if (CpaConstants.SESSION_USE_REDIS) {
                 redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
-                user = (CpaUser) redisService.getCacheObject(request.getHeader("Authorization"));
+                user = redisService.getCacheObject(request.getHeader("Authorization"), CpaUser.class);
             } else {
                 user = (CpaUser) request.getSession().getAttribute(CpaConstants.USER);
             }
@@ -58,7 +60,9 @@ public class WebUtil {
             if (CpaConstants.SESSION_USE_REDIS) {
                 redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
                 String token = JwtUtil.createJWT(JwtUtil.generalSubject(us), us.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
-                redisService.setCacheObject(token, us);
+                String user = JSONObject.toJSONString(us);
+//                有效期是一小时,与Token的有效期一致,当Token过期时,同时延长缓存时间
+                redisService.setCacheObjectForTime(token, user, CpaConstants.REDIS_SESSION_USE_EXPIRE, TimeUnit.MICROSECONDS);
             } else {
                 request.getSession().setAttribute(CpaConstants.USER, us);
             }

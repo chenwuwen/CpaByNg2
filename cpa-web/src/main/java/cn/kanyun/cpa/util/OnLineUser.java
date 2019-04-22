@@ -1,8 +1,9 @@
 package cn.kanyun.cpa.util;
 
-import java.util.*;
-import javax.servlet.http.*;
-import javax.servlet.*;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+import java.util.Date;
+import java.util.Vector;
 
 /**
  * HttpSessionBindingListener接口有两方需要实现的方法:
@@ -11,8 +12,8 @@ import javax.servlet.*;
  * Session创建的时候Servlet容器将会调用valueBound方法;Session删除的时候则调用valueUnbound方法.
  * 需要说明的是这种方式适合只有单台服务器的小网站使用，如果网站有多台web server则不能使用这种方式记录在线人数。
  */
-public class onLineUser implements HttpSessionBindingListener {
-    public onLineUser() {
+public class OnLineUser implements HttpSessionBindingListener {
+    public OnLineUser() {
     }
 
     /**

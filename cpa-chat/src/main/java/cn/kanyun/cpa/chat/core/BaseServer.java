@@ -5,7 +5,10 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.DefaultEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.concurrent.Executors;
@@ -86,8 +89,18 @@ public abstract class BaseServer implements Server {
 
     public void init() {
         try {
-//            加载配置文件中的端口号
-            props = org.springframework.core.io.support.PropertiesLoaderUtils.loadAllProperties("netty-config.properties");
+            String path = System.getProperty("user.dir");
+            log.info("current exec directory is :{}", path);
+            String resource_name = path + File.separator + "netty-config.properties";
+            File file = new File(resource_name);
+            if (file.exists()) {
+//                这个主要用在,当模块打成jar包部署时,在jar包所在目录读取配置文件
+                Resource resource = new FileSystemResource(file);
+                props = org.springframework.core.io.support.PropertiesLoaderUtils.loadProperties(resource);
+            } else {
+//              加载配置文件中的端口号(这个配置文件是src/main/resources 下的配置文件)
+                props = org.springframework.core.io.support.PropertiesLoaderUtils.loadAllProperties("netty-config.properties");
+            }
             port = Integer.parseInt(props.get("netty.server-port").toString());
         } catch (IOException e) {
             e.printStackTrace();
@@ -112,7 +125,7 @@ public abstract class BaseServer implements Server {
             }
         }));
 //          初始化线程组,构建线程组的时候,如果不传入参数,则默认线程数量为CPU数量
-        workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 10, Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10,new ThreadFactory() {
+        workGroup = new NioEventLoopGroup(Runtime.getRuntime().availableProcessors() * 10, Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 10, new ThreadFactory() {
             private AtomicInteger index = new AtomicInteger(0);
 
             @Override

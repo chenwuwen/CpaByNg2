@@ -137,20 +137,33 @@
                             <mainClass>cn.kanyun.cpa.chat.ChatServerMain</mainClass>
                             <!-- 是否指定项目classpath下的依赖 -->
                             <addClasspath>true</addClasspath>
-                            <!--指定依赖的时候声明前缀-->
+                            <!--指定依赖的时候声明前缀(可以从MANIFEST.MF文件中看出,该值指定了从哪个位置加载依赖),也就是说如果此值是 ./ 则程序从当前目录加载依赖,如果加载不到,则抛出异常,如果此值为lib,则表示程序从当前目录下的lib下加载依赖,如果找不到则抛出异常-->
                             <classpathPrefix>./</classpathPrefix>
                         </manifest>
                     </archive>
-                    <descriptorRefs>
-                        <!--会将所有依赖[包括自定义类的依赖]都打包-->
-                        <!--还有一些其他参数-->
-                        <!--bin ： 类似于默认打包，会将bin目录下的文件打到包中-->
-                        <!--jar-with-dependencies ： 会将所有依赖都解压打包到生成物中-->
-                        <!--src ：只将源码目录下的文件打包-->
-                        <!--project ： 将整个project资源打包-->
-                        <!--除了上面的几种方式外,还可以自定义打包方式：使用 <descriptor>打包,详见：https://blog.csdn.net/qq_36781718/article/details/80111971-->
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+
+                    <!--会将所有依赖[包括自定义类的依赖]都打包-->
+                    <!--还有一些其他参数-->
+                    <!--bin ： 类似于默认打包，会将bin目录下的文件打到包中-->
+                    <!--jar-with-dependencies ： 会将所有依赖都解压打包到生成物中-->
+                    <!--src ：只将源码目录下的文件打包-->
+                    <!--project ： 将整个project资源打包-->
+                    <!--除了上面的几种方式外,还可以自定义打包方式：使用 <descriptor>打包,详见：https://blog.csdn.net/qq_36781718/article/details/80111971-->
+                    <!--<descriptorRefs>-->
+                    <!--<descriptorRef>jar-with-dependencies</descriptorRef>-->
+                    <!--</descriptorRefs>-->
+
+                    <!--官方建议使用此种打包方式,自定义打包-->
+                    <descriptors>
+                        <descriptor>src/main/resources/assembly.xml</descriptor>
+                    </descriptors>
+
+                    <!--这样配置后，mvn deploy不会把assembly打的zip包上传到nexus-->
+                    <attach>false</attach>
+
+                    <!--如果只打成的jar包只想有finalName，不加其他的后缀的话,增加如下配置-->
+                    <appendAssemblyId>false</appendAssemblyId>
+
                 </configuration>
                 <executions>
                     <execution>
@@ -162,9 +175,46 @@
                             <!-- 只运行一次 这个配置在IDEA中有可能飘红,但是不能注释,注释掉将无法打包-->
                             <goal>single</goal>
                         </goals>
+
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- 在default生命周期的 validate阶段就执行resources插件的copy-resources目标 -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <!-- 指定resources插件处理资源文件到哪个目录下 -->
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                            <!-- 也可以用下面这样的方式（指定相对url的方式指定outputDirectory） <outputDirectory>target/classes</outputDirectory> -->
+                            <!-- 待处理的资源定义 -->
+                            <resources>
+                                <resource>
+                                    <!-- 指定resources插件处理哪个目录下的资源文件 -->
+                                    <directory>src/main/resources/</directory>
+                                    <!-- 指定不需要处理的资源  -->
+                                    <excludes>
+                                        <exclude>*.xml</exclude>
+                                    </excludes>
+                                    <!-- 是否对待处理的资源开启过滤模式 (resources插件的copy-resources目标也有资源过滤的功能，这里配置的
+                                    这个功能的效果跟<build><resources><resource>下配置的资源过滤是一样的，只不过可能执行的阶段不一样， 这里执行的阶段是插件指定的validate阶段，<build><resources><resource>下的配置将是在resources插件的resources目标执行时起作用（在process-resources阶段）) -->
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+
+            </plugin>
+
 
         </plugins>
     </build>

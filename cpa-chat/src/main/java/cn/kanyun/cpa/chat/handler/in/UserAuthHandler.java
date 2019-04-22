@@ -135,6 +135,7 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
                 Constants.WEBSOCKET_URL, null, true);
         handshaker = handshakerFactory.newHandshaker(request);
         if (handshaker == null) {
+//            给客户端返回一个异常状态
             WebSocketServerHandshakerFactory.sendUnsupportedVersionResponse(ctx.channel());
         } else {
             // 动态加入WebSocket的编解码处理
@@ -144,6 +145,9 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
             handshaker.handshake(ctx.channel(), request);
             // 存储已经连接的Channel
             ChatUserManager.addChannel(ctx.channel());
+//            有新客户端连接时,发送当前聊天人数
+            ChatUserManager.sendSysMess(ctx.channel(), ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
+
         }
     }
 
@@ -208,6 +212,8 @@ public class UserAuthHandler extends SimpleChannelInboundHandler<Object> {
                 if (isSuccess) {
 //                    如果认证成功：广播消息(谁加入了聊天,可以再前端补全,服务端只发送名字)
                     ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_WHO, ChatUserManager.getUserInfo(channel).getNickName());
+//                    如果认证成功：广播当前聊天人数
+                    ChatUserManager.broadCastInfo(ChatCodeEnum.SYS_USER_COUNT, ChatUserManager.getAuthUserCount());
                 }
                 return;
             case MESS_CODE: //普通的消息留给MessageHandler处理
