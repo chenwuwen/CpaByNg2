@@ -396,7 +396,7 @@
                     <password>tomcat</password>
                     <uriEncoding>UTF-8</uriEncoding>
                     <update>true</update>
-                    <!--配置打包名和打包路径，测试不必要，打包后的名称为build标签下的finalName标签的值-->
+                    <!--配置打包名和打包路径，测试不必要，打包后的名称为build标签下的finalName标签的值 ,basedir指的是pom文件所在的目录-->
                     <!--<warFile>${basedir}/target/${project.build.finalName}.war</warFile>-->
                 </configuration>
             </plugin>

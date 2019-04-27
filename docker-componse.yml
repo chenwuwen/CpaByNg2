@@ -1,0 +1,51 @@
+#我们使用 Docker 的时候，定义 Dockerfile 文件，然后使用 docker build、docker run 等命令操作容器。
+#然而微服务架构的应用系统一般包含若干个微服务，每个微服务一般都会部署多个实例，
+#如果每个微服务都要手动启停[或者说容器之前相互依赖比如容器A启动时需要连接容器B提供的服务]，那么效率之低，维护量之大可想而知，
+#使用 Docker Compose 可以轻松、高效的管理容器，它是一个用于定义和运行多容器 Docker 的应用程序工具
+#compose项目主要用于编排部署基于docker的应用。compose主要用于开发／测试场合。适合小规模应用的部署。
+#compose以命令行方式运行，本身没有daemon。只提供应用编排部署的能力。相对于kubernetes来说功能比较简单，
+#相当于kubernetes的一个子集。compose命令大多依赖于yml文件，默认使用当前目录下的“docker-compose.yml“，也可以通过－f指定。
+#使用docker-compose需要先安装docker-compose然后使用docker-compose -v查看安装是否成功
+#Docker Compose 将所管理的容器分为三层，分别是工程（project）、服务（service）、容器（container）
+#Docker Compose 运行目录下的所有文件（docker-compose.yml）组成一个工程,
+#一个工程包含多个服务，每个服务中定义了容器运行的镜像、参数、依赖，一个服务可包括多个容器实例
+# https://www.jianshu.com/p/658911a8cff3
+
+#使用docker-compose可以避免每次运行docker镜像时,docker run 后面加一大串(配置参数比如端口映射等等) 直接使用docker-compose up -d  后台启动服务(配置文件中的所有服务,如果需要启动单个服务使用命令 docker-compose up -d <services下定义的服务名称>)了 (便可以使用该配置文件中定义的参数来运行镜像了)
+
+# 表示该 Docker-Compose 文件使用的是 Version 2 file（指定 docker-compose.yml 文件的写法格式）
+version: "2"
+
+# 定义包含哪些服务
+services:
+
+  # 指定服务名称[一个docker-compose.yml配置文件中可配置多个服务]
+  cpa:
+    # 指定 Dockerfile 所在路径(如果使用了这个参数,那么可以使用docker-compose build来构建服务的镜像,就不必使用 docker build命令了 也可以直接使用 docker-compose up自动构建镜像并使用镜像启动容器)
+    build: .
+    # 指定端口映射(可配置多个)
+    ports:
+      - "8899:8899"
+    # 指定容器名称
+    container_name: cpa-backend
+    # 指定服务所使用的镜像[可以为镜像仓库的url],如果配置了这个参数,就省去了构建镜像的这个步骤
+    image: cpa:latest
+
+    # 将指定容器连接到当前连接(比如web项目启动时连接启动的mysql服务)，可以设置别名，避免ip方式导致的容器重启动态改变的无法连接情况
+    links:
+      -
+
+    # 卷挂载路径
+    volumes:
+      # 冒号前面为宿主机目录,后面为容器目录
+      - /data/cpa-persist:/usr/local/tomcat/logs
+
+
+
+    # 指定环境变量配置
+    environment:
+    - ADDITIONAL_EUREKA_SERVER_LIST=http://discovery2:8762/eureka/
+    - SPRING_PROFILES_ACTIVE=docker
+    - SERVER_PORT=8761
+
+

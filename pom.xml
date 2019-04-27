@@ -92,6 +92,16 @@
     <build>
         <!--定制打包后的包名,默认打包后包名为 ${project.artifactId}-${project.version} -->
         <finalName>cpaweb</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <!--是否替换资源中的属性,与maven-profile相关,建议配置在各个子模块的pom.xml文件中-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <!--设置maven编译的JDK版本-->
@@ -905,4 +915,21 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <!--实际项目开发时有多套环境,所以我们也就有多套的配置文件,maven提供了在打包时添加额外命令,来打包不同的配置文件,以避免每次修改项目配置,这就是maven-profile-->
+    <!--命令用法 mvn clean package -P <环境ID> -->
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <!--resources文件夹下的文件夹名称-->
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <!--activeByDefault标签的值为true的话表示为默认的profile，使用mvn install命令起作用的就是默认的-->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+
 </project>
