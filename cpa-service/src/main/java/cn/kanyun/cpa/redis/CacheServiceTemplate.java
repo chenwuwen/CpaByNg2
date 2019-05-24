@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.redis;
 
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
@@ -26,14 +27,14 @@ public class CacheServiceTemplate {
 
         T t;
 
-        t = (T) redisService.getCacheObject(key, clazz.getClass());
+        t = JSONObject.parseObject(redisService.getCache(key),clazz) ;
 
         if (t != null) {
             return t;
         }
 //        这个地方使用了双重锁,是因为,在设置缓存,获取缓存时,在高并发环境下,会造成缓存穿透,也就是说,一开始没有缓存,突然很多线程同时请求数据,不加锁会造成所有请求都直接到达数据库
         synchronized (this) {
-            t = (T) redisService.getCacheObject(key, clazz.getClass());
+            t = JSONObject.parseObject(redisService.getCache(key),clazz) ;
             if (t != null) {
                 return t;
             }

@@ -91,20 +91,25 @@ public class CpaRepertoryController {
 //            如果pageNo为0，则设置pageNo为1,否则为本身
             pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
+//            从jdk1.8开始可以在内部匿名类中使用非final变量,不过前提就是这个局部变量不能再被重新赋值,所以这只是个语法糖,本质上被没有改变,所以这类final变量称之为effectively final
+            final int startPage = pageNo;
+            final int displaySize = pageNo;
 //            key由当前类名+方法名+查询条件+参数+分页组成,尽可能保证key的唯一性
             String key = this.getClass().getName() + Thread.currentThread().getStackTrace()[1].getMethodName() + where + StringUtils.join(params) + pageNo + pageSize;
             logger.info("Redis缓存的Key：" + key);
-            result = cacheServiceTemplate.getObjectFromCache(key, 12, TimeUnit.HOURS, CpaResult.class, new CacheLoad<T>() {
+//            这个TypeReference的构造方法是protected,所以无法再外部使用new的方式来构建实例,通过添加大括号的方式以内部类的方式构建实例
+            result = cacheServiceTemplate.getObjectFromCache(key, 12, TimeUnit.HOURS, new TypeReference<CpaResult>() {
+            }, new CacheLoad<CpaResult>() {
                 @Override
-                public T load() {
-                    Integer firstResult = page.countOffset(pageNo, pageSize);
-                    result = cpaRepertoryService.getUnitExam(firstResult, pageSize, where, params);
+                public CpaResult load() {
+                    int firstResult = page.countOffset(startPage, displaySize);
+                    CpaResult result = cpaRepertoryService.getUnitExam(firstResult, displaySize, where, params);
 
                     //总记录数
                     page.setTotalRecords(result.getTotalCount().intValue());
                     //总页数(返回的记录中已包含总记录数,无需再次查询)
-                    page.setPageSize(pageSize);
-                    page.setPageNo(pageNo);
+                    page.setPageSize(displaySize);
+                    page.setPageNo(startPage);
                     result.setTotalPage(page.getTotalPages());
                     return result;
                 }
@@ -134,7 +139,7 @@ public class CpaRepertoryController {
             logger.error("ERROR： /api/unitExam/getUnitExam Error: {}" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
-            return result;
+        return result;
     }
 
     /**

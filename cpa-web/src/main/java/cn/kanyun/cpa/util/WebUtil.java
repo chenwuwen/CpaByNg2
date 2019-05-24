@@ -28,6 +28,10 @@ public class WebUtil {
 
     private static RedisService<CpaUser> redisService;
 
+    static {
+        redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
+    }
+
     /**
      * 在session中获得user
      *
@@ -38,7 +42,6 @@ public class WebUtil {
         CpaUser user = null;
         try {
             if (CpaConstants.SESSION_USE_REDIS) {
-                redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
                 user = redisService.getCacheObject(request.getHeader("Authorization"), CpaUser.class);
             } else {
                 user = (CpaUser) request.getSession().getAttribute(CpaConstants.USER);
@@ -58,7 +61,6 @@ public class WebUtil {
     public synchronized static void setSessionUser(HttpServletRequest request, CpaUser us) {
         try {
             if (CpaConstants.SESSION_USE_REDIS) {
-                redisService = SpringTools.getBeanById(RedisService.SERVICE_NAME);
                 String token = JwtUtil.createJWT(JwtUtil.generalSubject(us), us.getUserName(), CpaConstants.JWT_ISSUSER, CpaConstants.JWT_SECRET);
                 String user = JSONObject.toJSONString(us);
 //                有效期是一小时,与Token的有效期一致,当Token过期时,同时延长缓存时间

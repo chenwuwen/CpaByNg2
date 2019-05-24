@@ -44,6 +44,9 @@ public interface RedisService<T> {
      */
     <T> T getCacheObject(String key, Class<T> clazz);
 
+
+    String getCache(String key);
+
     /**
      * 缓存List数据
      *

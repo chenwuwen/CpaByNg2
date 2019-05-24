@@ -64,6 +64,11 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     }
 
     @Override
+    public String getCache(String key) {
+        return redisTemplate.opsForValue().get(key).toString();
+    }
+
+    @Override
     public void setCacheList(String key, List<Object> dataList) {
         ListOperations<String, Object> listOperation = redisTemplate.opsForList();
         if (null != dataList) {
