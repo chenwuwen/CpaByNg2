@@ -2,9 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+       http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
     <description>dubbo服务消费者配置</description>
+
+    <context:property-placeholder location="classpath:*.properties" ignore-unresolvable="true"/>
     <!-- 消费方应用名，用于计算依赖关系，不是匹配条件，不要与提供方一样 -->
     <!--当一个项目中配置多个dubbo时会报错： Invocation of init method failed; nested exception is java.lang.IllegalStateException: Duplicate application configs:-->
     <!--大意时配置文件重复,解决办法：1是可以把消费者提供者的配置文件整合成一个文件，2是在一个配置文件中添加default="false"-->
@@ -14,7 +17,7 @@
     <!--register:是否向此注册中心注册服务，如果设为false，将只订阅，不注册-->
     <!--subscribe:是否向此注册中心订阅服务，如果设为false，将只注册，不订阅-->
     <!--transport:网络传输方式，可选mina,netty-->
-    <dubbo:registry address="zookeeper://115.47.155.3:2181" register="false" transport=""/>
+    <dubbo:registry address="${zookeeper.url}" register="false" transport=""/>
     <!--使用 dubbo 协议调用定义好的 api.PermissionService 接口-->
     <!-- 生成远程服务代理，可以和本地bean一样使用demoService -->
     <!--mock:当远程服务不可用时,可以配置mock属性来进行服务降级,可以具体查询mock支持的几种类型-->

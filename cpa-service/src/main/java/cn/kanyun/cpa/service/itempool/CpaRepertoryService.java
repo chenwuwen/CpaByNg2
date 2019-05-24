@@ -23,11 +23,10 @@ public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
 
     /**
      * @Author: kanyun
-     * @Description: 获取试题列表（单元测试）,选择从数据库库进行查询
+     * @Description: 获取试题列表（单元测试）
      * @Date: 2017/8/16 15:05
      * @params:
      */
-    @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
     CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params);
 
     /**

@@ -55,8 +55,10 @@ public class RedisCacheAspect {
 //    }
 
 
+    /**
+     * 拦截标注了RedisCacheProfiler注解的方法
+     */
     @Pointcut("@annotation(cn.kanyun.cpa.dao.common.annotation.RedisCacheProfiler)")
-
     public void aspectjMethod() {
 
     }

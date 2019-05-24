@@ -2,6 +2,8 @@ package cn.kanyun.cpa.dao.user;
 
 
 import cn.kanyun.cpa.dao.CommonDao;
+import cn.kanyun.cpa.dao.common.DataSourceContextHolder;
+import cn.kanyun.cpa.dao.common.annotation.DataSource;
 import cn.kanyun.cpa.model.dto.user.CpaUserDto;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
@@ -20,6 +22,7 @@ public interface UserDao extends CommonDao<Long,CpaUser> {
 	 *@Date: 2017/8/16 15:37
 	 *@params:
 	 */
+	@DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
 	CpaUser findByUserName(String userName);
 
 	/**
@@ -28,5 +31,6 @@ public interface UserDao extends CommonDao<Long,CpaUser> {
 	 * @Author: Kanyun
 	 * @Date: 2018/1/23 0023 11:04
 	 */
+	@DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
 	CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderby);
 }

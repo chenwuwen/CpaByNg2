@@ -27,7 +27,10 @@ public class DataSourceAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(DataSourceAspect.class);
 
-    @Pointcut("execution(* cn.kanyun.cpa.service..*.*(..))")
+    /**
+     * 拦截标注了DataSource注解的方法
+     */
+    @Pointcut("@annotation(cn.kanyun.cpa.dao.common.annotation.DataSource)")
     private void aspectjMethod() {
     }
 
