@@ -11,9 +11,9 @@
             </column>
             <generator class="native"></generator>
         </id>
-        <property name="userName">
-            <column name="username" sql-type="varchar(255)">
-                <comment>用户名</comment>
+        <property name="nickName">
+            <column name="nick_name" sql-type="varchar(255)">
+                <comment>用户昵称</comment>
             </column>
         </property>
         <property name="userId">

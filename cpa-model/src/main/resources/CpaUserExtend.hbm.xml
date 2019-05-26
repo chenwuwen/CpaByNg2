@@ -9,6 +9,7 @@
             <column name="id"/>
             <generator class="native"></generator>
         </id>
+        <!--多对一,通过配置unique="true"变成了一对一-->
         <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select" unique="true">
             <column name="user_id">
                 <comment>用户ID</comment>

@@ -56,7 +56,7 @@ public class UserCommentController {
             } else {
                 userComment.setCommentDate(LocalDateTime.now());
                 userComment.setUserId(user.getId());
-                userComment.setUsername(user.getUserName());
+                userComment.setUserName(user.getUserName());
                 userComment.setNickName(user.getNickName());
                 result.setData(userCommentService.save(userComment));
             }

@@ -190,7 +190,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
         </dependency>
-        
+
         <!--logback 配置ELK依赖-->
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -368,6 +368,24 @@
     <build>
         <!--定制打包后的包名,默认打包后包名为 ${project.artifactId}-${project.version} -->
         <finalName>cpa-web</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <!--是否替换资源中的属性,与maven-profile相关,建议配置在各个子模块的pom.xml文件中-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <!--是否替换资源中的属性,与maven-profile相关,建议配置在各个子模块的pom.xml文件中-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <!--设置maven编译的JDK版本-->
             <plugin>

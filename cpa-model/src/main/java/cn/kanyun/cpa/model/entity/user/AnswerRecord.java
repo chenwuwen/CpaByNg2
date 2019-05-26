@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public class AnswerRecord implements java.io.Serializable {
     private Long id;
     private Long userId;
-    private String username;
+    private String userName;
     private String nickName;
     private String itemType;
     private Integer score;
-    private Integer totalcount;
-    private Integer correctcount;
-    private Integer errorcount;
+    private Integer totalCount;
+    private Integer correctCount;
+    private Integer errorCount;
     private LocalDateTime answerDate;
 
     @Id
@@ -38,13 +38,13 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "username", nullable = true, length = 255)
-    public String getUsername() {
-        return username;
+    @Column(name = "user_name", nullable = true, length = 255)
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Basic
@@ -78,33 +78,33 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "totalcount", nullable = true)
-    public Integer getTotalcount() {
-        return totalcount;
+    @Column(name = "total_count", nullable = true)
+    public Integer getTotalCount() {
+        return totalCount;
     }
 
-    public void setTotalcount(Integer totalcount) {
-        this.totalcount = totalcount;
-    }
-
-    @Basic
-    @Column(name = "correctcount", nullable = true)
-    public Integer getCorrectcount() {
-        return correctcount;
-    }
-
-    public void setCorrectcount(Integer correctcount) {
-        this.correctcount = correctcount;
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     @Basic
-    @Column(name = "errorcount", nullable = true)
-    public Integer getErrorcount() {
-        return errorcount;
+    @Column(name = "correct_count", nullable = true)
+    public Integer getCorrectCount() {
+        return correctCount;
     }
 
-    public void setErrorcount(Integer errorcount) {
-        this.errorcount = errorcount;
+    public void setCorrectCount(Integer correctCount) {
+        this.correctCount = correctCount;
+    }
+
+    @Basic
+    @Column(name = "error_count", nullable = true)
+    public Integer getErrorCount() {
+        return errorCount;
+    }
+
+    public void setErrorcount(Integer errorCount) {
+        this.errorCount = errorCount;
     }
 
     @Basic

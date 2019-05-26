@@ -7,16 +7,16 @@ import java.time.LocalDateTime;
  */
 public class Attendance implements java.io.Serializable{
     private Long id;
-    private String userName;
+    private String nickName;
     private Long userId;
     private LocalDateTime attendanceDate;
 
     public Attendance() {
     }
 
-    public Attendance(Long id, String userName, Long userId, LocalDateTime attendanceDate) {
+    public Attendance(Long id, String nickName, Long userId, LocalDateTime attendanceDate) {
         this.id = id;
-        this.userName = userName;
+        this.nickName = nickName;
         this.userId = userId;
         this.attendanceDate = attendanceDate;
     }
@@ -29,12 +29,12 @@ public class Attendance implements java.io.Serializable{
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setNickName(String userName) {
+        this.nickName = nickName;
     }
 
     public Long getUserId() {

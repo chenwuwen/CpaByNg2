@@ -103,14 +103,14 @@ public class CpaSolutionControllerTest {
     private AnswerRecord patchAnswerRecord(CpaResult result, CpaUser user) {
         AnswerRecord answerRecord = new AnswerRecord();
         answerRecord.setAnswerDate(LocalDateTime.now());
-        answerRecord.setCorrectcount((Integer) ((Map) result.getData()).get("correctCount"));
+        answerRecord.setCorrectCount((Integer) ((Map) result.getData()).get("correctCount"));
         answerRecord.setItemType(((Map) result.getData()).get("typeCode").toString());
         answerRecord.setErrorcount((Integer) ((Map) result.getData()).get("errorCount"));
         answerRecord.setScore((Integer) ((Map) result.getData()).get("score"));
-        answerRecord.setUsername(user.getUserName());
+        answerRecord.setUserName(user.getUserName());
         answerRecord.setUserId(user.getId());
         answerRecord.setNickName(user.getNickName());
-        answerRecord.setTotalcount((Integer) ((Map) result.getData()).get("totalCount"));
+        answerRecord.setTotalCount((Integer) ((Map) result.getData()).get("totalCount"));
         return answerRecord;
     }
 }

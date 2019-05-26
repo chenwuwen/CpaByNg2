@@ -16,13 +16,13 @@
                 <comment>用户ID</comment>
             </column>
         </property>
-        <property name="username">
-            <column name="username" sql-type="varchar(255)">
+        <property name="userName">
+            <column name="user_name" sql-type="varchar(255)">
                 <comment>用户名</comment>
             </column>
         </property>
-        <property name="petname">
-            <column name="petname" sql-type="varchar(255)">
+        <property name="nickName">
+            <column name="nick_name" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
@@ -36,18 +36,18 @@
                 <comment>得分</comment>
             </column>
         </property>
-        <property name="totalcount">
-            <column name="totalcount" sql-type="int(11)">
+        <property name="totalCount">
+            <column name="total_count" sql-type="int(11)">
                 <comment>总题数</comment>
             </column>
         </property>
-        <property name="correctcount">
-            <column name="correctcount" sql-type="int(11)">
+        <property name="correctCount">
+            <column name="correct_count" sql-type="int(11)">
                 <comment>答对数</comment>
             </column>
         </property>
-        <property name="errorcount">
-            <column name="errorcount" sql-type="int(11)">
+        <property name="errorCount">
+            <column name="error_count" sql-type="int(11)">
 
                 <comment>答错数</comment>
             </column>

@@ -7,7 +7,7 @@
     <session-factory>
         <!-- 连接数据库的信息-->
         <property name="dialect">
-            org.hibernate.dialect.MySQLDialect
+            org.hibernate.dialect.MySQL5Dialect
         </property>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 
@@ -108,16 +108,16 @@
 
         <!--Hibernate多租户配置开始-->
         <!--如果需要配置多租户,需要将该值配置为DATABASE-->
-        <property name="hibernate.multiTenancy">DATABASE</property>
+        <!--<property name="hibernate.multiTenancy">DATABASE</property>-->
         <!--告诉hibernate，如何解析出tenant_id-->
-        <property name="hibernate.tenant_identifier_resolver">DATABASE</property>
+        <!--<property name="hibernate.tenant_identifier_resolver">DATABASE</property>-->
         <!--告诉hibernate如何以租户特有的方式获取数据连接-->
-        <property name="hibernate.multi_tenant_connection_provider">DATABASE</property>
+        <!--<property name="hibernate.multi_tenant_connection_provider">DATABASE</property>-->
         <!--Hibernate多租户配置结束-->
 
 
 
-        <!-- 加载映射文件 ,注册ORM映射文件-->
+        <!-- 加载映射文件 ,注册ORM映射文件,以下是xml版的,注解版的是 <mapping class="XXXX"></mapping>-->
         <mapping resource="CpaUser.hbm.xml"/>
         <mapping resource="CpaOption.hbm.xml"/>
         <mapping resource="CpaRepertory.hbm.xml"/>
@@ -126,9 +126,9 @@
         <mapping resource="CpaRole.hbm.xml"/>
         <mapping resource="RolePermission.hbm.xml"/>
         <mapping resource="UserRole.hbm.xml"/>
-        <mapping resource="AnswerRecord.hbm.xml"/>
-        <mapping resource="UserCollect.hbm.xml"/>
-        <mapping resource="UserComment.hbm.xml"/>
+        <!--<mapping resource="AnswerRecord.hbm.xml"/>-->
+        <!--<mapping resource="UserCollect.hbm.xml"/>-->
+        <!--<mapping resource="UserComment.hbm.xml"/>-->
         <mapping resource="CpaUserExtend.hbm.xml"/>
 
         <!--指定需要缓存的对象类型:这里可以在映射文件中配置，也可以在hibernate核心配置文件中进行配置（推荐）-->

@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class UserCollect implements java.io.Serializable {
     private Long id;
     private Long userId;
-    private String username;
+    private String userName;
     private String nickName;
     private Long reId;
     private LocalDateTime collectDate;
@@ -38,13 +38,13 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "username", nullable = true, length = 255)
-    public String getUsername() {
-        return username;
+    @Column(name = "user_name", nullable = true, length = 255)
+    public String getUserName() {
+        return userName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     @Basic

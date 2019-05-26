@@ -17,10 +17,6 @@
     <packaging>jar</packaging>
     <artifactId>cpa-dao</artifactId>
 
-    <build>
-        <!--该配置修改打包后的文件名-->
-        <finalName>cpa-dao</finalName>
-    </build>
 
     <dependencies>
         <!--项目模块依赖-->
@@ -92,7 +88,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-ehcache</artifactId>
-            <version>4.1.6.Final</version>
         </dependency>
         <!--Hibernate5之后开始支持JDK,比如Date和Time API,之前使用Hibernate4保存日期字段时使用JDk8 LocalDateTime保存会报错,故ORM换成Hibernate5并加上此依赖-->
         <dependency>
@@ -132,4 +127,28 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <!--该配置修改打包后的文件名-->
+        <finalName>cpa-dao</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                </includes>
+                <!--是否替换资源中的属性,与maven-profile相关,建议配置在各个子模块的pom.xml文件中-->
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <includes>
+                    <include>**/*</include>
+                </includes>
+                <!--是否替换资源中的属性,与maven-profile相关,建议配置在各个子模块的pom.xml文件中-->
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+
 </project>

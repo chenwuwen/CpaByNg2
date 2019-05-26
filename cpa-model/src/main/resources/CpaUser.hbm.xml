@@ -12,7 +12,7 @@
             <generator class="native"></generator>
         </id>
         <property name="userName" type="java.lang.String">
-            <column name="username" not-null="true">
+            <column name="user_name" not-null="true">
                 <comment>用户名</comment>
             </column>
         </property>
@@ -31,8 +31,8 @@
                 <comment>Email</comment>
             </column>
         </property>
-        <property name="petName" type="java.lang.String">
-            <column name="pet_name" length="20">
+        <property name="nickName" type="java.lang.String">
+            <column name="nick_name" length="20">
                 <comment>用户昵称</comment>
             </column>
         </property>

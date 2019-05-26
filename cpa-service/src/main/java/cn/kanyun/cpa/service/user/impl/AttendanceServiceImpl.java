@@ -39,7 +39,7 @@ public class AttendanceServiceImpl extends CommonServiceImpl<Long, Attendance> i
         Attendance attendance = new Attendance();
         attendance.setAttendanceDate(LocalDateTime.now());
         attendance.setUserId(user.getId());
-        attendance.setUserName(user.getUserName());
+        attendance.setNickName(user.getNickName());
         //判断当前未打卡前上一次打卡,与当前时间差值
         if (this.getReapSigInDay(user)) {
             //设置连续打卡时间,为之前连续打卡时间加1

@@ -16,13 +16,13 @@
                 <comment>用户ID</comment>
             </column>
         </property>
-        <property name="username">
-            <column name="username" sql-type="varchar(255)">
+        <property name="userName">
+            <column name="user_name" sql-type="varchar(255)">
                 <comment>用户名</comment>
             </column>
         </property>
-        <property name="petname">
-            <column name="petname" sql-type="varchar(255)">
+        <property name="nickName">
+            <column name="nick_name" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
