@@ -4,40 +4,40 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.user.UserCollect" table="user_collect" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.user.UserCollect" table="USER_COLLECT" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="bigint(20)">
+            <column name="ID" sql-type="bigint(20)">
                 <comment>ID</comment>
             </column>
             <generator class="native"></generator>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="bigint(20)">
+            <column name="USER_ID" sql-type="bigint(20)">
                 <comment>用户ID</comment>
             </column>
         </property>
         <property name="userName">
-            <column name="user_name" sql-type="varchar(255)">
+            <column name="USER_NAME" sql-type="varchar(255)">
                 <comment>用户名</comment>
             </column>
         </property>
         <property name="nickName">
-            <column name="nick_name" sql-type="varchar(255)">
+            <column name="NICK_NAME" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
         <property name="reId">
-            <column name="re_id" sql-type="bigint(20)">
+            <column name="RE_ID" sql-type="bigint(20)">
                 <comment>试题ID</comment>
             </column>
         </property>
         <property name="collectDate">
-            <column name="collect_date" sql-type="datetime">
+            <column name="COLLECT_DATE" sql-type="datetime">
                 <comment>收藏时间</comment>
             </column>
         </property>
         <property name="status">
-            <column name="status" sql-type="int(11)">
+            <column name="STATUS" sql-type="int(11)">
                 <comment>收藏状态 1：已收藏，0：收藏又取消收藏</comment>
             </column>
         </property>

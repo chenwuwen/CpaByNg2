@@ -422,7 +422,7 @@
             <dependency>
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
-                <version>3.9.1</version>
+                <version>3.10.7</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.data</groupId>
@@ -861,10 +861,11 @@
             </dependency>
 
 
+            <!--Javassist是一个开源的分析、编辑和创建Java字节码的类库,关于java字节码的处理，目前有很多工具，如bcel，asm。不过这些都需要直接跟虚拟机指令打交道。如果你不想了解虚拟机指令，可以采用javassistjavassist是jboss的一个子项目，其主要的优点，在于简单，而且快速。直接使用java编码的形式，而不需要了解虚拟机指令，就能动态改变类的结构，或者动态生成类-->
             <dependency>
                 <groupId>org.javassist</groupId>
                 <artifactId>javassist</artifactId>
-                <version>3.18.2-GA</version>
+                <version>3.25.0-GA</version>
             </dependency>
             <dependency>
                 <groupId>proxool</groupId>

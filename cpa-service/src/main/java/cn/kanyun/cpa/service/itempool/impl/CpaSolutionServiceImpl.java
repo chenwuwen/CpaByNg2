@@ -3,6 +3,7 @@ package cn.kanyun.cpa.service.itempool.impl;
 import cn.kanyun.cpa.dao.itempool.CpaSolutionDao;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.CommonServiceImpl;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
@@ -34,9 +35,9 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution>
     private RedisService redisService;
 
     @Override
-    public Map<Integer, String[]> getSolution(List<Long> questionIds, String typeCode) {
+    public Map<Integer, String[]> getSolution(List<Long> questionIds, ExamClassificationEnum type) {
         Map mapSolution = null;
-        String key = typeCode + StringUtils.join(",", questionIds.toArray());
+        String key = type.toString() + StringUtils.join(",", questionIds.toArray());
         try {
             mapSolution = redisService.getCacheMap(key);
         } catch (Exception e) {
@@ -61,9 +62,9 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution>
     }
 
     @Override
-    public CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, String typeCode) {
+    public CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, ExamClassificationEnum type) {
         CpaResult result = new CpaResult();
-        Map<Integer, String[]> basicAnswer = getSolution((new ArrayList(peopleAnswer.keySet())), typeCode);
+        Map<Integer, String[]> basicAnswer = getSolution((new ArrayList(peopleAnswer.keySet())), type);
         Iterator iterator = peopleAnswer.entrySet().iterator();
         Integer score = 0;
         Map resultMap = new HashMap();
@@ -86,7 +87,7 @@ public class CpaSolutionServiceImpl extends CommonServiceImpl<Long, CpaSolution>
                 errorList.add(map);
             }
         }
-        resultMap.put("typeCode", typeCode);
+        resultMap.put("typeCode", type.getValue());
         resultMap.put("score", score);
         resultMap.put("errorList", errorList);
         resultMap.put("errorCount", errorList.size());

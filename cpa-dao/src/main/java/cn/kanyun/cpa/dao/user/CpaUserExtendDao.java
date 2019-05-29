@@ -20,6 +20,6 @@ public interface CpaUserExtendDao extends CommonDao<Long, CpaUserExtend> {
      * @Author: Kanyun
      * @Date: 2018/2/8 0008 17:50
      */
-    @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult findCpaUserExtendByCondition(CpaUserExtend cpaUserExtend, LinkedHashMap orderby);
+//    @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
+//    CpaResult findCpaUserExtendByCondition(CpaUserExtend cpaUserExtend, LinkedHashMap orderby);
 }

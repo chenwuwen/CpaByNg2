@@ -4,18 +4,18 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.system.UserRole" table="user_role" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.system.UserRole" table="USER_ROLE" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="bigint(20)"/>
+            <column name="ID" sql-type="bigint(20)"/>
             <generator class="native"></generator>
         </id>
         <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select">
-            <column name="user_id">
+            <column name="USER_ID">
                 <comment>用户ID</comment>
             </column>
         </many-to-one>
         <many-to-one name="cpaRole" class="cn.kanyun.cpa.model.entity.system.CpaRole" fetch="select">
-            <column name="role_id">
+            <column name="ROLE_ID">
                 <comment>角色ID</comment>
             </column>
         </many-to-one>

@@ -11,7 +11,7 @@ import javax.persistence.Table;
  * Created by Administrator on 2017/6/15.
  */
 @Entity
-@Table(name = "user_role", schema = "cpa", catalog = "")
+@Table(name = "USER_ROLE", schema = "cpa", catalog = "")
 public class UserRole implements java.io.Serializable {
     private Long id;
     private CpaUser cpaUser; //user_id
@@ -27,7 +27,7 @@ public class UserRole implements java.io.Serializable {
     }
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     public Long getId() {
         return id;
     }

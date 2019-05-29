@@ -61,9 +61,9 @@ public class CpaSolutionControllerTest {
             List<String> pAnswer = new ArrayList<>();
             pAnswer.add("20-C");
             pAnswer.add("19-C");
-            cpaRepertoryDto.setpAnswer(pAnswer);
+            cpaRepertoryDto.setUserResult(pAnswer);
             Map<Long, String[]> peopleAnswer = new HashMap<>();
-            Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
+            Iterator iterator = cpaRepertoryDto.getUserResult().iterator();
             while (iterator.hasNext()) {
                 String str = (String) iterator.next();
                 if (null != str && !"".equals(str)) {
@@ -104,8 +104,8 @@ public class CpaSolutionControllerTest {
         AnswerRecord answerRecord = new AnswerRecord();
         answerRecord.setAnswerDate(LocalDateTime.now());
         answerRecord.setCorrectCount((Integer) ((Map) result.getData()).get("correctCount"));
-        answerRecord.setItemType(((Map) result.getData()).get("typeCode").toString());
-        answerRecord.setErrorcount((Integer) ((Map) result.getData()).get("errorCount"));
+        answerRecord.setTestType(ExamClassificationEnum.valueOf(((Map) result.getData()).get("typeCode").toString()));
+        answerRecord.setErrorCount((Integer) ((Map) result.getData()).get("errorCount"));
         answerRecord.setScore((Integer) ((Map) result.getData()).get("score"));
         answerRecord.setUserName(user.getUserName());
         answerRecord.setUserId(user.getId());

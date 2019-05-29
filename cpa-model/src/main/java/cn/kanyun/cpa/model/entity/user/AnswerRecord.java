@@ -1,24 +1,29 @@
 package cn.kanyun.cpa.model.entity.user;
 
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "answer_record", schema = "cpa", catalog = "")
+@Table(name = "ANSWER_RECORD", schema = "cpa", catalog = "")
 public class AnswerRecord implements java.io.Serializable {
     private Long id;
     private Long userId;
     private String userName;
     private String nickName;
-    private String itemType;
+    private ExamClassificationEnum testType;
     private Integer score;
     private Integer totalCount;
     private Integer correctCount;
     private Integer errorCount;
     private LocalDateTime answerDate;
 
+    public AnswerRecord() {
+    }
+
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     public Long getId() {
         return id;
     }
@@ -28,7 +33,7 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = true)
+    @Column(name = "USER_ID", nullable = true)
     public Long getUserId() {
         return userId;
     }
@@ -38,7 +43,7 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = true, length = 255)
+    @Column(name = "USER_NAME", nullable = true, length = 255)
     public String getUserName() {
         return userName;
     }
@@ -48,7 +53,7 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "nick_name", nullable = true, length = 255)
+    @Column(name = "NICK_NAME", nullable = true, length = 255)
     public String getNickName() {
         return nickName;
     }
@@ -58,17 +63,17 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "item_type", nullable = true, length = 255)
-    public String getItemType() {
-        return itemType;
+    @Column(name = "TEST_TYPE", nullable = true, length = 255)
+    public ExamClassificationEnum getTestType() {
+        return testType;
     }
 
-    public void setItemType(String itemType) {
-        this.itemType = itemType;
+    public void setTestType(ExamClassificationEnum testType) {
+        this.testType = testType;
     }
 
     @Basic
-    @Column(name = "score", nullable = true)
+    @Column(name = "SCORE", nullable = true)
     public Integer getScore() {
         return score;
     }
@@ -78,7 +83,7 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "total_count", nullable = true)
+    @Column(name = "TOTAL_COUNT", nullable = true)
     public Integer getTotalCount() {
         return totalCount;
     }
@@ -88,7 +93,7 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "correct_count", nullable = true)
+    @Column(name = "CORRECT_COUNT", nullable = true)
     public Integer getCorrectCount() {
         return correctCount;
     }
@@ -98,17 +103,17 @@ public class AnswerRecord implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "error_count", nullable = true)
+    @Column(name = "ERROR_COUNT", nullable = true)
     public Integer getErrorCount() {
         return errorCount;
     }
 
-    public void setErrorcount(Integer errorCount) {
+    public void setErrorCount(Integer errorCount) {
         this.errorCount = errorCount;
     }
 
     @Basic
-    @Column(name = "answer_date", nullable = true)
+    @Column(name = "ANSWER_DATE", nullable = true)
     public LocalDateTime getAnswerDate() {
         return answerDate;
     }

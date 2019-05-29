@@ -1,37 +1,89 @@
 package cn.kanyun.cpa.model.entity.user;
 
+import cn.kanyun.cpa.model.entity.system.UserRole;
+
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
- * CpaUser entity. @author MyEclipse Persistence Tools
+ * Created by HLWK-06 on 2019/5/27.
  */
-
-public class CpaUser implements java.io.Serializable {
-
-
-    // Fields    
-
+public class CpaUser implements Serializable{
+    /**
+     * 用户ID
+     */
     private Long id;
+    /**
+     * 用户名
+     */
     private String userName;
+    /**
+     * 密码
+     */
     private String password;
-    private Byte gender;  //性别 0：女，1：男
+    /**
+     * 性别 0：女，1：男
+     */
+    private Byte gender;
+    /**
+     * 邮箱地址
+     */
     private String email;
+    /**
+     * 昵称
+     */
     private String nickName;
+    /**
+     * 注册时间
+     */
     private LocalDateTime regDate;
+    /**
+     * 上次登录时间
+     */
     private LocalDateTime lastLoginDate;
-    private Integer status;  //0:已删除，1:正常，2:锁定
+    /**
+     * 用户状态
+     * 0:已删除，1:正常，2:锁定
+     */
+    private Integer status;
+    /**
+     * 盐(加密密码)
+     */
     private String salt;
-    private Set userRoles = new HashSet<>();
+    /**
+     * 角色集合
+     */
+    private Set<UserRole> userRoles = new HashSet();
+    /**
+     * 用户头像路径
+     */
     private String imgPath;
+    /**
+     * 用户扩展表
+     */
     private CpaUserExtend cpaUserExtend;
+
 
     public CpaUser() {
     }
 
-
+    public CpaUser(Long id, String userName, String password, Byte gender, String email, String nickName, LocalDateTime regDate, LocalDateTime lastLoginDate, Integer status, String salt, Set<UserRole> userRoles, String imgPath, CpaUserExtend cpaUserExtend) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+        this.gender = gender;
+        this.email = email;
+        this.nickName = nickName;
+        this.regDate = regDate;
+        this.lastLoginDate = lastLoginDate;
+        this.status = status;
+        this.salt = salt;
+        this.userRoles = userRoles;
+        this.imgPath = imgPath;
+        this.cpaUserExtend = cpaUserExtend;
+    }
 
     public Long getId() {
         return id;
@@ -73,7 +125,6 @@ public class CpaUser implements java.io.Serializable {
         this.email = email;
     }
 
-
     public String getNickName() {
         return nickName;
     }
@@ -106,21 +157,20 @@ public class CpaUser implements java.io.Serializable {
         this.status = status;
     }
 
-    public Set getUserRoles() {
-        return userRoles;
-    }
-
-    public void setUserRoles(Set userRoles) {
-        this.userRoles = userRoles;
-    }
-
-
     public String getSalt() {
         return salt;
     }
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 
     public String getImgPath() {

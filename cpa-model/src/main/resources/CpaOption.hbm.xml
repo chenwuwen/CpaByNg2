@@ -6,23 +6,23 @@
 -->
 <!--suppress HibernateMappingDatasourceDomInspection -->
 <hibernate-mapping>
-    <class name="cn.kanyun.cpa.model.entity.itempool.CpaOption" table="cpa_option" catalog="cpa">
+    <class name="cn.kanyun.cpa.model.entity.itempool.CpaOption" table="CPA_OPTION" catalog="cpa">
         <id name="id" type="java.lang.Long" >
-            <column name="id" />
+            <column name="ID" />
             <generator class="native"></generator>
         </id>
         <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select" cascade="all">
-            <column name="re_id">
+            <column name="RE_ID">
                 <comment>试题ID</comment>
             </column>
         </many-to-one>
         <property name="selectData" type="java.lang.String">
-            <column name="select_data" length="2">
+            <column name="SELECT_DATA" length="2">
                 <comment>选择内容即ABCD</comment>
             </column>
         </property>
         <property name="optionData" type="java.lang.String">
-            <column name="option_data" length="100">
+            <column name="OPTION_DATA" length="100">
                 <comment>选项内容</comment>
             </column>
         </property>

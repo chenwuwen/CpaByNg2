@@ -109,9 +109,9 @@
                                   idle-connection-timeout="10000"
                                   master-connection-pool-size="64">
 
-            <redisson:node-address value="redis://127.0.0.1:6379" />
-            <redisson:node-address value="redis://127.0.0.1:6380" />
-            <redisson:node-address value="redis://127.0.0.1:6381" />
+            <redisson:node-address value="redis://192.168.109.3:6379" />
+            <redisson:node-address value="redis://192.168.109.3:6380" />
+            <redisson:node-address value="redis://192.168.109.3:6381" />
 
         </redisson:cluster-servers>
 </redisson:client>

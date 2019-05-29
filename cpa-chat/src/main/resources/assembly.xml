@@ -54,7 +54,7 @@
             <!--${project.build.finalName} 表示maven默认打包后的文件名-->
             <source>${project.build.directory}/classes/netty-config.properties</source>
             <!--输出目录-->
-            <outputDirectory>c:\\</outputDirectory>
+            <outputDirectory>${project.build.directory}</outputDirectory>
             <!--目标文件名-->
             <destName>netty-config1.properties</destName>
             <!--设置文件 UNIX 属性，默认是0644-->

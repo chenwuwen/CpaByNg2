@@ -225,7 +225,7 @@ public class CpaRepertoryController {
             cpaRepertoryDto.setTestStem(cpaRepertory.getTestStem());
             cpaRepertoryDto.setTestType(cpaRepertory.getTestType());
             cpaRepertoryDto.setQuestionType(cpaRepertory.getQuestionType());
-            cpaRepertoryDto.setBresult(cpaRepertory.getCpaSolution().getResult());
+            cpaRepertoryDto.setStandardResult(cpaRepertory.getCpaSolution().getResult());
             List<CpaOptionDto> cpaOptionDtoList = new ArrayList<>();
             Set<CpaOption> cpaOptions = cpaRepertory.getCpaOptions();
             List<CpaOption> cpaOptionList = new ArrayList(new HashSet(cpaOptions));

@@ -126,9 +126,9 @@
         <mapping resource="CpaRole.hbm.xml"/>
         <mapping resource="RolePermission.hbm.xml"/>
         <mapping resource="UserRole.hbm.xml"/>
-        <!--<mapping resource="AnswerRecord.hbm.xml"/>-->
-        <!--<mapping resource="UserCollect.hbm.xml"/>-->
-        <!--<mapping resource="UserComment.hbm.xml"/>-->
+        <mapping resource="AnswerRecord.hbm.xml"/>
+        <mapping resource="UserCollect.hbm.xml"/>
+        <mapping resource="UserComment.hbm.xml"/>
         <mapping resource="CpaUserExtend.hbm.xml"/>
 
         <!--指定需要缓存的对象类型:这里可以在映射文件中配置，也可以在hibernate核心配置文件中进行配置（推荐）-->

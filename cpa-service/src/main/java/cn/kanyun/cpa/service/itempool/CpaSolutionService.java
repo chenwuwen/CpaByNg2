@@ -2,6 +2,7 @@ package cn.kanyun.cpa.service.itempool;
 
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.service.CommonService;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface CpaSolutionService extends CommonService<Long, CpaSolution> {
      * @Date: 2017/8/16 15:27
      * @params:
      */
-    Map<Integer, String[]> getSolution(List<Long> questionIds, String typeCode);
+    Map<Integer, String[]> getSolution(List<Long> questionIds, ExamClassificationEnum type);
 
     /**
      * @Author: kanyun
@@ -30,5 +31,5 @@ public interface CpaSolutionService extends CommonService<Long, CpaSolution> {
      * @Date: 2017/8/16 15:06
      * @params:
      */
-    CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, String typeCode);
+    CpaResult compareAnswer(Map<Long, String[]> peopleAnswer, ExamClassificationEnum type);
 }

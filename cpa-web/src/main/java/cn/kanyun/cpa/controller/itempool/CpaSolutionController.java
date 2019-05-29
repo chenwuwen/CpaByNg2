@@ -5,6 +5,7 @@ import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.user.AnswerRecord;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
+import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.queue.UserAnswerLogTask;
 import cn.kanyun.cpa.service.itempool.CpaSolutionService;
 import cn.kanyun.cpa.service.user.AnswerRecordService;
@@ -60,7 +61,7 @@ public class CpaSolutionController {
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             Map<Long, String[]> peopleAnswer = new HashMap<>();
-            Iterator iterator = cpaRepertoryDto.getpAnswer().iterator();
+            Iterator iterator = cpaRepertoryDto.getUserResult().iterator();
             while (iterator.hasNext()) {
                 String str = (String) iterator.next();
                 if (null != str && !"".equals(str)) {
@@ -98,8 +99,8 @@ public class CpaSolutionController {
         AnswerRecord answerRecord = new AnswerRecord();
         answerRecord.setAnswerDate(LocalDateTime.now());
         answerRecord.setCorrectCount((Integer) ((Map)result.getData()).get("correctCount"));
-        answerRecord.setItemType(((Map)result.getData()).get("typeCode").toString());
-        answerRecord.setErrorcount((Integer) ((Map)result.getData()).get("errorCount"));
+        answerRecord.setTestType(ExamClassificationEnum.valueOf(((Map) result.getData()).get("typeCode").toString()));
+        answerRecord.setErrorCount((Integer) ((Map)result.getData()).get("errorCount"));
         answerRecord.setScore((Integer) ((Map)result.getData()).get("score"));
         answerRecord.setUserName(user.getUserName());
         answerRecord.setUserId(user.getId());

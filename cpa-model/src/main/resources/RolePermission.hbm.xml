@@ -4,20 +4,20 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.system.RolePermission" table="role_permission" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.system.RolePermission" table="ROLE_PERMISSION" schema="cpa">
         <id name="id">
             <column name="id" sql-type="int(11)"/>
             <generator class="native"></generator>
         </id>
         <many-to-one name="cpaRole" class="cn.kanyun.cpa.model.entity.system.CpaRole" fetch="select" insert="false"
                      update="false">
-            <column name="role_id">
+            <column name="ROLE_ID">
                 <comment>角色ID</comment>
             </column>
         </many-to-one>
         <many-to-one name="cpaPermission" class="cn.kanyun.cpa.model.entity.system.CpaPermission" fetch="select"
                      insert="false" update="false">
-            <column name="permission_id">
+            <column name="PERMISSION_ID">
                 <comment>权限ID</comment>
             </column>
         </many-to-one>

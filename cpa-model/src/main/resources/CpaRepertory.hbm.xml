@@ -7,28 +7,28 @@
 <!--suppress ALL -->
 <hibernate-mapping>
     <!--lazy="true" 类级别的加载策略(懒加载，默认为true),但仅对load方法有效,Session 的get() 方法及 Query 的 list() 方法在类级别总是使用立即检索策略-->
-    <class name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" table="cpa_repertory" catalog="cpa" lazy="true" dynamic-update="true">
+    <class name="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" table="CPA_REPERTORY" catalog="cpa" lazy="true" dynamic-update="true">
         <id name="id" type="java.lang.Long">
-            <column name="id"/>
+            <column name="ID"/>
             <generator class="native"></generator>
         </id>
         <property name="testStem" type="java.lang.String">
-            <column name="test_stem">
+            <column name="TEST_STEM">
                 <comment>题干</comment>
             </column>
         </property>
-        <property name="testType" type="java.lang.String">
-            <column name="test_type">
-                <comment>试题类型</comment>
+        <property name="testType" type="java.lang.Enum">
+            <column name="TEST_TYPE">
+                <comment>试题类型(基础/电算化/法规)</comment>
             </column>
         </property>
-        <property name="choice" type="java.lang.String">
-            <column name="choice">
-                <comment>题的类型(单选多选)</comment>
+        <property name="questionType" type="java.lang.Enum">
+            <column name="QUESTION_TYPE">
+                <comment>题的类型(单选/多选/判断)</comment>
             </column>
         </property>
         <property name="insertDate" type="java.time.LocalDateTime">
-            <column name="insert_date" length="19">
+            <column name="INSERT_DATE" length="19">
                 <comment>插入时间</comment>
             </column>
         </property>
@@ -42,7 +42,7 @@
         <!--当 fetch 属性为 “join”时，Hibernate将采用迫切左链接查询,懒加载将失效-->
         <set name="cpaOptions" inverse="true" cascade="all" order-by="select_data asc" batch-size="10">
             <key>
-                <column name="re_id">
+                <column name="RE_ID">
                     <comment>试题ID</comment>
                 </column>
             </key>

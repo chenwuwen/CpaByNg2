@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * Created by KANYUN on 2017/10/24.
  */
 @Entity
-@Table(name = "user_collect", schema = "cpa", catalog = "")
+@Table(name = "USER_COLLECT", schema = "cpa", catalog = "")
 public class UserCollect implements java.io.Serializable {
     private Long id;
     private Long userId;
@@ -18,7 +18,7 @@ public class UserCollect implements java.io.Serializable {
     private Integer status;
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     public Long getId() {
         return id;
     }
@@ -28,7 +28,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "user_id", nullable = true)
+    @Column(name = "USER_ID", nullable = true)
     public Long getUserId() {
         return userId;
     }
@@ -38,7 +38,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "user_name", nullable = true, length = 255)
+    @Column(name = "USER_NAME", nullable = true, length = 255)
     public String getUserName() {
         return userName;
     }
@@ -48,7 +48,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "nick_name", nullable = true, length = 255)
+    @Column(name = "NICK_NAME", nullable = true, length = 255)
     public String getNickName() {
         return nickName;
     }
@@ -58,7 +58,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "re_id", nullable = true)
+    @Column(name = "RE_ID", nullable = true)
     public Long getReId() {
         return reId;
     }
@@ -68,7 +68,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "collect_date", nullable = true)
+    @Column(name = "COLLECT_DATE", nullable = true)
     public LocalDateTime getCollectDate() {
         return collectDate;
     }
@@ -78,7 +78,7 @@ public class UserCollect implements java.io.Serializable {
     }
 
     @Basic
-    @Column(name = "status", nullable = true)
+    @Column(name = "STATUS", nullable = true)
     public Integer getStatus() {
         return status;
     }

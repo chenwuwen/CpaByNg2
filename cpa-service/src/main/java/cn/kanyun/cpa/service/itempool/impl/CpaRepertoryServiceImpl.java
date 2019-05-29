@@ -64,7 +64,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
                 CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
                 cpaRepertoryDto.setTestStem(cr.getTestStem());
                 cpaRepertoryDto.setId(cr.getId());
-                cpaRepertoryDto.setBresult(cr.getCpaSolution().getResult());
+                cpaRepertoryDto.setStandardResult(cr.getCpaSolution().getResult());
                 reids.add(cr.getId());
                 Set<CpaOption> setco = cr.getCpaOptions();
 //                将Set集合转换为List集合

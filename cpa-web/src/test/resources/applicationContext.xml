@@ -32,7 +32,7 @@
     <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
 
     <!-- Druid数据库连接池 -->
-    <bean id="CpaDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+    <bean id="MasterDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}"/>
@@ -77,7 +77,7 @@
     </bean>
 
     <!-- Druid数据库连接池 -->
-    <bean id="CpaDataSource2" class="com.alibaba.druid.pool.DruidDataSource"
+    <bean id="SlaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc2.url}"/>
@@ -131,19 +131,19 @@
     <bean id="dynamicDataSource" class="cn.kanyun.cpa.dao.common.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
-                <entry value-ref="CpaDataSource" key="master"></entry>
-                <entry value-ref="CpaDataSource2" key="slave"></entry>
+                <entry value-ref="MasterDataSource" key="master"></entry>
+                <entry value-ref="SlaveDataSource" key="slave"></entry>
             </map>
         </property>
         <!--默认数据源-->
-        <property name="defaultTargetDataSource" ref="CpaDataSource">
+        <property name="defaultTargetDataSource" ref="MasterDataSource">
         </property>
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
     <!--    <bean id="sessionFactory"
               class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-            <property name="dataSource" ref="CpaDataSource"/>
+            <property name="dataSource" ref="MasterDataSource"/>
             &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
             <property name="configLocation">
                 <value>classpath:hibernate.cfg.xml</value>
@@ -164,6 +164,11 @@
         <property name="configLocation">
             <value>classpath:hibernate.cfg.xml</value>
         </property>
+    </bean>
+
+    <!--jdbcTemplate,使用时直接进行注入,作用：用来执行一些少量的自定义的SQL,只作用于主库-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="CpaDataSource" />
     </bean>
 
     <!-- 报错找不到“找不到类型返回值的转换器”解决方案，同时应该加入这两个jar包 -->
@@ -187,7 +192,7 @@
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <!--是否自动检测数据源,默认为true,如果设为flase,那么实体类发生变化,将不会自动更新表(生产环境适用),为ture将触发检测表机制,更改对象为默认数据源,其他节点的数据源依靠数据库本身的同步机制完成更新-->
-        <property name="autodetectDataSource" value="true" />
+        <property name="autodetectDataSource" value="true"/>
         <!-- 事务中获取session时，是从这里获取的 -->
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>
@@ -223,33 +228,6 @@
         <property name="cacheManager" ref="ehCacheManagerFactory"/>
     </bean>
 
-    <!--配置拦截器,如果拦截不到可放到spring-mvc配置文件中-->
-    <!--配置拦截器,其实现HandlerInterceptor接口或者实现WebRequestInterceptor接口拦截器只能对action请求起作用，而过滤器则可以对几乎所有的请求起作用。(包括静态资源,页面等)-->
-    <!--拦截器使用责任链模式,拦截器是基于java的反射机制的，而过滤器是基于函数回调。两者都是Aop的实现，拦截器不依赖与servlet容器，过滤器依赖与servlet容器。拦截器可以访问action上下文、值栈里的对象，而过滤器不能访问。-->
-    <!--在action的生命周期中，拦截器可以多次被调用，而过滤器只能在容器初始化时被调用一次。拦截器可以获取IOC容器中的各个bean，而过滤器就不行，这点很重要，在拦截器里注入一个service，可以调用业务逻辑。-->
-    <!--在mvc:interceptors标签下声明interceptor主要有两种方式：-->
-    <!--（1）直接定义一个Interceptor实现类的bean对象。使用这种方式声明的Interceptor拦截器将会对所有的请求进行拦截。-->
-    <!--（2）使用mvc:interceptor标签进行声明。使用这种方式进行声明的Interceptor可以通过mvc:mapping子标签来定义需要进行拦截的请求路径。-->
-    <mvc:interceptors>
-        <!-- 使用bean定义一个Interceptor，直接定义在mvc:interceptors根下面的Interceptor将拦截所有的请求 -->
-        <!--也就是说在此处定义的拦截器,是拦截所有action-->
-        <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
-        <mvc:interceptor>
-            <!--path="/**/*"表示拦截所有请求跟直接定义在mvc:interceptors根下效果一致,当然也可以自己定义拦截哪些请求-->
-            <mvc:mapping path="/**/*"/>
-            <!--mvc:exclude-mapping表示在mvc:interceptor的mvc:mapping拦截方法下,不拦截哪些请求-->
-            <!--path="/static/**"表示不拦截根目录下static目录下的所有文件-->
-            <mvc:exclude-mapping path="/static/**"/>
-            <!--path="/**/*.html"表示不拦截所有的以html结尾的文件-->
-            <mvc:exclude-mapping path="/**/*.html"/>
-            <mvc:exclude-mapping path="/**/*.css"/>
-            <mvc:exclude-mapping path="/**/*.js"/>
-            <mvc:exclude-mapping path="/**/*.jpg"/>
-            <!-- 定义在mvc:interceptor下面的表示是对特定的请求才进行拦截的 -->
-            <!--也就是说在此处定义的拦截器,是拦截所有上面定义的action-->
-            <bean class="cn.kanyun.cpa.interceptor.TestInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
 
     <!--定义solr的server-->
     <bean id="httpSolrServer" class="org.apache.solr.client.solrj.impl.HttpSolrServer">
@@ -263,6 +241,9 @@
         <!-- 建立连接的最长时间 -->
         <property name="connectionTimeout" value="${solr.connectionTimeout}"/>
     </bean>
+
+    <!--自定义的在普通类获取bean的类-->
+    <bean class="cn.kanyun.cpa.util.SpringTools"/>
 
     <!--声明式事务配置-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">

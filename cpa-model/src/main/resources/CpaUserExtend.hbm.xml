@@ -4,41 +4,41 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.user.CpaUserExtend" table="cpa_user_extend" catalog="cpa">
+    <class name="cn.kanyun.cpa.model.entity.user.CpaUserExtend" table="CPA_USER_EXTEND" catalog="cpa">
         <id name="id" type="java.lang.Long">
             <column name="id"/>
             <generator class="native"></generator>
         </id>
         <!--多对一,通过配置unique="true"变成了一对一-->
         <many-to-one name="cpaUser" class="cn.kanyun.cpa.model.entity.user.CpaUser" fetch="select" unique="true">
-            <column name="user_id">
+            <column name="USER_ID">
                 <comment>用户ID</comment>
             </column>
         </many-to-one>
 
         <property name="inviteUser" type="java.lang.Long">
-            <column name="invite_user">
+            <column name="INVITE_USER">
                 <comment>邀请人ID</comment>
             </column>
         </property>
         <property name="shareChain" type="java.lang.String">
-            <column name="share_chain">
+            <column name="SHARE_CHAIN">
                 <comment>分享链接</comment>
             </column>
         </property>
         <property name="shareQrUrl" type="java.lang.String">
-            <column name="share_qr_url">
+            <column name="SHARE_QR_URL">
                 <comment>分享二维码图片地址</comment>
             </column>
         </property>
         <property name="reapSignInDay" type="java.lang.Integer">
-            <column name="reap_signIn_day">
+            <column name="REAP_SIGN_DAY">
                 <comment>连续打卡天数</comment>
             </column>
         </property>
         <property name="createDate" type="java.time.LocalDateTime">
-            <column name="create_date">
-                <comment>创建日期</comment>
+            <column name="CREATE_DATE">
+                <comment>分享链接的创建日期</comment>
             </column>
         </property>
     </class>

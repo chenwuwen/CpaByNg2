@@ -4,40 +4,40 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.user.UserComment" table="user_comment" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.user.UserComment" table="USER_COMMENT" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="bigint(20)">
+            <column name="ID" sql-type="bigint(20)">
                 <comment>ID</comment>
             </column>
             <generator class="native"></generator>
         </id>
         <property name="userId">
-            <column name="user_id" sql-type="int(11)">
+            <column name="USER_ID" sql-type="int(11)">
                 <comment>用户ID</comment>
             </column>
         </property>
         <property name="userName">
-            <column name="user_name" sql-type="varchar(255)">
+            <column name="USER_NAME" sql-type="varchar(255)">
                 <comment>用户名</comment>
             </column>
         </property>
         <property name="nickName">
-            <column name="nick_name" sql-type="varchar(255)">
+            <column name="NICK_NAME" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
         <property name="reId">
-            <column name="re_id" sql-type="bigint(20)">
+            <column name="RE_ID" sql-type="bigint(20)">
                 <comment>试题ID</comment>
             </column>
         </property>
         <property name="commentDate">
-            <column name="comment_date" sql-type="datetime">
+            <column name="COMMENT_DATE" sql-type="datetime">
                 <comment>评论时间</comment>
             </column>
         </property>
         <property name="comment">
-            <column name="comment" sql-type="varchar(255)">
+            <column name="COMMENT" sql-type="varchar(255)">
                 <comment>收藏内容</comment>
             </column>
         </property>

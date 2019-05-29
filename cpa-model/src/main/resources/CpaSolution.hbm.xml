@@ -6,9 +6,9 @@
 -->
 <!--suppress ALL -->
 <hibernate-mapping>
-    <class name="cn.kanyun.cpa.model.entity.itempool.CpaSolution" table="cpa_solution" catalog="cpa">
+    <class name="cn.kanyun.cpa.model.entity.itempool.CpaSolution" table="CPA_SOLUTION" catalog="cpa">
         <id name="id" type="java.lang.Long">
-            <column name="id" />
+            <column name="ID" />
             <generator class="native"></generator>
         </id>
         <!--唯一外键关联：-->
@@ -22,12 +22,12 @@
         <!--一对一外键关联，其实可以看做是一对多的一种特殊形式，多方退化成一。多方退化成一只需要在<many-to-one>标签中设置"unique"="true"。-->
         <!--一对一主键关联，是让两张的主键值一样。要使两表的主键相同，只能一张表生成主键，另一张表参考主键。-->
         <many-to-one name="cpaRepertory" class="cn.kanyun.cpa.model.entity.itempool.CpaRepertory" fetch="select" unique="true">
-            <column name="re_id">
+            <column name="RE_ID">
                 <comment>题库ID</comment>
             </column>
         </many-to-one>
         <property name="result" type="java.lang.String">
-            <column name="result" length="20">
+            <column name="RESULT" length="20">
                 <comment>正确答案选项</comment>
             </column>
         </property>

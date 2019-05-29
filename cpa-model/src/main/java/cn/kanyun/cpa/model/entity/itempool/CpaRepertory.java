@@ -15,9 +15,14 @@ import java.util.Set;
 public class CpaRepertory implements java.io.Serializable {
 
 
-    // Fields    
-
+    /**
+     * 试题ID
+     */
     private Long id;
+
+    /**
+     * 题干
+     */
     private String testStem;
 
     /**
@@ -32,12 +37,20 @@ public class CpaRepertory implements java.io.Serializable {
      */
     private ExamClassificationEnum testType ;
 
+    /**
+     * 试题创建时间
+     */
     private LocalDateTime insertDate;
-    private Set cpaOptions = new HashSet(0);
+    /**
+     * 试题选项
+     */
+    private Set<CpaOption> cpaOptions = new HashSet(0);
+
+    /**
+     * 试题答案
+     */
     private CpaSolution cpaSolution;
 
-
-    // Constructors
 
     /**
      * default constructor
@@ -95,11 +108,11 @@ public class CpaRepertory implements java.io.Serializable {
         this.insertDate = insertDate;
     }
 
-    public Set getCpaOptions() {
+    public Set<CpaOption> getCpaOptions() {
         return cpaOptions;
     }
 
-    public void setCpaOptions(Set cpaOptions) {
+    public void setCpaOptions(Set<CpaOption> cpaOptions) {
         this.cpaOptions = cpaOptions;
     }
 

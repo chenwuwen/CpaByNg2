@@ -4,25 +4,25 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.user.Attendance" table="answer_record" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.user.Attendance" table="ATTENDANCE" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="bigint(20)">
+            <column name="ID" sql-type="bigint(20)">
                 <comment>ID</comment>
             </column>
             <generator class="native"></generator>
         </id>
         <property name="nickName">
-            <column name="nick_name" sql-type="varchar(255)">
+            <column name="NICK_NAME" sql-type="varchar(255)">
                 <comment>用户昵称</comment>
             </column>
         </property>
         <property name="userId">
-            <column name="user_id" sql-type="bigint(20)">
+            <column name="USER_ID" sql-type="bigint(20)">
                 <comment>用户ID</comment>
             </column>
         </property>
         <property name="attendanceDate" >
-            <column name="attendance_date" sql-type="datetime">
+            <column name="ATTENDANCE_DATE" sql-type="datetime">
                 <comment>签到时间</comment>
             </column>
         </property>

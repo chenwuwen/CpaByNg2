@@ -4,24 +4,24 @@
         "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
 
-    <class name="cn.kanyun.cpa.model.entity.system.CpaRole" table="cpa_role" schema="cpa">
+    <class name="cn.kanyun.cpa.model.entity.system.CpaRole" table="CPA_ROLE" schema="cpa">
         <id name="id">
-            <column name="id" sql-type="int(11)"/>
+            <column name="ID" sql-type="int(11)"/>
             <generator class="native"></generator>
         </id>
         <property name="roleName" type="java.lang.String">
-                <column name="role_name">
+                <column name="ROLE_NAME">
                     <comment>角色名称</comment>
                 </column>
         </property>
         <property name="description" type="java.lang.String">
-                <column name="description">
+                <column name="DESCRIPTION">
                     <comment>角色描述</comment>
                 </column>
         </property>
         <set name="rolePermissions" inverse="true">
             <key>
-                <column name="role_id">
+                <column name="ROLE_ID">
                     <comment>角色ID</comment>
                 </column>
             </key>
@@ -29,7 +29,7 @@
         </set>
         <set name="userRoles" inverse="true">
             <key>
-                <column name="role_id">
+                <column name="ROLE_ID">
                     <comment>角色ID</comment>
                 </column>
             </key>
