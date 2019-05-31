@@ -9,6 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <url>http://maven.apache.org</url>
 
+
     <modules>
         <module>cpa-dao</module>
         <module>cpa-service</module>
@@ -84,9 +85,11 @@
         <maven>3.5.2</maven>
     </prerequisites>
 
-    <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
     <properties>
+    <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring-framework-version>5.0.2.RELEASE</spring-framework-version>
+        <hibernate-framework-version>5.1.2.Final</hibernate-framework-version>
     </properties>
 
     <build>
@@ -238,6 +241,8 @@
         </pluginManagement>
     </build>
 
+
+
     <!--dependencyManagement,一般是用来在父POM中定义，提供给子POM使用，子POM也可以覆盖这个定义,而且你在父POM中定义了版本之后，子模块中直接应用groupId和artifactId，而不用指定版本，同时也方便统一管理；而在父POM中的pluginManagement并不会介入到Maven的生命周期-->
     <dependencyManagement>
         <dependencies>
@@ -256,7 +261,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-test</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
                 <!--把<scope></scope>标签去掉 否则无法使用 @ContextConfiguration-->
                 <!--<scope>lombok</scope>-->
             </dependency>
@@ -264,47 +269,47 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-context</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-core</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-orm</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-aop</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-tx</artifactId>
-                <version>5.0.2.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-websocket</artifactId>
-                <version>5.0.3.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-messaging</artifactId>
-                <version>5.0.3.RELEASE</version>
+                <version>${spring-framework-version}</version>
             </dependency>
             <!--spring bom 解决spring依赖多版本问题,引入该POM文件后,再引入其他spring的jar包可不标明版本-->
             <dependency>
@@ -326,7 +331,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
-                <version>5.1.2.Final</version>
+                <version>${hibernate-framework-version}</version>
             </dependency>
             <dependency>
                 <groupId>org.hibernate.common</groupId>
@@ -341,7 +346,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
-                <version>5.1.2.Final</version>
+                <version>${hibernate-framework-version}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.jboss.logging</groupId>
@@ -355,7 +360,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
-                <version>5.1.2.Final</version>
+                <version>${hibernate-framework-version}</version>
             </dependency>
             <!--使用Ehcache做Hibernate二级缓存,之前一直想用redis做二级缓存,但是redis还未有实现的案例,
             也有想过使用hibernate memcached来做,但是还需要安装memcached,也是不妥,最有优势的是采用JbossCache做二级缓存,其功能强大,但是又会造成方法冲突
@@ -364,7 +369,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-ehcache</artifactId>
-                <version>5.1.2.Final</version>
+                <version>${hibernate-framework-version}</version>
             </dependency>
             <!--Hibernate5之后开始支持JDK,比如Date和Time API,之前使用Hibernate4保存日期字段时使用JDk8 LocalDateTime保存会报错,故ORM换成Hibernate5并加上此依赖-->
             <dependency>
@@ -394,11 +399,11 @@
             </dependency>
 
             <!--Netty网络通讯-->
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-all</artifactId>
-                <version>5.0.0.Alpha2</version>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>io.netty</groupId>-->
+                <!--<artifactId>netty-all</artifactId>-->
+                <!--<version>5.0.0.Alpha2</version>-->
+            <!--</dependency>-->
 
             <!--JBoss Marshalling 是一个Java对象的序列化API包，修正了JDK自带的序列化包的很多问题，但又保持跟 java.io.Serializable 接口的兼容，通常用于Netty编解码应用-->
             <dependency>
@@ -575,10 +580,10 @@
 
             <!--Guava是谷歌开源的java库.这个库提供用于集合，缓存，支持原语，并发性，常见注解，字符串处理，I/O和验证的实用方法-->
             <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>27.1-jre</version>
-            </dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>27.1-jre</version>
+        </dependency>
 
             <!--Java系统监控(淘汰sigar)-->
             <dependency>
@@ -831,6 +836,13 @@
             <!--<artifactId>lucene-facet</artifactId>-->
             <!--<version>5.2.0-SNAPSHOT</version>-->
             <!--</dependency>-->
+
+            <!--HTML解析-->
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>1.11.3</version>
+            </dependency>
 
             <!--其他-->
             <dependency>

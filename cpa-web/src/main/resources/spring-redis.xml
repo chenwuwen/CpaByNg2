@@ -95,15 +95,19 @@
     <!-- ================== redisson 集群配置 =================== -->
     <bean id="stringCodec" class="org.redisson.client.codec.StringCodec"></bean>
     <redisson:client id="redissonClient" codec-ref="stringCodec" >
+
+        <!--单个节点配置-->
+        <!--<redisson:single-server address="redis://127.0.0.1:6379" password="" />-->
+
         <!--scan-interval:集群状态扫描间隔时间，单位是毫秒-->
         <!--idle-connection-timeout:当前连接数量大于最小空闲连接池大小，然后它将关闭并从池中移除，缺省:10000 -->
         <!--client-name：客户端连接名称,可以使用应用名-->
         <!--connect-timeout:连接超时时长，默认10000毫秒-->
         <!--read-mode：读模式(从哪个节点读)，只有三个可选项 MASTER_SLAVE ，MASTER ，SLAVE-->
+        <!--password="" redis集群密码,需要注意的是,如果redis集群没有设置密码,那么不能有该选项,否则会报错:ERR Client sent AUTH, but no password is set-->
         <redisson:cluster-servers client-name="cpa"
                                   connect-timeout="5000"
                                   master-connection-minimum-idle-size="10"
-                                  password=""
                                   scan-interval="1000"
                                   read-mode="MASTER_SLAVE"
                                   idle-connection-timeout="10000"
@@ -112,6 +116,7 @@
             <redisson:node-address value="redis://192.168.109.3:6379" />
             <redisson:node-address value="redis://192.168.109.3:6380" />
             <redisson:node-address value="redis://192.168.109.3:6381" />
+
 
         </redisson:cluster-servers>
 </redisson:client>

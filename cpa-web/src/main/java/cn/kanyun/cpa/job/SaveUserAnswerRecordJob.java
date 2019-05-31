@@ -9,7 +9,10 @@ import org.apache.curator.framework.recipes.locks.InterProcessMutex;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 
 
@@ -20,22 +23,25 @@ import java.time.LocalDateTime;
  * @Date: 2017/12/15 0015 14:47
  */
 @Slf4j
+//这里不用@Component注解是因为,我已经在配置文件中配置过了该bean,不过即使加上该注解也不会有任何问题,以为spring的bean默认是单例的
+//@Component
+@PropertySource("classpath:config.properties")
 public class SaveUserAnswerRecordJob {
     /**
      * zookeeper地址[加端口号]，多个地址以逗号分隔
      */
-    private static final String zkAddr = "115.47.155.3:2181";
+    @Value("${zookeeper.url}")
+    private String zkAddr ;
 
     /**
      * 超时时间
      */
-    private static final Integer timeout = 100;
+    private static Integer timeout = 100;
 
     /**
      * 锁路径,该类的操作都是基于该目录进行的
      */
-    private static final String lockPath = "/tmp";
-
+    private static String lockPath = "/tmp";
 
     /**
      * 重试策略：初试时间为1s 重试10次
@@ -46,20 +52,40 @@ public class SaveUserAnswerRecordJob {
 
     /**
      * 通过工厂建立连接
+     * 这里使用了@PostConstruct,而不是使用构造方法,或者静态代码块来执行,初始化代码是因为
+     * 类变量 zkAddr 的取值是通过注解获取配置文件中的地址的,所以如果将代码块放在静态代码块中执行时
+     * zkAddr 还没有进行赋值,这个时候执行初始化代码会报错,同样的当将代码块写在构造方法时,由于spring bean
+     * 先实例化对象,也就是先执行bean的构造方法,这个时候 zkAddr 还是没有赋值的,所以使用@PostConstruct注解
+     * 这个注解用于在完成依赖项注入以执行任何初始化之后需要执行的方法,其执行顺序是 构造方法 > @Autowired > @PostConstruct
+     * 关于使用：https://cloud.tencent.com/developer/article/1371264
      */
-    static {
+    @PostConstruct
+    public void init() {
+        zkAddr = zkAddr.replace("zookeeper://","");
+        log.warn("代码段连接zookeeper地址：{}",zkAddr);
         curatorFramework = CuratorFrameworkFactory.builder().connectString(zkAddr).sessionTimeoutMs(timeout).retryPolicy(retryPolicy).build();
 //        开启连接
         curatorFramework.start();
         try {
 //            判断锁节点是否存在
             Stat stat = curatorFramework.checkExists().forPath(lockPath);
+            if (stat == null) {
+                log.warn("无法获取节点{}信息",lockPath);
+            }
+            if (stat.getEphemeralOwner() > 0) {
+                log.info("zookeeper当前节点{}是临时节点",lockPath);
+            } else {
+                log.info("zookeeper当前节点{}是持久节点",lockPath);
+            }
+
 //            建立锁路径节点,指定节点类型（不加withMode默认为持久类型节点）、路径
             curatorFramework.create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(lockPath);
+
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
+
 
     public void testJob() {
         log.info("=====定时任务执行=====");

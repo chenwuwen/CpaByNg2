@@ -32,7 +32,7 @@
     <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
 
     <!-- Druid数据库连接池 -->
-    <bean id="CpaDataSource" class="com.alibaba.druid.pool.DruidDataSource"
+    <bean id="MasterDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}"/>
@@ -77,7 +77,7 @@
     </bean>
 
     <!-- Druid数据库连接池 -->
-    <bean id="CpaDataSource2" class="com.alibaba.druid.pool.DruidDataSource"
+    <bean id="SlaveDataSource" class="com.alibaba.druid.pool.DruidDataSource"
           init-method="init" destroy-method="close">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc2.url}"/>
@@ -131,19 +131,19 @@
     <bean id="dynamicDataSource" class="cn.kanyun.cpa.dao.common.DynamicDataSource">
         <property name="targetDataSources">
             <map key-type="java.lang.String">
-                <entry value-ref="CpaDataSource" key="master"></entry>
-                <entry value-ref="CpaDataSource2" key="slave"></entry>
+                <entry value-ref="MasterDataSource" key="master"></entry>
+                <entry value-ref="SlaveDataSource" key="slave"></entry>
             </map>
         </property>
         <!--默认数据源-->
-        <property name="defaultTargetDataSource" ref="CpaDataSource">
+        <property name="defaultTargetDataSource" ref="MasterDataSource">
         </property>
     </bean>
 
     <!-- 3:创建sessionFactory，这是spring整合hibernate的入口 -->
     <!--    <bean id="sessionFactory"
               class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-            <property name="dataSource" ref="CpaDataSource"/>
+            <property name="dataSource" ref="MasterDataSource"/>
             &lt;!&ndash;将Hibernate整合进spring的配置文件中，不配置这个可能会造成 is not mapped 的错误&ndash;&gt;
             <property name="configLocation">
                 <value>classpath:hibernate.cfg.xml</value>
@@ -168,7 +168,7 @@
 
     <!--jdbcTemplate,使用时直接进行注入,作用：用来执行一些少量的自定义的SQL,只作用于主库-->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="CpaDataSource" />
+        <property name="dataSource" ref="MasterDataSource" />
     </bean>
 
     <!-- 报错找不到“找不到类型返回值的转换器”解决方案，同时应该加入这两个jar包 -->
@@ -192,7 +192,8 @@
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <!--是否自动检测数据源,默认为true,如果设为flase,那么实体类发生变化,将不会自动更新表(生产环境适用),为ture将触发检测表机制,更改对象为默认数据源,其他节点的数据源依靠数据库本身的同步机制完成更新-->
-        <property name="autodetectDataSource" value="true"/>
+        <!--当使用了Hibernate多租户架构配置时,此值应该设置为false,否则会报错 sessionFactory NullPointerException-->
+        <property name="autodetectDataSource" value="false"/>
         <!-- 事务中获取session时，是从这里获取的 -->
         <property name="sessionFactory" ref="sessionFactory"/>
     </bean>

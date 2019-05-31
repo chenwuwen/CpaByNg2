@@ -110,11 +110,10 @@
         <!--如果需要配置多租户,需要将该值配置为DATABASE-->
         <!--<property name="hibernate.multiTenancy">DATABASE</property>-->
         <!--告诉hibernate，如何解析出tenant_id-->
-        <!--<property name="hibernate.tenant_identifier_resolver">DATABASE</property>-->
+        <!--<property name="hibernate.tenant_identifier_resolver">cn.kanyun.cpa.dao.CpaTenantIdentifierResolver</property>-->
         <!--告诉hibernate如何以租户特有的方式获取数据连接-->
-        <!--<property name="hibernate.multi_tenant_connection_provider">DATABASE</property>-->
+        <!--<property name="hibernate.multi_tenant_connection_provider">cn.kanyun.cpa.dao.MultiTenantConnectionProvider</property>-->
         <!--Hibernate多租户配置结束-->
-
 
 
         <!-- 加载映射文件 ,注册ORM映射文件,以下是xml版的,注解版的是 <mapping class="XXXX"></mapping>-->
