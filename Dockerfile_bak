@@ -249,7 +249,7 @@ CMD ["mvn","tomcat7:run"]
 # 只能写一条，如果写了多条，那么只有最后一条生效
 # 容器启动时才运行(都是在执行docker run指令时运行)，运行时机相同
 #2. 不同点：
-# ENTRYPOINT不会被运行的command覆盖，而CMD则会被覆盖
+# ENTRYPOINT不会被运行的command覆盖，而CMD则会被覆盖,也就是说 CMD 指令指定的程序可被 docker run 命令行参数中指定要运行的程序所覆盖,ENTRYPOINT则不会;但是, 如果运行 docker run 时使用了 --entrypoint 选项，此选项的参数可当作要运行的程序覆盖 ENTRYPOINT 指令指定的程序
 # 如果我们在Dockerfile种同时写了ENTRYPOINT和CMD，并且CMD指令不是一个完整的可执行命令，那么CMD指定的内容将会作为ENTRYPOINT的参数
 # 如果我们在Dockerfile种同时写了ENTRYPOINT和CMD，并且CMD是一个完整的指令，那么它们两个会互相覆盖，谁在最后谁生效
 

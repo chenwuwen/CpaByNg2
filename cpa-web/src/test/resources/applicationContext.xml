@@ -191,7 +191,7 @@
     <!-- 配置事务管理器bean,使用HibernateTransactionManager事务管理器 -->
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
-        <!--是否自动检测数据源,默认为true,如果设为flase,那么实体类发生变化,将不会自动更新表(生产环境适用),为ture将触发检测表机制,更改对象为默认数据源,其他节点的数据源依靠数据库本身的同步机制完成更新-->
+        <!--是否自动检测数据源,默认为true,如果设为false,那么实体类发生变化,将不会自动更新表(生产环境适用),为ture将触发检测表机制,更改对象为默认数据源,其他节点的数据源依靠数据库本身的同步机制完成更新-->
         <property name="autodetectDataSource" value="false"/>
         <!-- 事务中获取session时，是从这里获取的 -->
         <property name="sessionFactory" ref="sessionFactory"/>

@@ -107,12 +107,17 @@
         <property name="hibernate.generate_statistics">true</property>
 
         <!--Hibernate多租户配置开始-->
-        <!--如果需要配置多租户,需要将该值配置为DATABASE-->
-        <!--<property name="hibernate.multiTenancy">DATABASE</property>-->
+        <!--https://www.jianshu.com/p/2274488225af-->
+        <!--在Hibernate5.0中多租户有四种模式(Hibernate在4.0的时候就已经支持多租户了):-->
+        <!--1.NONE:默认值，非多租户。-->
+        <!--2.SCHEMA:一个租户一个Schema 在mysql中Schema 等价于 database-->
+        <!--3.DATABASE:一个租户一个database-->
+        <!--4.DISCRIMINATOR:租户共享数据表(多个租户都在一个数据库里，数据也完全在一起，通过一个字段（列）来区分),在Hibernate5中实现-->
+        <property name="hibernate.multiTenancy">DATABASE</property>
         <!--告诉hibernate，如何解析出tenant_id-->
-        <!--<property name="hibernate.tenant_identifier_resolver">cn.kanyun.cpa.dao.CpaTenantIdentifierResolver</property>-->
+        <property name="hibernate.tenant_identifier_resolver">cn.kanyun.cpa.dao.common.tenant.CpaTenantIdentifierResolver</property>
         <!--告诉hibernate如何以租户特有的方式获取数据连接-->
-        <!--<property name="hibernate.multi_tenant_connection_provider">cn.kanyun.cpa.dao.MultiTenantConnectionProvider</property>-->
+        <property name="hibernate.multi_tenant_connection_provider">cn.kanyun.cpa.dao.common.tenant.MultiTenantConnectionProvider</property>
         <!--Hibernate多租户配置结束-->
 
 
