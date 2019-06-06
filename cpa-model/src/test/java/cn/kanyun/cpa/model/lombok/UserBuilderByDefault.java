@@ -13,6 +13,14 @@ public class UserBuilderByDefault {
         this.age = age;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
     public static UserBuilderByDefaultBuilder builder() {
         return new UserBuilderByDefaultBuilder();
     }
@@ -38,6 +46,9 @@ public class UserBuilderByDefault {
         public UserBuilderByDefault build() {
             return new UserBuilderByDefault(name, age);
         }
+
+
+
     }
 
 }

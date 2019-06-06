@@ -5,13 +5,16 @@ import cn.kanyun.cpa.model.entity.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 /**
- * Created by Administrator on 2017/7/11.
+ *
+ * @author Kanyun
+ * @date 2017/7/11
  */
 public class CpaUserDto extends BaseEntity {
     /**
@@ -25,10 +28,19 @@ public class CpaUserDto extends BaseEntity {
      * 2）当你序列化了一个类实例后，希望更改一个字段或添加一个字段，不设置serialVersionUID，所做的任何更改都将导致无法反序化旧有实例，并在反序列化时抛出一个异常（如在处理activiti工作流设置获取流程变量不设置固定序列化版本会抛出异常）。如果你添加了serialVersionUID，在反序列旧有实例时，新添加或更改的字段值将设为初始化值（对象为null，基本类型为相应的初始默认值），字段被删除将不设置。
      */
     private static final long serialVersionUID = 7991499430235800383L;
+
+    @NotBlank(message = "用户名不能为空")
     private String userName;
+    @NotBlank(message = "密码不能为空")
     private String password;
+    /**
+     * 邮箱
+     */
     private String email;
-    private String validateCode; //验证码
+    /**
+     * 验证码
+     */
+    private String validateCode;
     private String isRememberMe;
     /**
      * 盐 [加密盐值]

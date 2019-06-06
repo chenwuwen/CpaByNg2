@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -34,6 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.time.Instant;
@@ -130,7 +132,7 @@ public class UserController {
     @ApiOperation(value = "/register/{inviteUser}",notes = "注册通过分享链接",httpMethod = "POST",response = CpaResult.class)
     @RequestMapping(value = {"/register/{inviteUser}", "/register"})
     @ResponseBody
-    public CpaResult saveUser(CpaUserDto userDto, HttpServletRequest request, @PathVariable(value = "inviteUser", required = false) Long inviteUser) throws NoSuchAlgorithmException {
+    public CpaResult saveUser(@Valid CpaUserDto userDto, HttpServletRequest request, @PathVariable(value = "inviteUser", required = false) Long inviteUser) throws NoSuchAlgorithmException {
         CpaResult result = new CpaResult();
         // 获取session中保存的验证码
         String s_code = (String) request.getSession().getAttribute("validateCode");
@@ -276,10 +278,10 @@ public class UserController {
      * @Author: Kanyun
      * @Date: 2018/1/26 0026 16:39
      */
-    @ApiOperation(value = "/updUser",notes = "修改用户",httpMethod = "POST",response = CpaResult.class,produces="application/json")
-    @RequestMapping("/updUser")
+    @ApiOperation(value = "/updateUser",notes = "修改用户",httpMethod = "POST",response = CpaResult.class,produces="application/json")
+    @RequestMapping("/updateUser")
     @ResponseBody
-    public CpaResult updUser(CpaUserDto userDto) {
+    public CpaResult updateUser(CpaUserDto userDto) {
         CpaResult result = new CpaResult();
         try {
             CpaUser user = new CpaUser();

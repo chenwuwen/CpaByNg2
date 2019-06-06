@@ -112,4 +112,9 @@ public class CpaConstants {
      */
     public static final Boolean SESSION_USE_REDIS = true;
 
+    /**
+     * 默认租户
+     */
+    public static final String DEFAULT_TENANT = "DEFAULT";
+
 }

@@ -1,14 +1,18 @@
 package cn.kanyun.cpa.dao.common.tenant;
 
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.engine.jdbc.connections.spi.AbstractDataSourceBasedMultiTenantConnectionProviderImpl;
 
 import javax.sql.DataSource;
 
 /**
- * Created by HLWK-06 on 2019/5/31.
+ *
+ * @author Kanyun
+ * @date 2019/5/31
  * 指定了 ConnectionProvider，即 Hibernate 需要知道如何以租户特有的方式获取数据连接
  * 这个类是Hibernate框架拦截sql语句并在执行sql语句之前更换数据源提供的类
  */
+@Slf4j
 public class MultiTenantConnectionProvider extends AbstractDataSourceBasedMultiTenantConnectionProviderImpl {
 
     /**
@@ -31,6 +35,7 @@ public class MultiTenantConnectionProvider extends AbstractDataSourceBasedMultiT
      */
     @Override
     protected DataSource selectDataSource(String s) {
-        return null;
+        log.info("访问的域名是：{},开始为其选择数据源",s);
+        return TenantDataSourceProvider.getTenantDataSource(s);
     }
 }

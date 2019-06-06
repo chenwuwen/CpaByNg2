@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.model.lombok;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -24,6 +25,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Setter
 @Getter
+
 public class UserTestByLombok {
     private String name;
     private int age;

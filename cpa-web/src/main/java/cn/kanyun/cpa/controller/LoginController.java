@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 /**
@@ -86,7 +87,7 @@ public class LoginController {
     @ApiOperation(value = "/login",notes = "用户登录",httpMethod = "POST",response = CpaResult.class,produces="application/json")
     @PostMapping("/login")
     @ResponseBody
-    public CpaResult login(CpaUserDto user, HttpServletRequest request) {
+    public CpaResult login(@Valid CpaUserDto user, HttpServletRequest request) {
         CpaResult result = new CpaResult();
         String s_code = (String) request.getSession().getAttribute(CpaConstants.IDENTIFYING_CODE);
         // 先比较验证码(equalsIgnoreCase忽略大小写，equals不忽略)

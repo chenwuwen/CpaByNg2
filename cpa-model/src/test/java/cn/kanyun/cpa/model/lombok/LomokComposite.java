@@ -15,7 +15,7 @@ import java.io.IOException;
  * Lomok详解：https://blog.csdn.net/motui/article/details/79012846
  */
 @Slf4j
-public class LomokCompositeTest {
+public class LomokComposite {
 
 
     /**

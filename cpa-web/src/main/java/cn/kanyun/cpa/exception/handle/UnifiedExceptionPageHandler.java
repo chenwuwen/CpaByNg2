@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.exception;
+package cn.kanyun.cpa.exception.handle;
 
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;

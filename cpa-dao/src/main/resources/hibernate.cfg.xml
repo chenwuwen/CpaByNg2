@@ -47,7 +47,7 @@
  #hibernate.hbm2ddl.auto update(推荐使用) 自动生成表.如果已经存在不会再生成.如果表有变动.自动更新表(不会删除任何数据).
  #hibernate.hbm2ddl.auto validate    校验.不自动生成表.每次启动会校验数据库中表是否正确.校验失败.
   -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <!--<property name="hibernate.hbm2ddl.auto">update</property>-->
 
         <!-- session要从当前线程中产生,不配置可能报错-->
         <!-- 报错信息为：No CurrentSessionContext configured!或者No TransactionManagerLookup specified -->
@@ -115,7 +115,7 @@
         <!--4.DISCRIMINATOR:租户共享数据表(多个租户都在一个数据库里，数据也完全在一起，通过一个字段（列）来区分),在Hibernate5中实现-->
         <property name="hibernate.multiTenancy">DATABASE</property>
         <!--告诉hibernate，如何解析出tenant_id-->
-        <property name="hibernate.tenant_identifier_resolver">cn.kanyun.cpa.dao.common.tenant.CpaTenantIdentifierResolver</property>
+        <property name="hibernate.tenant_identifier_resolver">cn.kanyun.cpa.dao.common.tenant.TenantIdentifierResolverImpl</property>
         <!--告诉hibernate如何以租户特有的方式获取数据连接-->
         <property name="hibernate.multi_tenant_connection_provider">cn.kanyun.cpa.dao.common.tenant.MultiTenantConnectionProvider</property>
         <!--Hibernate多租户配置结束-->

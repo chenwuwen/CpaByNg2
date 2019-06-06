@@ -1,6 +1,8 @@
 package cn.kanyun.cpa.controller.test;
 
 
+import junit.framework.TestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.BufferedReader;
@@ -9,7 +11,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-public class TestStream {
+public class TestStream extends TestCase {
 
     public final String path = this.getClass().getClassLoader().getResource("")+"banner.txt";
     @Test
@@ -33,7 +35,6 @@ public class TestStream {
             String len;
             while ((br.readLine()) != null) {
                 pw.println(br.readLine());
-
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,6 +46,6 @@ public class TestStream {
         String a = "Hello";
         String b = new String("Hello");
         System.out.println(a == b);
-
+        Assert.assertNotEquals(a,b);
     }
 }

@@ -419,16 +419,7 @@
                     <!--<warFile>${basedir}/target/${project.build.finalName}.war</warFile>-->
                 </configuration>
             </plugin>
-            <!--设置Maven构建项目为UTF-8编码格式-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <forkMode>once</forkMode>
-                    <argLine>Dfile.encoding=UTF-8</argLine>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 

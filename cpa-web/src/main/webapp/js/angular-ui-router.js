@@ -4679,7 +4679,7 @@ var ViewService = (function () {
         var viewAtContext = rawViewName.split("@");
         var uiViewName = viewAtContext[0] || "$default"; // default to unnamed view
         var uiViewContextAnchor = isString(viewAtContext[1]) ? viewAtContext[1] : "^"; // default to parent context
-        // Handle relative view-name sugar syntax.
+        // handle relative view-name sugar syntax.
         // Matches rawViewName "^.^.^.foo.bar" into array: ["^.^.^.foo.bar", "^.^.^", "foo.bar"],
         var relativeViewNameSugar = /^(\^(?:\.\^)*)\.(.*$)/.exec(uiViewName);
         if (relativeViewNameSugar) {

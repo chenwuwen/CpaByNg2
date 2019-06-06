@@ -1,4 +1,4 @@
-package cn.kanyun.cpa.exception;
+package cn.kanyun.cpa.exception.handle;
 
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;

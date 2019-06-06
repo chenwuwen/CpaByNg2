@@ -86,7 +86,7 @@
     </prerequisites>
 
     <properties>
-    <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
+        <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <spring-framework-version>5.0.2.RELEASE</spring-framework-version>
         <hibernate-framework-version>5.1.2.Final</hibernate-framework-version>
@@ -143,17 +143,52 @@
                         <!--<warFile>${basedir}/target/${project.build.finalName}.war</warFile>-->
                     </configuration>
                 </plugin>
-                <!--设置Maven构建项目为UTF-8编码格式-->
+
+                <!--在Maven进行test、package、install等命令时，会默认使用 maven-surefire-plugin 插件来生成测试报告，此种方式生成的为XML文件和TXT类型文件。并存放在其自动生成的目录surefire-reports下-->
+                <!--引入插件依赖以及运行test命令的编译结果，注意该命令如果不指定测试类的地址，默认会扫描maven目录结构下test目录中类似-->
+                <!--1、Test*.java:任何目录下以Test为开始的类-->
+                <!--2、*Test.java: 任何目录下以Test为结尾的类-->
+                <!--3、*TestCase.java: 任何目录下以TestCase为结尾的类-->
+                <!--如果需要生成HTML的测试报告，运行Maven命令 mvn test surefire-report:report  即是：运行mvn test的基础上，根据生成的xml、txt文件，再生成默认格式的report-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.7.2</version>
+                    <version>2.22.2</version>
                     <configuration>
                         <forkMode>once</forkMode>
-                        <skipTests>true</skipTests>
-                        <argLine>Dfile.encoding=UTF-8</argLine>
+                        <argLine>-Dfile.encoding=UTF-8</argLine>
+                        <!--等同如下配置：mvn test -Dmaven.test.skip=true-->
+                        <!--<skipTests>true</skipTests>-->
+                        <!--maven中默认的情况下如果单元测试有错误(这个错误分两种:一是编译不过去的错误,二是单元测试的结果是跟Assert的期望值不一致,对于编译不过去的错误要及早解决),将会停止构建工程，如果想忽略错误而继续构建的话,设置为true,默认为false-->
+                        <testFailureIgnore>true</testFailureIgnore>
+                        <!--若此目录为空，则会在maven命令test执行结束之后，显示以上结果 ： No tests to run.-->
+                        <includes>
+                            **/*.java
+                        </includes>
+                        <excludes>
+                            <!-- -->
+                        </excludes>
+
                     </configuration>
                 </plugin>
+
+
+                <!--maven-site-plugin是一个负责为Java项目生成静态HTML网站的插件。这个插件非常的有用，里面可以嵌入各种插件，比如用来对代码检查bug的findbugs,检查代码风格的checkstyle,生成testng测试报告的surefire等-->
+                <!--使用方法：mvn site 生成的html文件在 target/site 执行mvn site:deploy部署到Web服务器-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.7.1</version>
+                    <configuration>
+                        <!--站点的生成是基于Velocity模板的，默认使用default-site.vm模板，可以在pom.xml中配置其他模板文件-->
+                        <!--<templateFile>${basedir}/maven-site.vm</templateFile>-->
+                        <!--源代码中的站点国际化-->
+                        <locales>en,zh</locales>
+                    </configuration>
+
+                </plugin>
+
+
                 <!--多模块Maven项目如何使用javadoc插件生成文档-->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -242,7 +277,6 @@
     </build>
 
 
-
     <!--dependencyManagement,一般是用来在父POM中定义，提供给子POM使用，子POM也可以覆盖这个定义,而且你在父POM中定义了版本之后，子模块中直接应用groupId和artifactId，而不用指定版本，同时也方便统一管理；而在父POM中的pluginManagement并不会介入到Maven的生命周期-->
     <dependencyManagement>
         <dependencies>
@@ -284,6 +318,11 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
+                <version>${spring-framework-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-web</artifactId>
                 <version>${spring-framework-version}</version>
             </dependency>
             <dependency>
@@ -400,9 +439,9 @@
 
             <!--Netty网络通讯-->
             <!--<dependency>-->
-                <!--<groupId>io.netty</groupId>-->
-                <!--<artifactId>netty-all</artifactId>-->
-                <!--<version>5.0.0.Alpha2</version>-->
+            <!--<groupId>io.netty</groupId>-->
+            <!--<artifactId>netty-all</artifactId>-->
+            <!--<version>5.0.0.Alpha2</version>-->
             <!--</dependency>-->
 
             <!--JBoss Marshalling 是一个Java对象的序列化API包，修正了JDK自带的序列化包的很多问题，但又保持跟 java.io.Serializable 接口的兼容，通常用于Netty编解码应用-->
@@ -580,10 +619,10 @@
 
             <!--Guava是谷歌开源的java库.这个库提供用于集合，缓存，支持原语，并发性，常见注解，字符串处理，I/O和验证的实用方法-->
             <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>27.1-jre</version>
-        </dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>27.1-jre</version>
+            </dependency>
 
             <!--Java系统监控(淘汰sigar)-->
             <dependency>
