@@ -78,6 +78,12 @@
     <!--第一种参数在servlet里面可以通过getServletContext().getInitParameter("context/param")得到-->
     <!--第二种参数只能在servlet的init()方法中通过this.getInitParameter("param1")取得-->
 
+    <!--spring的profile设置：https://blog.csdn.net/why_2012_gogo/article/details/73730535-->
+    <context-param>
+        <param-name>spring.profiles.default</param-name>
+        <param-value>dev</param-value>
+    </context-param>
+
     <!-- spring上下文容器配置 spring为我们提供了实现ServletContextListener接口的上下文初始化监听器：org.springframework.web.context.ContextLoaderListener-->
     <!--　spring为我们提供的IOC容器，需要我们指定容器的配置文件，然后由该监听器初始化并创建该容器。要求你指定配置文件的地址及文件名称，一定要使用：contextConfigLocation作为参数名称-->
     <!--默认读取/WEB-INF/下的applicationContext.xml文件。但是通过context-param指定配置文件路径后，便会去你指定的路径下读取对应的配置文件，并进行初始化-->

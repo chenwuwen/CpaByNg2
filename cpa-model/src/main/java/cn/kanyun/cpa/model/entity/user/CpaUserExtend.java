@@ -1,10 +1,14 @@
 package cn.kanyun.cpa.model.entity.user;
 
 
-import cn.kanyun.cpa.model.entity.BaseEntity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+
+/**
+ * @author Kanyun
+ * 用户扩展表
+ */
 
 public class CpaUserExtend implements Serializable {
     private Long id;
@@ -27,7 +31,12 @@ public class CpaUserExtend implements Serializable {
     /**
      * 连续打卡天数
      */
-    private Integer reapSignInDay;
+    private Integer seriesSignInDay;
+
+    /**
+     * 签到总天数
+     */
+    private Integer totalSignInDay;
     /**
      * 此时间是创建分享链接的时间
      */
@@ -35,7 +44,6 @@ public class CpaUserExtend implements Serializable {
 
     public CpaUserExtend() {
     }
-
 
 
     public Long getId() {
@@ -78,12 +86,12 @@ public class CpaUserExtend implements Serializable {
         this.shareQrUrl = shareQrUrl;
     }
 
-    public Integer getReapSignInDay() {
-        return reapSignInDay;
+    public Integer getSeriesSignInDay() {
+        return seriesSignInDay;
     }
 
-    public void setReapSignInDay(Integer reapSignInDay) {
-        this.reapSignInDay = reapSignInDay;
+    public void setSeriesSignInDay(Integer seriesSignInDay) {
+        this.seriesSignInDay = seriesSignInDay;
     }
 
     public LocalDateTime getCreateDate() {
@@ -92,5 +100,13 @@ public class CpaUserExtend implements Serializable {
 
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
+    }
+
+    public Integer getTotalSignInDay() {
+        return totalSignInDay;
+    }
+
+    public void setTotalSignInDay(Integer totalSignInDay) {
+        this.totalSignInDay = totalSignInDay;
     }
 }

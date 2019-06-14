@@ -178,6 +178,16 @@
         </filter>
     </appender>
 
+    <!--ELK日志配置，启动elasticsearch的话不能用root账号-->
+    <appender name="stash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>192.168.1.167:9250</destination>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <!-- encoder is required -->
+        <encoder charset="UTF-8" class="net.logstash.logback.encoder.LogstashEncoder" />
+    </appender>
+
     <!-- 配置monitor日志输出 -->
     <logger name="MONITOR">
         <appender-ref ref="MONITOR-FILE"/>
@@ -226,5 +236,7 @@
         <appender-ref ref="STDOUT"/>
         <!--启用回滚日志-->
         <appender-ref ref="rollingLog"/>
+        <!--启用ELK日志-->
+        <appender-ref ref="stash"/>
     </root>
 </configuration>

@@ -26,6 +26,11 @@
                 <comment>签到时间</comment>
             </column>
         </property>
+        <property name="type" >
+            <column name="TYPE" sql-type="tinyint">
+                <comment>签到时间</comment>
+            </column>
+        </property>
 
     </class>
 </hibernate-mapping>

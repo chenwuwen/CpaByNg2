@@ -114,6 +114,7 @@ public class CpaRepertoryController {
                     return result;
                 }
             });
+//            下面这种请求redis的方式存在两个问题:一是这类代码会在多个地方使用,代码冗余度高,二是:该方法会造成缓存穿透,需要使用双重锁的方式避免
 //            try {
 //                result = (CpaResult) redisService.getCacheObject(key,CpaResult.class);
 //            } catch (Exception e) {

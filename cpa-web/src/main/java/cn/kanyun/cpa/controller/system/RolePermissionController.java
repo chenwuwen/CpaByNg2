@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Kanyun
+ * @date 2017/6/16
  */
 @Controller
 @RequestMapping("/rolePermission")

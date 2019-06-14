@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.exception.ProgramsInternalException;
 import cn.kanyun.cpa.model.dto.user.AttendanceDto;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户签到
+ * @author Kanyun
  */
 @Api(value = "/api/user",tags = "签到模块")
 @Controller
@@ -32,8 +34,7 @@ public class AttendanceController {
 
 
     /**
-     * @describe:
-     * 签到
+     * @describe: 签到
      * @params:[request]
      * @Author: Kanyun
      * @Date: 2017/12/12 0012 13:33
@@ -42,31 +43,17 @@ public class AttendanceController {
     @RequestMapping("/attendance")
     @ResponseBody
     public CpaResult signIn(HttpServletRequest request) {
-        CpaResult result = new CpaResult();
+        CpaResult result ;
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             CpaUserExtend userExtend = user.getCpaUserExtend();
             result = attendanceService.signIn(user, userExtend);
         } catch (Exception e) {
             logger.error("用户签到异常：" + e);
-            result.setState(CpaConstants.OPERATION_ERROR);
+            throw new ProgramsInternalException("用户签到异常");
         }
         return result;
     }
 
-    @RequestMapping("/getSignIn")
-    @ResponseBody
-    public CpaResult getReapSigInDay(HttpServletRequest request) {
-        CpaResult result = new CpaResult();
-        CpaUser user = WebUtil.getSessionUser(request);
-        CpaUserExtend userExtend = user.getCpaUserExtend();
-        AttendanceDto attendanceDto = new AttendanceDto();
-        if (attendanceService.getReapSigInDay(user)) {
-            attendanceDto.setReapSigInDay(userExtend.getReapSignInDay());
-        } else {
-            attendanceDto.setReapSigInDay(0);
-        }
-        result.setData(attendanceDto);
-        return result;
-    }
+
 }

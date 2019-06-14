@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.terracotta.modules.ehcache.async.exceptions.ProcessingException;
 
 /**
  * Created by Administrator on 2018/7/17.
@@ -19,6 +20,34 @@ import org.springframework.web.bind.annotation.ResponseStatus;
  * 1.使用 @ExceptionHandler 注解
  * 2.实现 HandlerExceptionResolver 接口
  * 3.使用 @ControllerAdvice 注解
+ * A
+ * 使用 @ ExceptionHandler 注解，有一个不好的地方就是：进行异常处理的方法必须与出错的方法在同一个Controller里面使用如下：
+ * 可以看到，这种方式最大的缺陷就是不能全局控制异常。每个类都要写一遍。
+ * <p>
+ * 使用 @ControllerAdvice+ @ ExceptionHandler 注解
+ * 上文说到 @ ExceptionHandler 需要进行异常处理的方法必须与出错的方法在同一个Controller里面。
+ * 那么当代码加入了 @ControllerAdvice，则不需要必须在同一个 controller 中了。这也是 Spring 3.2 带来的新特性。
+ * 从名字上可以看出大体意思是控制器增强。 也就是说，@controlleradvice + @ ExceptionHandler 也可以实现全局的异常捕捉。
+ *
+ * @ExceptionHandler：统一处理某一类异常，从而能够减少代码重复率和复杂度
+ * @ControllerAdvice：异常集中处理，更好的使业务逻辑与异常处理剥离开
+ * @ResponseStatus：可以将某种异常映射为HTTP状态码
+ * @ExceptionHandler 该注解作用对象为方法，并且在运行时有效，value()可以指定异常类。由该注解注释的方法可以具有灵活的输入参数
+ * 异常参数：包括一般的异常或特定的异常（即自定义异常），如果注解没有指定异常类，会默认进行映射
+ * 请求或响应对象 (Servlet API or Portlet API)： 你可以选择不同的类型，如ServletRequest/HttpServletRequest或PortleRequest/ActionRequest/RenderRequest。
+ * Session对象(Servlet API or Portlet API)： HttpSession或PortletSession
+ * WebRequest或NativeWebRequest
+ * Locale
+ * InputStream/Reader
+ * OutputStream/Writer
+ * Model
+ * 方法返回值可以为：
+ * ModelAndView对象
+ * Model对象
+ * Map对象
+ * View对象
+ * String对象
+ * 还有@ResponseBody、HttpEntity<?>或ResponseEntity<?>，以及void
  */
 
 /**A
@@ -147,19 +176,14 @@ public class UnifiedExceptionJsonHandler {
      * 服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。一般来说，这个问题都会在服务器的程序码出错时出现。
      */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(ProcessingException.class)
     public CpaResult handleException(Exception e) {
-        if (e instanceof Exception) {
-            CpaResult result = new CpaResult();
+        CpaResult result = new CpaResult();
+        if (e instanceof ProcessingException) {
             result.setState(CpaConstants.OPERATION_ERROR);
-            result.setMsg(e.toString());
+            result.setMsg(e.getMessage());
             return result;
         }
-
-        logger.error("服务运行异常", e);
-        CpaResult result = new CpaResult();
-        result.setState(CpaConstants.OPERATION_ERROR);
-        result.setMsg("服务运行异常");
         return result;
     }
 

@@ -5,7 +5,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 
 /**
- * Created by KANYUN on 2017/6/17.
+ *
+ * @author KANYUN
+ * @date 2017/6/17
  */
 @Controller
 public class CpaOptionController {

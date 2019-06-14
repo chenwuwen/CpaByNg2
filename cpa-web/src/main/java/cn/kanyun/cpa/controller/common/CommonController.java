@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+/**
+ * @author Kanyun
+ * 公共请求
+ */
 @Api(value = "/api", tags = "公共控制层")
 @Controller
 @RequestMapping(value = "/api")

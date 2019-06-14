@@ -26,5 +26,5 @@ public interface AttendanceService extends CommonService<Long,Attendance> {
      * @Author: Kanyun
      * @Date: 2017/12/12  13:33
      */
-    Boolean getReapSigInDay(CpaUser user);
+//    Boolean getReapSigInDay(CpaUser user);
 }

@@ -28,17 +28,29 @@ services:
       - "8899:8080"
     # 指定容器名称
     container_name: cpa-backend
+
     # 指定服务所使用的镜像[可以为镜像仓库的url],如果配置了这个参数,就省去了构建镜像的这个步骤
     image: cpa:latest
+
+    # 内存限制[不一定会起作用,因为对于内存的限制还需要配置其他东西]
+    memory: 1000m
 
     # 将指定容器连接到当前连接(比如web项目启动时连接启动的mysql服务)，可以设置别名，避免ip方式导致的容器重启动态改变的无法连接情况
     #links:
       #-
 
+    # 链接到 docker-compose.yml 外部的容器，甚至 并非 Compose 管理的容器。参数格式跟 links 类似
+    #external_links
+
     # 卷挂载路径,也就是容器中应用产生的文件(需要持久化)保存到对应的宿主机中
     volumes:
       # 冒号前面为宿主机目录,后面为容器目录
       - /data/cpa-persist/log:/usr/local/tomcat/logs
+
+    # 从另一个服务或容器挂载它的所有卷
+    # volumes_from
+#      – service_name
+#      – container_name
 
 
 
@@ -48,4 +60,9 @@ services:
     - SPRING_PROFILES_ACTIVE=docker
     - SERVER_PORT=8761
 
+    # 从文件中获取环境变量，可以为单独的文件路径或列表。如果通过 docker-compose -f FILE 指定了模板文件，则 env_file 中路径会基于模板文件路径,如果有变量名称与 environment 指令冲突，则以后者为准。
+    #env_file
+
+    # 基于已有的服务进行扩展。例如我们已经有了一个 webapp 服务，模板文件为 common.yml
+    #extends
 

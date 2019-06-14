@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.annotation.Resource;
 
 /**
- * Created by Administrator on 2017/6/16.
+ *
+ * @author Kanyun
+ * @date 2017/6/16
  */
 @Controller
 @RequestMapping("/cpaPermission")
 public class CpaPermissionController {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CpaPermissionController.class);
+
     @Resource(name = CpaPermissionService.SERVICE_NAME)
     private CpaPermissionService cpaPermissionService;
 }

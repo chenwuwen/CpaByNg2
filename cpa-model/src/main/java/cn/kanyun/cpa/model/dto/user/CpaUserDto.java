@@ -31,53 +31,103 @@ public class CpaUserDto extends BaseEntity {
 
     @NotBlank(message = "用户名不能为空")
     private String userName;
+
+
     @NotBlank(message = "密码不能为空")
     private String password;
+
     /**
      * 邮箱
      */
     private String email;
+
     /**
      * 验证码
      */
     private String validateCode;
+
+    /**
+     * 记住我
+     */
     private String isRememberMe;
+
     /**
      * 盐 [加密盐值]
      */
     private String salt;
+
+    /**
+     * 注册开始时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime startRegisterDate; //注册开始时间
+    private LocalDateTime startRegisterDate;
+
+    /**
+     * 注册结束时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime endRegisterDate;  //注册结束时间
+    private LocalDateTime endRegisterDate;
+
+    /**
+     * 注册时间
+     */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime regDate;  //注册时间
+    private LocalDateTime regDate;
+
+
+    /**
+     * 上次登录开始时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime startLastLoginDate; //上次登录开始时间
+    private LocalDateTime startLastLoginDate;
+
+    /**
+     *上次登录结束时间
+     */
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDateTime endLastLoginDate;  //上次登录结束时间
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime endLastLoginDate;
+
     /**
      * 上次登录时间
      */
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastLoginDate;
+
     /**
      * 角色集合
      */
     private Set<String> roles;
+
     /**
      * 权限集合
      */
     private Set<String> permissions;
+
+    /**
+     * 头像路径
+     */
     private String imgPath;
+
+    /**
+     * token
+     */
     private String token;
+
+    /**
+     * 用户状态
+     */
     private Integer status;
+
     /**
      * 性别 0：女，1：男
      */
     private Byte gender;
+
+    /**
+     * 用户昵称
+     */
     private String nickName;
 
     public String getNickName() {
