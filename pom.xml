@@ -819,7 +819,7 @@
                 <version>4.5</version>
             </dependency>
 
-            <!--HSQLDB是一个轻量级的纯Java开发的开放源代码的关系数据库系统，其体积小，占用空间小，使用简单，支持内存运行方式等特点-->
+            <!--HSQLDB是一个轻量级的纯Java开发的开放源代码的关系数据库系统，其体积小，占用空间小，使用简单，支持内存运行方式等特点,同类型比较有名的数据库有H2数据库-->
             <!--Hsqldb有四种运行模式：-->
             <!--一、内存（Memory-Only）模式：所有的数据都将在内存中完成，如果程序退出，则相应的数据也将同时被销毁-->
             <!--二、进行（In-Process）模式：此模式从应用程序启动数据库，由于所有的数据都将写到文件中，所以，即使程序退出，数据也不会被销毁-->
@@ -881,6 +881,13 @@
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
                 <version>1.11.3</version>
+            </dependency>
+
+            <!--java使用ssh连接Linux并执行命令,需依赖jcraft的jar包-->
+            <dependency>
+                <groupId>com.jcraft</groupId>
+                <artifactId>jsch</artifactId>
+                <version>0.1.55</version>
             </dependency>
 
             <!--其他-->

@@ -6,13 +6,11 @@ package cn.kanyun.cpa.model.enums;
 public enum ExamClassificationEnum {
 
     /**
-     * 利用构造函数传参利用构造函数传参
+     * 利用构造函数传参
      * 通过括号赋值,而且必须有带参构造器和属性和方法，否则编译出错
      * 赋值必须是都赋值或都不赋值，不能一部分赋值一部分不赋值
      * 如果不赋值则不能写构造器，赋值编译也出错
      */
-
-    // 利用构造函数传参
     BASIC_ACCOUNT("会计基础"), CPU_ACCOUNT("会计电算化"), STATUTE_ETHICS("财经法规与职业道德");
 
 
@@ -32,7 +30,10 @@ public enum ExamClassificationEnum {
         this.value = value;
     }
 
-    // 定义get方法返回数据
+    /**
+     * 定义get方法返回数据
+     * @return
+     */
     public String getValue() {
         return value;
     }

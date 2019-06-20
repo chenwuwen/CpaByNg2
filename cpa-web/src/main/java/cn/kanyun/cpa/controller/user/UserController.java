@@ -297,8 +297,8 @@ public class UserController {
     }
 
     /**
-     * @describe:
-     * 跳转网页 (目前只是使用在用户扫描二维码,跳转到注册页面)
+     * @describe: 跳转网页 (目前只是使用在用户扫描二维码,跳转到注册页面) 需要注意的是@RequestMapping
+     * 中配置了两个地址,@其中@PathVariable配置了required 这个配置是springmvc5才有的
      * @params: inviteUser:推荐人ID
      * @Author: Kanyun
      * @Date: 2018/2/23 0023 17:48

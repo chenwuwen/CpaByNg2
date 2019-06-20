@@ -115,6 +115,12 @@
             <artifactId>spring-context</artifactId>
         </dependency>
 
+        <!--java使用ssh连接Linux并执行命令,需依赖jcraft的jar包-->
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+        </dependency>
+
     </dependencies>
 
     <!--   <build> -->
