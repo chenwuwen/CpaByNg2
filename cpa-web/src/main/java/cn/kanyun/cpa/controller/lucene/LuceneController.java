@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by root on 2018/2/28 0028.
+ * @author Kanyun
+ * @date 2018/2/28 0028.
  */
 @Controller
 @RequestMapping("/api/lucene")

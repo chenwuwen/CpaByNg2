@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+       http://www.springframework.org/schema/data/elasticsearch
+        http://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch.xsd">
+
+    <context:property-placeholder location="classpath:elasticsearch.properties"/>
+    <!--    扫描Dao包 实现自动创建,类似于<context:component-scan base-package="xxx"/>标签-->
+    <elasticsearch:repositories base-package="cn.kanyun.cpa.elasticsearch.repository"/>
+    <!--    配置elasticsearch 连接 -->
+    <elasticsearch:transport-client id="client" cluster-nodes="${elasticsearch_nodes}" cluster-name="${cluster_name}"/>
+
+    <!--        spring data ElasticSearch Dao 依赖 模板-->
+    <bean id="elasticsearchTemplate" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+        <constructor-arg name="client" ref="client"/>
+    </bean>
+
+
+    <!--    响应式ElasticsearchTemplate-->
+<!--    <bean id="elasticsearchMappingContext"-->
+<!--          class="org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext ">-->
+<!--    </bean>-->
+<!--    <bean id="elasticsearchConverter"-->
+<!--          class="org.springframework.data.elasticsearch.core.convert.MappingElasticsearchConverter">-->
+<!--        <constructor-arg name="mappingContext" ref="elasticsearchMappingContext"/>-->
+<!--    </bean>-->
+<!--    <bean id="reactiveElasticsearchTemplate"-->
+<!--          class="org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate">-->
+<!--        <constructor-arg name="client" ref="client"/>-->
+<!--        <constructor-arg name="converter" ref="elasticsearchConverter"/>-->
+<!--    </bean>-->
+</beans>

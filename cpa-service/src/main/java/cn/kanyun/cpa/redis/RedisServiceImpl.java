@@ -3,6 +3,7 @@ package cn.kanyun.cpa.redis;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.BoundSetOperations;
@@ -57,9 +58,9 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     }
 
     @Override
-    public  <T>T getCacheObject(String key, Class<T> clazz) {
+    public <T> T getCacheObject(String key, Class<T> clazz) {
         String ret = redisTemplate.opsForValue().get(key).toString();
-        T t = (T) JSONObject.parseObject(ret,clazz.getClass());
+        T t = (T) JSONObject.parseObject(ret, clazz.getClass());
         return t;
     }
 
@@ -206,9 +207,8 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     }
 
     @Override
-    public Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/) {
+    public Map<Object, Object> getCacheMap(String key) {
         Map<Object, Object> map = redisTemplate.opsForHash().entries(key);
-        /*Map<String, T> map = hashOperation.entries(key);*/
         return map;
     }
 
@@ -285,23 +285,24 @@ public class RedisServiceImpl<T> implements RedisService<T> {
         return redisTemplate.boundValueOps(key).persist();
     }
 
-    //redisTemplateSerializable
 
     /**
      * 删除redis的所有数据
      */
-    /*@SuppressWarnings({"unchecked", "rawtypes"})
+    @Override
     public String flushDB() {
-        return redisTemplateSerializable.execute(new RedisCallback() {
+        return redisTemplateSerializable.execute(new RedisCallback<String>() {
+            @Override
             public String doInRedis(RedisConnection connection) throws DataAccessException {
                 connection.flushDb();
                 return "ok";
             }
         });
-    }*/
+    }
+
     @Override
     public long del(final byte[] key) {
-        return (long) redisTemplateSerializable.execute(new RedisCallback<Object>() {
+        return redisTemplateSerializable.execute(new RedisCallback<Long>() {
             @Override
             public Long doInRedis(RedisConnection connection) {
                 return connection.del(key);
@@ -312,7 +313,7 @@ public class RedisServiceImpl<T> implements RedisService<T> {
     @Override
     @SuppressWarnings({"unchecked", "rawtypes"})
     public byte[] get(final byte[] key) {
-        return (byte[]) redisTemplateSerializable.execute(new RedisCallback() {
+        return redisTemplateSerializable.execute(new RedisCallback<byte[]>() {
             @Override
             public byte[] doInRedis(RedisConnection connection) throws DataAccessException {
                 return connection.get(key);

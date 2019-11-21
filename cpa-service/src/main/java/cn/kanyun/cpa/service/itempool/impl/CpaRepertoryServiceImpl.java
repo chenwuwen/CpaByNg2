@@ -36,11 +36,11 @@ import java.util.Set;
 
 /**
  *
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 @Service(CpaRepertoryService.SERVICE_NAME)
-@Transactional
+@Transactional(rollbackFor = {})
 public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertory> implements CpaRepertoryService {
     @Resource(name = CpaRepertoryDao.REPOSITORY_NAME)
     private CpaRepertoryDao cpaRepertoryDao;
@@ -51,29 +51,38 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
     @Resource(name = UserCommentService.SERVICE_NAME)
     private UserCommentService userCommentService;
 
+
+    /**
+     * 不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),
+     * 加上readOnly=true这样就做成一个只读事务，可以提高效率。
+     * @param firstResult
+     * @param pageSize
+     * @param where
+     * @param params
+     * @return
+     */
     @Override
-//不需要事务管理的(只查询的)方法:@Transactional(propagation=Propagation.NOT_SUPPORTED),加上readOnly=true这样就做成一个只读事务，可以提高效率。
     @Transactional(propagation = Propagation.NOT_SUPPORTED, readOnly = true, isolation = Isolation.REPEATABLE_READ)
     public CpaResult getUnitExam(Integer firstResult, Integer pageSize, String where, Object[] params) {
         CpaResult result = getScrollData(firstResult, pageSize, where, params);
         if (result.getTotalCount() > 0) {
             List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
-            List<CpaRepertory> listcr = (List<CpaRepertory>) result.getData();
-            List reids = new ArrayList();
-            for (CpaRepertory cr : listcr) {
+            List<CpaRepertory> cpaRepertories = (List<CpaRepertory>) result.getData();
+            List reIds = new ArrayList();
+            for (CpaRepertory cr : cpaRepertories) {
                 CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
                 cpaRepertoryDto.setTestStem(cr.getTestStem());
                 cpaRepertoryDto.setId(cr.getId());
                 cpaRepertoryDto.setStandardResult(cr.getCpaSolution().getResult());
-                reids.add(cr.getId());
-                Set<CpaOption> setco = cr.getCpaOptions();
+                reIds.add(cr.getId());
+                Set<CpaOption> cpaOptionSet = cr.getCpaOptions();
 //                将Set集合转换为List集合
-                List<CpaOption> listco = new ArrayList<CpaOption>();
-                for (CpaOption co : setco) {
-                    listco.add(co);
+                List<CpaOption> cpaOptionList = new ArrayList<CpaOption>();
+                for (CpaOption co : cpaOptionSet) {
+                    cpaOptionList.add(co);
                 }
 //                将转换后的List集合，自定义排序，根据属性内的ABCD进行升序排列
-                Collections.sort(listco, new Comparator<CpaOption>() {
+                Collections.sort(cpaOptionList, new Comparator<CpaOption>() {
                     @Override
                     public int compare(CpaOption o1, CpaOption o2) {
                         int sortResult = o1.getSelectData().compareTo(o2.getSelectData());
@@ -81,23 +90,25 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
                     }
                 });
 //                从排序后的List集合里取出选项内容，可以保证，他们的顺序不变
-                List<CpaOptionDto> listoptions = new ArrayList<>();
-//                List<CpaOption> listoptions = new ArrayList<CpaOption>(); //原写法,只取出选项的内容,ABCD在前台用Angular的过滤器来得到,由于选项内容已经排序故不必担心顺序不对的问题
-                for (CpaOption co : listco) {
+                List<CpaOptionDto> listOptions = new ArrayList<>();
+//                原写法,只取出选项的内容,ABCD在前台用Angular的过滤器来得到,由于选项内容已经排序故不必担心顺序不对的问题
+//                List<CpaOption> listOptions = new ArrayList<CpaOption>();
+                for (CpaOption co : cpaOptionList) {
 //                    listoptions.add(co.getOptionData());
                     CpaOptionDto cpaOptionDto = new CpaOptionDto();
-                    cpaOptionDto.setSelectData(co.getSelectData());//原写法,只取出数据即可.但后来发现在提交的时候有些问题,故将ABCD也加上
+//                    原写法,只取出数据即可.但后来发现在提交的时候有些问题,故将ABCD也加上
+                    cpaOptionDto.setSelectData(co.getSelectData());
                     cpaOptionDto.setOptionData(co.getOptionData());
-                    listoptions.add(cpaOptionDto);
+                    listOptions.add(cpaOptionDto);
                 }
-                cpaRepertoryDto.setCpaOptionDtos(listoptions);
+                cpaRepertoryDto.setCpaOptionDtos(listOptions);
                 cpaRepertoryDtos.add(cpaRepertoryDto);
             }
 //            获取每个试题的评论数,主要用作页面是否显示查看评论按钮
             Object[] fields = {"reId"};
-            String commentWhere = "o.reId in (:reids)";
-            Map paramsMap = new HashMap();
-            paramsMap.put("reids", reids);
+            String commentWhere = "o.reId in (:reIds)";
+            Map paramsMap = new HashMap(1);
+            paramsMap.put("reIds", reIds);
             List<Map<Object, Object>> list = userCommentService.getCommentCountByCondition(fields, commentWhere, paramsMap);
             if (!list.isEmpty()) {
                 Map<Object, Object> commentMap = TypeConver.List2Map(list, "reId", "count");
@@ -137,8 +148,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
 //        tx.commit();
 //        session.close();
 
-/*        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表
-        ,就可以把相关联的表也保存了，就不用一个个保存了*/
+//        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表 ,就可以把相关联的表也保存了，就不用一个个保存了
         cpaRepertory.setInsertDate(LocalDateTime.now());
         Set cpaOptions1 = new HashSet();
         for (CpaOption cpaOption : cpaOptions) {
@@ -153,27 +163,27 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
     }
 
     @Override
-    public CpaResult getListItem(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderby) {
-        CpaResult result = cpaRepertoryDao.findCpaRepertoryByCondition(cpaRepertoryDto, orderby);
-        List<CpaRepertoryDto> cpaRepertoryDtos = new ArrayList<>();
+    public CpaResult getListItem(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderBy) {
+        CpaResult result = cpaRepertoryDao.findCpaRepertoryByCondition(cpaRepertoryDto, orderBy);
+        List<CpaRepertoryDto> cpaRepertoryDtoList = new ArrayList<>();
         if (result.getTotalCount() > 0) {
-            List<CpaRepertory> cpaRepertorys = (List<CpaRepertory>) result.getData();
-            cpaRepertorys.forEach(cpaRepertory1 -> {
+            List<CpaRepertory> cpaRepertories = (List<CpaRepertory>) result.getData();
+            cpaRepertories.forEach(cpaRepertory1 -> {
                 CpaRepertoryDto cpaRepertoryDto1 = new CpaRepertoryDto();
                 cpaRepertoryDto1.setTestStem(cpaRepertory1.getTestStem());
                 cpaRepertoryDto1.setId(cpaRepertory1.getId());
                 cpaRepertoryDto1.setInsertDate(cpaRepertory1.getInsertDate());
                 cpaRepertoryDto1.setTestType(cpaRepertory1.getTestType());
                 cpaRepertoryDto1.setQuestionType(cpaRepertory1.getQuestionType());
-                cpaRepertoryDtos.add(cpaRepertoryDto1);
+                cpaRepertoryDtoList.add(cpaRepertoryDto1);
             });
         }
-        result.setData(cpaRepertoryDtos);
+        result.setData(cpaRepertoryDtoList);
         return result;
     }
 
     @Override
-    public Integer updUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+    public Integer updateUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
         Set cpaOptions1 = new HashSet();
         for (CpaOption cpaOption : cpaOptions) {
             cpaOption.setCpaRepertory(cpaRepertory);

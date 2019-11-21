@@ -266,5 +266,5 @@
     <tx:annotation-driven transaction-manager="transactionManager" proxy-target-class="true"/>
 
     <!--引入其他模块配置文件，这样被引入的配置文件就不用写在web.xml中了，但需要注意的是resource中引入的文件的地址要用相对路径，不然会出错。-->
-    <!--<import resource="classpath:hibernate.cfg.xml"/>-->
-</beans>  
+    <import resource="classpath*:spring-elasticsearch.xml"/>
+</beans>

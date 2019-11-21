@@ -286,6 +286,9 @@
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
             <version>4.1.36.Final</version>
+            <!-- https://blog.csdn.net/rocling/article/details/82989346 -->
+            <!-- https://www.jianshu.com/p/6eee9191f2ab -->
+            <optional>true</optional>
         </dependency>
 
         <!--HTML解析-->

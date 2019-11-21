@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author Kanyun
@@ -69,12 +70,12 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
     }
 
     @Override
-    public CpaResult<T> loadAll() {
+    public CpaResult<List<T>> loadAll() {
         return commondao.loadAll();
     }
 
     @Override
-    public CpaResult<T> load(int page, int rows) {
+    public CpaResult<List<T>> load(int page, int rows) {
         return commondao.load(page, rows);
     }
 
@@ -86,17 +87,17 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
     /****************************** HQL ******************************/
 
     @Override
-    public CpaResult<T> getScrollData() {
+    public CpaResult<List<T>> getScrollData() {
         return commondao.getScrollData();
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult) {
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult) {
         return commondao.getScrollData(firstResult, maxResult);
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult,
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult,
                                       LinkedHashMap<String, String> orderby) {
         return commondao.getScrollData(firstResult, maxResult, orderby);
     }
@@ -108,7 +109,7 @@ public abstract class CommonServiceImpl<K extends Serializable, T extends Serial
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult,
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult,
                                       String where, Object[] params, LinkedHashMap<String, String> orderby) {
         return commondao.getScrollData(firstResult, maxResult, where, params,
                 orderby);

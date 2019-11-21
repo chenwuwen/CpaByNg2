@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author Kanyun
  */
 @Service(UserCommentService.SERVICE_NAME)
-@Transactional
+@Transactional(rollbackFor = {})
 public class UserCommentServiceImpl extends CommonServiceImpl<Long, UserComment> implements UserCommentService {
     @Resource(name = UserCommentDao.REPOSITORY_NAME)
     private UserCommentDao userCommentDao;
@@ -26,9 +26,9 @@ public class UserCommentServiceImpl extends CommonServiceImpl<Long, UserComment>
 
     @Override
     public CpaResult getUserComment(Integer firstResult, Integer pageSize, String where, Object[] params) {
-        LinkedHashMap orderby = new LinkedHashMap();
-        orderby.put("commentDate", "desc");
-        CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params, orderby);
+        LinkedHashMap orderBy = new LinkedHashMap();
+        orderBy.put("commentDate", "desc");
+        CpaResult cpaResult = userCommentDao.getScrollData(firstResult, pageSize, where, params, orderBy);
         return cpaResult;
     }
 

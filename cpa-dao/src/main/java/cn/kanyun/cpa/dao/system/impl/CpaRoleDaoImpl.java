@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  *
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 @Repository(CpaRoleDao.REPOSITORY_NAME)

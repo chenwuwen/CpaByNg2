@@ -67,6 +67,9 @@
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-highlighter</artifactId>
         </dependency>
+
+
+
         <!--搜索结果分组,类似搜索框,输入一段文件后，出现一下预想值-->
         <!--<dependency>-->
             <!--<groupId>org.apache.lucene</groupId>-->

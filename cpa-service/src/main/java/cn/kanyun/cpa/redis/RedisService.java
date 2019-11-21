@@ -1,6 +1,7 @@
 package cn.kanyun.cpa.redis;
 
 import org.springframework.data.redis.core.BoundSetOperations;
+import org.springframework.data.redis.core.HashOperations;
 
 import java.util.Collection;
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Administrator on 2017/6/5.
+ *
+ * @author Kanyun
+ * @date 2017/6/5
  */
 public interface RedisService<T> {
 
@@ -39,12 +42,17 @@ public interface RedisService<T> {
      * 获得缓存的基本对象。
      *
      * @param key       缓存键值
-     * @param operation
+     * @param clazz
      * @return 缓存键值对应的数据
      */
     <T> T getCacheObject(String key, Class<T> clazz);
 
 
+    /**
+     * 得到字符串缓存
+     * @param key
+     * @return
+     */
     String getCache(String key);
 
     /**
@@ -80,8 +88,6 @@ public interface RedisService<T> {
      * @Description: 对一个 key-value 的值进行加减操作,
      * 如果该 key 不存在 将创建一个key 并赋值该 number
      * 如果 key 存在,但 value 不是长整型 ,将报错
-     * @auther: zhaoyingxu
-     * @date: 2018/12/28 8:56
      */
     Long increment(String key, long step);
 
@@ -138,17 +144,16 @@ public interface RedisService<T> {
      * 覆盖操作,将覆盖List中指定位置的值
      *
      * @param key
-     * @param int    index 位置
-     * @param String value 值
-     * @return 状态码
+     * @param index    index 位置
+     * @param obj
      */
     void listSet(String key, int index, Object obj);
 
     /**
      * 向List尾部追加记录
      *
-     * @param String key
-     * @param String value
+     * @param key
+     * @param obj
      * @return 记录总数
      */
     long leftPush(String key, Object obj);
@@ -158,8 +163,8 @@ public interface RedisService<T> {
      * 导入顺序按照 Collection 顺序
      * 如: a b c => c b a
      *
-     * @param String     key
-     * @param Collection value
+     * @param key
+     * @param values
      * @return 记录总数
      */
     long leftPushAll(String key, Collection<Object> values);
@@ -177,8 +182,8 @@ public interface RedisService<T> {
      * 向List头部追加记录
      * 指定 list 从右入栈
      *
-     * @param String key
-     * @param String value
+     * @param key
+     * @param obj
      * @return 记录总数
      */
     long rightPush(String key, Object obj);
@@ -225,9 +230,9 @@ public interface RedisService<T> {
     /**
      * 算是删除吧，只保留start与end之间的记录
      *
-     * @param String key
-     * @param int    start 记录的开始位置(0表示第一条记录)
-     * @param int    end 记录的结束位置（如果为-1则表示最后一个，-2，-3以此类推）
+     * @param key
+     * @param start 记录的开始位置(0表示第一条记录)
+     * @param end 记录的结束位置（如果为-1则表示最后一个，-2，-3以此类推）
      * @return 执行状态码
      */
     void trim(String key, int start, int end);
@@ -235,9 +240,9 @@ public interface RedisService<T> {
     /**
      * 删除List中c条记录，被删除的记录值为value
      *
-     * @param String key
-     * @param int    c 要删除的数量，如果为负数则从List的尾部检查并删除符合的记录
-     * @param Object obj 要匹配的值
+     * @param  key
+     * @param i 要删除的数量，如果为负数则从List的尾部检查并删除符合的记录
+     * @param obj 要匹配的值
      * @return 删除后的List中的记录数
      */
     long remove(String key, long i, Object obj);
@@ -255,10 +260,9 @@ public interface RedisService<T> {
      * 获得缓存的set
      *
      * @param key
-     * @param operation
      * @return
      */
-    Set<Object> getCacheSet(String key/*,BoundSetOperations<String,T> operation*/);
+    Set<Object> getCacheSet(String key);
 
     /**
      * 缓存Map
@@ -273,16 +277,15 @@ public interface RedisService<T> {
      * 获得缓存的Map
      *
      * @param key
-     * @param hashOperation
      * @return
      */
-    Map<Object, Object> getCacheMap(String key/*,HashOperations<String,String,T> hashOperation*/);
+    Map<Object, Object> getCacheMap(String key);
 
 
     /**
      * 从hash中删除指定的存储
      *
-     * @param String
+     * @param key
      * @return 状态码，1成功，0失败
      */
     long deleteMap(String key);
@@ -321,7 +324,7 @@ public interface RedisService<T> {
      * key 和 other 两个集合的并集,保存在 destKey 集合中, 列名相同的 score 相加
      *
      * @param key
-     * @param otherKey
+     * @param otherKeys
      * @param destKey
      * @return
      */
@@ -381,23 +384,24 @@ public interface RedisService<T> {
     Long intersectAndStore(String key, Collection<String> otherKeys, String destKey);
 
 
-    //redisTemplateSerializable
 
     /**
      * 删除redis的所有数据
      */
-    /*@SuppressWarnings({"unchecked", "rawtypes"})
-     String flushDB() {
-        return redisTemplateSerializable.execute(new RedisCallback() {
-             String doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.flushDb();
-                return "ok";
-            }
-        });
-    }*/
+     String flushDB() ;
+
+    /**
+     * 删除缓存
+     * @param key
+     * @return
+     */
     long del(final byte[] key);
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
+    /**
+     * 得到字节数组
+     * @param key
+     * @return
+     */
     byte[] get(final byte[] key);
 
     /**

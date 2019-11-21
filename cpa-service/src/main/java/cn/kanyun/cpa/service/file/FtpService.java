@@ -1,5 +1,7 @@
 package cn.kanyun.cpa.service.file;
 
+import cn.kanyun.cpa.util.FTPUtil;
+
 /**
  * @author Kanyun
  */
@@ -14,6 +16,6 @@ public interface FtpService {
      * @Description: 上传文件到FTP
      * @date 2017/11/22 23:01
      */
-    Enum uploadFTP(String localDirectory, String remoteDirectory) throws Exception;
+    FTPUtil.UploadStatus uploadFTP(String localDirectory, String remoteDirectory) throws Exception;
 
 }

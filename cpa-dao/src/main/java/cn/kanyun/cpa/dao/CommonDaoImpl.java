@@ -51,7 +51,6 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         this.clatt = clatt;
     }
 
-    // @SuppressWarnings("unchecked")
     // public BaseDaoImpl() {//另外一种方式指定clatt值，要求类必须是abstract类型
     // ParameterizedType parameterizedType =
     // (ParameterizedType)this.getClass().getGenericSuperclass();
@@ -87,7 +86,6 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         session.evict(t);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public K save(T t) {
         Session session = getSession();
@@ -97,16 +95,14 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     @Override
     public T findById(K id) {
         Session session = getSession();
-        @SuppressWarnings("unchecked")
-        T t = (T) session.get(clatt, id);
+        T t =  session.get(clatt, id);
         return t;
     }
 
     @Override
     public T loadById(K id) {
         Session session = getSession();
-        @SuppressWarnings("unchecked")
-        T t = (T) session.load(clatt, id);
+        T t =  session.load(clatt, id);
         return t;
     }
 
@@ -151,8 +147,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     @Override
     public boolean deleteById(K id) {
         Session session = getSession();
-        @SuppressWarnings("unchecked")
-        T t = (T) session.get(clatt, id);
+        T t =  session.get(clatt, id);
         if (t == null) {
             return false;
         }
@@ -160,12 +155,11 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public CpaResult<T> loadAll() {
+    public CpaResult<List<T>> loadAll() {
         Session session = getSession();
         Criteria criteria = session.createCriteria(clatt);
-        CpaResult<T> result = new CpaResult<T>();
+        CpaResult<List<T>> result = new CpaResult();
         result.setData(criteria.list());
         result.setTotalCount(Long.parseLong(criteria
                 .setProjection(Projections.rowCount()).uniqueResult()
@@ -173,15 +167,14 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
         return result;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public CpaResult<T> load(int page, int rows) {
+    public CpaResult<List<T>> load(int page, int rows) {
         Session session = getSession();
         Criteria criteria = session.createCriteria(clatt);
         criteria.setFirstResult((page - 1) * rows);
         criteria.setMaxResults(rows);
-        CpaResult<T> result = new CpaResult<T>();
-        result.setData(criteria.list());
+        CpaResult<List<T>> result = new CpaResult();
+        result.setData((criteria.list()));
         result.setTotalCount(Long.parseLong(criteria
                 .setProjection(Projections.rowCount()).uniqueResult()
                 .toString()));
@@ -203,46 +196,46 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
 
     /****************************** HQL ******************************/
     @Override
-    public CpaResult<T> getScrollData() {
+    public CpaResult<List<T>> getScrollData() {
         return getScrollData(-1, -1, null, null, null);
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult) {
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult) {
         return getScrollData(firstResult, maxResult, null, null, null);
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult,
-                                      LinkedHashMap<String, String> orderby) {
-        return getScrollData(firstResult, maxResult, null, null, orderby);
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult,
+                                      LinkedHashMap<String, String> orderBy) {
+        return getScrollData(firstResult, maxResult, null, null, orderBy);
     }
 
     @Override
-    public CpaResult<T> getScrollData(int firstResult, int maxResult,
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult,
                                       String where, Object[] params) {
         return getScrollData(firstResult, maxResult, where, params, null);
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public CpaResult<T> getScrollData(int firstResult, int maxResult,
-                                      String where, Object[] params, LinkedHashMap<String, String> orderby) {
+    public CpaResult<List<T>> getScrollData(int firstResult, int maxResult,
+                                      String where, Object[] params, LinkedHashMap<String, String> orderBy) {
         String entityName = clatt.getSimpleName();
-        String whereql = where != null && !"".equals(where.trim()) ? " where "
+        String whereSql = where != null && !"".equals(where.trim()) ? " where "
                 + buildWhere(where) : "";
         Session session = getSession();
         Query query = session.createQuery("select o from " + entityName + " o "
-                + whereql + buildOrderby(orderby));
-        query.setCacheable(true);   //激活查询缓存,查询缓存,缓存的是对象的ID
+                + whereSql + buildOrderBy(orderBy));
+//        激活查询缓存,查询缓存,缓存的是对象的ID
+        query.setCacheable(true);
         if (firstResult != -1 && maxResult != -1) {
             query.setFirstResult(firstResult).setMaxResults(maxResult);
         }
         setQueryParameter(query, params);
 
-        CpaResult<T> result = new CpaResult<T>();
+        CpaResult<List<T>> result = new CpaResult();
         Query queryCount = session.createQuery("select count(o) from "
-                + entityName + " o" + whereql);
+                + entityName + " o" + whereSql);
         setQueryParameter(queryCount, params);
         long count = (Long) queryCount.uniqueResult();
         result.setTotalCount(count);
@@ -254,11 +247,11 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     @Override
     public long getTotalCount(String where, Object[] params) {
         String entityName = clatt.getSimpleName();
-        String whereql = where != null && !"".equals(where.trim()) ? " where "
+        String whereSql = where != null && !"".equals(where.trim()) ? " where "
                 + where : "";
         Session session = getSession();
         Query queryCount = session.createQuery("select count(o) from "
-                + entityName + " o" + whereql);
+                + entityName + " o" + whereSql);
         setQueryParameter(queryCount, params);
         long count = (Long) queryCount.uniqueResult();
         return count;
@@ -267,11 +260,11 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     @Override
     public List<Map<Object, Object>> getGroupByList(Object[] fields, String where, Map<String, Collection> params) {
         String entityName = clatt.getSimpleName();
-        String whereql = where != null && !"".equals(where.trim()) ? " where "
+        String whereSql = where != null && !"".equals(where.trim()) ? " where "
                 + buildWhere(where) : "";
         Session session = getSession();
         Query queryList = session.createQuery("select count(o) as count, " + buildGroupBy(0, fields) + " from "
-                + entityName + " o" + whereql + " group by " + buildGroupBy(1, fields));
+                + entityName + " o" + whereSql + " group by " + buildGroupBy(1, fields));
         Iterator iterator = params.entrySet().iterator();
         while (iterator.hasNext()) {
             Map.Entry<String, Collection> entry = (Map.Entry<String, Collection>) iterator.next();
@@ -302,14 +295,14 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     /**
      * 构建排序语句
      *
-     * @param orderby 排序属性与asc/desc, Key为属性(即要排序的字段),Value为asc/desc
+     * @param orderBy 排序属性与asc/desc, Key为属性(即要排序的字段),Value为asc/desc
      * @return
      */
-    public static String buildOrderby(LinkedHashMap<String, String> orderby) {
+    public static String buildOrderBy(LinkedHashMap<String, String> orderBy) {
         StringBuilder sb = new StringBuilder();
-        if (orderby != null && !orderby.isEmpty()) {
+        if (orderBy != null && !orderBy.isEmpty()) {
             sb.append(" order by ");
-            for (Map.Entry<String, String> entry : orderby.entrySet()) {
+            for (Map.Entry<String, String> entry : orderBy.entrySet()) {
                 sb.append("o.").append(entry.getKey()).append(" ")
                         .append(entry.getValue()).append(',');
             }
@@ -323,7 +316,7 @@ public abstract class CommonDaoImpl<K extends Serializable, T extends Serializab
     /**
      * 构建group by语句
      *
-     * @param groupby 传入需要进行分组查询的参数
+     * @param fields 传入需要进行分组查询的参数
      * @return
      */
     public static String buildGroupBy(Integer num, Object[] fields) {

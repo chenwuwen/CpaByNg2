@@ -15,9 +15,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * @author Kanyun
+ */
 @Repository(UserDao.REPOSITORY_NAME)
 public class UserDaoImpl extends CommonDaoImpl<Long, CpaUser> implements UserDao {
-    //通过调用父类的构造函数指定clazz值，即实体类的类类型
+    /**
+     * 通过调用父类的构造函数指定clazz值，即实体类的类型
+     */
     public UserDaoImpl() {
         super(CpaUser.class);
     }
@@ -32,13 +37,9 @@ public class UserDaoImpl extends CommonDaoImpl<Long, CpaUser> implements UserDao
     }
 
     @Override
-    public CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderby) {
-        Page page = new Page();
-        int pageNo = cpaUserDto.getPageNo() == null || cpaUserDto.getPageNo() == 0 ? 1 : cpaUserDto.getPageNo();
-        int pageSize = cpaUserDto.getPageSize() == null || cpaUserDto.getPageSize() == 0 ? 20 : cpaUserDto.getPageSize();
-        page.setPageNo(pageNo);
-        page.setPageSize(pageSize);
-        int firstResult = page.countOffset(pageNo, pageSize);
+    public CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderBy) {
+        Page page = new Page(cpaUserDto);
+        int firstResult = page.countOffset();
         Object[] params;
         Queue queue = new LinkedList();
         StringBuilder where = new StringBuilder();
@@ -63,7 +64,7 @@ public class UserDaoImpl extends CommonDaoImpl<Long, CpaUser> implements UserDao
             queue.add(cpaUserDto.getEndLastLoginDate());
         }
         params = queue.toArray();
-        CpaResult result = getScrollData(firstResult, pageSize, where.toString(), params, orderby);
+        CpaResult result = getScrollData(firstResult, page.getPageSize(), where.toString(), params, orderBy);
         page.setTotalRecords(result.getTotalCount().intValue());
         result.setTotalPage(page.getTotalPages());
         return result;

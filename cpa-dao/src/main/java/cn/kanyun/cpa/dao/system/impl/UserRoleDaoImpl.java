@@ -14,7 +14,7 @@ import java.util.Set;
 
 /**
  *
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 @Repository(UserRoleDao.REPOSITORY_NAME)

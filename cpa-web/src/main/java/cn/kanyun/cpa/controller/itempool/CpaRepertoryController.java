@@ -44,14 +44,13 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-/**
- * Created by KANYUN on 2017/6/17.
- */
 
 /**
  * 在方法级@RequestMapping的注解增加了一个RequestMothod.GET，意思是只有以GET方式提交的"/fileupload"URL请求才会进入fileUploadForm()
  * 方法，其实根据HTTP协议，HTTP支持一系列提交方法（GET，POST，PUT，DELETE），同一个URL都可以使用这几种提交方式
  * 事实上SpringMVC正是通过将同一个URL的不同提交方法对应到不同的方法上达到RESTful
+ * @author Kanyun
+ * @date 2017/6/17.
  */
 @Api(value = "/api/unitExam", tags = "试题管理模块")
 @Controller
@@ -144,10 +143,10 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @Author: kanyun
-     * @Description: 新增试题【保存单元测试】
-     * @Date: 2017/9/18 17:21
-     * @params: , List<CpaOption> cpaOptions,CpaSolution cpaSolution
+     * 新增试题【保存单元测试】
+     * @author kanyun
+     * @date 2017/9/18 17:21
+     * @param itemForm
      */
     @ApiOperation(value = "/addUnitExam", notes = "新增试题【保存单元测试】", httpMethod = "POST", response = CpaResult.class)
     @RequestMapping("/addUnitExam")
@@ -194,7 +193,7 @@ public class CpaRepertoryController {
             String where = "o.testType=? ";
             CpaResult result = cpaRepertoryService.getUnitExam(-1, -1, where, params);
             List<CpaRepertoryDto> list = (List) result.getData();
-            Map map = new HashMap<>();
+            Map map = new HashMap<>(3);
             map.put("cpaRepertoryDtos", list);
             map.put("total", result.getTotalCount());
             map.put("type", ExamClassificationEnum.valueOf(typeCode.toUpperCase()));
@@ -206,10 +205,10 @@ public class CpaRepertoryController {
     }
 
     /**
-     * @describe: 获取单个试题详情
-     * @params:
-     * @Author: Kanyun
-     * @Date: 2018/1/12  13:38
+     * 获取单个试题详情
+     * @param
+     * @author Kanyun
+     * @date 2018/1/12  13:38
      */
     @ApiOperation(value = "/getExamDetail/{id}", notes = "获取单个试题详情", httpMethod = "GET", response = CpaResult.class)
     @ApiImplicitParams({
@@ -294,11 +293,11 @@ public class CpaRepertoryController {
                 cpaOptions.add(cpaOption);
             });
             CpaSolution cpaSolution = itemForm.getCpaSolution();
-            result.setData(cpaRepertoryService.updUnitExam(cpaRepertory, cpaOptions, cpaSolution));
+            result.setData(cpaRepertoryService.updateUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
             result.setState(CpaConstants.OPERATION_ERROR);
-            logger.error("ERROR：/api/unitExam/updUnitExam: {}" + e);
+            logger.error("ERROR：/api/unitExam/updUnitExam: [{}]" , e);
         }
         return result;
     }

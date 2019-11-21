@@ -3,13 +3,17 @@ package cn.kanyun.cpa.model.entity.itempool;
 import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 
 /**
- * CpaRepertory entity. @author MyEclipse Persistence Tools
+ * 试题库 实体类
+ *
+ * @author Kanyun
  */
 
 public class CpaRepertory implements java.io.Serializable {
@@ -29,13 +33,14 @@ public class CpaRepertory implements java.io.Serializable {
      * 使用枚举
      * 题型：unique:单选题,multi:多选题,judge判断题
      */
-    private QuestionTypeEnum questionType ;
+    private QuestionTypeEnum questionType;
 
     /**
      * 试题分类
      * BASIC_ACCOUNT：会计基础, CPU_ACCOUNT：会计电算化, STATUTE_ETHICS：财经法规与职业道德;
      */
-    private ExamClassificationEnum testType ;
+    @Enumerated(value = EnumType.STRING)
+    private ExamClassificationEnum testType;
 
     /**
      * 试题创建时间

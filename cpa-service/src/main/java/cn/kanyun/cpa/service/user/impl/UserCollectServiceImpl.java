@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author Administrator
@@ -27,7 +28,7 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect>
         UserCollect userCollect = new UserCollect();
         userCollect.setReId(reId.longValue());
         userCollect.setUserId(user.getId());
-        userCollect.setCollectDate( LocalDateTime.now() );
+        userCollect.setCollectDate(LocalDateTime.now());
         userCollect.setStatus(1);
         userCollect.setUserName(user.getUserName());
         userCollect.setNickName(user.getNickName());
@@ -40,9 +41,9 @@ public class UserCollectServiceImpl extends CommonServiceImpl<Long, UserCollect>
         解决思路：直接 clear();清空一下 session缓存不就Ok了。但是 clear打击面太广了（慎用！）。其他一些“无辜”对象也被杀掉，导致其他业务无法进行了。
         session一个evict方法，“定点清除”对象缓存。先用传回来的id用get方法（其实这里用load方法也行反正都是从缓存中加载）获得session里的持久化实体，然后杀掉，再保存临时实体
 */
-        CpaResult<UserCollect> cpaResult = userCollectDao.getScrollData(-1, -1, where, params);
+        CpaResult<List<UserCollect>> cpaResult = userCollectDao.getScrollData(-1, -1, where, params);
         if (cpaResult.getTotalCount() > 0) {
-            java.util.List<UserCollect> userCollects = (java.util.List<UserCollect>) cpaResult.getData();
+            List<UserCollect> userCollects = cpaResult.getData();
             userCollect.setId(userCollects.get(0).getId());
             if (userCollects.get(0).getStatus() == 1) {
                 userCollect.setStatus(0);

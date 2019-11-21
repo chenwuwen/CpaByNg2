@@ -18,6 +18,7 @@
     <artifactId>cpa-model</artifactId>
     <name>cpa-model</name>
 
+
     <build>
         <!--该配置修改打包后的文件名-->
         <finalName>cpa-model</finalName>
@@ -88,6 +89,10 @@
             <artifactId>persistence-api</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+        </dependency>
         <!--参数校验，实体类字段可加@NotEmpty注解，且与@Controller方法参数@Valid注解配合使用-->
         <dependency>
             <groupId>org.hibernate</groupId>

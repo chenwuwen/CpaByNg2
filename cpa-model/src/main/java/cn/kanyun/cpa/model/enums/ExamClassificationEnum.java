@@ -1,9 +1,13 @@
 package cn.kanyun.cpa.model.enums;
 
+import cn.kanyun.cpa.model.enums.convert.Convert;
+
 /**
  * 试题分类
+ *
+ * @author Kanyun
  */
-public enum ExamClassificationEnum {
+public enum ExamClassificationEnum implements Convert {
 
     /**
      * 利用构造函数传参
@@ -32,6 +36,7 @@ public enum ExamClassificationEnum {
 
     /**
      * 定义get方法返回数据
+     *
      * @return
      */
     public String getValue() {
@@ -41,6 +46,27 @@ public enum ExamClassificationEnum {
     @Override
     public String toString() {
         return String.valueOf(this.value);
+    }
+
+    @Override
+    public String getName() {
+        return this.name();
+    }
+
+    /**
+     * 通过字符串找到枚举对象
+     *
+     * @param name
+     * @return
+     */
+    public static ExamClassificationEnum findByName(String name) {
+        ExamClassificationEnum[] objs = ExamClassificationEnum.values();
+        for (ExamClassificationEnum obj : objs) {
+            if (name.equals(obj.getName())) {
+                return obj;
+            }
+        }
+        return null;
     }
 
     public static void main(String[] args) {
@@ -53,4 +79,6 @@ public enum ExamClassificationEnum {
             System.out.println(exam.toString());
         }
     }
+
+
 }

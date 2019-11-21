@@ -9,7 +9,7 @@ import cn.kanyun.cpa.model.entity.user.CpaUserExtend;
 import java.util.LinkedHashMap;
 
 /**
- * @author Administrator
+ * @author KANYUN
  */
 public interface CpaUserExtendDao extends CommonDao<Long, CpaUserExtend> {
     String REPOSITORY_NAME = "cn.kanyun.cpa.dao.user.impl.CpaUserExtendDaoImpl";

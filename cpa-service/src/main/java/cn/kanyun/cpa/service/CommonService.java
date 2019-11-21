@@ -7,6 +7,7 @@ import cn.kanyun.cpa.model.entity.CpaResult;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 /**
  * @author Kanyun
@@ -85,7 +86,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      *
      * @return 所有记录集合
      */
-    CpaResult<T> loadAll();
+    CpaResult<List<T>> loadAll();
 
     /**
      * 分页加载记录集合
@@ -94,7 +95,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @param rows 每页最多多少行数据
      * @return 第page页的数据集合
      */
-    CpaResult<T> load(int page, int rows);
+    CpaResult<List<T>> load(int page, int rows);
 
     /**
      * 获取总记录数
@@ -110,7 +111,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult<T> getScrollData();
+    CpaResult<List<T>> getScrollData();
 
     /**
      * 根据条件获取总记录数
@@ -130,7 +131,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult<T> getScrollData(int firstResult, int maxResult);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult);
 
     /**
      * 分页获取记录
@@ -144,7 +145,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult<T> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
 
     /**
      * 分页获取记录
@@ -172,7 +173,7 @@ public interface CommonService<K extends Serializable, T extends Serializable> {
      * @return
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
 
 }
 

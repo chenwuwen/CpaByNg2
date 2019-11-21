@@ -22,9 +22,6 @@ import java.nio.file.FileSystems;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by root on 2018/2/27 0027.
- */
 
 /**
  * 一般类调用Service使用@AutoWrite或者@Resource注入,会出现注入为null的情况,即使此类加了@Component注解
@@ -32,6 +29,8 @@ import java.util.List;
  * 因为加了@PostConstruct注解的方法会在servlet启动时自动执行，所以通过init方法得到注入bean的实例,最后在需要调用的方法中直接使用即可)
  * 从Java EE 5规范开始，Servlet中增加了两个影响Servlet生命周期的注解（Annotion）；@PostConstruct和@PreDestroy。这两个注解被用来修饰一个非静态的void()方法
  * 被@PostConstruct修饰的方法会在服务器加载Servle的时候运行，并且只会被服务器执行一次。PostConstruct在构造函数之后执行,init()方法之前执行。PreDestroy（）方法在destroy()方法执行执行之后执行
+ *
+ * @author Kanyun
  */
 @Component
 public class LuceneComponent {
@@ -45,7 +44,7 @@ public class LuceneComponent {
 
     @PostConstruct
     public void init() {
-        luceneComponent=this;
+        luceneComponent = this;
         luceneComponent.cpaRepertoryService = this.cpaRepertoryService;
     }
 
@@ -65,7 +64,7 @@ public class LuceneComponent {
         System.out.println("---------CpaRepertory.size()=" + result.getTotalCount());
 
         //2: 将原始数据放入lucene的document对象
-        List<Document> docList = new ArrayList<Document>();
+        List<Document> docList = new ArrayList();
         List<CpaRepertory> cpaRepertories = (List<CpaRepertory>) result.getData();
         Document doc;
         if (null != cpaRepertories && cpaRepertories.size() > 0) {

@@ -31,7 +31,7 @@ public class CpaResult<T> implements java.io.Serializable {
      * 数据
      */
     @ApiModelProperty(value="请求返回数据")
-    private Object data;
+    private T data;
     /**
      * 总记录数
      */
@@ -47,7 +47,7 @@ public class CpaResult<T> implements java.io.Serializable {
     public CpaResult() {
     }
 
-    public CpaResult(Integer status, Integer state, String msg, Object data, Long totalCount, Integer totalPage) {
+    public CpaResult(Integer status, Integer state, String msg, T data, Long totalCount, Integer totalPage) {
         this.status = status;
         this.state = state;
         this.msg = msg;
@@ -80,11 +80,11 @@ public class CpaResult<T> implements java.io.Serializable {
         this.msg = msg;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

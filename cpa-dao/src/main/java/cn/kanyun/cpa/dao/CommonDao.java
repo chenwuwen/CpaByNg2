@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Administrator
+ * @author Kanyun
  */
 public interface CommonDao<K extends Serializable, T extends Serializable> {
     /**
@@ -30,7 +30,6 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
     /**
      * 清除缓冲区内指定的缓冲对象
      *
-     * @return
      */
     void evict(T t);
 
@@ -108,7 +107,7 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      *
      * @return 所有记录集合
      */
-    CpaResult<T> loadAll();
+    CpaResult<List<T>> loadAll();
 
     /**
      * 分页加载记录集合
@@ -117,7 +116,7 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      * @param rows 每页最多多少行数据
      * @return 第page页的数据集合
      */
-    CpaResult<T> load(int page, int rows);
+    CpaResult<List<T>> load(int page, int rows);
 
     /**
      * 获取总记录数
@@ -132,7 +131,7 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      *
      * @return
      */
-    CpaResult<T> getScrollData();
+    CpaResult<List<T>> getScrollData();
 
     /**
      * 根据条件获取总记录数
@@ -160,20 +159,20 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      * @param maxResult   每页获取的记录数,如果输入值为-1,即获取全部数据
      * @return
      */
-    CpaResult<T> getScrollData(int firstResult, int maxResult);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult);
 
     /**
      * 分页获取记录
      *
      * @param firstResult 开始索引,如果输入值为-1,即获取全部数据
      * @param maxResult   每页获取的记录数,如果输入值为-1,即获取全部数据
-     * @param orderby     排序,Key为排序属性,Value为asc/desc,如:
+     * @param orderBy     排序,Key为排序属性,Value为asc/desc,如:
      *                    LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
      *                    orderby.put("email", "asc");
      *                    orderby.put("password", "desc");
      * @return
      */
-    CpaResult<T> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderby);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult, LinkedHashMap<String, String> orderBy);
 
     /**
      * 分页获取记录
@@ -184,7 +183,7 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      * @param params      条件语句出现的位置参数值
      * @return
      */
-    CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult, String where, Object[] params);
 
     /**
      * 分页获取记录
@@ -193,12 +192,12 @@ public interface CommonDao<K extends Serializable, T extends Serializable> {
      * @param maxResult   每页获取的记录数,如果输入值为-1,即获取全部数据
      * @param where       条件语句,不带where关键字,条件语句只能使用位置参数,位置参数的索引值以1开始,如:o.username=?1 and o.password=?2
      * @param params      条件语句出现的位置参数值
-     * @param orderby     排序,Key为排序属性,Value为asc/desc,如:
+     * @param orderBy     排序,Key为排序属性,Value为asc/desc,如:
      *                    LinkedHashMap<String, String> orderby = new LinkedHashMap<String, String>();
      *                    orderby.put("email", "asc");
      *                    orderby.put("password", "desc");
      * @return
      */
-    CpaResult<T> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderby);
+    CpaResult<List<T>> getScrollData(int firstResult, int maxResult, String where, Object[] params, LinkedHashMap<String, String> orderBy);
 
 }  

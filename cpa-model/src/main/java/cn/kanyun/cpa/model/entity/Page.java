@@ -3,18 +3,52 @@ package cn.kanyun.cpa.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Kanyun
+ */
 public class Page<E> {
-    // 结果集
+    /**
+     * 结果集
+     */
     private List<E> list;
 
-    // 查询记录总数
+    /**
+     * 查询记录总数
+     */
     private int totalRecords;
 
-    // 每页多少条记录
+    /**
+     * 每页多少条记录
+     */
     private int pageSize = 20;
 
-    // 第几页
+    /**
+     * 第几页
+     */
     private int pageNo = 1;
+
+    public Page() {
+    }
+
+    public Page(int pageSize, int pageNo) {
+        this.pageSize = pageSize;
+        this.pageNo = pageNo;
+    }
+
+    /**
+     * 构造方法,初始化pageNo、pageSize
+     *
+     * @param baseEntity 通过传入BaseEntity的子类,来获取页码和每页显示数量
+     */
+    public Page(BaseEntity baseEntity) {
+        if (null != baseEntity) {
+            this.pageNo = baseEntity.getPageNo() == null || baseEntity.getPageNo() == 0 ? 1 : baseEntity.getPageNo();
+            this.pageSize = baseEntity.getPageSize() == null || baseEntity.getPageSize() == 0 ? 20 : baseEntity.getPageSize();
+        } else {
+            this.pageNo = 1;
+            this.pageSize = 10;
+        }
+    }
 
     /**
      * @return 总页数
@@ -32,6 +66,16 @@ public class Page<E> {
      */
     public int countOffset(int currentPage, int pageSize) {
         int offset = pageSize * (currentPage - 1);
+        return offset;
+    }
+
+    /**
+     * 计算当前页开始记录
+     *
+     * @return 当前页开始记录号
+     */
+    public int countOffset() {
+        int offset = this.pageSize * (this.pageNo - 1);
         return offset;
     }
 
@@ -104,12 +148,13 @@ public class Page<E> {
 
     /**
      * 计算以当前页为中心的页面列表,如"首页,23,24,25,26,27,末页"，即页数过多,不能全部在页面显示,只能显示一部分
+     *
      * @param count 需要计算的列表大小,即页面展示(count+1)个页码
      * @return pageNo列表
      * 在jsp页面可以使用
      * <%
-     *      Page p = (Page) request.getAttribute("page");
-     *      List showPageNos = p.getSlider(6);
+     * Page p = (Page) request.getAttribute("page");
+     * List showPageNos = p.getSlider(6);
      * %>
      * page为response 返回的键值对的key,应根据实际代码来判断其取值
      * 在需要循环的页码出使用 <c:forEach items="<%=showPageNos%>" var="page">即可

@@ -27,6 +27,7 @@ import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
  * 一个是要重写determineCurrentLookupKey方法，告诉它当前要用哪个数据源；
  * 一是在Spring的配置文件中将几个数据源注入到targetDataSources属性中。
  * 本文中，该属性的形式为:HashMap<String,DataSource>
+ * @author Kanyun
  */
 public class DynamicDataSource extends AbstractRoutingDataSource {
     private static final Logger logger = LoggerFactory.getLogger(DynamicDataSource.class);

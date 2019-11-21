@@ -15,7 +15,9 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by KANYUN on 2017/10/21.
+ *
+ * @author KANYUN
+ * @date 2017/10/21
  * <p>
  * 当把一个任务交给线程池来处理的时候，线程池的执行原理:
  * ①首先会判断核心线程池里是否有线程可执行，有空闲线程则创建一个线程来执行任务。

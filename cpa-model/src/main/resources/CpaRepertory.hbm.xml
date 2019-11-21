@@ -17,18 +17,18 @@
                 <comment>题干</comment>
             </column>
         </property>
-        <property name="testType" type="java.lang.Enum">
-            <column name="TEST_TYPE">
+        <property name="testType" type="cn.kanyun.cpa.model.enums.type.ExamClassificationConvert" >
+            <column name="TEST_TYPE" sql-type="varchar">
                 <comment>试题类型(基础/电算化/法规)</comment>
             </column>
         </property>
-        <property name="questionType" type="java.lang.Enum">
-            <column name="QUESTION_TYPE">
+        <property name="questionType" type="cn.kanyun.cpa.model.enums.type.QuestionTypeConvert" >
+            <column name="QUESTION_TYPE" sql-type="varchar">
                 <comment>题的类型(单选/多选/判断)</comment>
             </column>
         </property>
         <property name="insertDate" type="java.time.LocalDateTime">
-            <column name="INSERT_DATE" length="19">
+            <column name="INSERT_DATE" length="19" sql-type="datetime">
                 <comment>插入时间</comment>
             </column>
         </property>

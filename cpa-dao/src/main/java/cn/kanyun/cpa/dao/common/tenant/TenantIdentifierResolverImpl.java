@@ -3,6 +3,7 @@ package cn.kanyun.cpa.dao.common.tenant;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Slf4j
 public class TenantIdentifierResolverImpl implements CurrentTenantIdentifierResolver {
 
-    private static HttpServletRequest request = null;
+    private static HttpServletRequest request ;
 
     static {
         request = ((ServletRequestAttributes) (RequestContextHolder.currentRequestAttributes())).getRequest();

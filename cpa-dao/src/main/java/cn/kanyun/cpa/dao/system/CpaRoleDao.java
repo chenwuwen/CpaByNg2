@@ -5,7 +5,7 @@ import cn.kanyun.cpa.model.entity.system.CpaRole;
 
 /**
  *
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 public interface CpaRoleDao extends CommonDao<Integer,CpaRole> {

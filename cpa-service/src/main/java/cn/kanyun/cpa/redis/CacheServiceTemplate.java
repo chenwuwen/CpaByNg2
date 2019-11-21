@@ -11,7 +11,9 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 缓存管理模板方法
+ * 缓存管理
+ * 模板方法模式 也叫钩子函数
+ * @author Kanyun
  */
 @Component
 @Slf4j
@@ -22,7 +24,16 @@ public class CacheServiceTemplate {
     @Resource
     private RedissonClient redissonClient;
 
-
+    /**
+     * 从缓存中获得对象
+     * @param key 缓存的key
+     * @param expire 过期时间
+     * @param unit 过期时间单位
+     * @param clazz 类型转换,从缓存中加载到数据,进行类型转换
+     * @param cacheLoad 缓存加载器(当从缓存中没有加载到数据,则需要自定义进行加载,需要实现CacheLoad接口并进行实现)
+     * @param <T>
+     * @return
+     */
     public <T> T getObjectFromCache(String key, long expire, TimeUnit unit, TypeReference<T> clazz, CacheLoad<T> cacheLoad) {
 
         T t;
@@ -50,7 +61,7 @@ public class CacheServiceTemplate {
     /**
      * 加分布式锁
      *
-     * @param lockName        这个名字一定要全局唯一 所谓的全局指的是在Redis集群中
+     * @param lockName 这个名字一定要全局唯一 所谓的全局指的是在Redis集群中
      * @param distributedLock
      * @return
      */

@@ -14,7 +14,7 @@ import java.util.Optional;
 import java.util.Queue;
 
 /**
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 @Repository(CpaRepertoryDao.REPOSITORY_NAME)
@@ -36,14 +36,10 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Long, CpaRepertory> imple
 
 
     @Override
-    public CpaResult findCpaRepertoryByCondition(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderby) {
+    public CpaResult findCpaRepertoryByCondition(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderBy) {
         CpaResult result;
-        Page page = new Page();
-        int pageNo = cpaRepertoryDto.getPageNo() == null || cpaRepertoryDto.getPageNo() == 0 ? 1 : cpaRepertoryDto.getPageNo();
-        int pageSize = cpaRepertoryDto.getPageSize() == null || cpaRepertoryDto.getPageSize() == 0 ? 20 : cpaRepertoryDto.getPageSize();
-        page.setPageNo(pageNo);
-        page.setPageSize(pageSize);
-        int firstResult = page.countOffset(pageNo, pageSize);
+        Page page = new Page(cpaRepertoryDto);
+        int firstResult = page.countOffset();
         Object[] params;
         Queue queue = new LinkedList();
         StringBuilder where = new StringBuilder();
@@ -78,9 +74,9 @@ public class CpaRepertoryDaoImpl extends CommonDaoImpl<Long, CpaRepertory> imple
 
         if (queue.size() > 0) {
             params = queue.toArray();
-            result = getScrollData(firstResult, pageSize, where.toString(), params, orderby);
+            result = getScrollData(firstResult, page.getPageSize(), where.toString(), params, orderBy);
         } else {
-            result = getScrollData(firstResult, pageSize, null, null, orderby);
+            result = getScrollData(firstResult, page.getPageSize(), null, null, orderBy);
         }
         page.setTotalRecords(result.getTotalCount().intValue());
         result.setTotalPage(page.getTotalPages());

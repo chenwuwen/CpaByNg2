@@ -16,8 +16,9 @@ import redis.clients.jedis.JedisCluster;
 import java.lang.reflect.Method;
 
 /**
- * Created by kanyun on 2018/5/24 0024.
  * Redis缓存注解AOP实现
+ * @author kanyun
+ * @date 2018/5/24 0024.
  */
 @Component
 @Aspect
@@ -127,7 +128,7 @@ public class RedisCacheAspect {
             Object[] arr = pjp.getArgs();
             for (Object o : arr) {
                 if (null != o) {
-                    sb.append("_").append(String.valueOf(o));
+                    sb.append("_").append(o);
                 }
             }
             return sb.toString();

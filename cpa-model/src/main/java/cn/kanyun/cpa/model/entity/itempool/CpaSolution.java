@@ -3,7 +3,8 @@ package cn.kanyun.cpa.model.entity.itempool;
 
 
 /**
- * CpaSolution entity. @author MyEclipse Persistence Tools
+ * 试题答案 实体类
+ * @author Kanyun
  */
 
 public class CpaSolution  implements java.io.Serializable {

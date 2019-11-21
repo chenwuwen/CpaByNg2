@@ -14,23 +14,35 @@ import java.util.List;
 
 
 /**
- * CpaRepertory entity. @author MyEclipse Persistence Tools
+ * 试题库 Dto类
+ *
+ * @author Kanyun
  */
 @Data
 public class CpaRepertoryDto extends BaseEntity {
 
 
-    // Fields    
-
     private Long id;
     private String testStem;
+    /**
+     * 试题类型 枚举
+     * 单选题/多选题/判断题
+     */
     private QuestionTypeEnum questionType;
+
+    /**
+     * 试题分类  枚举
+     * 会计电算化/会计基础
+     */
     private ExamClassificationEnum testType;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-//    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
-//    下面这两个注解保证该字段返回Json是 yyyy-MM-dd HH:mm:ss 格式的字符串
+
+    /**
+     * @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+     * 下面这两个注解保证该字段返回Json是 yyyy-MM-dd HH:mm:ss 格式的字符串
+     */
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime insertDate;
 
     /**
@@ -43,7 +55,6 @@ public class CpaRepertoryDto extends BaseEntity {
      */
     private List<String> userResult;
     private Long commentCount;
-
 
 
 }

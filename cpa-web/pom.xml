@@ -50,6 +50,11 @@
             <artifactId>cpa-lucene</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cn.kanyun</groupId>
+            <artifactId>cpa-elasticsearch</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!--聊天服务独立部署,加入到web中,会导致,web服务无法运行,因为当web启动到一半时,chat服务将启动监听-->
         <!--<dependency>-->
             <!--<groupId>cn.kanyun</groupId>-->

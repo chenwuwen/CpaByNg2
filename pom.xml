@@ -19,6 +19,7 @@
         <module>cpa-lucene</module>
         <module>cpa-provide</module>
         <module>cpa-chat</module>
+        <module>cpa-elasticsearch</module>
     </modules>
     <!--上传私服 pom.xml 配置,发布自己的jar包,本文件仅为pom文件故不参与部署-->
     <!--自动发布构件到远程仓库，在本地工程目录下执行：mvn deploy 所部署的包就自动上传到了nexus安装目录下-->
@@ -199,6 +200,7 @@
                     </configuration>
                 </plugin>
                 <!--maven-source-plugin插件,主要是生成jar，运行mvn clean package生成jar包，再执行一条命令：mvn deploy就可以发布到你自己的私服上了-->
+                <!--                同时在编译时添加源码包,当发布到maven仓库时,也会自动带上源码,用户在使用IDEA的时候也可以直接下载关联源码了,比写注释文档好的多-->
                 <plugin>
                     <artifactId>maven-source-plugin</artifactId>
                     <version>3.0.1</version>
@@ -438,11 +440,11 @@
             </dependency>
 
             <!--Netty网络通讯-->
-            <!--<dependency>-->
-            <!--<groupId>io.netty</groupId>-->
-            <!--<artifactId>netty-all</artifactId>-->
-            <!--<version>5.0.0.Alpha2</version>-->
-            <!--</dependency>-->
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.43.Final</version>
+            </dependency>
 
             <!--JBoss Marshalling 是一个Java对象的序列化API包，修正了JDK自带的序列化包的很多问题，但又保持跟 java.io.Serializable 接口的兼容，通常用于Netty编解码应用-->
             <dependency>
@@ -450,6 +452,14 @@
                 <artifactId>jboss-marshalling</artifactId>
                 <version>2.0.6.Final</version>
             </dependency>
+
+            <!--            Jest 是一个Java 版的ElasticSearch Http Rest 客户端，基于HttpClient 封装实现。更好用的ElasticSearch Client-->
+            <dependency>
+                <groupId>io.searchbox</groupId>
+                <artifactId>jest</artifactId>
+                <version>6.3.1</version>
+            </dependency>
+
 
             <!--使用redis-->
             <dependency>
@@ -488,6 +498,7 @@
             </dependency>
 
             <!--Quartz定时任务-->
+            <!--   Quartz连接数据库需要连接池Quartz 2.0以前是DBCP,2.0之后是C3P0（包含2.0）所以需要添加依赖,当然也可以使用其他连接池来代替：https://www.cnblogs.com/gougouyangzi/articles/10043319.html-->
             <dependency>
                 <groupId>org.quartz-scheduler</groupId>
                 <artifactId>quartz</artifactId>
@@ -623,6 +634,27 @@
                 <artifactId>guava</artifactId>
                 <version>27.1-jre</version>
             </dependency>
+
+            <!-- jodd也是一个工具集,其中还包括一个MVC的框架,其比较出名的工具是jodd-props-->
+            <!--            https://blog.csdn.net/qq496013218/article/details/78732194-->
+            <dependency>
+                <groupId>org.jodd</groupId>
+                <artifactId>jodd-props</artifactId>
+                <version>5.0.13</version>
+            </dependency>
+            <!--jodd-email邮件相关-->
+            <dependency>
+                <groupId>org.jodd</groupId>
+                <artifactId>jodd-mail</artifactId>
+                <version>5.0.13</version>
+            </dependency>
+            <!--            Apache邮件相关-->
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-email</artifactId>
+                <version>1.5</version>
+            </dependency>
+
 
             <!--Java系统监控(淘汰sigar)-->
             <dependency>
@@ -843,31 +875,31 @@
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-core</artifactId>
-                <version>6.6.0</version>
+                <version>7.7.0</version>
             </dependency>
             <!--一般分词器，适用于英文分词-->
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-analyzers-common</artifactId>
-                <version>6.6.0</version>
+                <version>7.7.0</version>
             </dependency>
             <!--中文分词器-->
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-analyzers-smartcn</artifactId>
-                <version>6.6.0</version>
+                <version>7.7.0</version>
             </dependency>
             <!--对分词索引查询解析-->
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-queryparser</artifactId>
-                <version>6.6.0</version>
+                <version>7.7.0</version>
             </dependency>
             <!--检索关键字高亮显示-->
             <dependency>
                 <groupId>org.apache.lucene</groupId>
                 <artifactId>lucene-highlighter</artifactId>
-                <version>6.6.0</version>
+                <version>7.7.0</version>
             </dependency>
             <!--搜索结果分组,类似搜索框,输入一段文件后，出现一下预想值-->
             <!--<dependency>-->
@@ -875,6 +907,24 @@
             <!--<artifactId>lucene-facet</artifactId>-->
             <!--<version>5.2.0-SNAPSHOT</version>-->
             <!--</dependency>-->
+
+            <!--            Elasticsearch，注意版本问题，包括Lucene版本-->
+            <!--            需要注意的是spring-data-elasticsearch的版本,需要与elasticsearch版本一致,具体查看spring-data-elasticsearch文档,否则会出现问题-->
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-elasticsearch</artifactId>
+                <version>3.2.1.RELEASE</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>6.8.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>transport</artifactId>
+                <version>6.8.1</version>
+            </dependency>
 
             <!--HTML解析-->
             <dependency>

@@ -32,5 +32,5 @@ public interface UserDao extends CommonDao<Long,CpaUser> {
 	 * @Date: 2018/1/23 0023 11:04
 	 */
 	@DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-	CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderby);
+	CpaResult findCpaUserByCondition(CpaUserDto cpaUserDto, LinkedHashMap orderBy);
 }

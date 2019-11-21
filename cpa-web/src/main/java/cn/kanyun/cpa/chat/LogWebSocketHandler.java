@@ -6,6 +6,9 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 
+/**
+ * @author Kanyun
+ */
 public class LogWebSocketHandler extends TextWebSocketHandler {
 
     private SimpMessagingTemplate template;
@@ -17,7 +20,8 @@ public class LogWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        String text = message.getPayload(); // 获取提交过来的消息
+        // 获取提交过来的消息
+        String text = message.getPayload();
         System.out.println("handMessage:" + text);
         // template.convertAndSend("/topic/getLog", text); // 这里用于广播
         session.sendMessage(message);

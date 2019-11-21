@@ -18,10 +18,10 @@ public class FtpServiceImpl implements FtpService {
     private FTPUtil ftpUtil;
 
     @Override
-    public Enum uploadFTP(String localDirectory, String remoteDirectory) throws Exception {
+    public FTPUtil.UploadStatus uploadFTP(String localDirectory, String remoteDirectory) throws Exception {
 
         ftpUtil.connect();
-        Enum e = null;
+        FTPUtil.UploadStatus status = null;
         //下面这两句代码注意不能颠倒
         String prefix = localDirectory.substring(localDirectory.lastIndexOf("/") + 1);
         prefix = prefix.substring(0, prefix.lastIndexOf("."));
@@ -29,14 +29,10 @@ public class FtpServiceImpl implements FtpService {
         List<String> filePaths = FileUtil.searchFile(localDirectory, prefix, null);
         for (String localpath : filePaths) {
             remoteDirectory = remoteDirectory.substring(0, remoteDirectory.lastIndexOf("/")) + localpath.substring(localpath.lastIndexOf("/"));
-            e = ftpUtil.upload(localpath, remoteDirectory);
+            status = ftpUtil.upload(localpath, remoteDirectory);
         }
-//        e = ftpUtil.upload(localDirectory, remoteDirectory);
         ftpUtil.disconnect();
-//        if (e.toString().indexOf("SUCCESS") != -1) {
-//
-//        }
-        return e;
+        return status;
     }
 
 

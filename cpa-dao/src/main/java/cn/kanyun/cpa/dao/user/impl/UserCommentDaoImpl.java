@@ -5,10 +5,15 @@ import cn.kanyun.cpa.dao.user.UserCommentDao;
 import cn.kanyun.cpa.model.entity.user.UserComment;
 import org.springframework.stereotype.Repository;
 
+/**
+ * @author Kanyun
+ */
 @Repository(UserCommentDao.REPOSITORY_NAME)
 public class UserCommentDaoImpl extends CommonDaoImpl<Long, UserComment> implements UserCommentDao {
 
-    //通过调用父类的构造函数指定clazz值，即实体类的类类型
+    /**
+     * 通过调用父类的构造函数指定clazz值，即实体类的类型
+     */
     public UserCommentDaoImpl() {
         super(UserComment.class);
     }

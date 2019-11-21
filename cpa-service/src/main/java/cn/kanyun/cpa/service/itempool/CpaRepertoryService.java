@@ -41,18 +41,18 @@ public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
 
     /**
      * @describe: 获取试题列表（不包括选项,答案等内容，供后台试题管理使用）
-     * @params:
-     * @Author: Kanyun
+     * @params: orderBy 排序
+     * @author: Kanyun
      * @Date: 2018/1/11  15:48
      */
     @DataSource(targetDataSource = DataSourceContextHolder.DATA_SOURCE_SLAVE)
-    CpaResult getListItem(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderby);
+    CpaResult getListItem(CpaRepertoryDto cpaRepertoryDto, LinkedHashMap orderBy);
 
     /**
-     * @describe: 修改试题
-     * @params:
-     * @Author: Kanyun
-     * @Date: 2018/1/12  14:15
+     * 修改试题
+     * @param cpaRepertory
+     * @author Kanyun
+     * @date 2018/1/12  14:15
      */
-    Integer updUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
+    Integer updateUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }

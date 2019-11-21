@@ -6,7 +6,7 @@ import cn.kanyun.cpa.model.entity.system.UserRole;
 import java.util.Set;
 
 /**
- * @author Administrator
+ * @author Kanyun
  * @date 2017/6/16
  */
 public interface UserRoleDao extends CommonDao<Integer,UserRole> {
