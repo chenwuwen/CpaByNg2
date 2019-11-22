@@ -1,5 +1,6 @@
 package cn.kanyun.cpa.controller.itempool;
 
+import cn.kanyun.cpa.elasticsearch.controller.CreateHandler;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.dto.itempool.CpaOptionDto;
 import cn.kanyun.cpa.model.dto.itempool.CpaRepertoryDto;
@@ -10,12 +11,15 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaRepertory;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
+import cn.kanyun.cpa.model.event.CpaEvent;
+import cn.kanyun.cpa.model.event.RepertoryEvent;
 import cn.kanyun.cpa.redis.CacheLoad;
 import cn.kanyun.cpa.redis.CacheServiceTemplate;
 import cn.kanyun.cpa.redis.RedisService;
 import cn.kanyun.cpa.service.itempool.CpaRepertoryService;
 import cn.kanyun.cpa.util.WordUtil;
 import com.alibaba.fastjson.TypeReference;
+import com.google.common.eventbus.EventBus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -34,6 +38,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -49,6 +54,7 @@ import java.util.concurrent.TimeUnit;
  * 在方法级@RequestMapping的注解增加了一个RequestMothod.GET，意思是只有以GET方式提交的"/fileupload"URL请求才会进入fileUploadForm()
  * 方法，其实根据HTTP协议，HTTP支持一系列提交方法（GET，POST，PUT，DELETE），同一个URL都可以使用这几种提交方式
  * 事实上SpringMVC正是通过将同一个URL的不同提交方法对应到不同的方法上达到RESTful
+ *
  * @author Kanyun
  * @date 2017/6/17.
  */
@@ -65,6 +71,8 @@ public class CpaRepertoryController {
     private RedisService redisService;
     @Resource
     private CacheServiceTemplate cacheServiceTemplate;
+    @Resource
+    private CreateHandler createHandler;
 
     /**
      * @Author: kanyun
@@ -136,7 +144,7 @@ public class CpaRepertoryController {
 //                }
 //            }
         } catch (Exception e) {
-            logger.error("ERROR： /api/unitExam/getUnitExam Error: {}" + e);
+            logger.error("ERROR： /api/unitExam/getUnitExam Error: {}", e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
@@ -144,9 +152,10 @@ public class CpaRepertoryController {
 
     /**
      * 新增试题【保存单元测试】
+     *
+     * @param itemForm
      * @author kanyun
      * @date 2017/9/18 17:21
-     * @param itemForm
      */
     @ApiOperation(value = "/addUnitExam", notes = "新增试题【保存单元测试】", httpMethod = "POST", response = CpaResult.class)
     @RequestMapping("/addUnitExam")
@@ -154,22 +163,21 @@ public class CpaRepertoryController {
     public CpaResult addUnitExam(@RequestBody ItemForm itemForm) {
         CpaResult result = new CpaResult();
         try {
-            CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-            cpaRepertory.setTestStem(StringUtils.trimToEmpty(cpaRepertory.getTestStem()));
-            List<CpaOption> cpaOptions = new ArrayList<>();
-            itemForm.getCpaOptions().forEach(cpaOption -> {
-                cpaOption.setOptionData(StringUtils.trimToEmpty(cpaOption.getOptionData()));
-                cpaOptions.add(cpaOption);
-            });
-            CpaSolution cpaSolution = itemForm.getCpaSolution();
+            CpaRepertory cpaRepertory = new CpaRepertory();
+            Set<CpaOption> cpaOptions = new HashSet();
+            CpaSolution cpaSolution = new CpaSolution();
+            buildCpaRepertory(itemForm, cpaRepertory, cpaOptions, cpaSolution);
             result.setData(cpaRepertoryService.saveUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
+            sendRepertoryEvent(cpaRepertory, cpaOptions, cpaSolution);
+
         } catch (Exception e) {
             logger.error("ERROR： /api/unitExam/addUnitExam  新增试题异常：  {}" + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
     }
+
 
     /**
      * @param
@@ -206,6 +214,7 @@ public class CpaRepertoryController {
 
     /**
      * 获取单个试题详情
+     *
      * @param
      * @author Kanyun
      * @date 2018/1/12  13:38
@@ -285,22 +294,20 @@ public class CpaRepertoryController {
     public CpaResult updUnitExam(@RequestBody ItemForm itemForm) {
         CpaResult result = new CpaResult();
         try {
-            CpaRepertory cpaRepertory = itemForm.getCpaRepertory();
-            cpaRepertory.setTestStem(StringUtils.trimToEmpty(cpaRepertory.getTestStem()));
-            List<CpaOption> cpaOptions = new ArrayList<>();
-            itemForm.getCpaOptions().forEach(cpaOption -> {
-                cpaOption.setOptionData(StringUtils.trimToEmpty(cpaOption.getOptionData()));
-                cpaOptions.add(cpaOption);
-            });
-            CpaSolution cpaSolution = itemForm.getCpaSolution();
+            CpaRepertory cpaRepertory = new CpaRepertory();
+            Set<CpaOption> cpaOptions = Collections.EMPTY_SET;
+            CpaSolution cpaSolution = new CpaSolution();
+            buildCpaRepertory(itemForm, cpaRepertory, cpaOptions, cpaSolution);
             result.setData(cpaRepertoryService.updateUnitExam(cpaRepertory, cpaOptions, cpaSolution));
             result.setState(CpaConstants.OPERATION_SUCCESS);
+            sendRepertoryEvent(cpaRepertory, cpaOptions, cpaSolution);
         } catch (Exception e) {
             result.setState(CpaConstants.OPERATION_ERROR);
-            logger.error("ERROR：/api/unitExam/updUnitExam: [{}]" , e);
+            logger.error("ERROR：/api/unitExam/updUnitExam: [{}]", e);
         }
         return result;
     }
+
 
     /**
      * @describe: 获取试题列表（仅试题本身,删除修改试题使用）
@@ -327,5 +334,40 @@ public class CpaRepertoryController {
         return result;
     }
 
+    /**
+     * 构建需要保存到数据库的实体类
+     *
+     * @param cpaRepertory
+     * @param cpaOptions
+     * @param cpaSolution
+     */
+    private void buildCpaRepertory(ItemForm itemForm, CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        cpaRepertory = itemForm.getCpaRepertory();
+        if (cpaRepertory.getId() == null) {
+            cpaRepertory.setInsertDate(LocalDateTime.now());
+        }
+        cpaRepertory.setTestStem(StringUtils.trimToEmpty(cpaRepertory.getTestStem()));
+        itemForm.getCpaOptions().forEach(cpaOption -> {
+            cpaOption.setOptionData(StringUtils.trimToEmpty(cpaOption.getOptionData()));
+            cpaOptions.add(cpaOption);
+        });
+        cpaSolution = itemForm.getCpaSolution();
+    }
+
+    /**
+     * 发送试题变化事件
+     *
+     * @param cpaRepertory
+     * @param cpaOptions
+     * @param cpaSolution
+     */
+    private void sendRepertoryEvent(CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        EventBus eventBus = new EventBus();
+        eventBus.register(createHandler);
+        cpaRepertory.setCpaOptions(cpaOptions);
+        cpaRepertory.setCpaSolution(cpaSolution);
+        CpaEvent<CpaRepertory> event = new RepertoryEvent(cpaRepertory);
+        eventBus.post(event);
+    }
 }
 

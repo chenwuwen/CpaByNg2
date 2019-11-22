@@ -4,14 +4,16 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.DateFormat;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.Date;
 import java.util.Set;
 
 
@@ -26,7 +28,7 @@ import java.util.Set;
  * replicas：副本数量，默认1
  * refreshInterval: 刷新间隔
  * indexStoreType: 索引文件存储类型
- *
+ * 同时添加@Document注解，项目启动会在ES中自动创建index与type
  */
 @Data
 @Document(indexName = "cpa", type = "repertory")
@@ -56,7 +58,7 @@ public class EsCpaRepertory implements java.io.Serializable {
      * store：是否存储，布尔类型，默认是false
      * analyzer：指定字段建立索引时指定的分词器，这里的ik_max_word即使用ik分词器
      * searchAnalyzer: 指定字段搜索时使用的分词器
-     * IK分词器有两种分词模式：ik_max_word和ik_smart模式.
+     * IK分词器有两种分词模式(前提是ES服务安装了ik分词器)：ik_max_word和ik_smart模式.
      * ik_max_word 会将文本做最细粒度的拆分  ik_smart 会做最粗粒度的拆分
      * 两种分词器使用的最佳实践是：索引时用ik_max_word，在搜索时用ik_smart。即：索引时最大化的将文章内容分词，搜索时更精确的搜索到想要的结果
      * format:时间类型的格式化
@@ -78,13 +80,15 @@ public class EsCpaRepertory implements java.io.Serializable {
 
     /**
      * 试题创建时间
+     * 时间转换,否则无法插入到ES中,最好的方式是存储long类型的时间戳
      */
-    @Field(type = FieldType.Date, index = false, store = true)
-    private Long insertDate;
+    @Field(type = FieldType.Date, format = DateFormat.custom, pattern = "yyyy-MM-dd HH:mm:ss", index = false, store = true)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern ="yyyy-MM-dd HH:mm:ss",timezone="GMT+8")
+    private Date insertDate;
     /**
      * 试题选项
      */
-    private Set<CpaOption> cpaOptions = new HashSet(0);
+    private Set<CpaOption> cpaOptions;
 
     /**
      * 试题答案

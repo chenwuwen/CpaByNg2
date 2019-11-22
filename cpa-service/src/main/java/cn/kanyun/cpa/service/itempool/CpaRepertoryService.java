@@ -11,6 +11,7 @@ import cn.kanyun.cpa.service.CommonService;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -37,7 +38,7 @@ public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
      * @Description: 保存试题，单独保存，(单元测试)，选择主数据库库进行插入
      * @Date: 2017/9/16 15:05
      */
-    Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
+    Integer saveUnitExam(CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution);
 
     /**
      * @describe: 获取试题列表（不包括选项,答案等内容，供后台试题管理使用）
@@ -54,5 +55,5 @@ public interface CpaRepertoryService extends CommonService<Long, CpaRepertory> {
      * @author Kanyun
      * @date 2018/1/12  14:15
      */
-    Integer updateUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution);
+    Integer updateUnitExam(CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution);
 }

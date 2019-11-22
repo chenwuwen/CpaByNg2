@@ -1,18 +1,24 @@
 package cn.kanyun.cpa.controller.user;
 
+import cn.kanyun.cpa.elasticsearch.controller.CreateHandler;
 import cn.kanyun.cpa.model.constants.CpaConstants;
 import cn.kanyun.cpa.model.entity.CpaResult;
 import cn.kanyun.cpa.model.entity.Page;
 import cn.kanyun.cpa.model.entity.user.CpaUser;
 import cn.kanyun.cpa.model.entity.user.UserComment;
+import cn.kanyun.cpa.model.event.CpaEvent;
+import cn.kanyun.cpa.model.event.UserCommentEvent;
 import cn.kanyun.cpa.service.user.UserCommentService;
 import cn.kanyun.cpa.util.WebUtil;
+import com.google.common.eventbus.EventBus;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,7 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 /**
- * Created by KANYUN on 2017/10/24.
+ *
+ * @author KANYUN
+ * @date 2017/10/24
  */
 @Api(value = "/api/userComment",tags = "试题评论模块",produces="application/json",consumes="application/json")
 @Controller
@@ -35,6 +43,9 @@ public class UserCommentController {
 
     @Resource(name = UserCommentService.SERVICE_NAME)
     private UserCommentService userCommentService;
+
+    @Autowired
+    private CreateHandler createHandler;
 
     /**
      * @Author: kanyun
@@ -59,13 +70,16 @@ public class UserCommentController {
                 userComment.setUserName(user.getUserName());
                 userComment.setNickName(user.getNickName());
                 result.setData(userCommentService.save(userComment));
+                sendUserCommentEvent(userComment);
             }
         } catch (Exception e) {
-            logger.error("Error : /api/usercomment/saveComment " + e);
+            logger.error("Error : /api/userComment/saveComment " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;
     }
+
+
 
     /**
      * @Author: kanyun
@@ -86,7 +100,8 @@ public class UserCommentController {
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             Page page = new Page();
-            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+//            如果pageNo为0，则设置pageNo为1,否则为本身
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
             Object[] params = {user.getId()};
             String where = "o.userId =?";
@@ -118,7 +133,8 @@ public class UserCommentController {
         CpaResult result = new CpaResult();
         try {
             Page page = new Page();
-            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;  //如果pageNo为0，则设置pageNo为1,否则为本身
+//            如果pageNo为0，则设置pageNo为1,否则为本身
+            pageNo = pageNo == null || pageNo == 0 ? page.getTopPageNo() : pageNo;
             pageSize = pageSize == null || pageSize == 0 ? page.getPageSize() : pageSize;
             Object[] params = {reId};
             String where = "o.reId =?";
@@ -126,8 +142,19 @@ public class UserCommentController {
             Integer firstResult = page.countOffset(pageNo, pageSize);
             result = userCommentService.getUserComment(firstResult, pageSize, where, params);
         } catch (Exception e) {
-            logger.error("Error : /api/usercomment/getUserComment " + e);
+            logger.error("Error : /api/userComment/getUserComment " + e);
         }
         return result;
+    }
+
+    /**
+     * 发送用户评论数据变化事件
+     * @param userComment
+     */
+    private void sendUserCommentEvent(UserComment userComment) {
+        EventBus eventBus = new EventBus();
+        eventBus.register(createHandler);
+        CpaEvent<UserComment> event = new UserCommentEvent(userComment);
+        eventBus.post(event);
     }
 }

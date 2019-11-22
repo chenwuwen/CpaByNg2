@@ -4,7 +4,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
- * Created by KANYUN on 2017/10/24.
+ *
+ * @author KANYUN
+ * @date 2017/10/24
  */
 @Entity
 @Table(name = "USER_COMMENT", schema = "cpa", catalog = "")

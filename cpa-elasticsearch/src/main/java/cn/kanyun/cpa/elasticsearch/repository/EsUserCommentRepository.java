@@ -1,6 +1,6 @@
 package cn.kanyun.cpa.elasticsearch.repository;
 
-import cn.kanyun.cpa.elasticsearch.model.EsCpaRepertory;
+import cn.kanyun.cpa.elasticsearch.model.EsUserComment;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -11,5 +11,5 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * 简单的查询和条件查询可以直接使用ElasticsearchRepository提供的接口，如果需要复杂的条件组合（模糊查询，完全匹配查 询，分页，排序）使用ElasticSearchTemplate实例
  * @author Kanyun
  */
-public interface EsCpaRepertoryRepository extends ElasticsearchRepository<EsCpaRepertory,Long> {
+public interface EsUserCommentRepository extends ElasticsearchRepository<EsUserComment,Long> {
 }

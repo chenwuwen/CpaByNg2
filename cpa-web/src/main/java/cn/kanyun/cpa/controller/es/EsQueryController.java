@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -56,8 +57,9 @@ public class EsQueryController {
         ZoneId zone = ZoneId.systemDefault();
         list.forEach(repertoryDto -> {
             EsCpaRepertory esCpaRepertory = new EsCpaRepertory();
+            esCpaRepertory.setId(repertoryDto.getId());
             esCpaRepertory.setTestStem(repertoryDto.getTestStem());
-            esCpaRepertory.setInsertDate(repertoryDto.getInsertDate().atZone(zone).toEpochSecond());
+            esCpaRepertory.setInsertDate(Date.from(repertoryDto.getInsertDate().atZone(zone).toInstant()));
             cpaRepertories.add(esCpaRepertory);
         });
         createHandler.insertItem(cpaRepertories);

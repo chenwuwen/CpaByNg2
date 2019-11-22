@@ -20,7 +20,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Created by KANYUN on 2017/10/24.
+ *
+ * @author KANYUN
+ * @date 2017/10/24
  */
 @Api(value = "/api/userCollect",tags = "用户收藏模块")
 @Controller
@@ -51,7 +53,7 @@ public class UserCollectController {
             result.setData(userCollectService.toggleUserCollect(reId, user));
             result.setState(CpaConstants.OPERATION_SUCCESS);
         } catch (Exception e) {
-            logger.error("Error : /api/usercollect/toggleCollect " + e);
+            logger.error("Error : /api/userCollect/toggleCollect " + e);
             result.setState(CpaConstants.OPERATION_ERROR);
         }
         return result;

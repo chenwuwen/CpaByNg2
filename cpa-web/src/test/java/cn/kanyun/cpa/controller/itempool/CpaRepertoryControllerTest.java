@@ -19,7 +19,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @RunWith(SpringJUnit4ClassRunner.class)  //必须要写，相当于提供了spring的环境
 @WebAppConfiguration("src/main/resources")
@@ -51,7 +53,7 @@ public class CpaRepertoryControllerTest {
         cpaRepertory.setTestType(ExamClassificationEnum.CPU_ACCOUNT);
         cpaRepertory.setQuestionType(QuestionTypeEnum.SINGLE);
         cpaRepertory.setInsertDate(LocalDateTime.now());
-        List<CpaOption> cpaOptions = new ArrayList<>();
+        Set<CpaOption> cpaOptions = Collections.EMPTY_SET;
         CpaOption cpaOption1 = new CpaOption();
         cpaOption1.setSelectData("A");
         cpaOption1.setOptionData("操作系统");

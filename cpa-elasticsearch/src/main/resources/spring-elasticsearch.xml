@@ -14,6 +14,13 @@
     <!--    扫描Dao包 实现自动创建,类似于<context:component-scan base-package="xxx"/>标签-->
     <elasticsearch:repositories base-package="cn.kanyun.cpa.elasticsearch.repository"/>
     <!--    配置elasticsearch 连接 -->
+    <!--      Java与ElasticSearch连接的两种方式：-->
+    <!--    （1）使用Transport与ElasticSearch建立连接-->
+    <!--      优点：脱离框架，集成过程中不需要考虑与Spring的版本兼容问题，容易集成-->
+    <!--      缺点：使用原生API操作ES，代码量大，撰写困难-->
+    <!--    （2）使用SpringDataElasticSearch连接连接-->
+    <!--      优点：将原生API进行封装，提供了ElasticsearchRepository，操作ES非常简单，与JPA同理-->
+    <!--      缺点：出生于Spring家族，与SpringBoot，SpringData版本容易冲突-->
     <elasticsearch:transport-client id="client" cluster-nodes="${elasticsearch_nodes}" cluster-name="${cluster_name}"/>
 
     <!--        spring data ElasticSearch Dao 依赖 模板-->
@@ -23,16 +30,16 @@
 
 
     <!--    响应式ElasticsearchTemplate-->
-<!--    <bean id="elasticsearchMappingContext"-->
-<!--          class="org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext ">-->
-<!--    </bean>-->
-<!--    <bean id="elasticsearchConverter"-->
-<!--          class="org.springframework.data.elasticsearch.core.convert.MappingElasticsearchConverter">-->
-<!--        <constructor-arg name="mappingContext" ref="elasticsearchMappingContext"/>-->
-<!--    </bean>-->
-<!--    <bean id="reactiveElasticsearchTemplate"-->
-<!--          class="org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate">-->
-<!--        <constructor-arg name="client" ref="client"/>-->
-<!--        <constructor-arg name="converter" ref="elasticsearchConverter"/>-->
-<!--    </bean>-->
+    <!--    <bean id="elasticsearchMappingContext"-->
+    <!--          class="org.springframework.data.elasticsearch.core.mapping.SimpleElasticsearchMappingContext ">-->
+    <!--    </bean>-->
+    <!--    <bean id="elasticsearchConverter"-->
+    <!--          class="org.springframework.data.elasticsearch.core.convert.MappingElasticsearchConverter">-->
+    <!--        <constructor-arg name="mappingContext" ref="elasticsearchMappingContext"/>-->
+    <!--    </bean>-->
+    <!--    <bean id="reactiveElasticsearchTemplate"-->
+    <!--          class="org.springframework.data.elasticsearch.core.ReactiveElasticsearchTemplate">-->
+    <!--        <constructor-arg name="client" ref="client"/>-->
+    <!--        <constructor-arg name="converter" ref="elasticsearchConverter"/>-->
+    <!--    </bean>-->
 </beans>

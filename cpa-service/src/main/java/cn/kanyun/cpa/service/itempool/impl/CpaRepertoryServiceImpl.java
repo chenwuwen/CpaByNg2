@@ -135,7 +135,7 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
 
     @Override
     @Transactional(rollbackFor = {RuntimeException.class, Exception.class})
-    public Integer saveUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+    public Integer saveUnitExam(CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution) {
 //        for (CpaOption cpaOption:cpaOptions){
 //            cpaOption.setCpaRepertory(cpaRepertory);
 //        }
@@ -149,14 +149,9 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
 //        session.close();
 
 //        Hibernate在.hbm.xml文件中配置好级联关系后;如“cascade="save-update"”;那么保存的时候仅仅保存主表 ,就可以把相关联的表也保存了，就不用一个个保存了
-        cpaRepertory.setInsertDate(LocalDateTime.now());
-        Set cpaOptions1 = new HashSet();
-        for (CpaOption cpaOption : cpaOptions) {
-            cpaOption.setCpaRepertory(cpaRepertory);
-            cpaOptions1.add(cpaOption);
-        }
+
         cpaSolution.setCpaRepertory(cpaRepertory);
-        cpaRepertory.setCpaOptions(cpaOptions1);
+        cpaRepertory.setCpaOptions(cpaOptions);
         cpaRepertory.setCpaSolution(cpaSolution);
         cpaRepertoryDao.save(cpaRepertory);
         return cpaRepertory.getId().intValue();
@@ -183,14 +178,8 @@ public class CpaRepertoryServiceImpl extends CommonServiceImpl<Long, CpaRepertor
     }
 
     @Override
-    public Integer updateUnitExam(CpaRepertory cpaRepertory, List<CpaOption> cpaOptions, CpaSolution cpaSolution) {
-        Set cpaOptions1 = new HashSet();
-        for (CpaOption cpaOption : cpaOptions) {
-            cpaOption.setCpaRepertory(cpaRepertory);
-            cpaOptions1.add(cpaOption);
-        }
-        cpaSolution.setCpaRepertory(cpaRepertory);
-        cpaRepertory.setCpaOptions(cpaOptions1);
+    public Integer updateUnitExam(CpaRepertory cpaRepertory, Set<CpaOption> cpaOptions, CpaSolution cpaSolution) {
+        cpaRepertory.setCpaOptions(cpaOptions);
         cpaRepertory.setCpaSolution(cpaSolution);
         cpaRepertoryDao.saveOrUpdate(cpaRepertory);
         return cpaRepertory.getId().intValue();

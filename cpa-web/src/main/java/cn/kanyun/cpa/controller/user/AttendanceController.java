@@ -21,9 +21,10 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * 用户签到
+ *
  * @author Kanyun
  */
-@Api(value = "/api/user",tags = "签到模块")
+@Api(value = "/api/user", tags = "签到模块")
 @Controller
 @RequestMapping("/api/user")
 public class AttendanceController {
@@ -39,17 +40,17 @@ public class AttendanceController {
      * @Author: Kanyun
      * @Date: 2017/12/12 0012 13:33
      */
-    @ApiOperation(value = "/attendance",notes = "用户签到",response = CpaResult.class,produces="application/json")
+    @ApiOperation(value = "/attendance", notes = "用户签到", response = CpaResult.class, produces = "application/json")
     @RequestMapping("/attendance")
     @ResponseBody
     public CpaResult signIn(HttpServletRequest request) {
-        CpaResult result ;
+        CpaResult result;
         try {
             CpaUser user = WebUtil.getSessionUser(request);
             CpaUserExtend userExtend = user.getCpaUserExtend();
             result = attendanceService.signIn(user, userExtend);
         } catch (Exception e) {
-            logger.error("用户签到异常：" + e);
+            logger.error("用户签到异常：{}", e);
             throw new ProgramsInternalException("用户签到异常");
         }
         return result;
