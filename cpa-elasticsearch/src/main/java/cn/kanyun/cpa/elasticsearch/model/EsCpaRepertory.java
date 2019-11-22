@@ -4,6 +4,7 @@ import cn.kanyun.cpa.model.entity.itempool.CpaOption;
 import cn.kanyun.cpa.model.entity.itempool.CpaSolution;
 import cn.kanyun.cpa.model.enums.ExamClassificationEnum;
 import cn.kanyun.cpa.model.enums.QuestionTypeEnum;
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -19,12 +20,16 @@ import java.util.Set;
  *
  * @author Kanyun
  * @Document 作用在类，标记实体类为文档对象，一般有两个属性
- * indexName：对应索引库名称
- * type：对应在索引库中的类型
+ * indexName：对应索引库名称 ->建议以项目名称命名
+ * type：对应在索引库中的类型 ->建议以实体类名称命名
  * shards：分片数量，默认5
  * replicas：副本数量，默认1
+ * refreshInterval: 刷新间隔
+ * indexStoreType: 索引文件存储类型
+ *
  */
-@Document(indexName = "repertory", type = "note")
+@Data
+@Document(indexName = "cpa", type = "repertory")
 public class EsCpaRepertory implements java.io.Serializable {
     /**
      * 试题ID
@@ -47,11 +52,16 @@ public class EsCpaRepertory implements java.io.Serializable {
      * 需要指定一个精度因子，比如10或100。elasticsearch会把真实值乘以这个因子后存储，取出时再还原。
      * Date：日期类型
      * elasticsearch可以对日期格式化为字符串存储，但是建议我们存储为毫秒值，存储为long，节省空间。
-     * index：是否索引，布尔类型，默认是true
+     * index：是否索引，布尔类型，默认是true 默认情况下分词，一般默认分词就好，除非这个字段你确定查询时不会用到
      * store：是否存储，布尔类型，默认是false
-     * analyzer：分词器名称，这里的ik_max_word即使用ik分词器
+     * analyzer：指定字段建立索引时指定的分词器，这里的ik_max_word即使用ik分词器
+     * searchAnalyzer: 指定字段搜索时使用的分词器
+     * IK分词器有两种分词模式：ik_max_word和ik_smart模式.
+     * ik_max_word 会将文本做最细粒度的拆分  ik_smart 会做最粗粒度的拆分
+     * 两种分词器使用的最佳实践是：索引时用ik_max_word，在搜索时用ik_smart。即：索引时最大化的将文章内容分词，搜索时更精确的搜索到想要的结果
+     * format:时间类型的格式化
      */
-    @Field(type = FieldType.Text, store = true)
+    @Field(type = FieldType.Text, store = true, analyzer = "ik_max_word", searchAnalyzer = "ik_smart")
     private String testStem;
 
     /**
@@ -69,8 +79,8 @@ public class EsCpaRepertory implements java.io.Serializable {
     /**
      * 试题创建时间
      */
-//    @Field(type = FieldType.Date, index = false, store = true)
-    private LocalDateTime insertDate;
+    @Field(type = FieldType.Date, index = false, store = true)
+    private Long insertDate;
     /**
      * 试题选项
      */
@@ -82,59 +92,4 @@ public class EsCpaRepertory implements java.io.Serializable {
     private CpaSolution cpaSolution;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTestStem() {
-        return testStem;
-    }
-
-    public void setTestStem(String testStem) {
-        this.testStem = testStem;
-    }
-
-    public QuestionTypeEnum getQuestionType() {
-        return questionType;
-    }
-
-    public void setQuestionType(QuestionTypeEnum questionType) {
-        this.questionType = questionType;
-    }
-
-    public ExamClassificationEnum getTestType() {
-        return testType;
-    }
-
-    public void setTestType(ExamClassificationEnum testType) {
-        this.testType = testType;
-    }
-
-    public LocalDateTime getInsertDate() {
-        return insertDate;
-    }
-
-    public void setInsertDate(LocalDateTime insertDate) {
-        this.insertDate = insertDate;
-    }
-
-    public Set<CpaOption> getCpaOptions() {
-        return cpaOptions;
-    }
-
-    public void setCpaOptions(Set<CpaOption> cpaOptions) {
-        this.cpaOptions = cpaOptions;
-    }
-
-    public CpaSolution getCpaSolution() {
-        return cpaSolution;
-    }
-
-    public void setCpaSolution(CpaSolution cpaSolution) {
-        this.cpaSolution = cpaSolution;
-    }
 }

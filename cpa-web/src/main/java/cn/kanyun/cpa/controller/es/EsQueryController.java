@@ -13,6 +13,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,24 +36,28 @@ public class EsQueryController {
 
     @ApiOperation(value = "/query", notes = "关键字查询", httpMethod = "GET")
     @ApiImplicitParams({
+            @ApiImplicitParam(name = "field", value = "字段名", dataType = "String", paramType = "query", required = true,defaultValue = "testStem"),
             @ApiImplicitParam(name = "queryStr", value = "查询字符串", dataType = "String", paramType = "query", required = true),
     })
-    @PostMapping("/query")
-    public void query(@RequestParam("queryStr") String queryStr) {
-        queryHandler.getCpaRepertory(queryStr);
+    @GetMapping("/query")
+    public void query(@RequestParam("field") String field, @RequestParam("queryStr") String queryStr) {
+        queryHandler.getCpaRepertory(field, queryStr);
     }
 
 
     @ApiOperation(value = "/init", notes = "初始化索引", httpMethod = "GET")
     @GetMapping("/init")
     public void init() {
-        CpaResult<List<CpaRepertoryDto>> result = cpaRepertoryService.getListItem(null, null);
+        CpaRepertoryDto cpaRepertoryDto = new CpaRepertoryDto();
+        cpaRepertoryDto.setPageSize(Integer.MAX_VALUE);
+        CpaResult<List<CpaRepertoryDto>> result = cpaRepertoryService.getListItem(cpaRepertoryDto, null);
         List<CpaRepertoryDto> list = result.getData();
         List<EsCpaRepertory> cpaRepertories = new ArrayList<>();
-        list.forEach(cpaRepertoryDto -> {
+        ZoneId zone = ZoneId.systemDefault();
+        list.forEach(repertoryDto -> {
             EsCpaRepertory esCpaRepertory = new EsCpaRepertory();
-            esCpaRepertory.setTestStem(cpaRepertoryDto.getTestStem());
-            esCpaRepertory.setInsertDate(cpaRepertoryDto.getInsertDate());
+            esCpaRepertory.setTestStem(repertoryDto.getTestStem());
+            esCpaRepertory.setInsertDate(repertoryDto.getInsertDate().atZone(zone).toEpochSecond());
             cpaRepertories.add(esCpaRepertory);
         });
         createHandler.insertItem(cpaRepertories);

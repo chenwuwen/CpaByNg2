@@ -40,7 +40,7 @@ public class CreateHandler {
 
 
     /**
-     * 添加对象
+     * 添加对象 添加对象的时候如果索引不存在会自动创建索引
      * @param items
      */
     public void insertItem(List<?> items) {
