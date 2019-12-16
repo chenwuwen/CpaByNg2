@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * Swagger2配置类
- * 访问地址 ip:port/docs.html
+ * 访问地址 ip:port/docs.html 为什么不是ip:port/swagger-ui.html 是因为我没有使用springfox-swagger-ui这个依赖,而是用的swagger-ui-layer
  * 需要注意的一点是 swagger api 的默认地址是/v2/api-docs (访问该地址返回的是JSON串)所以swagger-ui-layer也读取的是默认地址
  * 所以在new Docket()的时候不能指定group参数，否则 swagger api 的地址会在后面加入group的参数导致swagger-ui-layer不能正确请求到数据
  * @EnableSwagger2  启用swagger2
