@@ -89,7 +89,7 @@
     <properties>
         <!-- 指明编译源代码时使用的字符编码，maven编译的时候默认使用的GBK编码， 通过project.build.sourceEncoding属性设置字符编码，告诉maven这个项目使用UTF-8来编译 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-framework-version>5.0.2.RELEASE</spring-framework-version>
+        <spring-framework-version>5.2.3.RELEASE</spring-framework-version>
         <hibernate-framework-version>5.1.2.Final</hibernate-framework-version>
     </properties>
 
