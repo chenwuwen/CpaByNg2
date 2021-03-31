@@ -632,7 +632,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>27.1-jre</version>
+                <version>29.0-jre</version>
             </dependency>
 
             <!-- jodd也是一个工具集,其中还包括一个MVC的框架,其比较出名的工具是jodd-props-->
