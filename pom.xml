@@ -619,7 +619,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.57</version>
+                <version>1.2.83</version>
             </dependency>
             <!-- 支持java8 localDate等新时间类型的序列化 -->
             <dependency>
