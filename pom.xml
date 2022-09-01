@@ -930,7 +930,7 @@
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.11.3</version>
+                <version>1.15.3</version>
             </dependency>
 
             <!--java使用ssh连接Linux并执行命令,需依赖jcraft的jar包-->
